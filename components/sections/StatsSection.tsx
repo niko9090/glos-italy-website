@@ -3,6 +3,7 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 interface StatsSectionProps {
   data: {
@@ -112,7 +113,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
 
               {/* Label */}
               <div className="text-lg md:text-xl font-semibold mb-1 opacity-90">
-                {stat.label}
+                {getTextValue(stat.label)}
               </div>
 
               {/* Decorative underline */}

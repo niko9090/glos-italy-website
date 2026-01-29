@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { urlFor } from '@/lib/sanity/client'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 interface FeaturesSectionProps {
   data: {
@@ -109,7 +110,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {data.title && (
+            {getTextValue(data.title) && (
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -117,11 +118,11 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                 transition={{ delay: 0.1 }}
                 className="section-title mb-4"
               >
-                {data.title}
+                {getTextValue(data.title)}
               </motion.h2>
             )}
 
-            {data.subtitle && (
+            {getTextValue(data.subtitle) && (
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -129,7 +130,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                 transition={{ delay: 0.2 }}
                 className="section-subtitle mb-8"
               >
-                {data.subtitle}
+                {getTextValue(data.subtitle)}
               </motion.p>
             )}
 
@@ -163,10 +164,10 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                   {/* Text content */}
                   <div>
                     <h3 className="text-lg font-semibold mb-1 group-hover:text-primary transition-colors duration-300">
-                      {item.title}
+                      {getTextValue(item.title)}
                     </h3>
                     <p className="text-gray-600 leading-relaxed">
-                      {item.description}
+                      {getTextValue(item.description)}
                     </p>
                   </div>
                 </motion.div>

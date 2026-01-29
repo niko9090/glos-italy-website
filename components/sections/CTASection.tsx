@@ -4,6 +4,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Phone } from 'lucide-react'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 interface CTASectionProps {
   data: {
@@ -34,25 +35,25 @@ export default function CTASection({ data }: CTASectionProps) {
           viewport={{ once: true }}
           className="text-center max-w-3xl mx-auto"
         >
-          {data.title && (
+          {getTextValue(data.title) && (
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {data.title}
+              {getTextValue(data.title)}
             </h2>
           )}
 
-          {data.subtitle && (
+          {getTextValue(data.subtitle) && (
             <p className="text-xl mb-8 opacity-90">
-              {data.subtitle}
+              {getTextValue(data.subtitle)}
             </p>
           )}
 
           <div className="flex flex-wrap justify-center gap-4">
-            {data.buttonText && data.buttonLink && (
+            {getTextValue(data.buttonText) && data.buttonLink && (
               <Link
                 href={data.buttonLink}
                 className="btn bg-white text-primary hover:bg-gray-100"
               >
-                {data.buttonText}
+                {getTextValue(data.buttonText)}
               </Link>
             )}
           </div>

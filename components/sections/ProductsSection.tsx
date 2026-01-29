@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { urlFor } from '@/lib/sanity/client'
 import type { Product } from '@/lib/sanity/fetch'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 interface ProductsSectionProps {
   data: {
@@ -66,11 +67,11 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
         {/* Header */}
         <div className="text-center mb-12">
           {data.title && (
-            <h2 className="section-title mb-4">{data.title}</h2>
+            <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
           )}
 
           {data.subtitle && (
-            <p className="section-subtitle mx-auto">{data.subtitle}</p>
+            <p className="section-subtitle mx-auto">{getTextValue(data.subtitle)}</p>
           )}
         </div>
 
@@ -169,7 +170,7 @@ function ProductCard({ product }: { product: Product }) {
           )}
 
           <h3 className="text-xl font-semibold mt-1 mb-2 group-hover:text-primary transition-colors duration-300">
-            {product.name}
+            {getTextValue(product.name)}
           </h3>
 
           {product.shortDescription && (

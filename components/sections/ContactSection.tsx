@@ -4,6 +4,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Send, MapPin, Phone, Mail, CheckCircle } from 'lucide-react'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 interface ContactSectionProps {
   data: {
@@ -34,11 +35,11 @@ export default function ContactSection({ data }: ContactSectionProps) {
       <div className="container-glos">
         {/* Header */}
         <div className="text-center mb-12">
-          {data.title && (
-            <h2 className="section-title mb-4">{data.title}</h2>
+          {getTextValue(data.title) && (
+            <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
           )}
-          {data.subtitle && (
-            <p className="section-subtitle mx-auto">{data.subtitle}</p>
+          {getTextValue(data.subtitle) && (
+            <p className="section-subtitle mx-auto">{getTextValue(data.subtitle)}</p>
           )}
         </div>
 

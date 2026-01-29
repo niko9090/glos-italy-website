@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { Star, Quote } from 'lucide-react'
 import { urlFor } from '@/lib/sanity/client'
 import type { Testimonial } from '@/lib/sanity/fetch'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 interface TestimonialsSectionProps {
   data: {
@@ -102,10 +103,10 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
           className="text-center mb-12"
         >
           {data.title && (
-            <h2 className="section-title mb-4">{data.title}</h2>
+            <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
           )}
           {data.subtitle && (
-            <p className="section-subtitle mx-auto">{data.subtitle}</p>
+            <p className="section-subtitle mx-auto">{getTextValue(data.subtitle)}</p>
           )}
         </motion.div>
 
@@ -157,7 +158,7 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                 transition={{ delay: 0.4 }}
                 className="text-gray-700 mb-6 italic leading-relaxed"
               >
-                "{testimonial.quote}"
+                "{getTextValue(testimonial.quote)}"
               </motion.blockquote>
 
               {/* Author */}

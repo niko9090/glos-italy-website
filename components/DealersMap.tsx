@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 // Fix per le icone Leaflet in Next.js - usa CDN
 const defaultIcon = L.icon({
@@ -95,21 +96,21 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
         >
           <Popup>
             <div className="min-w-[200px]">
-              <h3 className="font-semibold text-gray-900 mb-1">{dealer.name}</h3>
+              <h3 className="font-semibold text-gray-900 mb-1">{getTextValue(dealer.name)}</h3>
 
-              {dealer.type && (
+              {getTextValue(dealer.type) && (
                 <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-xs rounded mb-2">
-                  {dealer.type === 'distributore' ? 'Distributore' :
-                   dealer.type === 'agente' ? 'Agente' : 'Rivenditore'}
+                  {getTextValue(dealer.type) === 'distributore' ? 'Distributore' :
+                   getTextValue(dealer.type) === 'agente' ? 'Agente' : 'Rivenditore'}
                 </span>
               )}
 
-              {dealer.city && (
-                <p className="text-sm text-gray-600 mb-1">{dealer.city}</p>
+              {getTextValue(dealer.city) && (
+                <p className="text-sm text-gray-600 mb-1">{getTextValue(dealer.city)}</p>
               )}
 
-              {dealer.address && (
-                <p className="text-sm text-gray-500 mb-2">{dealer.address}</p>
+              {getTextValue(dealer.address) && (
+                <p className="text-sm text-gray-500 mb-2">{getTextValue(dealer.address)}</p>
               )}
 
               {dealer.certifications && dealer.certifications.length > 0 && (
@@ -119,27 +120,27 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
                       key={i}
                       className="px-1.5 py-0.5 bg-green-100 text-green-700 text-xs rounded"
                     >
-                      {cert}
+                      {getTextValue(cert)}
                     </span>
                   ))}
                 </div>
               )}
 
               <div className="flex flex-col gap-1 pt-2 border-t">
-                {dealer.phone && (
+                {getTextValue(dealer.phone) && (
                   <a
-                    href={`tel:${dealer.phone.replace(/\s/g, '')}`}
+                    href={`tel:${getTextValue(dealer.phone).replace(/\s/g, '')}`}
                     className="text-sm text-primary hover:underline"
                   >
-                    {dealer.phone}
+                    {getTextValue(dealer.phone)}
                   </a>
                 )}
-                {dealer.email && (
+                {getTextValue(dealer.email) && (
                   <a
-                    href={`mailto:${dealer.email}`}
+                    href={`mailto:${getTextValue(dealer.email)}`}
                     className="text-sm text-primary hover:underline"
                   >
-                    {dealer.email}
+                    {getTextValue(dealer.email)}
                   </a>
                 )}
               </div>

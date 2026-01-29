@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { urlFor } from '@/lib/sanity/client'
 import { ArrowRight, ChevronDown } from 'lucide-react'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 interface HeroSectionProps {
   data: {
@@ -69,24 +70,24 @@ export default function HeroSection({ data }: HeroSectionProps) {
           transition={{ duration: 0.8 }}
           className="max-w-3xl"
         >
-          {data.title && (
+          {getTextValue(data.title) && (
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              {data.title}
+              {getTextValue(data.title)}
             </h1>
           )}
 
-          {data.subtitle && (
+          {getTextValue(data.subtitle) && (
             <p className="text-xl md:text-2xl text-white/90 mb-10">
-              {data.subtitle}
+              {getTextValue(data.subtitle)}
             </p>
           )}
 
-          {data.buttonText && data.buttonLink && (
+          {getTextValue(data.buttonText) && data.buttonLink && (
             <Link
               href={data.buttonLink}
               className="btn-primary inline-flex items-center gap-2"
             >
-              {data.buttonText}
+              {getTextValue(data.buttonText)}
               <ArrowRight className="w-5 h-5" />
             </Link>
           )}

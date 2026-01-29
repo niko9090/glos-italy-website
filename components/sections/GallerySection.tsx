@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import { urlFor } from '@/lib/sanity/client'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 interface GallerySectionProps {
   data: {
@@ -152,7 +153,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="section-title mb-4">{data.title}</h2>
+            <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
           </motion.div>
         )}
 

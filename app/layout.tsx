@@ -70,7 +70,7 @@ export default async function RootLayout({
         <main className="flex-grow">{children}</main>
         <Footer settings={settings} navigation={navigation} />
         {/* Visual Editing per Sanity - attivo solo in draft mode */}
-        {draftMode().isEnabled && <VisualEditing />}
+        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   )

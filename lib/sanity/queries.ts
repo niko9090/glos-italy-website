@@ -25,7 +25,7 @@ export const siteSettingsQuery = groq`
 
 export const navigationQuery = groq`
   *[_type == "navigation"][0] {
-    "items": items[isActive == true] {
+    "items": items[] {
       _key,
       label,
       href

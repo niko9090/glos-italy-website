@@ -25,7 +25,7 @@ export const previewClient = createClient({
   apiVersion,
   useCdn: false, // No cache per vedere modifiche in tempo reale
   token,
-  perspective: 'previewDrafts', // Vede sia bozze che pubblicati
+  perspective: 'drafts', // Vede sia bozze che pubblicati (rinominato da 'previewDrafts')
   stega: {
     enabled: true, // Abilita visual editing overlays
     studioUrl: '/studio', // URL relativo di Sanity Studio

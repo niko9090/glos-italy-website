@@ -1,14 +1,17 @@
 // Homepage
+import { draftMode } from 'next/headers'
 import { getPageBySlug, getFeaturedProducts, getFeaturedTestimonials } from '@/lib/sanity/fetch'
 import { SectionRenderer } from '@/components/sections/SectionRenderer'
 
 export const revalidate = 60 // Revalidate every 60 seconds
 
 export default async function HomePage() {
+  const isDraftMode = draftMode().isEnabled
+
   const [page, products, testimonials] = await Promise.all([
-    getPageBySlug('home'),
-    getFeaturedProducts(),
-    getFeaturedTestimonials(),
+    getPageBySlug('home', isDraftMode),
+    getFeaturedProducts(isDraftMode),
+    getFeaturedTestimonials(isDraftMode),
   ])
 
   if (!page) {

@@ -1,6 +1,8 @@
 // Root Layout
 import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
+import { draftMode } from 'next/headers'
+import { VisualEditing } from 'next-sanity'
 import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
 import Header from '@/components/layout/Header'
@@ -24,11 +26,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: {
-      default: settings?.seo?.title || 'GLOS Italy',
+      default: settings?.companyName || 'GLOS Italy',
       template: '%s | GLOS Italy',
     },
-    description: settings?.seo?.description?.it || 'Prodotti di qualita Made in Italy',
-    keywords: settings?.seo?.keywords || [],
+    description: settings?.slogan || 'Prodotti di qualita Made in Italy',
     openGraph: {
       type: 'website',
       locale: 'it_IT',
@@ -42,9 +43,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const isDraftMode = draftMode().isEnabled
+
   const [settings, navigation] = await Promise.all([
-    getSiteSettings(),
-    getNavigation(),
+    getSiteSettings(isDraftMode),
+    getNavigation(isDraftMode),
   ])
 
   return (
@@ -53,6 +56,8 @@ export default async function RootLayout({
         <Header settings={settings} navigation={navigation} />
         <main className="flex-grow">{children}</main>
         <Footer settings={settings} navigation={navigation} />
+        {/* Visual Editing per Sanity - attivo solo in draft mode */}
+        {draftMode().isEnabled && <VisualEditing />}
       </body>
     </html>
   )

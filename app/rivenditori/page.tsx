@@ -1,6 +1,7 @@
 // Dealers Page
 import { Metadata } from 'next'
 import Image from 'next/image'
+import { draftMode } from 'next/headers'
 import { getAllDealers } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
 import { MapPin, Phone, Mail, Globe, Award } from 'lucide-react'
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function DealersPage() {
-  const dealers = await getAllDealers()
+  const isDraftMode = draftMode().isEnabled
+  const dealers = await getAllDealers(isDraftMode)
 
   // Group dealers by type
   const distributors = dealers.filter((d) => d.type === 'distributore')

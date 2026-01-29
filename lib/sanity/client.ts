@@ -7,6 +7,7 @@ import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || ''
 export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 export const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01'
+export const token = process.env.SANITY_API_TOKEN
 
 // Client per query (senza token - dati pubblici)
 export const client = createClient({
@@ -17,19 +18,23 @@ export const client = createClient({
   perspective: 'published', // Solo contenuti pubblicati
 })
 
-// Client per preview (con token - bozze)
+// Client per preview/draft mode (con token - vede bozze)
 export const previewClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false,
-  token: process.env.SANITY_API_TOKEN,
-  perspective: 'previewDrafts',
+  useCdn: false, // No cache per vedere modifiche in tempo reale
+  token,
+  perspective: 'previewDrafts', // Vede sia bozze che pubblicati
+  stega: {
+    enabled: true, // Abilita visual editing overlays
+    studioUrl: '/studio', // URL relativo di Sanity Studio
+  },
 })
 
-// Seleziona client basato su modalita preview
-export function getClient(preview = false) {
-  return preview ? previewClient : client
+// Seleziona client basato su modalita draft
+export function getClient(isDraftMode = false) {
+  return isDraftMode ? previewClient : client
 }
 
 // Builder per URL immagini

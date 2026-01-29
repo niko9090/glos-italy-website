@@ -2,6 +2,7 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { draftMode } from 'next/headers'
 import { getAllProducts, getAllCategories } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
 
@@ -13,9 +14,11 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function ProductsPage() {
+  const isDraftMode = draftMode().isEnabled
+
   const [products, categories] = await Promise.all([
-    getAllProducts(),
-    getAllCategories(),
+    getAllProducts(isDraftMode),
+    getAllCategories(isDraftMode),
   ])
 
   return (

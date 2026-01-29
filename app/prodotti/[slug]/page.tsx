@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { draftMode } from 'next/headers'
 import { getProductBySlug, getProductSlugs } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
 import { ArrowLeft } from 'lucide-react'
@@ -39,7 +40,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProductBySlug(params.slug)
+  const isDraftMode = draftMode().isEnabled
+  const product = await getProductBySlug(params.slug, isDraftMode)
 
   if (!product) {
     notFound()

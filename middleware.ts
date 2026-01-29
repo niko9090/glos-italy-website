@@ -3,12 +3,19 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const response = NextResponse.next()
+  // Crea una nuova response con headers modificati
+  const requestHeaders = new Headers(request.headers)
 
-  // Rimuove X-Frame-Options per permettere embedding da Sanity Studio
-  response.headers.delete('X-Frame-Options')
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  })
 
-  // Imposta CSP per permettere solo domini specifici
+  // Sovrascrive X-Frame-Options con valore vuoto (effettivamente lo disabilita)
+  response.headers.set('X-Frame-Options', '')
+
+  // Imposta CSP per permettere iframe da Sanity Studio
   response.headers.set(
     'Content-Security-Policy',
     "frame-ancestors 'self' https://*.sanity.studio https://glositalystudio.vercel.app"
@@ -18,5 +25,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/:path*',
+  // Applica a tutte le route
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 }

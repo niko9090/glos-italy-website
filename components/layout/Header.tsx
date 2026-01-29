@@ -14,8 +14,20 @@ interface HeaderProps {
   navigation: Navigation | null
 }
 
+// Helper per estrarre valore da campo che può essere stringa o oggetto multilingua
+function getTextValue(value: unknown): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') {
+    const obj = value as Record<string, unknown>
+    if ('it' in obj) return String(obj.it || obj.en || obj.es || '')
+  }
+  return ''
+}
+
 export default function Header({ settings, navigation }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const companyName = getTextValue(settings?.companyName) || 'GLOS Italy'
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
 
@@ -28,14 +40,14 @@ export default function Header({ settings, navigation }: HeaderProps) {
             {settings?.logo ? (
               <Image
                 src={urlFor(settings.logo).width(200).url()}
-                alt={settings.companyName || 'Logo'}
+                alt={companyName}
                 width={150}
                 height={50}
                 className="h-12 w-auto"
               />
             ) : (
               <span className="text-2xl font-bold text-primary">
-                {settings?.companyName || 'GLOS Italy'}
+                {companyName}
               </span>
             )}
           </Link>

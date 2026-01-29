@@ -10,8 +10,32 @@ interface FooterProps {
   navigation: Navigation | null
 }
 
+// Helper per estrarre valore da campo che può essere stringa o oggetto multilingua
+function getTextValue(value: unknown): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') {
+    const obj = value as Record<string, unknown>
+    // Se è un oggetto multilingua {it, en, es}
+    if ('it' in obj) return String(obj.it || obj.en || obj.es || '')
+    // Se è un oggetto indirizzo {street, city, ...}
+    if ('street' in obj || 'city' in obj) {
+      const addr = obj as { street?: string; city?: string; province?: string; postalCode?: string; country?: string }
+      return [addr.street, addr.city, addr.province, addr.postalCode, addr.country]
+        .filter(Boolean)
+        .join(', ')
+    }
+  }
+  return ''
+}
+
 export default function Footer({ settings, navigation }: FooterProps) {
   const currentYear = new Date().getFullYear()
+
+  // Estrai valori sicuri
+  const companyName = getTextValue(settings?.companyName) || 'GLOS Italy'
+  const slogan = getTextValue(settings?.slogan)
+  const address = getTextValue(settings?.address)
 
   return (
     <footer className="bg-gray-900 text-white">
@@ -22,19 +46,19 @@ export default function Footer({ settings, navigation }: FooterProps) {
             {settings?.logo ? (
               <Image
                 src={urlFor(settings.logo).width(200).url()}
-                alt={settings.companyName || 'Logo'}
+                alt={companyName}
                 width={150}
                 height={50}
                 className="h-12 w-auto mb-6 brightness-0 invert"
               />
             ) : (
               <h3 className="text-2xl font-bold mb-6">
-                {settings?.companyName || 'GLOS Italy'}
+                {companyName}
               </h3>
             )}
 
-            {settings?.slogan && (
-              <p className="text-gray-400 mb-6">{settings.slogan}</p>
+            {slogan && (
+              <p className="text-gray-400 mb-6">{slogan}</p>
             )}
 
             {/* Social Links */}
@@ -110,10 +134,10 @@ export default function Footer({ settings, navigation }: FooterProps) {
           <div>
             <h4 className="text-lg font-semibold mb-6">Contatti</h4>
             <ul className="space-y-4">
-              {settings?.address && (
+              {address && (
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                  <span className="text-gray-400">{settings.address}</span>
+                  <span className="text-gray-400">{address}</span>
                 </li>
               )}
               {settings?.phone && (
@@ -148,7 +172,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
         <div className="container-glos py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm">
-              © {currentYear} {settings?.companyName || 'GLOS Italy'}. Tutti i diritti riservati.
+              © {currentYear} {companyName}. Tutti i diritti riservati.
             </p>
             <div className="flex gap-6 text-sm">
               <Link href="/privacy" className="text-gray-500 hover:text-white transition-colors">

@@ -81,10 +81,17 @@ export interface Dealer {
   _id: string
   name?: string
   type?: string
+  logo?: any
   email?: string
   phone?: string
   city?: string
   address?: string
+  location?: {
+    lat: number
+    lng: number
+  }
+  regions?: string[]
+  certifications?: string[]
   isActive?: boolean
 }
 

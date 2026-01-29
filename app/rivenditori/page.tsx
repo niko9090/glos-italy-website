@@ -1,10 +1,24 @@
 // Dealers Page
 import { Metadata } from 'next'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { draftMode } from 'next/headers'
 import { getAllDealers } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
-import { MapPin, Phone, Mail, Globe, Award } from 'lucide-react'
+import { MapPin, Phone, Mail, Award } from 'lucide-react'
+
+// Import dinamico per Leaflet (non supporta SSR)
+const DealersMap = dynamic(() => import('@/components/DealersMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-96 bg-gray-100 rounded-2xl flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-2"></div>
+        <p className="text-gray-500">Caricamento mappa...</p>
+      </div>
+    </div>
+  ),
+})
 
 export const metadata: Metadata = {
   title: 'Rivenditori',
@@ -55,52 +69,36 @@ export default async function DealersPage() {
         </div>
       </div>
 
-      {/* Address */}
-      {dealer.address && (
+      {/* City & Address */}
+      {(dealer.city || dealer.address) && (
         <div className="flex items-start gap-2 mt-4 text-sm text-gray-600">
           <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <span>
-            {[
-              dealer.address.street,
-              dealer.address.city,
-              dealer.address.province,
-              dealer.address.postalCode,
-            ]
-              .filter(Boolean)
-              .join(', ')}
+            {dealer.city}
+            {dealer.city && dealer.address && ' - '}
+            {dealer.address}
           </span>
         </div>
       )}
 
       {/* Contact */}
       <div className="mt-4 space-y-2">
-        {dealer.contact?.phone && (
+        {dealer.phone && (
           <a
-            href={`tel:${dealer.contact.phone.replace(/\s/g, '')}`}
+            href={`tel:${dealer.phone.replace(/\s/g, '')}`}
             className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary"
           >
             <Phone className="w-4 h-4" />
-            {dealer.contact.phone}
+            {dealer.phone}
           </a>
         )}
-        {dealer.contact?.email && (
+        {dealer.email && (
           <a
-            href={`mailto:${dealer.contact.email}`}
+            href={`mailto:${dealer.email}`}
             className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary"
           >
             <Mail className="w-4 h-4" />
-            {dealer.contact.email}
-          </a>
-        )}
-        {dealer.contact?.website && (
-          <a
-            href={dealer.contact.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary"
-          >
-            <Globe className="w-4 h-4" />
-            Visita il sito
+            {dealer.email}
           </a>
         )}
       </div>
@@ -135,9 +133,12 @@ export default async function DealersPage() {
           </p>
         </div>
 
-        {/* Map Placeholder */}
-        <div className="bg-gray-100 rounded-2xl h-96 mb-12 flex items-center justify-center">
-          <p className="text-gray-500">Mappa interattiva - Configurare con Google Maps API</p>
+        {/* Mappa Interattiva */}
+        <div className="mb-12">
+          <DealersMap dealers={dealers} />
+          <p className="text-sm text-gray-500 text-center mt-2">
+            Clicca sui marker per vedere i dettagli del rivenditore
+          </p>
         </div>
 
         {/* Distributors */}

@@ -181,10 +181,15 @@ export const allDealersQuery = groq`
     _id,
     name,
     type,
+    logo,
     email,
     phone,
     city,
-    address
+    address,
+    location,
+    regions,
+    certifications,
+    isActive
   }
 `
 
@@ -193,10 +198,14 @@ export const dealersByCityQuery = groq`
     _id,
     name,
     type,
+    logo,
     email,
     phone,
     city,
-    address
+    address,
+    location,
+    regions,
+    certifications
   }
 `
 

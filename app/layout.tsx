@@ -8,6 +8,17 @@ import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 
+// Helper per estrarre valore da campo che può essere stringa o oggetto multilingua
+function getTextValue(value: unknown): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') {
+    const obj = value as Record<string, unknown>
+    if ('it' in obj) return String(obj.it || obj.en || obj.es || '')
+  }
+  return ''
+}
+
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
@@ -23,17 +34,19 @@ const poppins = Poppins({
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
+  const companyName = getTextValue(settings?.companyName) || 'GLOS Italy'
+  const slogan = getTextValue(settings?.slogan) || 'Prodotti di qualita Made in Italy'
 
   return {
     title: {
-      default: settings?.companyName || 'GLOS Italy',
+      default: companyName,
       template: '%s | GLOS Italy',
     },
-    description: settings?.slogan || 'Prodotti di qualita Made in Italy',
+    description: slogan,
     openGraph: {
       type: 'website',
       locale: 'it_IT',
-      siteName: settings?.companyName || 'GLOS Italy',
+      siteName: companyName,
     },
   }
 }

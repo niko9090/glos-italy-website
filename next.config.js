@@ -53,7 +53,7 @@ const nextConfig = {
             value: 'origin-when-cross-origin',
           },
           {
-            // Permette iframe da Sanity Studio per visual editing
+            // Permette iframe da Sanity Studio per visual editing (sovrascrive X-Frame-Options)
             key: 'Content-Security-Policy',
             value: "frame-ancestors 'self' https://*.sanity.studio https://glositalystudio.vercel.app",
           },

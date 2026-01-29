@@ -115,7 +115,7 @@
     @apply w-full px-4 py-3 border border-gray-300 rounded-lg;
     @apply focus:ring-2 focus:ring-primary focus:border-transparent;
     @apply transition-all duration-300 ease-out;
-    @apply hover:border-gray-400 focus:shadow-lg focus:shadow-primary/10;
+    @apply hover:border-gray-400 focus:shadow-lg;
   }
 
   .input-animated {

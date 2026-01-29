@@ -154,7 +154,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                   <motion.div
                     variants={iconContainerVariants}
                     className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center
-                               group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/30
+                               group-hover:bg-primary group-hover:shadow-lg
                                transition-all duration-300"
                   >
                     <Check className="w-6 h-6 text-primary group-hover:text-white transition-colors duration-300" />

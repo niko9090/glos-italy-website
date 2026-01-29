@@ -176,7 +176,7 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                   >
                     <Image
                       src={urlFor(testimonial.avatar).width(96).height(96).url()}
-                      alt={testimonial.author || ''}
+                      alt={getTextValue(testimonial.author)}
                       fill
                       className="object-cover"
                     />
@@ -184,13 +184,13 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                 )}
                 <div>
                   <p className="font-semibold group-hover:text-primary transition-colors duration-300">
-                    {testimonial.author}
+                    {getTextValue(testimonial.author)}
                   </p>
                   {(testimonial.role || testimonial.company) && (
                     <p className="text-sm text-gray-500">
-                      {testimonial.role}
+                      {getTextValue(testimonial.role)}
                       {testimonial.role && testimonial.company && ', '}
-                      {testimonial.company}
+                      {getTextValue(testimonial.company)}
                     </p>
                   )}
                 </div>

@@ -181,7 +181,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
             >
               <Image
                 src={urlFor(image).width(400).height(400).url()}
-                alt={image.caption || ''}
+                alt={getTextValue(image.caption)}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -204,7 +204,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent
                                 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                   <p className="text-white text-sm truncate">
-                    {image.caption}
+                    {getTextValue(image.caption)}
                   </p>
                 </div>
               )}
@@ -293,7 +293,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 >
                   <Image
                     src={urlFor(data.images[lightboxIndex]).width(1600).url()}
-                    alt={data.images[lightboxIndex].caption || ''}
+                    alt={getTextValue(data.images[lightboxIndex].caption)}
                     fill
                     className="object-contain"
                   />
@@ -307,7 +307,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                       className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent"
                     >
                       <p className="text-white text-center text-lg">
-                        {data.images[lightboxIndex].caption}
+                        {getTextValue(data.images[lightboxIndex].caption)}
                       </p>
                     </motion.div>
                   )}

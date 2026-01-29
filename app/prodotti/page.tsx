@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { draftMode } from 'next/headers'
 import { getAllProducts, getAllCategories } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 export const metadata: Metadata = {
   title: 'Prodotti',
@@ -44,7 +45,7 @@ export default async function ProductsPage() {
                 href={`/prodotti/categoria/${category.slug?.current}`}
                 className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
               >
-                {category.name} ({category.productCount})
+                {getTextValue(category.name)} ({category.productCount})
               </Link>
             ))}
           </div>
@@ -85,17 +86,17 @@ export default async function ProductsPage() {
                 <div className="p-6">
                   {product.category && (
                     <span className="text-sm text-primary font-medium">
-                      {product.category.name}
+                      {getTextValue(product.category.name)}
                     </span>
                   )}
 
                   <h2 className="text-xl font-semibold mt-1 mb-2 group-hover:text-primary transition-colors">
-                    {product.name}
+                    {getTextValue(product.name)}
                   </h2>
 
                   {product.shortDescription && (
                     <p className="text-gray-600 line-clamp-2">
-                      {product.shortDescription}
+                      {getTextValue(product.shortDescription)}
                     </p>
                   )}
                 </div>

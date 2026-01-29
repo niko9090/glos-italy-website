@@ -6,6 +6,7 @@ import { draftMode } from 'next/headers'
 import { getAllDealers } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
 import { MapPin, Phone, Mail, Award } from 'lucide-react'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 // Import dinamico per Leaflet (non supporta SSR)
 const DealersMap = dynamic(() => import('@/components/DealersMap'), {
@@ -50,7 +51,7 @@ export default async function DealersPage() {
           </div>
         )}
         <div className="flex-grow">
-          <h3 className="text-lg font-semibold">{dealer.name}</h3>
+          <h3 className="text-lg font-semibold">{getTextValue(dealer.name)}</h3>
 
           {/* Certifications */}
           {dealer.certifications && dealer.certifications.length > 0 && (
@@ -61,7 +62,7 @@ export default async function DealersPage() {
                   className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full"
                 >
                   <Award className="w-3 h-3" />
-                  {cert}
+                  {getTextValue(cert)}
                 </span>
               ))}
             </div>
@@ -74,9 +75,9 @@ export default async function DealersPage() {
         <div className="flex items-start gap-2 mt-4 text-sm text-gray-600">
           <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <span>
-            {dealer.city}
+            {getTextValue(dealer.city)}
             {dealer.city && dealer.address && ' - '}
-            {dealer.address}
+            {getTextValue(dealer.address)}
           </span>
         </div>
       )}
@@ -85,20 +86,20 @@ export default async function DealersPage() {
       <div className="mt-4 space-y-2">
         {dealer.phone && (
           <a
-            href={`tel:${dealer.phone.replace(/\s/g, '')}`}
+            href={`tel:${getTextValue(dealer.phone).replace(/\s/g, '')}`}
             className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary"
           >
             <Phone className="w-4 h-4" />
-            {dealer.phone}
+            {getTextValue(dealer.phone)}
           </a>
         )}
         {dealer.email && (
           <a
-            href={`mailto:${dealer.email}`}
+            href={`mailto:${getTextValue(dealer.email)}`}
             className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary"
           >
             <Mail className="w-4 h-4" />
-            {dealer.email}
+            {getTextValue(dealer.email)}
           </a>
         )}
       </div>
@@ -113,7 +114,7 @@ export default async function DealersPage() {
                 key={index}
                 className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded"
               >
-                {region}
+                {getTextValue(region)}
               </span>
             ))}
           </div>

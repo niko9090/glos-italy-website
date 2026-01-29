@@ -106,7 +106,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     href={item.href || '#'}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {item.label}
+                    {getTextValue(item.label)}
                   </Link>
                 </li>
               ))}
@@ -144,10 +144,10 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 <li className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-primary flex-shrink-0" />
                   <a
-                    href={`tel:${settings.phone.replace(/\s/g, '')}`}
+                    href={`tel:${getTextValue(settings.phone).replace(/\s/g, '')}`}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {settings.phone}
+                    {getTextValue(settings.phone)}
                   </a>
                 </li>
               )}
@@ -155,10 +155,10 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 <li className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-primary flex-shrink-0" />
                   <a
-                    href={`mailto:${settings.email}`}
+                    href={`mailto:${getTextValue(settings.email)}`}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {settings.email}
+                    {getTextValue(settings.email)}
                   </a>
                 </li>
               )}

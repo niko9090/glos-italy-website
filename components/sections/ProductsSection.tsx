@@ -92,7 +92,7 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
         {data.buttonText && data.buttonLink && (
           <div className="text-center mt-12">
             <Link href={data.buttonLink} className="btn-primary">
-              {data.buttonText}
+              {getTextValue(data.buttonText)}
             </Link>
           </div>
         )}
@@ -175,7 +175,7 @@ function ProductCard({ product }: { product: Product }) {
 
           {product.shortDescription && (
             <p className="text-gray-600 line-clamp-2">
-              {product.shortDescription}
+              {getTextValue(product.shortDescription)}
             </p>
           )}
         </div>

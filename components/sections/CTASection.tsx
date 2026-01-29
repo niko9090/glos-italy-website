@@ -61,11 +61,11 @@ export default function CTASection({ data }: CTASectionProps) {
           {data.phone && (
             <div className="mt-8">
               <a
-                href={`tel:${data.phone.replace(/\s/g, '')}`}
+                href={`tel:${getTextValue(data.phone).replace(/\s/g, '')}`}
                 className="inline-flex items-center gap-2 text-lg font-medium"
               >
                 <Phone className="w-5 h-5" />
-                {data.phone}
+                {getTextValue(data.phone)}
               </a>
             </div>
           )}

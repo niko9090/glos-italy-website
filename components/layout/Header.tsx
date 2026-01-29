@@ -60,7 +60,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
                 href={item.href || '#'}
                 className="text-gray-700 hover:text-primary font-medium py-2 transition-colors"
               >
-                {item.label}
+                {getTextValue(item.label)}
               </Link>
             ))}
           </nav>
@@ -102,7 +102,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
                     onClick={toggleMobileMenu}
                     className="block py-3 text-gray-700 font-medium hover:text-primary"
                   >
-                    {item.label}
+                    {getTextValue(item.label)}
                   </Link>
                 ))}
 

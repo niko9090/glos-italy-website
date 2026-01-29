@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getAllProducts, getAllCategories } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
-import { t, defaultLocale } from '@/lib/i18n'
 
 export const metadata: Metadata = {
   title: 'Prodotti',
@@ -18,7 +17,6 @@ export default async function ProductsPage() {
     getAllProducts(),
     getAllCategories(),
   ])
-  const locale = defaultLocale
 
   return (
     <div className="section">
@@ -43,7 +41,7 @@ export default async function ProductsPage() {
                 href={`/prodotti/categoria/${category.slug?.current}`}
                 className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
               >
-                {t(category.name, locale)} ({category.productCount})
+                {category.name} ({category.productCount})
               </Link>
             ))}
           </div>
@@ -59,7 +57,7 @@ export default async function ProductsPage() {
                   {product.mainImage && (
                     <Image
                       src={urlFor(product.mainImage).width(600).height(450).url()}
-                      alt={t(product.name, locale) || ''}
+                      alt={product.name || ''}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -84,27 +82,17 @@ export default async function ProductsPage() {
                 <div className="p-6">
                   {product.category && (
                     <span className="text-sm text-primary font-medium">
-                      {t(product.category.name, locale)}
+                      {product.category.name}
                     </span>
                   )}
 
                   <h2 className="text-xl font-semibold mt-1 mb-2 group-hover:text-primary transition-colors">
-                    {t(product.name, locale)}
+                    {product.name}
                   </h2>
 
                   {product.shortDescription && (
                     <p className="text-gray-600 line-clamp-2">
-                      {t(product.shortDescription, locale)}
-                    </p>
-                  )}
-
-                  {/* Price */}
-                  {product.price?.showPrice && product.price?.amount && (
-                    <p className="mt-4 text-lg font-semibold text-primary">
-                      {new Intl.NumberFormat('it-IT', {
-                        style: 'currency',
-                        currency: product.price.currency || 'EUR',
-                      }).format(product.price.amount)}
+                      {product.shortDescription}
                     </p>
                   )}
                 </div>

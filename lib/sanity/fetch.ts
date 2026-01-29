@@ -14,127 +14,78 @@ import {
   allCategoriesQuery,
   categoryBySlugQuery,
   allDealersQuery,
-  dealersByRegionQuery,
+  dealersByCityQuery,
   allTestimonialsQuery,
   featuredTestimonialsQuery,
   allFaqsQuery,
   faqsByCategoryQuery,
 } from './queries'
 
-// Types
-export interface LocalizedString {
-  it?: string
-  en?: string
-  es?: string
-}
-
+// Types - Semplificati (no multilingua)
 export interface SiteSettings {
-  companyName: string
+  companyName?: string
+  slogan?: string
   logo?: any
-  tagline?: LocalizedString
-  contact?: {
-    email?: string
-    phone?: string
-    address?: LocalizedString
-  }
-  social?: {
-    facebook?: string
-    instagram?: string
-    linkedin?: string
-    youtube?: string
-  }
-  footer?: {
-    copyright?: LocalizedString
-  }
-  seo?: {
-    title?: string
-    description?: LocalizedString
-    keywords?: string[]
-  }
+  email?: string
+  phone?: string
+  address?: string
+  facebook?: string
+  instagram?: string
+  linkedin?: string
 }
 
 export interface Navigation {
-  header?: Array<{
+  items?: Array<{
     _key: string
-    label?: LocalizedString
+    label?: string
     href?: string
-    children?: Array<{
-      _key: string
-      label?: LocalizedString
-      href?: string
-    }>
   }>
-  footer?: any
 }
 
 export interface Page {
   _id: string
-  title?: LocalizedString
+  title?: string
   slug?: { current: string }
-  description?: LocalizedString
-  seo?: any
   sections?: any[]
+  isPublished?: boolean
 }
 
 export interface Product {
   _id: string
-  name?: LocalizedString
+  name?: string
   slug?: { current: string }
-  shortDescription?: LocalizedString
-  fullDescription?: LocalizedString
+  shortDescription?: string
+  description?: string
+  specs?: string
   mainImage?: any
-  gallery?: any[]
   category?: {
     _id: string
-    name?: LocalizedString
+    name?: string
     slug?: { current: string }
   }
-  specifications?: any[]
-  documents?: any[]
-  price?: {
-    amount?: number
-    currency?: string
-    showPrice?: boolean
-  }
+  isActive?: boolean
   isNew?: boolean
   isFeatured?: boolean
-  relatedProducts?: Product[]
-  seo?: any
 }
 
 export interface Category {
   _id: string
-  name?: LocalizedString
+  name?: string
   slug?: { current: string }
-  description?: LocalizedString
+  description?: string
   image?: any
   productCount?: number
-  seo?: any
 }
 
 export interface Dealer {
   _id: string
   name?: string
   type?: string
-  logo?: any
-  address?: {
-    street?: string
-    city?: string
-    province?: string
-    postalCode?: string
-    country?: string
-  }
-  contact?: {
-    phone?: string
-    email?: string
-    website?: string
-  }
-  location?: {
-    lat?: number
-    lng?: number
-  }
-  regions?: string[]
-  certifications?: string[]
+  email?: string
+  phone?: string
+  city?: string
+  address?: string
+  isActive?: boolean
 }
 
 export interface Testimonial {
@@ -143,14 +94,14 @@ export interface Testimonial {
   company?: string
   role?: string
   avatar?: any
-  quote?: LocalizedString
+  quote?: string
   rating?: number
 }
 
 export interface FAQ {
   _id: string
-  question?: LocalizedString
-  answer?: LocalizedString
+  question?: string
+  answer?: string
   category?: string
 }
 
@@ -229,9 +180,9 @@ export async function getAllDealers(preview = false): Promise<Dealer[]> {
   return client.fetch(allDealersQuery, {}, { next: { revalidate: 60 } }) || []
 }
 
-export async function getDealersByRegion(region: string, preview = false): Promise<Dealer[]> {
+export async function getDealersByCity(city: string, preview = false): Promise<Dealer[]> {
   const client = getClient(preview)
-  return client.fetch(dealersByRegionQuery, { region }, { next: { revalidate: 60 } }) || []
+  return client.fetch(dealersByCityQuery, { city }, { next: { revalidate: 60 } }) || []
 }
 
 // Testimonials

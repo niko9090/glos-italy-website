@@ -3,17 +3,14 @@
 
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { t, defaultLocale } from '@/lib/i18n'
 
 interface StatsSectionProps {
   data: {
     items?: Array<{
       _key: string
       number?: string
-      label?: { it?: string; en?: string; es?: string }
-      description?: { it?: string; en?: string; es?: string }
+      label?: string
     }>
-    backgroundColor?: string
   }
 }
 
@@ -63,16 +60,6 @@ function AnimatedNumber({ value, suffix = '' }: { value: string; suffix?: string
 }
 
 export default function StatsSection({ data }: StatsSectionProps) {
-  const locale = defaultLocale
-
-  const bgClasses = {
-    light: 'bg-gray-50',
-    dark: 'bg-gray-900 text-white',
-    blue: 'bg-primary text-white',
-  }
-
-  const bgClass = bgClasses[data.backgroundColor as keyof typeof bgClasses] || bgClasses.light
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -99,7 +86,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
   }
 
   return (
-    <section className={`section ${bgClass} overflow-hidden`}>
+    <section className="section bg-primary text-white overflow-hidden">
       <div className="container-glos">
         <motion.div
           variants={containerVariants}
@@ -125,15 +112,8 @@ export default function StatsSection({ data }: StatsSectionProps) {
 
               {/* Label */}
               <div className="text-lg md:text-xl font-semibold mb-1 opacity-90">
-                {t(stat.label, locale)}
+                {stat.label}
               </div>
-
-              {/* Description */}
-              {stat.description && (
-                <div className="text-sm opacity-70 max-w-[200px] mx-auto">
-                  {t(stat.description, locale)}
-                </div>
-              )}
 
               {/* Decorative underline */}
               <div className="mt-4 mx-auto w-12 h-1 bg-current opacity-30 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />

@@ -7,15 +7,15 @@ import { groq } from 'next-sanity'
 
 export const siteSettingsQuery = groq`
   *[_type == "siteSettings"][0] {
-    "companyName": company.name,
+    companyName,
+    slogan,
     logo,
-    tagline,
-    contact,
+    email,
+    phone,
     address,
-    social,
-    footer,
-    seo,
-    businessHours
+    facebook,
+    instagram,
+    linkedin
   }
 `
 
@@ -24,18 +24,12 @@ export const siteSettingsQuery = groq`
 // ============================================
 
 export const navigationQuery = groq`
-  *[_type == "navigation" && _id == "mainNavigation"][0] {
-    header[] {
+  *[_type == "navigation"][0] {
+    "items": items[isActive == true] {
       _key,
       label,
-      href,
-      children[] {
-        _key,
-        label,
-        href
-      }
-    },
-    footer
+      href
+    }
   }
 `
 
@@ -59,11 +53,10 @@ export const pageBySlugQuery = groq`
 `
 
 export const allPagesQuery = groq`
-  *[_type == "page"] | order(title.it asc) {
+  *[_type == "page"] | order(title asc) {
     _id,
     title,
-    slug,
-    description
+    slug
   }
 `
 
@@ -158,7 +151,7 @@ export const productSlugsQuery = groq`
 // ============================================
 
 export const allCategoriesQuery = groq`
-  *[_type == "productCategory" && isActive == true] | order(sortOrder asc) {
+  *[_type == "productCategory" && isActive == true] | order(name asc) {
     _id,
     name,
     slug,
@@ -188,24 +181,22 @@ export const allDealersQuery = groq`
     _id,
     name,
     type,
-    logo,
-    address,
-    contact,
-    location,
-    regions,
-    certifications
+    email,
+    phone,
+    city,
+    address
   }
 `
 
-export const dealersByRegionQuery = groq`
-  *[_type == "dealer" && isActive == true && $region in regions] | order(name asc) {
+export const dealersByCityQuery = groq`
+  *[_type == "dealer" && isActive == true && city == $city] | order(name asc) {
     _id,
     name,
     type,
-    logo,
-    address,
-    contact,
-    location
+    email,
+    phone,
+    city,
+    address
   }
 `
 
@@ -214,7 +205,7 @@ export const dealersByRegionQuery = groq`
 // ============================================
 
 export const allTestimonialsQuery = groq`
-  *[_type == "testimonial" && isActive == true] | order(sortOrder asc) {
+  *[_type == "testimonial" && isActive == true] | order(_createdAt desc) {
     _id,
     author,
     company,
@@ -226,10 +217,12 @@ export const allTestimonialsQuery = groq`
 `
 
 export const featuredTestimonialsQuery = groq`
-  *[_type == "testimonial" && isActive == true && isFeatured == true] | order(sortOrder asc)[0...3] {
+  *[_type == "testimonial" && isActive == true] | order(_createdAt desc)[0...3] {
     _id,
     author,
     company,
+    role,
+    avatar,
     quote,
     rating
   }

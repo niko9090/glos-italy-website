@@ -6,19 +6,15 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import { urlFor } from '@/lib/sanity/client'
-import { t, defaultLocale } from '@/lib/i18n'
 
 interface GallerySectionProps {
   data: {
-    title?: { it?: string; en?: string; es?: string }
-    subtitle?: { it?: string; en?: string; es?: string }
+    title?: string
     images?: Array<{
       _key: string
       asset: any
-      alt?: { it?: string; en?: string; es?: string }
-      caption?: { it?: string; en?: string; es?: string }
+      caption?: string
     }>
-    layout?: 'grid' | 'masonry' | 'carousel'
   }
 }
 
@@ -94,7 +90,6 @@ const counterVariants = {
 }
 
 export default function GallerySection({ data }: GallerySectionProps) {
-  const locale = defaultLocale
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [[page, direction], setPage] = useState([0, 0])
 
@@ -149,7 +144,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
     <section className="section bg-white overflow-hidden">
       <div className="container-glos">
         {/* Header */}
-        {(data.title || data.subtitle) && (
+        {data.title && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -157,12 +152,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            {data.title && (
-              <h2 className="section-title mb-4">{t(data.title, locale)}</h2>
-            )}
-            {data.subtitle && (
-              <p className="section-subtitle mx-auto">{t(data.subtitle, locale)}</p>
-            )}
+            <h2 className="section-title mb-4">{data.title}</h2>
           </motion.div>
         )}
 
@@ -190,7 +180,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
             >
               <Image
                 src={urlFor(image).width(400).height(400).url()}
-                alt={t(image.alt, locale) || ''}
+                alt={image.caption || ''}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -213,7 +203,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent
                                 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                   <p className="text-white text-sm truncate">
-                    {t(image.caption, locale)}
+                    {image.caption}
                   </p>
                 </div>
               )}
@@ -302,7 +292,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 >
                   <Image
                     src={urlFor(data.images[lightboxIndex]).width(1600).url()}
-                    alt={t(data.images[lightboxIndex].alt, locale) || ''}
+                    alt={data.images[lightboxIndex].caption || ''}
                     fill
                     className="object-contain"
                   />
@@ -316,7 +306,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                       className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent"
                     >
                       <p className="text-white text-center text-lg">
-                        {t(data.images[lightboxIndex].caption, locale)}
+                        {data.images[lightboxIndex].caption}
                       </p>
                     </motion.div>
                   )}

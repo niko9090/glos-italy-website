@@ -1,9 +1,8 @@
 // Footer Component
 import Link from 'next/link'
 import Image from 'next/image'
-import { Facebook, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from 'lucide-react'
+import { Facebook, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
 import { urlFor } from '@/lib/sanity/client'
-import { t, defaultLocale } from '@/lib/i18n'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
 
 interface FooterProps {
@@ -12,15 +11,7 @@ interface FooterProps {
 }
 
 export default function Footer({ settings, navigation }: FooterProps) {
-  const locale = defaultLocale
   const currentYear = new Date().getFullYear()
-
-  const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-    facebook: Facebook,
-    instagram: Instagram,
-    linkedin: Linkedin,
-    youtube: Youtube,
-  }
 
   return (
     <footer className="bg-gray-900 text-white">
@@ -42,45 +33,56 @@ export default function Footer({ settings, navigation }: FooterProps) {
               </h3>
             )}
 
-            {settings?.tagline && (
-              <p className="text-gray-400 mb-6">{t(settings.tagline, locale)}</p>
+            {settings?.slogan && (
+              <p className="text-gray-400 mb-6">{settings.slogan}</p>
             )}
 
             {/* Social Links */}
-            {settings?.social && (
-              <div className="flex gap-4">
-                {Object.entries(settings.social).map(([key, url]) => {
-                  if (!url) return null
-                  const Icon = socialIcons[key]
-                  if (!Icon) return null
-
-                  return (
-                    <a
-                      key={key}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
-                    >
-                      <Icon className="w-5 h-5" />
-                    </a>
-                  )
-                })}
-              </div>
-            )}
+            <div className="flex gap-4">
+              {settings?.facebook && (
+                <a
+                  href={settings.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+              )}
+              {settings?.instagram && (
+                <a
+                  href={settings.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+              )}
+              {settings?.linkedin && (
+                <a
+                  href={settings.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              )}
+            </div>
           </div>
 
           {/* Quick Links */}
           <div>
             <h4 className="text-lg font-semibold mb-6">Link Rapidi</h4>
             <ul className="space-y-3">
-              {navigation?.header?.slice(0, 6).map((item) => (
+              {navigation?.items?.slice(0, 6).map((item) => (
                 <li key={item._key}>
                   <Link
                     href={item.href || '#'}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {t(item.label, locale)}
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -97,11 +99,6 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 </Link>
               </li>
               <li>
-                <Link href="/catalogo" className="text-gray-400 hover:text-white transition-colors">
-                  Catalogo PDF
-                </Link>
-              </li>
-              <li>
                 <Link href="/rivenditori" className="text-gray-400 hover:text-white transition-colors">
                   Trova Rivenditore
                 </Link>
@@ -113,31 +110,31 @@ export default function Footer({ settings, navigation }: FooterProps) {
           <div>
             <h4 className="text-lg font-semibold mb-6">Contatti</h4>
             <ul className="space-y-4">
-              {settings?.contact?.address && (
+              {settings?.address && (
                 <li className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                  <span className="text-gray-400">{t(settings.contact.address, locale)}</span>
+                  <span className="text-gray-400">{settings.address}</span>
                 </li>
               )}
-              {settings?.contact?.phone && (
+              {settings?.phone && (
                 <li className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-primary flex-shrink-0" />
                   <a
-                    href={`tel:${settings.contact.phone.replace(/\s/g, '')}`}
+                    href={`tel:${settings.phone.replace(/\s/g, '')}`}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {settings.contact.phone}
+                    {settings.phone}
                   </a>
                 </li>
               )}
-              {settings?.contact?.email && (
+              {settings?.email && (
                 <li className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-primary flex-shrink-0" />
                   <a
-                    href={`mailto:${settings.contact.email}`}
+                    href={`mailto:${settings.email}`}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {settings.contact.email}
+                    {settings.email}
                   </a>
                 </li>
               )}
@@ -151,8 +148,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
         <div className="container-glos py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm">
-              {t(settings?.footer?.copyright, locale) ||
-                `© ${currentYear} GLOS Italy. Tutti i diritti riservati.`}
+              © {currentYear} {settings?.companyName || 'GLOS Italy'}. Tutti i diritti riservati.
             </p>
             <div className="flex gap-6 text-sm">
               <Link href="/privacy" className="text-gray-500 hover:text-white transition-colors">
@@ -160,9 +156,6 @@ export default function Footer({ settings, navigation }: FooterProps) {
               </Link>
               <Link href="/cookie" className="text-gray-500 hover:text-white transition-colors">
                 Cookie Policy
-              </Link>
-              <Link href="/termini" className="text-gray-500 hover:text-white transition-colors">
-                Termini e Condizioni
               </Link>
             </div>
           </div>

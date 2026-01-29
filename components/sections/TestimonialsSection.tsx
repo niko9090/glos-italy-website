@@ -5,13 +5,12 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Star, Quote } from 'lucide-react'
 import { urlFor } from '@/lib/sanity/client'
-import { t, defaultLocale } from '@/lib/i18n'
 import type { Testimonial } from '@/lib/sanity/fetch'
 
 interface TestimonialsSectionProps {
   data: {
-    title?: { it?: string; en?: string; es?: string }
-    subtitle?: { it?: string; en?: string; es?: string }
+    title?: string
+    subtitle?: string
   }
   testimonials?: Testimonial[]
 }
@@ -87,8 +86,6 @@ function AnimatedStar({ filled, delay }: { filled: boolean; delay: number }) {
 }
 
 export default function TestimonialsSection({ data, testimonials }: TestimonialsSectionProps) {
-  const locale = defaultLocale
-
   if (!testimonials || testimonials.length === 0) {
     return null
   }
@@ -105,10 +102,10 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
           className="text-center mb-12"
         >
           {data.title && (
-            <h2 className="section-title mb-4">{t(data.title, locale)}</h2>
+            <h2 className="section-title mb-4">{data.title}</h2>
           )}
           {data.subtitle && (
-            <p className="section-subtitle mx-auto">{t(data.subtitle, locale)}</p>
+            <p className="section-subtitle mx-auto">{data.subtitle}</p>
           )}
         </motion.div>
 
@@ -160,7 +157,7 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                 transition={{ delay: 0.4 }}
                 className="text-gray-700 mb-6 italic leading-relaxed"
               >
-                "{t(testimonial.quote, locale)}"
+                "{testimonial.quote}"
               </motion.blockquote>
 
               {/* Author */}

@@ -1,8 +1,7 @@
 // Dynamic Page
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-import { getPageBySlug, getPageSlugs } from '@/lib/sanity/fetch'
-import { t, defaultLocale } from '@/lib/i18n'
+import { getPageBySlug, getPageSlugs, getFeaturedProducts, getAllTestimonials } from '@/lib/sanity/fetch'
 import { SectionRenderer } from '@/components/sections/SectionRenderer'
 
 export const revalidate = 60
@@ -25,16 +24,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Pagina non trovata' }
   }
 
-  const title = t(page.title, defaultLocale) || 'GLOS Italy'
-  const description = t(page.description, defaultLocale) || ''
-
   return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-    },
+    title: page.title || 'GLOS Italy',
   }
 }
 
@@ -45,10 +36,21 @@ export default async function DynamicPage({ params }: PageProps) {
     notFound()
   }
 
+  // Fetch additional data for sections that need it
+  const [products, testimonials] = await Promise.all([
+    getFeaturedProducts(),
+    getAllTestimonials(),
+  ])
+
   return (
     <>
       {page.sections?.map((section, index) => (
-        <SectionRenderer key={section._key || index} section={section} />
+        <SectionRenderer
+          key={section._key || index}
+          section={section}
+          products={products}
+          testimonials={testimonials}
+        />
       ))}
     </>
   )

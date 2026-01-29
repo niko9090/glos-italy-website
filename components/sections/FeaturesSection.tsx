@@ -4,35 +4,18 @@
 import { useRef } from 'react'
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Check, Star, Shield, Award, Zap, Heart, Target, Leaf, Globe, Users } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { urlFor } from '@/lib/sanity/client'
-import { t, defaultLocale } from '@/lib/i18n'
-
-// Icon mapping with more options
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  check: Check,
-  star: Star,
-  shield: Shield,
-  award: Award,
-  zap: Zap,
-  heart: Heart,
-  target: Target,
-  leaf: Leaf,
-  globe: Globe,
-  users: Users,
-}
 
 interface FeaturesSectionProps {
   data: {
-    sectionLabel?: { it?: string; en?: string; es?: string }
-    title?: { it?: string; en?: string; es?: string }
-    subtitle?: { it?: string; en?: string; es?: string }
+    title?: string
+    subtitle?: string
     image?: any
     items?: Array<{
       _key: string
-      icon?: string
-      title?: { it?: string; en?: string; es?: string }
-      description?: { it?: string; en?: string; es?: string }
+      title?: string
+      description?: string
     }>
   }
 }
@@ -75,7 +58,6 @@ const iconContainerVariants = {
 }
 
 export default function FeaturesSection({ data }: FeaturesSectionProps) {
-  const locale = defaultLocale
   const sectionRef = useRef<HTMLElement>(null)
 
   // Parallax for the image
@@ -127,17 +109,6 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {data.sectionLabel && (
-              <motion.span
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4"
-              >
-                {t(data.sectionLabel, locale)}
-              </motion.span>
-            )}
-
             {data.title && (
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
@@ -146,7 +117,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                 transition={{ delay: 0.1 }}
                 className="section-title mb-4"
               >
-                {t(data.title, locale)}
+                {data.title}
               </motion.h2>
             )}
 
@@ -158,7 +129,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                 transition={{ delay: 0.2 }}
                 className="section-subtitle mb-8"
               >
-                {t(data.subtitle, locale)}
+                {data.subtitle}
               </motion.p>
             )}
 
@@ -170,40 +141,36 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
               viewport={{ once: true, margin: '-50px' }}
               className="space-y-6"
             >
-              {data.items?.map((item) => {
-                const Icon = iconMap[item.icon || 'check'] || Check
-
-                return (
+              {data.items?.map((item) => (
+                <motion.div
+                  key={item._key}
+                  variants={itemVariants}
+                  whileHover="hover"
+                  initial="rest"
+                  animate="rest"
+                  className="flex gap-4 group cursor-default"
+                >
+                  {/* Icon with rotation and glow on hover */}
                   <motion.div
-                    key={item._key}
-                    variants={itemVariants}
-                    whileHover="hover"
-                    initial="rest"
-                    animate="rest"
-                    className="flex gap-4 group cursor-default"
+                    variants={iconContainerVariants}
+                    className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center
+                               group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/30
+                               transition-all duration-300"
                   >
-                    {/* Icon with rotation and glow on hover */}
-                    <motion.div
-                      variants={iconContainerVariants}
-                      className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center
-                                 group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/30
-                                 transition-all duration-300"
-                    >
-                      <Icon className="w-6 h-6 text-primary group-hover:text-white transition-colors duration-300" />
-                    </motion.div>
-
-                    {/* Text content */}
-                    <div>
-                      <h3 className="text-lg font-semibold mb-1 group-hover:text-primary transition-colors duration-300">
-                        {t(item.title, locale)}
-                      </h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        {t(item.description, locale)}
-                      </p>
-                    </div>
+                    <Check className="w-6 h-6 text-primary group-hover:text-white transition-colors duration-300" />
                   </motion.div>
-                )
-              })}
+
+                  {/* Text content */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-1 group-hover:text-primary transition-colors duration-300">
+                      {item.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
           </motion.div>
         </div>

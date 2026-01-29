@@ -6,20 +6,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { urlFor } from '@/lib/sanity/client'
-import { t, defaultLocale } from '@/lib/i18n'
 import type { Product } from '@/lib/sanity/fetch'
 
 interface ProductsSectionProps {
   data: {
-    sectionLabel?: { it?: string; en?: string; es?: string }
-    title?: { it?: string; en?: string; es?: string }
-    subtitle?: { it?: string; en?: string; es?: string }
+    title?: string
+    subtitle?: string
     showFeatured?: boolean
     limit?: number
-    ctaButton?: {
-      text?: { it?: string; en?: string; es?: string }
-      link?: string
-    }
+    buttonText?: string
+    buttonLink?: string
   }
   products?: Product[]
 }
@@ -62,7 +58,6 @@ function ImagePlaceholder() {
 }
 
 export default function ProductsSection({ data, products }: ProductsSectionProps) {
-  const locale = defaultLocale
   const displayProducts = products?.slice(0, data.limit || 6) || []
 
   return (
@@ -70,18 +65,12 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
       <div className="container-glos">
         {/* Header */}
         <div className="text-center mb-12">
-          {data.sectionLabel && (
-            <span className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
-              {t(data.sectionLabel, locale)}
-            </span>
-          )}
-
           {data.title && (
-            <h2 className="section-title mb-4">{t(data.title, locale)}</h2>
+            <h2 className="section-title mb-4">{data.title}</h2>
           )}
 
           {data.subtitle && (
-            <p className="section-subtitle mx-auto">{t(data.subtitle, locale)}</p>
+            <p className="section-subtitle mx-auto">{data.subtitle}</p>
           )}
         </div>
 
@@ -94,15 +83,15 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
           viewport={{ once: true, margin: "-50px" }}
         >
           {displayProducts.map((product) => (
-            <ProductCard key={product._id} product={product} locale={locale} />
+            <ProductCard key={product._id} product={product} />
           ))}
         </motion.div>
 
         {/* CTA Button */}
-        {data.ctaButton?.text && data.ctaButton?.link && (
+        {data.buttonText && data.buttonLink && (
           <div className="text-center mt-12">
-            <Link href={data.ctaButton.link} className="btn-primary">
-              {t(data.ctaButton.text, locale)}
+            <Link href={data.buttonLink} className="btn-primary">
+              {data.buttonText}
             </Link>
           </div>
         )}
@@ -112,7 +101,7 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
 }
 
 // Separate ProductCard component for better organization
-function ProductCard({ product, locale }: { product: Product; locale: string }) {
+function ProductCard({ product }: { product: Product }) {
   const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
@@ -133,7 +122,7 @@ function ProductCard({ product, locale }: { product: Product; locale: string }) 
           {product.mainImage && (
             <Image
               src={urlFor(product.mainImage).width(600).height(450).url()}
-              alt={t(product.name, locale) || ''}
+              alt={product.name || ''}
               fill
               className={`object-cover transition-transform duration-700 ease-out group-hover:scale-110 ${
                 imageLoaded ? 'opacity-100' : 'opacity-0'
@@ -175,17 +164,17 @@ function ProductCard({ product, locale }: { product: Product; locale: string }) 
         <div className="p-6">
           {product.category && (
             <span className="text-sm text-primary font-medium">
-              {t(product.category.name, locale)}
+              {product.category.name}
             </span>
           )}
 
           <h3 className="text-xl font-semibold mt-1 mb-2 group-hover:text-primary transition-colors duration-300">
-            {t(product.name, locale)}
+            {product.name}
           </h3>
 
           {product.shortDescription && (
             <p className="text-gray-600 line-clamp-2">
-              {t(product.shortDescription, locale)}
+              {product.shortDescription}
             </p>
           )}
         </div>

@@ -25,9 +25,22 @@ function getTextValue(value: unknown): string {
   return ''
 }
 
+// Menu di fallback se Sanity non ha dati
+const defaultNavItems = [
+  { _key: 'home', label: 'Home', href: '/' },
+  { _key: 'chi-siamo', label: 'Chi Siamo', href: '/chi-siamo' },
+  { _key: 'prodotti', label: 'Prodotti', href: '/prodotti' },
+  { _key: 'rivenditori', label: 'Rivenditori', href: '/rivenditori' },
+]
+
 export default function Header({ settings, navigation }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const companyName = getTextValue(settings?.companyName) || 'GLOS Italy'
+
+  // Usa items da Sanity se esistono, altrimenti usa il fallback
+  const navItems = navigation?.items && navigation.items.length > 0
+    ? navigation.items
+    : defaultNavItems
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
 
@@ -54,7 +67,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
-            {navigation?.items?.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item._key}
                 href={item.href || '#'}
@@ -95,7 +108,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
           >
             <div className="container-glos py-4">
               <nav className="flex flex-col gap-2">
-                {navigation?.items?.map((item) => (
+                {navItems.map((item) => (
                   <Link
                     key={item._key}
                     href={item.href || '#'}

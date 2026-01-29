@@ -1,16 +1,17 @@
 // Draft Mode API - Attiva preview delle bozze per Sanity Presentation Tool
 import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { NextRequest } from 'next/server'
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
+export async function GET(request: NextRequest) {
+  // Attiva draft mode
+  const draft = draftMode()
+  draft.enable()
 
   // Ottieni il path dalla query string
-  const path = searchParams.get('sanity-preview-pathname') || '/'
-
-  // Attiva draft mode (permette di vedere le bozze)
-  draftMode().enable()
+  const searchParams = request.nextUrl.searchParams
+  const redirectTo = searchParams.get('sanity-preview-pathname') || searchParams.get('redirect') || '/'
 
   // Redirect alla pagina richiesta
-  redirect(path)
+  redirect(redirectTo)
 }

@@ -45,16 +45,17 @@ const nextConfig = {
             value: 'on',
           },
           {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-          {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
           },
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+          {
+            // Permette iframe da Sanity Studio per visual editing
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self' https://*.sanity.studio https://glositalystudio.vercel.app",
           },
         ],
       },

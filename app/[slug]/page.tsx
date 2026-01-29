@@ -5,6 +5,17 @@ import { draftMode } from 'next/headers'
 import { getPageBySlug, getPageSlugs, getFeaturedProducts, getAllTestimonials } from '@/lib/sanity/fetch'
 import { SectionRenderer } from '@/components/sections/SectionRenderer'
 
+// Helper per estrarre testo da campi multilingua
+function getTextValue(value: unknown): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') {
+    const obj = value as Record<string, unknown>
+    if ('it' in obj) return String(obj.it || obj.en || obj.es || '')
+  }
+  return ''
+}
+
 export const revalidate = 60
 
 interface PageProps {
@@ -26,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: page.title || 'GLOS Italy',
+    title: getTextValue(page.title) || 'GLOS Italy',
   }
 }
 

@@ -8,6 +8,17 @@ import { getProductBySlug, getProductSlugs } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
 import { ArrowLeft } from 'lucide-react'
 
+// Helper per estrarre testo da campi multilingua
+function getTextValue(value: unknown): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') {
+    const obj = value as Record<string, unknown>
+    if ('it' in obj) return String(obj.it || obj.en || obj.es || '')
+  }
+  return ''
+}
+
 interface ProductPageProps {
   params: { slug: string }
 }
@@ -26,12 +37,15 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     return { title: 'Prodotto non trovato' }
   }
 
+  const name = getTextValue(product.name) || 'Prodotto'
+  const description = getTextValue(product.shortDescription) || ''
+
   return {
-    title: product.name || 'Prodotto',
-    description: product.shortDescription || '',
+    title: name,
+    description: description,
     openGraph: {
-      title: product.name || 'Prodotto',
-      description: product.shortDescription || '',
+      title: name,
+      description: description,
       images: product.mainImage
         ? [urlFor(product.mainImage).width(1200).height(630).url()]
         : [],
@@ -47,9 +61,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound()
   }
 
+  // Estrai valori sicuri
+  const productName = getTextValue(product.name)
+  const shortDesc = getTextValue(product.shortDescription)
+  const fullDesc = getTextValue(product.description)
+  const categoryName = getTextValue(product.category?.name)
+  const specs = getTextValue(product.specs)
+
   // Parse specs from text (one per line)
-  const specsList = product.specs
-    ? product.specs.split('\n').filter((s: string) => s.trim())
+  const specsList = specs
+    ? specs.split('\n').filter((s: string) => s.trim())
     : []
 
   return (
@@ -72,7 +93,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {product.mainImage && (
               <Image
                 src={urlFor(product.mainImage).width(800).height(800).url()}
-                alt={product.name || ''}
+                alt={productName || 'Prodotto'}
                 fill
                 className="object-cover"
               />
@@ -82,15 +103,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {/* Product Info */}
           <div>
             {/* Category */}
-            {product.category && (
+            {categoryName && (
               <span className="text-sm text-primary font-medium">
-                {product.category.name}
+                {categoryName}
               </span>
             )}
 
             {/* Title */}
             <h1 className="text-3xl md:text-4xl font-bold mt-2 mb-4">
-              {product.name}
+              {productName}
             </h1>
 
             {/* Badges */}
@@ -103,9 +124,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             {/* Short Description */}
-            {product.shortDescription && (
+            {shortDesc && (
               <p className="text-lg text-gray-600 mb-6">
-                {product.shortDescription}
+                {shortDesc}
               </p>
             )}
 
@@ -137,11 +158,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         {/* Full Description */}
-        {product.description && (
+        {fullDesc && (
           <div className="mt-16 border-t pt-12">
             <h2 className="text-2xl font-semibold mb-6">Descrizione Completa</h2>
             <div className="prose prose-lg max-w-none">
-              {product.description}
+              {fullDesc}
             </div>
           </div>
         )}

@@ -6,7 +6,7 @@ import { SectionRenderer } from '@/components/sections/SectionRenderer'
 export const revalidate = 60 // Revalidate every 60 seconds
 
 export default async function HomePage() {
-  const isDraftMode = draftMode().isEnabled
+  const { isEnabled: isDraftMode } = await draftMode()
 
   const [page, products, testimonials] = await Promise.all([
     getPageBySlug('home', isDraftMode),

@@ -1,4 +1,6 @@
 // Data Fetching Functions
+// These functions wrap sanityFetch with proper cache tags for on-demand revalidation
+// Cache tags align with Sanity document types for accurate invalidation via webhook
 import { sanityFetch } from './client'
 import {
   siteSettingsQuery,
@@ -21,11 +23,14 @@ import {
   faqsByCategoryQuery,
 } from './queries'
 
-// Types
+// ===========================================
+// TYPE DEFINITIONS
+// ===========================================
+
 export interface SiteSettings {
   companyName?: string
   slogan?: string
-  logo?: any
+  logo?: unknown
   email?: string
   phone?: string
   address?: string
@@ -44,10 +49,17 @@ export interface Navigation {
 
 export interface Page {
   _id: string
+  _type?: string
   title?: string
   slug?: { current: string }
-  sections?: any[]
+  description?: string
+  sections?: unknown[]
   isPublished?: boolean
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+    ogImage?: unknown
+  }
 }
 
 export interface Product {
@@ -55,17 +67,28 @@ export interface Product {
   name?: string
   slug?: { current: string }
   shortDescription?: string
-  description?: string
-  specs?: string
-  mainImage?: any
+  fullDescription?: unknown
+  mainImage?: unknown
+  gallery?: unknown[]
   category?: {
     _id: string
     name?: string
     slug?: { current: string }
   }
+  specifications?: Array<{
+    label?: string
+    value?: string
+  }>
+  documents?: unknown[]
+  price?: number
   isActive?: boolean
   isNew?: boolean
   isFeatured?: boolean
+  relatedProducts?: Product[]
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+  }
 }
 
 export interface Category {
@@ -73,15 +96,19 @@ export interface Category {
   name?: string
   slug?: { current: string }
   description?: string
-  image?: any
+  image?: unknown
   productCount?: number
+  seo?: {
+    metaTitle?: string
+    metaDescription?: string
+  }
 }
 
 export interface Dealer {
   _id: string
   name?: string
   type?: string
-  logo?: any
+  logo?: unknown
   email?: string
   phone?: string
   city?: string
@@ -100,7 +127,7 @@ export interface Testimonial {
   author?: string
   company?: string
   role?: string
-  avatar?: any
+  avatar?: unknown
   quote?: string
   rating?: number
 }
@@ -112,99 +139,217 @@ export interface FAQ {
   category?: string
 }
 
-// ============================================
-// FETCH FUNCTIONS
-// ============================================
+// ===========================================
+// SETTINGS & NAVIGATION
+// Cache tags: 'settings', 'navigation' - invalidated on global changes
+// ===========================================
 
-// Settings
-export async function getSiteSettings(preview = false): Promise<SiteSettings | null> {
-  return sanityFetch<SiteSettings | null>(siteSettingsQuery, {}, preview)
+export async function getSiteSettings(
+  preview = false
+): Promise<SiteSettings | null> {
+  return sanityFetch<SiteSettings | null>(
+    siteSettingsQuery,
+    {},
+    preview,
+    ['settings']
+  )
 }
 
-// Navigation
-export async function getNavigation(preview = false): Promise<Navigation | null> {
-  return sanityFetch<Navigation | null>(navigationQuery, {}, preview)
+export async function getNavigation(
+  preview = false
+): Promise<Navigation | null> {
+  return sanityFetch<Navigation | null>(
+    navigationQuery,
+    {},
+    preview,
+    ['navigation']
+  )
 }
 
-// Pages
-export async function getPageBySlug(slug: string, preview = false): Promise<Page | null> {
-  return sanityFetch<Page | null>(pageBySlugQuery, { slug }, preview)
+// ===========================================
+// PAGES
+// Cache tags: 'pages', 'page-{slug}' - invalidated on page changes
+// ===========================================
+
+export async function getPageBySlug(
+  slug: string,
+  preview = false
+): Promise<Page | null> {
+  return sanityFetch<Page | null>(
+    pageBySlugQuery,
+    { slug },
+    preview,
+    ['pages', `page-${slug}`]
+  )
 }
 
 export async function getAllPages(preview = false): Promise<Page[]> {
-  const result = await sanityFetch<Page[]>(allPagesQuery, {}, preview)
+  const result = await sanityFetch<Page[]>(allPagesQuery, {}, preview, ['pages'])
   return result || []
 }
 
 export async function getPageSlugs(): Promise<string[]> {
-  const result = await sanityFetch<string[]>(pageSlugsQuery, {}, false)
+  const result = await sanityFetch<string[]>(pageSlugsQuery, {}, false, ['pages'])
   return result || []
 }
 
-// Products
+// ===========================================
+// PRODUCTS
+// Cache tags: 'products', 'product-{slug}' - invalidated on product changes
+// ===========================================
+
 export async function getAllProducts(preview = false): Promise<Product[]> {
-  const result = await sanityFetch<Product[]>(allProductsQuery, {}, preview)
+  const result = await sanityFetch<Product[]>(
+    allProductsQuery,
+    {},
+    preview,
+    ['products']
+  )
   return result || []
 }
 
-export async function getProductBySlug(slug: string, preview = false): Promise<Product | null> {
-  return sanityFetch<Product | null>(productBySlugQuery, { slug }, preview)
+export async function getProductBySlug(
+  slug: string,
+  preview = false
+): Promise<Product | null> {
+  return sanityFetch<Product | null>(
+    productBySlugQuery,
+    { slug },
+    preview,
+    ['products', `product-${slug}`]
+  )
 }
 
 export async function getFeaturedProducts(preview = false): Promise<Product[]> {
-  const result = await sanityFetch<Product[]>(featuredProductsQuery, {}, preview)
+  const result = await sanityFetch<Product[]>(
+    featuredProductsQuery,
+    {},
+    preview,
+    ['products']
+  )
   return result || []
 }
 
-export async function getProductsByCategory(categoryId: string, preview = false): Promise<Product[]> {
-  const result = await sanityFetch<Product[]>(productsByCategoryQuery, { categoryId }, preview)
+export async function getProductsByCategory(
+  categoryId: string,
+  preview = false
+): Promise<Product[]> {
+  const result = await sanityFetch<Product[]>(
+    productsByCategoryQuery,
+    { categoryId },
+    preview,
+    ['products', 'categories']
+  )
   return result || []
 }
 
 export async function getProductSlugs(): Promise<string[]> {
-  const result = await sanityFetch<string[]>(productSlugsQuery, {}, false)
+  const result = await sanityFetch<string[]>(productSlugsQuery, {}, false, [
+    'products',
+  ])
   return result || []
 }
 
-// Categories
+// ===========================================
+// CATEGORIES
+// Cache tags: 'categories', 'category-{slug}' - invalidated on category changes
+// ===========================================
+
 export async function getAllCategories(preview = false): Promise<Category[]> {
-  const result = await sanityFetch<Category[]>(allCategoriesQuery, {}, preview)
+  const result = await sanityFetch<Category[]>(
+    allCategoriesQuery,
+    {},
+    preview,
+    ['categories']
+  )
   return result || []
 }
 
-export async function getCategoryBySlug(slug: string, preview = false): Promise<Category | null> {
-  return sanityFetch<Category | null>(categoryBySlugQuery, { slug }, preview)
+export async function getCategoryBySlug(
+  slug: string,
+  preview = false
+): Promise<Category | null> {
+  return sanityFetch<Category | null>(
+    categoryBySlugQuery,
+    { slug },
+    preview,
+    ['categories', `category-${slug}`]
+  )
 }
 
-// Dealers
+// ===========================================
+// DEALERS
+// Cache tags: 'dealers' - invalidated on dealer changes
+// ===========================================
+
 export async function getAllDealers(preview = false): Promise<Dealer[]> {
-  const result = await sanityFetch<Dealer[]>(allDealersQuery, {}, preview)
+  const result = await sanityFetch<Dealer[]>(allDealersQuery, {}, preview, [
+    'dealers',
+  ])
   return result || []
 }
 
-export async function getDealersByCity(city: string, preview = false): Promise<Dealer[]> {
-  const result = await sanityFetch<Dealer[]>(dealersByCityQuery, { city }, preview)
+export async function getDealersByCity(
+  city: string,
+  preview = false
+): Promise<Dealer[]> {
+  const result = await sanityFetch<Dealer[]>(
+    dealersByCityQuery,
+    { city },
+    preview,
+    ['dealers']
+  )
   return result || []
 }
 
-// Testimonials
-export async function getAllTestimonials(preview = false): Promise<Testimonial[]> {
-  const result = await sanityFetch<Testimonial[]>(allTestimonialsQuery, {}, preview)
+// ===========================================
+// TESTIMONIALS
+// Cache tags: 'testimonials' - invalidated on testimonial changes
+// ===========================================
+
+export async function getAllTestimonials(
+  preview = false
+): Promise<Testimonial[]> {
+  const result = await sanityFetch<Testimonial[]>(
+    allTestimonialsQuery,
+    {},
+    preview,
+    ['testimonials']
+  )
   return result || []
 }
 
-export async function getFeaturedTestimonials(preview = false): Promise<Testimonial[]> {
-  const result = await sanityFetch<Testimonial[]>(featuredTestimonialsQuery, {}, preview)
+export async function getFeaturedTestimonials(
+  preview = false
+): Promise<Testimonial[]> {
+  const result = await sanityFetch<Testimonial[]>(
+    featuredTestimonialsQuery,
+    {},
+    preview,
+    ['testimonials']
+  )
   return result || []
 }
 
-// FAQs
+// ===========================================
+// FAQS
+// Cache tags: 'faqs' - invalidated on FAQ changes
+// ===========================================
+
 export async function getAllFaqs(preview = false): Promise<FAQ[]> {
-  const result = await sanityFetch<FAQ[]>(allFaqsQuery, {}, preview)
+  const result = await sanityFetch<FAQ[]>(allFaqsQuery, {}, preview, ['faqs'])
   return result || []
 }
 
-export async function getFaqsByCategory(category: string, preview = false): Promise<FAQ[]> {
-  const result = await sanityFetch<FAQ[]>(faqsByCategoryQuery, { category }, preview)
+export async function getFaqsByCategory(
+  category: string,
+  preview = false
+): Promise<FAQ[]> {
+  const result = await sanityFetch<FAQ[]>(
+    faqsByCategoryQuery,
+    { category },
+    preview,
+    ['faqs']
+  )
   return result || []
 }

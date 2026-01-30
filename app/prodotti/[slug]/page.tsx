@@ -90,14 +90,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Image */}
           <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100">
-            {product.mainImage && (
+            {product.mainImage ? (
               <Image
                 src={urlFor(product.mainImage).width(800).height(800).url()}
                 alt={productName || 'Prodotto'}
                 fill
                 className="object-cover"
               />
-            )}
+            ) : null}
           </div>
 
           {/* Product Info */}

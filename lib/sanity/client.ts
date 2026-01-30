@@ -31,7 +31,7 @@ export const previewClient = createClient({
   apiVersion,
   useCdn: false, // No cache per vedere modifiche in tempo reale
   token,
-  perspective: 'previewDrafts', // Usa previewDrafts invece di drafts per next-sanity v9
+  perspective: 'drafts',
   stega: {
     enabled: true,
     studioUrl,

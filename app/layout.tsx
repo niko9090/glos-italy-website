@@ -5,7 +5,6 @@ import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity'
 import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
-import { studioUrl } from '@/lib/sanity/client'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 
@@ -72,14 +71,7 @@ export default async function RootLayout({
         <main className="flex-grow">{children}</main>
         <Footer settings={settings} navigation={navigation} />
         {/* Visual Editing per Sanity - attivo solo in draft mode */}
-        {/* CRITICO: studioUrl e' necessario per la comunicazione con Sanity Studio */}
-        {isDraftMode && (
-          <VisualEditing
-            studioUrl={studioUrl}
-            // Refresh automatico quando i dati cambiano nello Studio
-            refresh={{ throttle: 2000 }}
-          />
-        )}
+        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   )

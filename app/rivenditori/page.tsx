@@ -41,16 +41,16 @@ export default async function DealersPage() {
   const DealerCard = ({ dealer }: { dealer: any }) => (
     <article className="card p-6">
       <div className="flex items-start gap-4">
-        {dealer.logo && (
+        {dealer.logo ? (
           <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
             <Image
               src={urlFor(dealer.logo).width(128).height(128).url()}
-              alt={dealer.name || ''}
+              alt={String(dealer.name || '')}
               fill
               className="object-contain"
             />
           </div>
-        )}
+        ) : null}
         <div className="flex-grow">
           <h3 className="text-lg font-semibold">{getTextValue(dealer.name)}</h3>
 

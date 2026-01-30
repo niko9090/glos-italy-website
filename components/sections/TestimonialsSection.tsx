@@ -169,7 +169,7 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                 transition={{ delay: 0.5, type: 'spring', stiffness: 100 }}
                 className="flex items-center gap-4"
               >
-                {testimonial.avatar && (
+                {testimonial.avatar ? (
                   <motion.div
                     whileHover={{ scale: 1.1 }}
                     className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-transparent group-hover:ring-primary/30 transition-all duration-300"
@@ -181,7 +181,7 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                       className="object-cover"
                     />
                   </motion.div>
-                )}
+                ) : null}
                 <div>
                   <p className="font-semibold group-hover:text-primary transition-colors duration-300">
                     {getTextValue(testimonial.author)}

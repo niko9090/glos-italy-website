@@ -20,7 +20,7 @@ export default function ProductGallery({ mainImage, gallery, productName }: Prod
     <div>
       {/* Main Image */}
       <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-4">
-        {activeImage && (
+        {activeImage ? (
           <Image
             src={urlFor(activeImage).width(800).height(800).url()}
             alt={productName}
@@ -28,7 +28,7 @@ export default function ProductGallery({ mainImage, gallery, productName }: Prod
             className="object-contain"
             priority
           />
-        )}
+        ) : null}
       </div>
 
       {/* Thumbnails */}

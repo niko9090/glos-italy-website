@@ -120,17 +120,17 @@ function ProductCard({ product }: { product: Product }) {
           {/* Shimmer placeholder */}
           {!imageLoaded && <ImagePlaceholder />}
 
-          {product.mainImage && (
+          {product.mainImage ? (
             <Image
               src={urlFor(product.mainImage).width(600).height(450).url()}
-              alt={product.name || ''}
+              alt={String(product.name || '')}
               fill
               className={`object-cover transition-transform duration-700 ease-out group-hover:scale-110 ${
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}
               onLoad={() => setImageLoaded(true)}
             />
-          )}
+          ) : null}
 
           {/* Badges with bounce-subtle animation */}
           <div className="absolute top-4 left-4 flex gap-2">

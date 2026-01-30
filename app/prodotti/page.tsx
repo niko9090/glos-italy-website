@@ -59,14 +59,14 @@ export default async function ProductsPage() {
               <Link href={`/prodotti/${product.slug?.current}`}>
                 {/* Image */}
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  {product.mainImage && (
+                  {product.mainImage ? (
                     <Image
                       src={urlFor(product.mainImage).width(600).height(450).url()}
-                      alt={product.name || ''}
+                      alt={String(product.name || '')}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  )}
+                  ) : null}
 
                   {/* Badges */}
                   <div className="absolute top-4 left-4 flex gap-2">

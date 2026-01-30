@@ -75,7 +75,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
       <div className="container-glos">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Image with parallax effect */}
-          {data.image && (
+          {data.image ? (
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -101,7 +101,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
               <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/10 rounded-2xl -z-10" />
               <div className="absolute -top-4 -left-4 w-16 h-16 bg-secondary/20 rounded-full -z-10" />
             </motion.div>
-          )}
+          ) : null}
 
           {/* Content */}
           <motion.div

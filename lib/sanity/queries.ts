@@ -38,11 +38,12 @@ export const navigationQuery = groq`
 // ============================================
 
 export const pageBySlugQuery = groq`
-  *[_type == "page" && slug.current == $slug][0] {
+  *[_type == "page" && slug.current == $slug && isPublished != false][0] {
     _id,
     title,
     slug,
     description,
+    isPublished,
     seo,
     sections[] {
       _type,
@@ -53,7 +54,7 @@ export const pageBySlugQuery = groq`
 `
 
 export const allPagesQuery = groq`
-  *[_type == "page"] | order(title asc) {
+  *[_type == "page" && isPublished != false] | order(title asc) {
     _id,
     title,
     slug
@@ -61,7 +62,7 @@ export const allPagesQuery = groq`
 `
 
 export const pageSlugsQuery = groq`
-  *[_type == "page" && defined(slug.current)].slug.current
+  *[_type == "page" && defined(slug.current) && isPublished != false].slug.current
 `
 
 // ============================================

@@ -1,9 +1,14 @@
 // Debug endpoint - RIMUOVERE DOPO IL DEBUG
 import { NextResponse } from 'next/server'
+import { draftMode } from 'next/headers'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  const draft = await draftMode()
+
   const config = {
-    // Verifica variabili ambiente (mostra solo se esistono, non i valori)
+    draftMode: draft.isEnabled,
     env: {
       NEXT_PUBLIC_SANITY_PROJECT_ID: !!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
       NEXT_PUBLIC_SANITY_DATASET: !!process.env.NEXT_PUBLIC_SANITY_DATASET,

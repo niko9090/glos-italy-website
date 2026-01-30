@@ -71,7 +71,26 @@ export default async function RootLayout({
         <main className="flex-grow">{children}</main>
         <Footer settings={settings} navigation={navigation} />
         {/* Visual Editing per Sanity - attivo solo in draft mode */}
-        {isDraftMode && <VisualEditing />}
+        {isDraftMode && (
+          <>
+            <VisualEditing />
+            {/* Debug indicator - RIMUOVERE IN PRODUZIONE */}
+            <div style={{
+              position: 'fixed',
+              bottom: 10,
+              right: 10,
+              background: '#22c55e',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 'bold',
+              zIndex: 9999
+            }}>
+              DRAFT MODE ATTIVO
+            </div>
+          </>
+        )}
       </body>
     </html>
   )

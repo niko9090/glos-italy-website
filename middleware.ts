@@ -2,34 +2,51 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+// Lista esplicita delle origini permesse per CORS
+const ALLOWED_ORIGINS = [
+  'https://glositalystudio.vercel.app',
+  'https://glositaly.sanity.studio',
+  'https://glositaly.it',
+  'https://www.glositaly.it',
+  'https://glositaly.vercel.app',
+]
+
 export function middleware(request: NextRequest) {
   const response = NextResponse.next()
 
   // Rimuovi X-Frame-Options per permettere iframe
-  // (delete e' piu affidabile di set(''))
   response.headers.delete('X-Frame-Options')
 
   // CSP che permette iframe da Sanity Studio
   // frame-ancestors controlla CHI puo includere questa pagina in iframe
   response.headers.set(
     'Content-Security-Policy',
-    "frame-ancestors 'self' https://*.sanity.studio https://glositalystudio.vercel.app https://*.vercel.app"
+    "frame-ancestors 'self' https://*.sanity.studio https://glositalystudio.vercel.app https://*.vercel.app https://glositaly.it https://www.glositaly.it"
   )
 
-  // Headers aggiuntivi per CORS e visual editing
+  // Headers CORS per visual editing
   const origin = request.headers.get('origin')
+
   if (origin) {
-    // Permetti richieste cross-origin da Sanity Studio
-    const allowedOrigins = [
-      'https://glositalystudio.vercel.app',
-      'https://glositaly.sanity.studio',
-    ]
-    if (allowedOrigins.some(allowed => origin.includes(allowed.replace('https://', '')))) {
+    // Verifica esatta dell'origine (non usare includes per sicurezza)
+    const isAllowedOrigin = ALLOWED_ORIGINS.includes(origin) ||
+      origin.endsWith('.sanity.studio') ||
+      origin.endsWith('.vercel.app')
+
+    if (isAllowedOrigin) {
       response.headers.set('Access-Control-Allow-Origin', origin)
       response.headers.set('Access-Control-Allow-Credentials', 'true')
-      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
     }
+  }
+
+  // Gestione preflight OPTIONS
+  if (request.method === 'OPTIONS') {
+    return new NextResponse(null, {
+      status: 204,
+      headers: response.headers,
+    })
   }
 
   return response

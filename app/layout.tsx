@@ -5,6 +5,7 @@ import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity'
 import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
+import { studioUrl } from '@/lib/sanity/client'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 
@@ -56,7 +57,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const isDraftMode = draftMode().isEnabled
+  // CORRETTO: draftMode() e' async in Next.js 14.x App Router
+  const { isEnabled: isDraftMode } = await draftMode()
 
   const [settings, navigation] = await Promise.all([
     getSiteSettings(isDraftMode),
@@ -70,7 +72,14 @@ export default async function RootLayout({
         <main className="flex-grow">{children}</main>
         <Footer settings={settings} navigation={navigation} />
         {/* Visual Editing per Sanity - attivo solo in draft mode */}
-        {isDraftMode && <VisualEditing />}
+        {/* CRITICO: studioUrl e' necessario per la comunicazione con Sanity Studio */}
+        {isDraftMode && (
+          <VisualEditing
+            studioUrl={studioUrl}
+            // Refresh automatico quando i dati cambiano nello Studio
+            refresh={{ throttle: 2000 }}
+          />
+        )}
       </body>
     </html>
   )

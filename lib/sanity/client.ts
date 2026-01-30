@@ -13,16 +13,19 @@ export const token = process.env.SANITY_API_TOKEN
 export const studioUrl = process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || 'https://glositalystudio.vercel.app'
 
 // Client base - usato per tutte le query
-// La configurazione stega viene passata al momento della fetch
+// Stega disabilitato di default, abilitato solo in draft mode via fetch options
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
   useCdn: true, // CDN per produzione, disabilitato durante draft mode
   perspective: 'published',
+  // Stega configurazione - CRITICO per Visual Editing
   stega: {
-    // Stega abilitato ma controllato a runtime via fetch options
+    enabled: false, // Disabilitato di default, abilitato dinamicamente in draft mode
     studioUrl,
+    // Log errori stega per debug
+    logger: console,
   },
 })
 
@@ -33,6 +36,11 @@ export async function sanityFetch<T>(
   params: Record<string, unknown> = {},
   isDraftMode = false
 ): Promise<T> {
+  // Log per debug in development
+  if (isDraftMode && process.env.NODE_ENV === 'development') {
+    console.log('[sanityFetch] Draft mode attivo, stega abilitato')
+  }
+
   return client.fetch<T>(
     query,
     params,
@@ -41,8 +49,11 @@ export async function sanityFetch<T>(
           // In draft mode: niente CDN, perspective drafts, stega abilitato
           perspective: 'drafts',
           useCdn: false,
+          // CRITICO: stega deve essere true per Visual Editing
           stega: true,
           token,
+          // Forza revalidazione per vedere cambiamenti in tempo reale
+          next: { revalidate: 0 },
         }
       : {
           // Produzione: CDN abilitato, perspective published, niente stega
@@ -60,6 +71,10 @@ export function getClient(isDraftMode = false) {
       perspective: 'drafts',
       useCdn: false,
       token,
+      stega: {
+        enabled: true,
+        studioUrl,
+      },
     })
   }
   return client

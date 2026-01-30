@@ -15,7 +15,8 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function ProductsPage() {
-  const isDraftMode = draftMode().isEnabled
+  // CORRETTO: draftMode() e' async in Next.js 14.x App Router
+  const { isEnabled: isDraftMode } = await draftMode()
 
   const [products, categories] = await Promise.all([
     getAllProducts(isDraftMode),

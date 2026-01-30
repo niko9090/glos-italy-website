@@ -19,7 +19,7 @@ function getTextValue(value: unknown): string {
 export const revalidate = 60
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
@@ -30,7 +30,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const page = await getPageBySlug(params.slug)
+  const { slug } = await params
+  const page = await getPageBySlug(slug)
 
   if (!page) {
     return { title: 'Pagina non trovata' }
@@ -42,8 +43,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function DynamicPage({ params }: PageProps) {
-  const isDraftMode = draftMode().isEnabled
-  const page = await getPageBySlug(params.slug, isDraftMode)
+  // CORRETTO: draftMode() e' async in Next.js 14.x App Router
+  const { isEnabled: isDraftMode } = await draftMode()
+  const { slug } = await params
+  const page = await getPageBySlug(slug, isDraftMode)
 
   if (!page) {
     notFound()

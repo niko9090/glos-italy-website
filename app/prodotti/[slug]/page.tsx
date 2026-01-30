@@ -20,7 +20,7 @@ function getTextValue(value: unknown): string {
 }
 
 interface ProductPageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export const revalidate = 60
@@ -31,7 +31,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const product = await getProductBySlug(params.slug)
+  const { slug } = await params
+  const product = await getProductBySlug(slug)
 
   if (!product) {
     return { title: 'Prodotto non trovato' }
@@ -54,8 +55,10 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const isDraftMode = draftMode().isEnabled
-  const product = await getProductBySlug(params.slug, isDraftMode)
+  // CORRETTO: draftMode() e' async in Next.js 14.x App Router
+  const { isEnabled: isDraftMode } = await draftMode()
+  const { slug } = await params
+  const product = await getProductBySlug(slug, isDraftMode)
 
   if (!product) {
     notFound()
@@ -147,7 +150,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <ul className="space-y-2">
                   {specsList.map((spec: string, index: number) => (
                     <li key={index} className="flex items-start gap-2">
-                      <span className="text-primary">•</span>
+                      <span className="text-primary">-</span>
                       <span>{spec}</span>
                     </li>
                   ))}

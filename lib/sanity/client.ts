@@ -1,5 +1,5 @@
 // Sanity Client Configuration
-import { createClient } from 'next-sanity'
+import { createClient, defineLive } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
@@ -191,3 +191,21 @@ export function getImageWithBlur(source: SanityImageSource) {
     blurDataURL,
   }
 }
+
+// ===========================================
+// LIVE MODE - Real-time updates in preview
+// ===========================================
+
+/**
+ * Live mode configuration for real-time preview updates.
+ * This enables automatic refresh when content changes in Sanity Studio.
+ */
+export const { sanityFetch: sanityFetchLive, SanityLive } = defineLive({
+  client: client.withConfig({
+    token,
+    stega: {
+      enabled: true,
+      studioUrl,
+    },
+  }),
+})

@@ -5,6 +5,7 @@ import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity'
 import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
+import { SanityLive } from '@/lib/sanity/client'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 
@@ -70,6 +71,8 @@ export default async function RootLayout({
         <Header settings={settings} navigation={navigation} />
         <main className="flex-grow">{children}</main>
         <Footer settings={settings} navigation={navigation} />
+        {/* Live updates - sempre attivo per refresh real-time */}
+        <SanityLive />
         {/* Visual Editing per Sanity - attivo solo in draft mode */}
         {isDraftMode && (
           <>

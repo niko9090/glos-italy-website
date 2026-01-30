@@ -35,6 +35,7 @@ const nextConfig = {
   },
 
   // Headers for security
+  // NOTA: CSP e X-Frame-Options sono gestiti dal middleware.ts per compatibilita con Sanity Visual Editing
   async headers() {
     return [
       {
@@ -52,14 +53,16 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
           },
-          {
-            // Permette iframe da Sanity Studio per visual editing (sovrascrive X-Frame-Options)
-            key: 'Content-Security-Policy',
-            value: "frame-ancestors 'self' https://*.sanity.studio https://glositalystudio.vercel.app",
-          },
         ],
       },
     ]
+  },
+
+  // Logging per debug in sviluppo
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
   },
 }
 

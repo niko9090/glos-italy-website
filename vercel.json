@@ -4,12 +4,25 @@
       "source": "/(.*)",
       "headers": [
         {
-          "key": "X-Frame-Options",
-          "value": ""
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://*.sanity.studio https://glositalystudio.vercel.app https://*.vercel.app"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
         },
         {
-          "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://*.sanity.studio https://glositalystudio.vercel.app"
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
         }
       ]
     }

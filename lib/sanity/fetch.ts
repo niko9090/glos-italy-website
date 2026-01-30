@@ -1,5 +1,5 @@
 // Data Fetching Functions
-import { getClient } from './client'
+import { getClient, getFetchOptions } from './client'
 import {
   siteSettingsQuery,
   navigationQuery,
@@ -119,24 +119,28 @@ export interface FAQ {
 // Settings
 export async function getSiteSettings(preview = false): Promise<SiteSettings | null> {
   const client = getClient(preview)
-  return client.fetch(siteSettingsQuery, {}, { next: { revalidate: 60 } })
+  const options = getFetchOptions(preview)
+  return client.fetch(siteSettingsQuery, {}, options)
 }
 
 // Navigation
 export async function getNavigation(preview = false): Promise<Navigation | null> {
   const client = getClient(preview)
-  return client.fetch(navigationQuery, {}, { next: { revalidate: 60 } })
+  const options = getFetchOptions(preview)
+  return client.fetch(navigationQuery, {}, options)
 }
 
 // Pages
 export async function getPageBySlug(slug: string, preview = false): Promise<Page | null> {
   const client = getClient(preview)
-  return client.fetch(pageBySlugQuery, { slug }, { next: { revalidate: 60 } })
+  const options = getFetchOptions(preview)
+  return client.fetch(pageBySlugQuery, { slug }, options)
 }
 
 export async function getAllPages(preview = false): Promise<Page[]> {
   const client = getClient(preview)
-  return client.fetch(allPagesQuery, {}, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(allPagesQuery, {}, options) || []
 }
 
 export async function getPageSlugs(): Promise<string[]> {
@@ -147,22 +151,26 @@ export async function getPageSlugs(): Promise<string[]> {
 // Products
 export async function getAllProducts(preview = false): Promise<Product[]> {
   const client = getClient(preview)
-  return client.fetch(allProductsQuery, {}, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(allProductsQuery, {}, options) || []
 }
 
 export async function getProductBySlug(slug: string, preview = false): Promise<Product | null> {
   const client = getClient(preview)
-  return client.fetch(productBySlugQuery, { slug }, { next: { revalidate: 60 } })
+  const options = getFetchOptions(preview)
+  return client.fetch(productBySlugQuery, { slug }, options)
 }
 
 export async function getFeaturedProducts(preview = false): Promise<Product[]> {
   const client = getClient(preview)
-  return client.fetch(featuredProductsQuery, {}, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(featuredProductsQuery, {}, options) || []
 }
 
 export async function getProductsByCategory(categoryId: string, preview = false): Promise<Product[]> {
   const client = getClient(preview)
-  return client.fetch(productsByCategoryQuery, { categoryId }, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(productsByCategoryQuery, { categoryId }, options) || []
 }
 
 export async function getProductSlugs(): Promise<string[]> {
@@ -173,43 +181,51 @@ export async function getProductSlugs(): Promise<string[]> {
 // Categories
 export async function getAllCategories(preview = false): Promise<Category[]> {
   const client = getClient(preview)
-  return client.fetch(allCategoriesQuery, {}, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(allCategoriesQuery, {}, options) || []
 }
 
 export async function getCategoryBySlug(slug: string, preview = false): Promise<Category | null> {
   const client = getClient(preview)
-  return client.fetch(categoryBySlugQuery, { slug }, { next: { revalidate: 60 } })
+  const options = getFetchOptions(preview)
+  return client.fetch(categoryBySlugQuery, { slug }, options)
 }
 
 // Dealers
 export async function getAllDealers(preview = false): Promise<Dealer[]> {
   const client = getClient(preview)
-  return client.fetch(allDealersQuery, {}, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(allDealersQuery, {}, options) || []
 }
 
 export async function getDealersByCity(city: string, preview = false): Promise<Dealer[]> {
   const client = getClient(preview)
-  return client.fetch(dealersByCityQuery, { city }, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(dealersByCityQuery, { city }, options) || []
 }
 
 // Testimonials
 export async function getAllTestimonials(preview = false): Promise<Testimonial[]> {
   const client = getClient(preview)
-  return client.fetch(allTestimonialsQuery, {}, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(allTestimonialsQuery, {}, options) || []
 }
 
 export async function getFeaturedTestimonials(preview = false): Promise<Testimonial[]> {
   const client = getClient(preview)
-  return client.fetch(featuredTestimonialsQuery, {}, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(featuredTestimonialsQuery, {}, options) || []
 }
 
 // FAQs
 export async function getAllFaqs(preview = false): Promise<FAQ[]> {
   const client = getClient(preview)
-  return client.fetch(allFaqsQuery, {}, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(allFaqsQuery, {}, options) || []
 }
 
 export async function getFaqsByCategory(category: string, preview = false): Promise<FAQ[]> {
   const client = getClient(preview)
-  return client.fetch(faqsByCategoryQuery, { category }, { next: { revalidate: 60 } }) || []
+  const options = getFetchOptions(preview)
+  return client.fetch(faqsByCategoryQuery, { category }, options) || []
 }

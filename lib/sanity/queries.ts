@@ -37,9 +37,12 @@ export const navigationQuery = groq`
 // PAGINE
 // ============================================
 
+// NOTA: La condizione isPublished != false viene gestita dalla perspective del client
+// In draft mode (perspective: 'previewDrafts') verranno mostrate anche le bozze
 export const pageBySlugQuery = groq`
-  *[_type == "page" && slug.current == $slug && isPublished != false][0] {
+  *[_type == "page" && slug.current == $slug][0] {
     _id,
+    _type,
     title,
     slug,
     description,

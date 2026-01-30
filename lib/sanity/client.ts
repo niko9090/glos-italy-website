@@ -1,5 +1,5 @@
 // Sanity Client Configuration
-import { createClient } from 'next-sanity'
+import { createClient, type QueryOptions } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
@@ -9,32 +9,52 @@ export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 export const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01'
 export const token = process.env.SANITY_API_TOKEN
 
-// Client per query (senza token - dati pubblici)
-export const client = createClient({
+// URL dello Studio Sanity per visual editing
+export const studioUrl = process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || 'https://glositalystudio.vercel.app'
+
+// Client base condiviso
+const baseClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true, // Cache CDN per performance
-  perspective: 'published', // Solo contenuti pubblicati
+  useCdn: false, // Disabilitato per garantire dati freschi
+  perspective: 'published',
 })
 
-// Client per preview/draft mode (con token - vede bozze)
+// Client per query pubbliche (senza stega)
+export const client = baseClient
+
+// Client per preview/draft mode (con token e stega)
 export const previewClient = createClient({
   projectId,
   dataset,
   apiVersion,
   useCdn: false, // No cache per vedere modifiche in tempo reale
   token,
-  perspective: 'drafts',
-  stega: token ? {
+  perspective: 'previewDrafts', // Usa previewDrafts invece di drafts per next-sanity v9
+  stega: {
     enabled: true,
-    studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || 'https://glositalystudio.vercel.app',
-  } : { enabled: false },
+    studioUrl,
+  },
 })
 
 // Seleziona client basato su modalita draft
 export function getClient(isDraftMode = false) {
   return isDraftMode ? previewClient : client
+}
+
+// Helper per opzioni di fetch in base a draft mode
+export function getFetchOptions(isDraftMode = false): QueryOptions {
+  if (isDraftMode) {
+    // In draft mode: no cache, sempre fresco
+    return {
+      next: { revalidate: 0 },
+    }
+  }
+  // In produzione: revalidate ogni 60 secondi
+  return {
+    next: { revalidate: 60 },
+  }
 }
 
 // Builder per URL immagini

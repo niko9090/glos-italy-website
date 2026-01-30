@@ -1,5 +1,5 @@
 // Data Fetching Functions
-import { getClient, getFetchOptions } from './client'
+import { getClient } from './client'
 import {
   siteSettingsQuery,
   navigationQuery,
@@ -21,7 +21,7 @@ import {
   faqsByCategoryQuery,
 } from './queries'
 
-// Types - Semplificati (no multilingua)
+// Types
 export interface SiteSettings {
   companyName?: string
   slogan?: string
@@ -119,28 +119,24 @@ export interface FAQ {
 // Settings
 export async function getSiteSettings(preview = false): Promise<SiteSettings | null> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(siteSettingsQuery, {}, options)
+  return client.fetch(siteSettingsQuery, {}, { next: { revalidate: preview ? 0 : 60 } })
 }
 
 // Navigation
 export async function getNavigation(preview = false): Promise<Navigation | null> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(navigationQuery, {}, options)
+  return client.fetch(navigationQuery, {}, { next: { revalidate: preview ? 0 : 60 } })
 }
 
 // Pages
 export async function getPageBySlug(slug: string, preview = false): Promise<Page | null> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(pageBySlugQuery, { slug }, options)
+  return client.fetch(pageBySlugQuery, { slug }, { next: { revalidate: preview ? 0 : 60 } })
 }
 
 export async function getAllPages(preview = false): Promise<Page[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(allPagesQuery, {}, options) || []
+  return client.fetch(allPagesQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 export async function getPageSlugs(): Promise<string[]> {
@@ -151,26 +147,22 @@ export async function getPageSlugs(): Promise<string[]> {
 // Products
 export async function getAllProducts(preview = false): Promise<Product[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(allProductsQuery, {}, options) || []
+  return client.fetch(allProductsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 export async function getProductBySlug(slug: string, preview = false): Promise<Product | null> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(productBySlugQuery, { slug }, options)
+  return client.fetch(productBySlugQuery, { slug }, { next: { revalidate: preview ? 0 : 60 } })
 }
 
 export async function getFeaturedProducts(preview = false): Promise<Product[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(featuredProductsQuery, {}, options) || []
+  return client.fetch(featuredProductsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 export async function getProductsByCategory(categoryId: string, preview = false): Promise<Product[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(productsByCategoryQuery, { categoryId }, options) || []
+  return client.fetch(productsByCategoryQuery, { categoryId }, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 export async function getProductSlugs(): Promise<string[]> {
@@ -181,51 +173,43 @@ export async function getProductSlugs(): Promise<string[]> {
 // Categories
 export async function getAllCategories(preview = false): Promise<Category[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(allCategoriesQuery, {}, options) || []
+  return client.fetch(allCategoriesQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 export async function getCategoryBySlug(slug: string, preview = false): Promise<Category | null> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(categoryBySlugQuery, { slug }, options)
+  return client.fetch(categoryBySlugQuery, { slug }, { next: { revalidate: preview ? 0 : 60 } })
 }
 
 // Dealers
 export async function getAllDealers(preview = false): Promise<Dealer[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(allDealersQuery, {}, options) || []
+  return client.fetch(allDealersQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 export async function getDealersByCity(city: string, preview = false): Promise<Dealer[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(dealersByCityQuery, { city }, options) || []
+  return client.fetch(dealersByCityQuery, { city }, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 // Testimonials
 export async function getAllTestimonials(preview = false): Promise<Testimonial[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(allTestimonialsQuery, {}, options) || []
+  return client.fetch(allTestimonialsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 export async function getFeaturedTestimonials(preview = false): Promise<Testimonial[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(featuredTestimonialsQuery, {}, options) || []
+  return client.fetch(featuredTestimonialsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 // FAQs
 export async function getAllFaqs(preview = false): Promise<FAQ[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(allFaqsQuery, {}, options) || []
+  return client.fetch(allFaqsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
 }
 
 export async function getFaqsByCategory(category: string, preview = false): Promise<FAQ[]> {
   const client = getClient(preview)
-  const options = getFetchOptions(preview)
-  return client.fetch(faqsByCategoryQuery, { category }, options) || []
+  return client.fetch(faqsByCategoryQuery, { category }, { next: { revalidate: preview ? 0 : 60 } }) || []
 }

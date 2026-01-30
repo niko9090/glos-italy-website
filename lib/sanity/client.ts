@@ -1,5 +1,5 @@
 // Sanity Client Configuration
-import { createClient, type QueryOptions } from 'next-sanity'
+import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
 
@@ -41,20 +41,6 @@ export const previewClient = createClient({
 // Seleziona client basato su modalita draft
 export function getClient(isDraftMode = false) {
   return isDraftMode ? previewClient : client
-}
-
-// Helper per opzioni di fetch in base a draft mode
-export function getFetchOptions(isDraftMode = false): QueryOptions {
-  if (isDraftMode) {
-    // In draft mode: no cache, sempre fresco
-    return {
-      next: { revalidate: 0 },
-    }
-  }
-  // In produzione: revalidate ogni 60 secondi
-  return {
-    next: { revalidate: 60 },
-  }
 }
 
 // Builder per URL immagini

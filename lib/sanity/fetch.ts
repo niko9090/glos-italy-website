@@ -1,5 +1,5 @@
 // Data Fetching Functions
-import { getClient } from './client'
+import { sanityFetch } from './client'
 import {
   siteSettingsQuery,
   navigationQuery,
@@ -118,98 +118,93 @@ export interface FAQ {
 
 // Settings
 export async function getSiteSettings(preview = false): Promise<SiteSettings | null> {
-  const client = getClient(preview)
-  return client.fetch(siteSettingsQuery, {}, { next: { revalidate: preview ? 0 : 60 } })
+  return sanityFetch<SiteSettings | null>(siteSettingsQuery, {}, preview)
 }
 
 // Navigation
 export async function getNavigation(preview = false): Promise<Navigation | null> {
-  const client = getClient(preview)
-  return client.fetch(navigationQuery, {}, { next: { revalidate: preview ? 0 : 60 } })
+  return sanityFetch<Navigation | null>(navigationQuery, {}, preview)
 }
 
 // Pages
 export async function getPageBySlug(slug: string, preview = false): Promise<Page | null> {
-  const client = getClient(preview)
-  return client.fetch(pageBySlugQuery, { slug }, { next: { revalidate: preview ? 0 : 60 } })
+  return sanityFetch<Page | null>(pageBySlugQuery, { slug }, preview)
 }
 
 export async function getAllPages(preview = false): Promise<Page[]> {
-  const client = getClient(preview)
-  return client.fetch(allPagesQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<Page[]>(allPagesQuery, {}, preview)
+  return result || []
 }
 
 export async function getPageSlugs(): Promise<string[]> {
-  const client = getClient(false)
-  return client.fetch(pageSlugsQuery) || []
+  const result = await sanityFetch<string[]>(pageSlugsQuery, {}, false)
+  return result || []
 }
 
 // Products
 export async function getAllProducts(preview = false): Promise<Product[]> {
-  const client = getClient(preview)
-  return client.fetch(allProductsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<Product[]>(allProductsQuery, {}, preview)
+  return result || []
 }
 
 export async function getProductBySlug(slug: string, preview = false): Promise<Product | null> {
-  const client = getClient(preview)
-  return client.fetch(productBySlugQuery, { slug }, { next: { revalidate: preview ? 0 : 60 } })
+  return sanityFetch<Product | null>(productBySlugQuery, { slug }, preview)
 }
 
 export async function getFeaturedProducts(preview = false): Promise<Product[]> {
-  const client = getClient(preview)
-  return client.fetch(featuredProductsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<Product[]>(featuredProductsQuery, {}, preview)
+  return result || []
 }
 
 export async function getProductsByCategory(categoryId: string, preview = false): Promise<Product[]> {
-  const client = getClient(preview)
-  return client.fetch(productsByCategoryQuery, { categoryId }, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<Product[]>(productsByCategoryQuery, { categoryId }, preview)
+  return result || []
 }
 
 export async function getProductSlugs(): Promise<string[]> {
-  const client = getClient(false)
-  return client.fetch(productSlugsQuery) || []
+  const result = await sanityFetch<string[]>(productSlugsQuery, {}, false)
+  return result || []
 }
 
 // Categories
 export async function getAllCategories(preview = false): Promise<Category[]> {
-  const client = getClient(preview)
-  return client.fetch(allCategoriesQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<Category[]>(allCategoriesQuery, {}, preview)
+  return result || []
 }
 
 export async function getCategoryBySlug(slug: string, preview = false): Promise<Category | null> {
-  const client = getClient(preview)
-  return client.fetch(categoryBySlugQuery, { slug }, { next: { revalidate: preview ? 0 : 60 } })
+  return sanityFetch<Category | null>(categoryBySlugQuery, { slug }, preview)
 }
 
 // Dealers
 export async function getAllDealers(preview = false): Promise<Dealer[]> {
-  const client = getClient(preview)
-  return client.fetch(allDealersQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<Dealer[]>(allDealersQuery, {}, preview)
+  return result || []
 }
 
 export async function getDealersByCity(city: string, preview = false): Promise<Dealer[]> {
-  const client = getClient(preview)
-  return client.fetch(dealersByCityQuery, { city }, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<Dealer[]>(dealersByCityQuery, { city }, preview)
+  return result || []
 }
 
 // Testimonials
 export async function getAllTestimonials(preview = false): Promise<Testimonial[]> {
-  const client = getClient(preview)
-  return client.fetch(allTestimonialsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<Testimonial[]>(allTestimonialsQuery, {}, preview)
+  return result || []
 }
 
 export async function getFeaturedTestimonials(preview = false): Promise<Testimonial[]> {
-  const client = getClient(preview)
-  return client.fetch(featuredTestimonialsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<Testimonial[]>(featuredTestimonialsQuery, {}, preview)
+  return result || []
 }
 
 // FAQs
 export async function getAllFaqs(preview = false): Promise<FAQ[]> {
-  const client = getClient(preview)
-  return client.fetch(allFaqsQuery, {}, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<FAQ[]>(allFaqsQuery, {}, preview)
+  return result || []
 }
 
 export async function getFaqsByCategory(category: string, preview = false): Promise<FAQ[]> {
-  const client = getClient(preview)
-  return client.fetch(faqsByCategoryQuery, { category }, { next: { revalidate: preview ? 0 : 60 } }) || []
+  const result = await sanityFetch<FAQ[]>(faqsByCategoryQuery, { category }, preview)
+  return result || []
 }

@@ -12,35 +12,57 @@ export const token = process.env.SANITY_API_TOKEN
 // URL dello Studio Sanity per visual editing
 export const studioUrl = process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || 'https://glositalystudio.vercel.app'
 
-// Client base condiviso
-const baseClient = createClient({
+// Client base - usato per tutte le query
+// La configurazione stega viene passata al momento della fetch
+export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false, // Disabilitato per garantire dati freschi
+  useCdn: true, // CDN per produzione, disabilitato durante draft mode
   perspective: 'published',
-})
-
-// Client per query pubbliche (senza stega)
-export const client = baseClient
-
-// Client per preview/draft mode (con token e stega)
-export const previewClient = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: false, // No cache per vedere modifiche in tempo reale
-  token,
-  perspective: 'drafts',
   stega: {
-    enabled: true,
+    // Stega abilitato ma controllato a runtime via fetch options
     studioUrl,
   },
 })
 
-// Seleziona client basato su modalita draft
+// Helper per eseguire query con configurazione corretta per draft mode
+// Questo permette di abilitare stega dinamicamente quando serve
+export async function sanityFetch<T>(
+  query: string,
+  params: Record<string, unknown> = {},
+  isDraftMode = false
+): Promise<T> {
+  return client.fetch<T>(
+    query,
+    params,
+    isDraftMode
+      ? {
+          // In draft mode: niente CDN, perspective drafts, stega abilitato
+          perspective: 'drafts',
+          useCdn: false,
+          stega: true,
+          token,
+        }
+      : {
+          // Produzione: CDN abilitato, perspective published, niente stega
+          perspective: 'published',
+          useCdn: true,
+          stega: false,
+        }
+  )
+}
+
+// Seleziona client configurato per draft mode (backward compatibility)
 export function getClient(isDraftMode = false) {
-  return isDraftMode ? previewClient : client
+  if (isDraftMode) {
+    return client.withConfig({
+      perspective: 'drafts',
+      useCdn: false,
+      token,
+    })
+  }
+  return client
 }
 
 // Builder per URL immagini

@@ -67,14 +67,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // Estrai valori sicuri
   const productName = getTextValue(product.name)
   const shortDesc = getTextValue(product.shortDescription)
-  const fullDesc = getTextValue(product.description)
+  const fullDesc = getTextValue(product.fullDescription)
   const categoryName = getTextValue(product.category?.name)
-  const specs = getTextValue(product.specs)
 
-  // Parse specs from text (one per line)
-  const specsList = specs
-    ? specs.split('\n').filter((s: string) => s.trim())
-    : []
+  // Specifications array
+  const specsList = product.specifications || []
 
   return (
     <div className="section">
@@ -148,10 +145,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <div className="border-t pt-6">
                 <h2 className="text-xl font-semibold mb-4">Specifiche Tecniche</h2>
                 <ul className="space-y-2">
-                  {specsList.map((spec: string, index: number) => (
+                  {specsList.map((spec, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <span className="text-primary">-</span>
-                      <span>{spec}</span>
+                      <span className="text-primary font-medium">{spec.label}:</span>
+                      <span>{spec.value}</span>
                     </li>
                   ))}
                 </ul>

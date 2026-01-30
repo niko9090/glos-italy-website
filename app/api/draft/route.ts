@@ -4,8 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
   // Attiva draft mode
-  const draft = await draftMode()
-  draft.enable()
+  draftMode().enable()
 
   // Ottieni il path dalla query string
   const searchParams = request.nextUrl.searchParams

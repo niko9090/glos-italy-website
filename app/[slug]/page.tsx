@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function DynamicPage({ params }: PageProps) {
-  const { isEnabled: isDraftMode } = await draftMode()
+  const isDraftMode = draftMode().isEnabled
   const page = await getPageBySlug(params.slug, isDraftMode)
 
   if (!page) {

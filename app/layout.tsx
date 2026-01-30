@@ -56,7 +56,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { isEnabled: isDraftMode } = await draftMode()
+  const isDraftMode = draftMode().isEnabled
 
   const [settings, navigation] = await Promise.all([
     getSiteSettings(isDraftMode),

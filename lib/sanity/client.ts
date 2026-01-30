@@ -25,11 +25,11 @@ export const previewClient = createClient({
   apiVersion,
   useCdn: false, // No cache per vedere modifiche in tempo reale
   token,
-  perspective: 'drafts', // Vede sia bozze che pubblicati (rinominato da 'previewDrafts')
-  stega: {
-    enabled: true, // Abilita visual editing overlays
+  perspective: 'drafts',
+  stega: token ? {
+    enabled: true,
     studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || 'https://glositalystudio.vercel.app',
-  },
+  } : { enabled: false },
 })
 
 // Seleziona client basato su modalita draft

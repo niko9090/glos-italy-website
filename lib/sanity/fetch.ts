@@ -47,13 +47,20 @@ export interface Navigation {
   }>
 }
 
+// Base type for all sections
+export interface Section {
+  _key: string
+  _type: string
+  [key: string]: unknown
+}
+
 export interface Page {
   _id: string
   _type?: string
   title?: string
   slug?: { current: string }
   description?: string
-  sections?: unknown[]
+  sections?: Section[]
   isPublished?: boolean
   seo?: {
     metaTitle?: string

@@ -3,6 +3,9 @@
 import { draftMode } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Force dynamic rendering - this endpoint uses draftMode()
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     // draftMode() is async in Next.js 14.x App Router

@@ -147,8 +147,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <ul className="space-y-2">
                   {specsList.map((spec, index) => (
                     <li key={index} className="flex items-start gap-2">
-                      <span className="text-primary font-medium">{spec.label}:</span>
-                      <span>{spec.value}</span>
+                      <span className="text-primary font-medium">{getTextValue(spec.label)}:</span>
+                      <span>{getTextValue(spec.value)}</span>
                     </li>
                   ))}
                 </ul>

@@ -42,7 +42,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
 
   // Get unique categories
   const categories = data.showCategories
-    ? [...new Set(data.items.map((item) => item.category).filter(Boolean))]
+    ? Array.from(new Set(data.items.map((item) => item.category).filter(Boolean)))
     : []
 
   // Filter items by category

@@ -181,7 +181,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
         <div className={`relative ${data.imageShape === 'square' || data.imageShape === 'circle' ? 'aspect-square' : 'aspect-[4/3]'}`}>
           <Image
             src={safeImageUrl(data.image, 800, 600)!}
-            alt={data.image?.alt || ''}
+            alt={(data.image as any)?.alt || ''}
             fill
             className="object-cover"
           />

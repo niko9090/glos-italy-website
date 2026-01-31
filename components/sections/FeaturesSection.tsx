@@ -111,17 +111,15 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {getTextValue(data.title) && (
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="section-title mb-4"
-              >
-                {getTextValue(data.title)}
-              </motion.h2>
-            )}
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="section-title mb-4"
+            >
+              <RichText value={data.title} />
+            </motion.h2>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}

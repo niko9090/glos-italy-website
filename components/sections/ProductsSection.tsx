@@ -67,9 +67,9 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
       <div className="container-glos">
         {/* Header */}
         <div className="text-center mb-12">
-          {data.title && (
-            <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
-          )}
+          <h2 className="section-title mb-4">
+            <RichText value={data.title} />
+          </h2>
 
           <div className="section-subtitle mx-auto">
             <RichText value={data.subtitle} />

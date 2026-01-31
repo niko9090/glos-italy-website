@@ -71,11 +71,9 @@ export default function HeroSection({ data }: HeroSectionProps) {
           transition={{ duration: 0.8 }}
           className="max-w-3xl"
         >
-          {getTextValue(data.title) && (
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              {getTextValue(data.title)}
-            </h1>
-          )}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+            <RichText value={data.title} />
+          </h1>
 
           <div className="text-xl md:text-2xl text-white/90 mb-10">
             <RichText value={data.subtitle} />

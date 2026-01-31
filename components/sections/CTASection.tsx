@@ -36,11 +36,9 @@ export default function CTASection({ data }: CTASectionProps) {
           viewport={{ once: true }}
           className="text-center max-w-3xl mx-auto"
         >
-          {getTextValue(data.title) && (
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {getTextValue(data.title)}
-            </h2>
-          )}
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <RichText value={data.title} />
+          </h2>
 
           <div className="text-xl mb-8 opacity-90">
             <RichText value={data.subtitle} />

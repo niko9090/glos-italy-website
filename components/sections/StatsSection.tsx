@@ -4,13 +4,15 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { getTextValue } from '@/lib/utils/textHelpers'
+import RichText from '@/components/RichText'
 
 interface StatsSectionProps {
   data: {
+    title?: unknown
     items?: Array<{
       _key: string
       number?: string
-      label?: string
+      label?: unknown
     }>
   }
 }
@@ -89,6 +91,13 @@ export default function StatsSection({ data }: StatsSectionProps) {
   return (
     <section className="section bg-primary text-white overflow-hidden">
       <div className="container-glos">
+        {/* Title */}
+        <div className="text-center mb-12">
+          <h2 className="section-title text-white mb-4">
+            <RichText value={data.title} />
+          </h2>
+        </div>
+
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -113,7 +122,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
 
               {/* Label */}
               <div className="text-lg md:text-xl font-semibold mb-1 opacity-90">
-                {getTextValue(stat.label)}
+                <RichText value={stat.label} />
               </div>
 
               {/* Decorative underline */}

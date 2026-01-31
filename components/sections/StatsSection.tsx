@@ -320,8 +320,63 @@ export default function StatsSection({ data }: StatsSectionProps) {
           className={getGridClasses()}
         >
           {data.items?.map((stat, index) => {
-            const StatWrapper = stat.link ? Link : 'div'
-            const wrapperProps = stat.link ? { href: stat.link } : {}
+            const statContent = (
+              <>
+                {/* Icon */}
+                {data.iconPosition !== 'hidden' && (stat.icon || stat.iconImage) && (
+                  <div className={`mb-3 ${
+                    data.iconPosition === 'left' ? 'inline-block mr-4 align-middle' :
+                    data.iconPosition === 'right' ? 'inline-block ml-4 align-middle float-right' :
+                    data.iconPosition === 'background' ? 'absolute inset-0 flex items-center justify-center opacity-10 text-8xl' :
+                    'block text-center'
+                  }`}>
+                    {stat.iconImage && isValidImage(stat.iconImage) ? (
+                      <Image
+                        src={safeImageUrl(stat.iconImage, 64) || ''}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className="inline-block"
+                      />
+                    ) : stat.icon ? (
+                      <span className="text-4xl">{stat.icon}</span>
+                    ) : null}
+                  </div>
+                )}
+
+                {/* Number */}
+                <div className={`relative ${colorClasses[stat.color || 'default']}`}>
+                  <div className={`${numberSizeClasses[data.numberSize || 'xl']} ${numberWeightClasses[data.numberWeight || 'bold']} mb-3`}>
+                    <AnimatedNumber
+                      value={stat.number || '0'}
+                      prefix={stat.prefix}
+                      suffix={stat.suffix}
+                      animate={data.countAnimation !== false}
+                      duration={data.countDuration || 2000}
+                    />
+                  </div>
+                  {/* Subtle glow on hover */}
+                  <div className="absolute inset-0 bg-current opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500" />
+                </div>
+
+                {/* Label */}
+                {!!stat.label && (
+                  <div className="text-lg md:text-xl font-semibold mb-1 opacity-90">
+                    <RichText value={stat.label} />
+                  </div>
+                )}
+
+                {/* Description */}
+                {!!stat.description && (
+                  <div className="text-sm opacity-70 mt-2">
+                    {t(stat.description)}
+                  </div>
+                )}
+
+                {/* Decorative underline */}
+                <div className="mt-4 mx-auto w-12 h-1 bg-current opacity-30 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+              </>
+            )
 
             return (
               <motion.div
@@ -329,61 +384,15 @@ export default function StatsSection({ data }: StatsSectionProps) {
                 variants={getItemVariants()}
                 className={`group ${data.alignment || 'center'} ${cardStyleClasses[data.cardStyle || 'none']} ${hoverClasses[data.hoverAnimation || 'scale']}`}
               >
-                <StatWrapper {...wrapperProps} className="block">
-                  {/* Icon */}
-                  {data.iconPosition !== 'hidden' && (stat.icon || stat.iconImage) && (
-                    <div className={`mb-3 ${
-                      data.iconPosition === 'left' ? 'inline-block mr-4 align-middle' :
-                      data.iconPosition === 'right' ? 'inline-block ml-4 align-middle float-right' :
-                      data.iconPosition === 'background' ? 'absolute inset-0 flex items-center justify-center opacity-10 text-8xl' :
-                      'block text-center'
-                    }`}>
-                      {stat.iconImage && isValidImage(stat.iconImage) ? (
-                        <Image
-                          src={safeImageUrl(stat.iconImage, 64) || ''}
-                          alt=""
-                          width={48}
-                          height={48}
-                          className="inline-block"
-                        />
-                      ) : stat.icon ? (
-                        <span className="text-4xl">{stat.icon}</span>
-                      ) : null}
-                    </div>
-                  )}
-
-                  {/* Number */}
-                  <div className={`relative ${colorClasses[stat.color || 'default']}`}>
-                    <div className={`${numberSizeClasses[data.numberSize || 'xl']} ${numberWeightClasses[data.numberWeight || 'bold']} mb-3`}>
-                      <AnimatedNumber
-                        value={stat.number || '0'}
-                        prefix={stat.prefix}
-                        suffix={stat.suffix}
-                        animate={data.countAnimation !== false}
-                        duration={data.countDuration || 2000}
-                      />
-                    </div>
-                    {/* Subtle glow on hover */}
-                    <div className="absolute inset-0 bg-current opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500" />
+                {stat.link ? (
+                  <Link href={stat.link} className="block">
+                    {statContent}
+                  </Link>
+                ) : (
+                  <div className="block">
+                    {statContent}
                   </div>
-
-                  {/* Label */}
-                  {stat.label && (
-                    <div className="text-lg md:text-xl font-semibold mb-1 opacity-90">
-                      <RichText value={stat.label} />
-                    </div>
-                  )}
-
-                  {/* Description */}
-                  {stat.description && (
-                    <div className="text-sm opacity-70 mt-2">
-                      {t(stat.description)}
-                    </div>
-                  )}
-
-                  {/* Decorative underline */}
-                  <div className="mt-4 mx-auto w-12 h-1 bg-current opacity-30 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
-                </StatWrapper>
+                )}
               </motion.div>
             )
           })}

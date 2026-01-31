@@ -280,10 +280,15 @@ export default function HeroSection({ data }: HeroSectionProps) {
         </motion.div>
       )}
 
+      {/* Gradient background */}
       {backgroundType === 'gradient' && (
         <div
-          className="absolute inset-0"
           style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             zIndex: 0,
             background: data.backgroundGradient === 'blue-purple'
               ? 'linear-gradient(to bottom right, #2563eb, #9333ea, #581c87)'
@@ -300,10 +305,15 @@ export default function HeroSection({ data }: HeroSectionProps) {
         />
       )}
 
+      {/* Solid background */}
       {backgroundType === 'solid' && (
         <div
-          className="absolute inset-0"
           style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             zIndex: 0,
             backgroundColor: data.backgroundColor === 'dark-blue'
               ? '#1e3a8a'
@@ -316,9 +326,19 @@ export default function HeroSection({ data }: HeroSectionProps) {
         />
       )}
 
-      {/* Default gradient if no background */}
-      {!backgroundUrl && backgroundType === 'image' && (
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary via-primary-dark to-gray-900" />
+      {/* Default gradient if image selected but no image uploaded */}
+      {backgroundType === 'image' && !backgroundUrl && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 0,
+            background: 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
+          }}
+        />
       )}
 
       {/* Floating decorative elements */}

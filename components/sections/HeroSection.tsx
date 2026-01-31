@@ -340,7 +340,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           className={`${widthClasses[width]} ${textColorClasses[textColor]}`}
         >
           {/* Badge */}
-          {data.badge?.text && (
+          {!!data.badge?.text && (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -353,7 +353,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           )}
 
           {/* Eyebrow */}
-          {data.eyebrow && (
+          {!!data.eyebrow && (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -370,7 +370,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           </h1>
 
           {/* Subtitle */}
-          {data.subtitle && (
+          {!!data.subtitle && (
             <div className="text-xl md:text-2xl mb-10 opacity-90">
               <RichText value={data.subtitle} />
             </div>
@@ -411,7 +411,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
         >
-          {data.scrollIndicatorText && (
+          {!!data.scrollIndicatorText && (
             <p className={`text-sm mb-2 opacity-60 ${textColorClasses[textColor]}`}>
               {t(data.scrollIndicatorText)}
             </p>

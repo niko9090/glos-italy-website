@@ -115,9 +115,13 @@ export interface Dealer {
   _id: string
   name?: string
   type?: string
+  description?: string
   logo?: unknown
   email?: string
   phone?: string
+  website?: string
+  openingHours?: string
+  country?: string
   city?: string
   address?: string
   location?: {
@@ -126,7 +130,10 @@ export interface Dealer {
   }
   regions?: string[]
   certifications?: string[]
+  youtubeVideo?: string
+  gallery?: unknown[]
   isActive?: boolean
+  isFeatured?: boolean
 }
 
 export interface Testimonial {

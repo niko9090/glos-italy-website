@@ -242,6 +242,109 @@ export default function HeroSection({ data }: HeroSectionProps) {
     }
   }
 
+  // Helper per ottenere il gradiente - usa includes() per caratteri stega
+  const getGradientBackground = (gradient?: string): string => {
+    if (!gradient) return 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
+
+    // Blu
+    if (gradient.includes('blue-dark')) return 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
+    if (gradient.includes('blue-purple')) return 'linear-gradient(to bottom right, #2563eb, #9333ea, #581c87)'
+    if (gradient.includes('cyan-blue')) return 'linear-gradient(to bottom right, #06b6d4, #3b82f6, #1e40af)'
+    if (gradient.includes('indigo-purple')) return 'linear-gradient(to bottom right, #6366f1, #a855f7, #7c3aed)'
+    if (gradient.includes('navy-blue')) return 'linear-gradient(to bottom right, #1e3a8a, #2563eb, #3b82f6)'
+    if (gradient.includes('radial-blue')) return 'radial-gradient(ellipse at center, #2563eb, #1e40af, #111827)'
+
+    // Verde
+    if (gradient.includes('green-blue')) return 'linear-gradient(to bottom right, #22c55e, #0d9488, #1d4ed8)'
+    if (gradient.includes('green-yellow')) return 'linear-gradient(to bottom right, #22c55e, #84cc16, #eab308)'
+    if (gradient.includes('teal-green')) return 'linear-gradient(to bottom right, #14b8a6, #10b981, #059669)'
+    if (gradient.includes('emerald-cyan')) return 'linear-gradient(to bottom right, #10b981, #06b6d4, #0891b2)'
+
+    // Rosso/Arancione
+    if (gradient.includes('red-orange')) return 'linear-gradient(to bottom right, #ef4444, #f97316, #fbbf24)'
+    if (gradient.includes('red-pink')) return 'linear-gradient(to bottom right, #ef4444, #ec4899, #f472b6)'
+    if (gradient.includes('orange-pink')) return 'linear-gradient(to bottom right, #f97316, #ec4899, #9333ea)'
+    if (gradient.includes('gold-orange')) return 'linear-gradient(to bottom right, #fbbf24, #f59e0b, #f97316)'
+    if (gradient.includes('peach-pink')) return 'linear-gradient(to bottom right, #fdba74, #fb7185, #f472b6)'
+
+    // Viola/Rosa
+    if (gradient.includes('purple-blue')) return 'linear-gradient(to bottom right, #a855f7, #6366f1, #3b82f6)'
+    if (gradient.includes('pink-purple')) return 'linear-gradient(to bottom right, #ec4899, #a855f7, #7c3aed)'
+    if (gradient.includes('magenta-purple')) return 'linear-gradient(to bottom right, #e879f9, #c026d3, #9333ea)'
+    if (gradient.includes('lavender-pink')) return 'linear-gradient(to bottom right, #c4b5fd, #f0abfc, #f9a8d4)'
+
+    // Scuri
+    if (gradient.includes('black-gray')) return 'linear-gradient(to bottom right, #111827, #1f2937, #000000)'
+    if (gradient.includes('black-blue')) return 'linear-gradient(to bottom right, #000000, #1e3a8a, #1e40af)'
+    if (gradient.includes('black-purple')) return 'linear-gradient(to bottom right, #000000, #581c87, #7c3aed)'
+    if (gradient.includes('charcoal-gray')) return 'linear-gradient(to bottom right, #374151, #4b5563, #6b7280)'
+
+    // Temi speciali
+    if (gradient.includes('sunset')) return 'linear-gradient(to bottom right, #f97316, #ef4444, #be123c, #581c87)'
+    if (gradient.includes('ocean')) return 'linear-gradient(to bottom right, #06b6d4, #0284c7, #1e40af, #1e3a8a)'
+    if (gradient.includes('forest')) return 'linear-gradient(to bottom right, #166534, #15803d, #14532d, #052e16)'
+    if (gradient.includes('fire')) return 'linear-gradient(to bottom right, #fbbf24, #f97316, #ef4444, #b91c1c)'
+    if (gradient.includes('night')) return 'linear-gradient(to bottom right, #0f172a, #1e1b4b, #312e81, #1e3a8a)'
+    if (gradient.includes('aurora')) return 'linear-gradient(to bottom right, #22c55e, #06b6d4, #a855f7, #ec4899)'
+    if (gradient.includes('dawn')) return 'linear-gradient(to bottom right, #fef3c7, #fcd34d, #f97316, #be123c)'
+    if (gradient.includes('grape')) return 'linear-gradient(to bottom right, #7c3aed, #6d28d9, #5b21b6, #4c1d95)'
+
+    // Default
+    return 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
+  }
+
+  // Helper per ottenere il colore solido - usa includes() per caratteri stega
+  const getSolidBackground = (color?: string): string => {
+    if (!color) return '#0047AB'
+
+    // Blu
+    if (color.includes('primary')) return '#0047AB'
+    if (color.includes('dark-blue')) return '#1e3a8a'
+    if (color.includes('navy')) return '#1e3a5f'
+    if (color.includes('sky-blue')) return '#0ea5e9'
+    if (color.includes('cyan')) return '#06b6d4'
+    if (color.includes('indigo')) return '#6366f1'
+
+    // Verde
+    if (color.includes('dark-green')) return '#166534'
+    if (color.includes('green')) return '#22c55e'
+    if (color.includes('teal')) return '#14b8a6'
+    if (color.includes('emerald')) return '#10b981'
+    if (color.includes('lime')) return '#84cc16'
+
+    // Rosso/Arancione
+    if (color.includes('dark-red')) return '#991b1b'
+    if (color.includes('red')) return '#ef4444'
+    if (color.includes('bordeaux')) return '#7f1d1d'
+    if (color.includes('orange')) return '#f97316'
+    if (color.includes('amber')) return '#f59e0b'
+
+    // Viola/Rosa
+    if (color.includes('dark-purple')) return '#581c87'
+    if (color.includes('purple')) return '#a855f7'
+    if (color.includes('magenta')) return '#e879f9'
+    if (color.includes('dark-pink')) return '#be185d'
+    if (color.includes('pink')) return '#ec4899'
+    if (color.includes('fuchsia')) return '#d946ef'
+
+    // Neutri
+    if (color.includes('black')) return '#000000'
+    if (color.includes('gray-dark')) return '#1f2937'
+    if (color.includes('gray')) return '#6b7280'
+    if (color.includes('charcoal')) return '#374151'
+    if (color.includes('dark-brown')) return '#78350f'
+    if (color.includes('brown')) return '#a16207'
+
+    // Altri
+    if (color.includes('yellow')) return '#eab308'
+    if (color.includes('gold')) return '#fbbf24'
+    if (color.includes('white')) return '#ffffff'
+    if (color.includes('cream')) return '#fef3c7'
+
+    // Default
+    return '#0047AB'
+  }
+
   const backgroundUrl = isValidImage(data.backgroundImage)
     ? safeImageUrl(data.backgroundImage, 1920)
     : null
@@ -295,17 +398,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
             width: '100%',
             height: '100%',
             zIndex: 1,
-            background: data.backgroundGradient?.includes('blue-purple')
-              ? 'linear-gradient(to bottom right, #2563eb, #9333ea, #581c87)'
-              : data.backgroundGradient?.includes('green-blue')
-              ? 'linear-gradient(to bottom right, #22c55e, #0d9488, #1d4ed8)'
-              : data.backgroundGradient?.includes('orange-pink')
-              ? 'linear-gradient(to bottom right, #f97316, #ec4899, #9333ea)'
-              : data.backgroundGradient?.includes('black-gray')
-              ? 'linear-gradient(to bottom right, #111827, #1f2937, #000000)'
-              : data.backgroundGradient?.includes('radial-blue')
-              ? 'radial-gradient(ellipse at center, #2563eb, #1e40af, #111827)'
-              : 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
+            background: getGradientBackground(data.backgroundGradient)
           }}
         />
       )}
@@ -320,13 +413,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
             width: '100%',
             height: '100%',
             zIndex: 1,
-            backgroundColor: data.backgroundColor?.includes('dark-blue')
-              ? '#1e3a8a'
-              : data.backgroundColor?.includes('black')
-              ? '#000000'
-              : data.backgroundColor?.includes('gray-dark')
-              ? '#1f2937'
-              : '#0047AB'
+            backgroundColor: getSolidBackground(data.backgroundColor)
           }}
         />
       )}

@@ -179,7 +179,6 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
   return (
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
-        {/* Header */}
         {(data.title || data.subtitle) && (
           <div className={`text-center mb-12 ${textColor}`}>
             {data.title && <h2 className="section-title mb-4"><RichText value={data.title} /></h2>}
@@ -192,7 +191,6 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
           </div>
         )}
 
-        {/* Comparisons */}
         <div className={layout === 'grid' ? 'grid md:grid-cols-2 gap-8' : 'space-y-12'}>
           {validComparisons.map((comparison) => (
             <motion.div
@@ -234,7 +232,6 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
                 </div>
               )}
 
-              {/* Caption */}
               {comparison.caption && (
                 <p className={`text-center mt-4 ${textColor}`}>
                   {getTextValue(comparison.caption)}

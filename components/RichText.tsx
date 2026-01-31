@@ -304,8 +304,7 @@ const getTextOutlineStyle = (width: string, color: string): CSSProperties => {
 
   return {
     WebkitTextStroke: `${w} ${colorValue}`,
-    textStroke: `${w} ${colorValue}`,
-  }
+  } as CSSProperties
 }
 
 // ============================================

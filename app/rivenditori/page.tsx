@@ -1,4 +1,4 @@
-// Dealers Page - VERSIONE COMPLETA con Video YouTube e Dettagli
+// Dealers Page - v1.3.0 - VERSIONE COMPLETA con Video YouTube e Dettagli
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'

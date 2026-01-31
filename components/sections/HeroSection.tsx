@@ -124,27 +124,32 @@ export default function HeroSection({ data }: HeroSectionProps) {
     auto: 'text-white', // Default for backgrounds
   }
 
-  // Overlay classes
+  // Overlay classes - usa includes() per gestire caratteri stega
   const getOverlayClass = () => {
     const opacity = data.overlayOpacity ?? 50
     const opacityValue = opacity / 100
+    const overlayType = data.overlayType || ''
 
-    switch (data.overlayType) {
-      case 'none':
-        return ''
-      case 'dark':
-        return `bg-black/${Math.round(opacityValue * 100)}`
-      case 'gradient-left':
-        return `bg-gradient-to-r from-black/${Math.round(opacityValue * 100)} via-black/${Math.round(opacityValue * 50)} to-transparent`
-      case 'gradient-right':
-        return `bg-gradient-to-l from-black/${Math.round(opacityValue * 100)} via-black/${Math.round(opacityValue * 50)} to-transparent`
-      case 'gradient-bottom':
-        return `bg-gradient-to-t from-black/${Math.round(opacityValue * 100)} via-black/${Math.round(opacityValue * 50)} to-transparent`
-      case 'vignette':
-        return 'bg-radial-vignette'
-      default:
-        return `bg-gradient-to-r from-black/80 via-black/50 to-transparent`
+    if (overlayType.includes('none')) {
+      return ''
     }
+    if (overlayType.includes('dark') && !overlayType.includes('gradient')) {
+      return `bg-black/${Math.round(opacityValue * 100)}`
+    }
+    if (overlayType.includes('gradient-left')) {
+      return `bg-gradient-to-r from-black/${Math.round(opacityValue * 100)} via-black/${Math.round(opacityValue * 50)} to-transparent`
+    }
+    if (overlayType.includes('gradient-right')) {
+      return `bg-gradient-to-l from-black/${Math.round(opacityValue * 100)} via-black/${Math.round(opacityValue * 50)} to-transparent`
+    }
+    if (overlayType.includes('gradient-bottom')) {
+      return `bg-gradient-to-t from-black/${Math.round(opacityValue * 100)} via-black/${Math.round(opacityValue * 50)} to-transparent`
+    }
+    if (overlayType.includes('vignette')) {
+      return 'bg-radial-vignette'
+    }
+    // Default
+    return `bg-gradient-to-r from-black/80 via-black/50 to-transparent`
   }
 
   // Gradient backgrounds
@@ -250,13 +255,6 @@ export default function HeroSection({ data }: HeroSectionProps) {
   const backgroundType = data.backgroundType || 'image'
   const animationVariants = getAnimationVariants()
 
-  // DEBUG: Log valori sfondo
-  console.log('=== HERO BG DEBUG ===', {
-    backgroundType,
-    backgroundGradient: data.backgroundGradient,
-    backgroundColor: data.backgroundColor,
-  })
-
   // Merge legacy button with new buttons array
   const buttons = data.buttons?.length
     ? data.buttons
@@ -270,8 +268,8 @@ export default function HeroSection({ data }: HeroSectionProps) {
       className={`relative flex overflow-hidden ${heightClasses[height]} ${positionClasses[position]}`}
       style={height === 'custom' && data.customHeight ? { minHeight: `${data.customHeight}px` } : undefined}
     >
-      {/* Background based on type */}
-      {backgroundType === 'image' && backgroundUrl && (
+      {/* Background based on type - usa includes() per caratteri stega */}
+      {backgroundType?.includes('image') && backgroundUrl && (
         <motion.div
           className="absolute inset-0 z-0"
           style={{ y: backgroundY }}
@@ -287,8 +285,8 @@ export default function HeroSection({ data }: HeroSectionProps) {
         </motion.div>
       )}
 
-      {/* Gradient background */}
-      {backgroundType === 'gradient' && (
+      {/* Gradient background - usa includes() per gestire caratteri stega */}
+      {backgroundType?.includes('gradient') && (
         <div
           style={{
             position: 'absolute',
@@ -297,23 +295,23 @@ export default function HeroSection({ data }: HeroSectionProps) {
             width: '100%',
             height: '100%',
             zIndex: 1,
-            background: data.backgroundGradient === 'blue-purple'
+            background: data.backgroundGradient?.includes('blue-purple')
               ? 'linear-gradient(to bottom right, #2563eb, #9333ea, #581c87)'
-              : data.backgroundGradient === 'green-blue'
+              : data.backgroundGradient?.includes('green-blue')
               ? 'linear-gradient(to bottom right, #22c55e, #0d9488, #1d4ed8)'
-              : data.backgroundGradient === 'orange-pink'
+              : data.backgroundGradient?.includes('orange-pink')
               ? 'linear-gradient(to bottom right, #f97316, #ec4899, #9333ea)'
-              : data.backgroundGradient === 'black-gray'
+              : data.backgroundGradient?.includes('black-gray')
               ? 'linear-gradient(to bottom right, #111827, #1f2937, #000000)'
-              : data.backgroundGradient === 'radial-blue'
+              : data.backgroundGradient?.includes('radial-blue')
               ? 'radial-gradient(ellipse at center, #2563eb, #1e40af, #111827)'
               : 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
           }}
         />
       )}
 
-      {/* Solid background */}
-      {backgroundType === 'solid' && (
+      {/* Solid background - usa includes() per gestire caratteri stega */}
+      {backgroundType?.includes('solid') && (
         <div
           style={{
             position: 'absolute',
@@ -322,11 +320,11 @@ export default function HeroSection({ data }: HeroSectionProps) {
             width: '100%',
             height: '100%',
             zIndex: 1,
-            backgroundColor: data.backgroundColor === 'dark-blue'
+            backgroundColor: data.backgroundColor?.includes('dark-blue')
               ? '#1e3a8a'
-              : data.backgroundColor === 'black'
+              : data.backgroundColor?.includes('black')
               ? '#000000'
-              : data.backgroundColor === 'gray-dark'
+              : data.backgroundColor?.includes('gray-dark')
               ? '#1f2937'
               : '#0047AB'
           }}
@@ -334,7 +332,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
       )}
 
       {/* Default gradient if image selected but no image uploaded */}
-      {backgroundType === 'image' && !backgroundUrl && (
+      {backgroundType?.includes('image') && !backgroundUrl && (
         <div
           style={{
             position: 'absolute',

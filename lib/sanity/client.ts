@@ -87,35 +87,32 @@ export async function sanityFetch<T>(
     )
   }
 
-  return client.fetch<T>(
-    query,
-    params,
-    isDraftMode
-      ? {
-          // Draft mode configuration
-          perspective: 'drafts',
-          useCdn: false,
-          stega: true, // CRITICAL: enables Visual Editing
-          token,
-          // No caching for real-time preview
-          next: { revalidate: 0 },
-        }
-      : {
-          // Production configuration
-          perspective: 'published',
-          // CRITICO: useCdn: false per garantire dati freschi dopo revalidation
-          // Il CDN di Sanity ha cache separata che non si invalida con revalidatePath/revalidateTag
-          useCdn: false,
-          stega: false,
-          // Cache configuration for on-demand revalidation
-          next: {
-            // Tags for granular invalidation via revalidateTag()
-            tags: tags || ['sanity'],
-            // Fallback revalidation after 60 seconds (ISR)
-            revalidate: 60,
-          },
-        }
-  )
+  if (isDraftMode) {
+    // Draft mode: fetch fresh data every time, no caching
+    return client.withConfig({
+      perspective: 'drafts',
+      useCdn: false,
+      token,
+      stega: {
+        enabled: true,
+        studioUrl,
+      },
+    }).fetch<T>(query, params, {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+    })
+  }
+
+  // Production mode: use caching with tags
+  return client.fetch<T>(query, params, {
+    perspective: 'published',
+    useCdn: false,
+    stega: false,
+    next: {
+      tags: tags || ['sanity'],
+      revalidate: 60,
+    },
+  })
 }
 
 // ===========================================

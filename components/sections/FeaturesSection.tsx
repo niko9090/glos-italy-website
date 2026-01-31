@@ -289,7 +289,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
     >
       <div className="container-glos">
         {/* Header */}
-        {(data.eyebrow || data.title || data.subtitle || data.description) && (
+        {!!(data.eyebrow || data.title || data.subtitle || data.description) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

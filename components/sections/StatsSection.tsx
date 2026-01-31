@@ -291,19 +291,19 @@ export default function StatsSection({ data }: StatsSectionProps) {
 
       <div className="container-glos relative z-10">
         {/* Header */}
-        {(data.title || data.subtitle || data.description) && (
+        {!!(data.title || data.subtitle || data.description) && (
           <div className={`mb-12 ${data.alignment === 'left' ? 'text-left' : data.alignment === 'right' ? 'text-right' : 'text-center'}`}>
-            {data.title && (
+            {!!data.title && (
               <h2 className="section-title mb-4">
                 <RichText value={data.title} />
               </h2>
             )}
-            {data.subtitle && (
+            {!!data.subtitle && (
               <div className="text-xl opacity-80 mb-4">
                 <RichText value={data.subtitle} />
               </div>
             )}
-            {data.description && (
+            {!!data.description && (
               <div className="max-w-2xl mx-auto opacity-70">
                 <RichText value={data.description} />
               </div>

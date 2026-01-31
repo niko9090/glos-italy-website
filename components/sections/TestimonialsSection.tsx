@@ -745,7 +745,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
       <div className="container-glos relative z-10">
         {/* Header */}
-        {(data.eyebrow || data.title || data.subtitle || data.description) && (
+        {!!(data.eyebrow || data.title || data.subtitle || data.description) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

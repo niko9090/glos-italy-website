@@ -280,6 +280,14 @@ export default function HeroSection({ data }: HeroSectionProps) {
         </motion.div>
       )}
 
+      {/* DEBUG LOG */}
+      {console.log('=== HERO BG DEBUG ===', {
+        backgroundType,
+        backgroundGradient: data.backgroundGradient,
+        backgroundColor: data.backgroundColor,
+        rawData: JSON.stringify({ type: data.backgroundType, gradient: data.backgroundGradient, color: data.backgroundColor })
+      })}
+
       {/* Gradient background */}
       {backgroundType === 'gradient' && (
         <div

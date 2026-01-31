@@ -1,7 +1,7 @@
 // CTA Section Component - VERSIONE AVANZATA
 'use client'
 
-import { useRef } from 'react'
+import { useRef, type ReactNode } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
@@ -268,7 +268,7 @@ export default function CTASection({ data }: CTASectionProps) {
   }
 
   // Icon mapping
-  const getIcon = (iconName?: string) => {
+  const getIcon = (iconName?: string): ReactNode => {
     switch (iconName) {
       case 'arrow-right':
       case '→':
@@ -423,7 +423,7 @@ export default function CTASection({ data }: CTASectionProps) {
             <div className={`flex flex-wrap gap-4 mb-8 ${layout === 'centered' ? 'justify-center' : ''}`}>
               {data.highlights.map((highlight) => (
                 <div key={highlight._key} className="flex items-center gap-2">
-                  <span className="text-lg">{highlight.icon || <Check className="w-5 h-5" />}</span>
+                  <span className="text-lg">{highlight.icon ? String(highlight.icon) : <Check className="w-5 h-5" />}</span>
                   <span className="text-sm">{t(highlight.text)}</span>
                 </div>
               ))}
@@ -443,10 +443,10 @@ export default function CTASection({ data }: CTASectionProps) {
                     index === 0 ? buttonAnimationClasses[data.buttonAnimation || 'none'] : ''
                   }`}
                 >
-                  {button.iconPosition === 'left' && button.icon && getIcon(button.icon)}
+                  {button.iconPosition === 'left' && button.icon ? getIcon(button.icon) : null}
                   {t(button.text)}
                   {(button.iconPosition !== 'left' || !button.icon) && (
-                    index === 0 ? getIcon(button.icon || 'arrow-right') : button.icon && getIcon(button.icon)
+                    index === 0 ? getIcon(button.icon || 'arrow-right') : (button.icon ? getIcon(button.icon) : null)
                   )}
                 </Link>
               ))}

@@ -328,7 +328,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
             <div className={`absolute inset-0 flex ${textPositionClasses[currentSlide.textPosition || 'center']}`}>
               <div className="max-w-3xl px-4">
                 {/* Badge */}
-                {currentSlide.badge?.text && (
+                {!!currentSlide.badge?.text && (
                   <motion.span
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -337,12 +337,12 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                       badgeColorClasses[currentSlide.badge.color || 'blue']
                     }`}
                   >
-                    {currentSlide.badge.text}
+                    {String(currentSlide.badge.text)}
                   </motion.span>
                 )}
 
                 {/* Subtitle */}
-                {currentSlide.subtitle && (
+                {!!currentSlide.subtitle && (
                   <motion.p
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -354,7 +354,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                 )}
 
                 {/* Title */}
-                {currentSlide.title && (
+                {!!currentSlide.title && (
                   <motion.h3
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -366,7 +366,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                 )}
 
                 {/* Description */}
-                {currentSlide.description && (
+                {!!currentSlide.description && (
                   <motion.p
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -378,14 +378,14 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                 )}
 
                 {/* Buttons */}
-                {(currentSlide.buttonText || currentSlide.secondButtonText) && (
+                {!!(currentSlide.buttonText || currentSlide.secondButtonText) && (
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                     className="flex flex-wrap gap-4 justify-center md:justify-start"
                   >
-                    {currentSlide.buttonText && currentSlide.buttonLink && (
+                    {!!currentSlide.buttonText && currentSlide.buttonLink && (
                       <Link
                         href={currentSlide.buttonLink}
                         className={buttonVariantClasses[currentSlide.buttonVariant || 'primary']}
@@ -393,7 +393,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                         {t(currentSlide.buttonText)}
                       </Link>
                     )}
-                    {currentSlide.secondButtonText && currentSlide.secondButtonLink && (
+                    {!!currentSlide.secondButtonText && currentSlide.secondButtonLink && (
                       <Link
                         href={currentSlide.secondButtonLink}
                         className={buttonVariantClasses['ghost']}

@@ -775,7 +775,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         )}
 
         {/* Aggregate Rating */}
-        {data.showAggregateRating && (
+        {!!data.showAggregateRating && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -797,7 +797,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   ))}
                 </div>
               </div>
-              {data.totalReviews && (
+              {!!data.totalReviews && (
                 <p className="text-sm opacity-70">su {data.totalReviews} recensioni</p>
               )}
             </div>
@@ -808,7 +808,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         {renderLayout()}
 
         {/* CTA */}
-        {data.showCta && data.ctaText && data.ctaLink && (
+        {data.showCta && !!data.ctaText && data.ctaLink && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

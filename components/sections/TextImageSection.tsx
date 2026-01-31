@@ -72,7 +72,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
   const imageShape = imageShapeClasses[data.imageShape || 'rounded']
   const imageShadow = imageShadowClasses[data.imageShadow || 'medium']
 
-  const imageContent = isValidImage(data.image) && (
+  const imageContent = isValidImage(data.image) ? (
     <motion.div
       initial={{ opacity: 0, x: imagePosition === 'left' ? -50 : 50 }}
       whileInView={{ opacity: 1, x: 0 }}
@@ -100,7 +100,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
         />
       </motion.div>
     </motion.div>
-  )
+  ) : null
 
   const textContent = (
     <motion.div
@@ -110,37 +110,36 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
       transition={{ duration: 0.6, delay: 0.1 }}
       className={`flex-1 ${textColor}`}
     >
-      {data.title && (
+      {data.title ? (
         <h2 className="section-title mb-4">
           <RichText value={data.title} />
         </h2>
-      )}
-      {data.subtitle && (
+      ) : null}
+      {data.subtitle ? (
         <div className="section-subtitle mb-6">
           <RichText value={data.subtitle} />
         </div>
-      )}
-      {data.content && (
+      ) : null}
+      {data.content ? (
         <div className="prose prose-lg max-w-none mb-8">
           <RichText value={data.content} />
         </div>
-      )}
+      ) : null}
 
-      {/* Buttons */}
-      {(data.buttonText || data.secondaryButtonText) && (
+      {(data.buttonText || data.secondaryButtonText) ? (
         <div className="flex flex-wrap gap-4">
-          {data.buttonText && data.buttonLink && (
+          {data.buttonText && data.buttonLink ? (
             <Link href={data.buttonLink} className="btn-primary">
               {getTextValue(data.buttonText)}
             </Link>
-          )}
-          {data.secondaryButtonText && data.secondaryButtonLink && (
+          ) : null}
+          {data.secondaryButtonText && data.secondaryButtonLink ? (
             <Link href={data.secondaryButtonLink} className="btn-secondary">
               {getTextValue(data.secondaryButtonText)}
             </Link>
-          )}
+          ) : null}
         </div>
-      )}
+      ) : null}
     </motion.div>
   )
 

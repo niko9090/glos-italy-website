@@ -219,13 +219,12 @@ export default function FaqSection({ data }: FaqSectionProps) {
   return (
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
-        {/* Header */}
-        {(data.title || data.subtitle) && (
+        {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${textColor}`}>
-            {data.title && <h2 className="section-title mb-4"><RichText value={data.title} /></h2>}
-            {data.subtitle && <div className="section-subtitle"><RichText value={data.subtitle} /></div>}
+            {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
+            {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
           </div>
-        )}
+        ) : null}
 
         {/* Category Filter (for non-sidebar layouts) */}
         {data.showCategories && categories.length > 0 && layout !== 'sidebar' && (

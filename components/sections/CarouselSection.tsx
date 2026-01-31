@@ -99,21 +99,20 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
 
   return (
     <section className="relative overflow-hidden">
-      {/* Header */}
-      {(data.title || data.subtitle) && (
+      {(data.title || data.subtitle) ? (
         <div className="container-glos py-8 text-center">
-          {data.title && (
+          {data.title ? (
             <h2 className="section-title mb-4">
               <RichText value={data.title} />
             </h2>
-          )}
-          {data.subtitle && (
+          ) : null}
+          {data.subtitle ? (
             <div className="section-subtitle">
               <RichText value={data.subtitle} />
             </div>
-          )}
+          ) : null}
         </div>
-      )}
+      ) : null}
 
       {/* Carousel */}
       <div
@@ -145,7 +144,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
             {/* Content */}
             <div className={`absolute inset-0 flex ${textPositionClasses[currentSlide.textPosition || 'center']}`}>
               <div className="max-w-3xl px-4">
-                {currentSlide.title && (
+                {currentSlide.title ? (
                   <motion.h3
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -154,8 +153,8 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                   >
                     {getTextValue(currentSlide.title)}
                   </motion.h3>
-                )}
-                {currentSlide.description && (
+                ) : null}
+                {currentSlide.description ? (
                   <motion.p
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -164,8 +163,8 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                   >
                     {getTextValue(currentSlide.description)}
                   </motion.p>
-                )}
-                {currentSlide.buttonText && currentSlide.buttonLink && (
+                ) : null}
+                {currentSlide.buttonText && currentSlide.buttonLink ? (
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -175,7 +174,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                       {getTextValue(currentSlide.buttonText)}
                     </Link>
                   </motion.div>
-                )}
+                ) : null}
               </div>
             </div>
           </motion.div>

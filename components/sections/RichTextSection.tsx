@@ -66,15 +66,13 @@ export default function RichTextSection({ data }: RichTextSectionProps) {
           viewport={{ once: true }}
           className={`${maxWidth} mx-auto ${textColor}`}
         >
-          {/* Title */}
-          {data.title && (
+          {data.title ? (
             <h2 className={`section-title mb-8 ${textAlign}`}>
               <RichText value={data.title} />
             </h2>
-          )}
+          ) : null}
 
-          {/* Content */}
-          {data.content && (
+          {data.content ? (
             <div
               className={`prose prose-lg max-w-none ${textAlign} ${columnClasses[columns]} ${
                 data.dropCap ? 'first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:text-primary' : ''
@@ -82,7 +80,7 @@ export default function RichTextSection({ data }: RichTextSectionProps) {
             >
               <RichText value={data.content} />
             </div>
-          )}
+          ) : null}
         </motion.div>
       </div>
     </section>

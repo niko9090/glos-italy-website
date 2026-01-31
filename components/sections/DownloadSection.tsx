@@ -156,18 +156,17 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
   return (
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
-        {/* Header */}
-        {(data.title || data.subtitle) && (
+        {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${textColor}`}>
-            {data.title && <h2 className="section-title mb-4"><RichText value={data.title} /></h2>}
-            {data.subtitle && <div className="section-subtitle"><RichText value={data.subtitle} /></div>}
-            {data.description && (
+            {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
+            {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
+            {data.description ? (
               <div className="prose prose-lg max-w-2xl mx-auto mt-4">
                 <RichText value={data.description} />
               </div>
-            )}
+            ) : null}
           </div>
-        )}
+        ) : null}
 
         {/* Files */}
         {Object.entries(groupedFiles).map(([category, files]) => (

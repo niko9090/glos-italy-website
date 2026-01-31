@@ -83,13 +83,12 @@ export default function TeamSection({ data }: TeamSectionProps) {
   return (
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
-        {/* Header */}
-        {(data.title || data.subtitle) && (
+        {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${textColor}`}>
-            {data.title && <h2 className="section-title mb-4"><RichText value={data.title} /></h2>}
-            {data.subtitle && <div className="section-subtitle"><RichText value={data.subtitle} /></div>}
+            {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
+            {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
           </div>
-        )}
+        ) : null}
 
         {/* Team Grid */}
         <motion.div
@@ -120,14 +119,13 @@ export default function TeamSection({ data }: TeamSectionProps) {
 
               {/* Name & Role */}
               <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
-              {member.role && (
+              {member.role ? (
                 <p className="text-primary font-medium mb-3">{getTextValue(member.role)}</p>
-              )}
+              ) : null}
 
-              {/* Bio */}
-              {data.showBio && member.bio && (
+              {data.showBio && member.bio ? (
                 <p className="text-gray-600 text-sm mb-4">{getTextValue(member.bio)}</p>
-              )}
+              ) : null}
 
               {/* Contact & Social */}
               {data.showSocial && (

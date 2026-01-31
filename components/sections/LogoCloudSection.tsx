@@ -102,13 +102,12 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
     return (
       <section className={`section ${bgClass} overflow-hidden`}>
         <div className="container-glos">
-          {/* Header */}
-          {(data.title || data.subtitle) && (
+          {(data.title || data.subtitle) ? (
             <div className={`text-center mb-12 ${textColor}`}>
-              {data.title && <h2 className="section-title mb-4"><RichText value={data.title} /></h2>}
-              {data.subtitle && <div className="section-subtitle"><RichText value={data.subtitle} /></div>}
+              {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
+              {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Marquee */}
@@ -141,13 +140,12 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
     return (
       <section className={`section ${bgClass}`}>
         <div className="container-glos">
-          {/* Header */}
-          {(data.title || data.subtitle) && (
+          {(data.title || data.subtitle) ? (
             <div className={`text-center mb-12 ${textColor}`}>
-              {data.title && <h2 className="section-title mb-4"><RichText value={data.title} /></h2>}
-              {data.subtitle && <div className="section-subtitle"><RichText value={data.subtitle} /></div>}
+              {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
+              {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
             </div>
-          )}
+          ) : null}
 
           {/* Carousel */}
           <div className="flex overflow-x-auto gap-8 pb-4 snap-x scrollbar-hide">
@@ -166,13 +164,12 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
   return (
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
-        {/* Header */}
-        {(data.title || data.subtitle) && (
+        {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${textColor}`}>
-            {data.title && <h2 className="section-title mb-4"><RichText value={data.title} /></h2>}
-            {data.subtitle && <div className="section-subtitle"><RichText value={data.subtitle} /></div>}
+            {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
+            {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
           </div>
-        )}
+        ) : null}
 
         {/* Grid */}
         <div className={`grid ${gridCols[columns]} gap-8 items-center justify-items-center`}>

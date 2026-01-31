@@ -130,25 +130,25 @@ export default function VideoSection({ data }: VideoSectionProps) {
     </div>
   )
 
-  const textContent = (data.title || data.subtitle || data.description) && (
+  const textContent = (data.title || data.subtitle || data.description) ? (
     <div className={textColor}>
-      {data.title && (
+      {data.title ? (
         <h2 className="section-title mb-4">
           <RichText value={data.title} />
         </h2>
-      )}
-      {data.subtitle && (
+      ) : null}
+      {data.subtitle ? (
         <div className="section-subtitle mb-4">
           <RichText value={data.subtitle} />
         </div>
-      )}
-      {data.description && (
+      ) : null}
+      {data.description ? (
         <div className="prose prose-lg max-w-none">
           <RichText value={data.description} />
         </div>
-      )}
+      ) : null}
     </div>
-  )
+  ) : null
 
   if (data.layout === 'side-text') {
     return (

@@ -42,11 +42,9 @@ export default function CTASection({ data }: CTASectionProps) {
             </h2>
           )}
 
-          {data.subtitle && (
-            <div className="text-xl mb-8 opacity-90">
-              <RichText value={data.subtitle} />
-            </div>
-          )}
+          <div className="text-xl mb-8 opacity-90">
+            <RichText value={data.subtitle} />
+          </div>
 
           <div className="flex flex-wrap justify-center gap-4">
             {getTextValue(data.buttonText) && data.buttonLink && (

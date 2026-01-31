@@ -158,11 +158,9 @@ export default function GallerySection({ data }: GallerySectionProps) {
             {data.title && (
               <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
             )}
-            {data.subtitle && (
-              <div className="section-subtitle mx-auto">
-                <RichText value={data.subtitle} />
-              </div>
-            )}
+            <div className="section-subtitle mx-auto">
+              <RichText value={data.subtitle} />
+            </div>
           </motion.div>
         )}
 

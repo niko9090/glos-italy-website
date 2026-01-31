@@ -123,17 +123,15 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
               </motion.h2>
             )}
 
-            {data.subtitle && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="section-subtitle mb-8"
-              >
-                <RichText value={data.subtitle} />
-              </motion.div>
-            )}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="section-subtitle mb-8"
+            >
+              <RichText value={data.subtitle} />
+            </motion.div>
 
             {/* Features List with stagger */}
             <motion.div

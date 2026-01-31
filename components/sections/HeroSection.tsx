@@ -77,11 +77,9 @@ export default function HeroSection({ data }: HeroSectionProps) {
             </h1>
           )}
 
-          {data.subtitle && (
-            <div className="text-xl md:text-2xl text-white/90 mb-10">
-              <RichText value={data.subtitle} />
-            </div>
-          )}
+          <div className="text-xl md:text-2xl text-white/90 mb-10">
+            <RichText value={data.subtitle} />
+          </div>
 
           {getTextValue(data.buttonText) && data.buttonLink && (
             <Link

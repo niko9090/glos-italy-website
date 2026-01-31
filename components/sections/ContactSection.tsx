@@ -39,11 +39,9 @@ export default function ContactSection({ data }: ContactSectionProps) {
           {data.title && (
             <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
           )}
-          {data.subtitle && (
-            <div className="section-subtitle mx-auto">
-              <RichText value={data.subtitle} />
-            </div>
-          )}
+          <div className="section-subtitle mx-auto">
+            <RichText value={data.subtitle} />
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">

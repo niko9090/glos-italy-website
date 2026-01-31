@@ -29,30 +29,6 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* DEBUG - RIMUOVERE */}
-      {isDraftMode && (
-        <div style={{
-          background: '#fef3c7',
-          padding: '20px',
-          margin: '20px',
-          borderRadius: '8px',
-          fontSize: '14px',
-          fontFamily: 'monospace',
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-all'
-        }}>
-          <strong>DEBUG INFO:</strong><br/>
-          Draft Mode: {isDraftMode ? 'YES' : 'NO'}<br/>
-          Page ID: {page._id}<br/>
-          Page Title: {JSON.stringify(page.title)}<br/>
-          Sections Count: {page.sections?.length || 0}<br/>
-          <br/>
-          <strong>First Section Raw Data:</strong><br/>
-          {JSON.stringify(page.sections?.[0], null, 2)?.substring(0, 500)}
-        </div>
-      )}
-      {/* FINE DEBUG */}
-
       {page.sections?.map((section, index) => (
         <SectionRenderer
           key={section._key || index}

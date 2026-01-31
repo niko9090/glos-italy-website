@@ -281,7 +281,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
       )}
 
       {backgroundType === 'gradient' && (
-        <div className={`absolute inset-0 z-0 ${gradientClasses[data.backgroundGradient || 'blue-dark']}`} />
+        <div className={`absolute inset-0 z-0 ${gradientClasses[data.backgroundGradient as keyof typeof gradientClasses] || gradientClasses['blue-dark']}`} />
       )}
 
       {backgroundType === 'solid' && (

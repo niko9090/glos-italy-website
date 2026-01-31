@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { draftMode } from 'next/headers'
 import { getProductBySlug, getProductSlugs } from '@/lib/sanity/fetch'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { ArrowLeft } from 'lucide-react'
 import RichText from '@/components/RichText'
 import { getTextValue } from '@/lib/utils/textHelpers'
@@ -39,8 +39,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     openGraph: {
       title: name,
       description: description,
-      images: product.mainImage
-        ? [urlFor(product.mainImage).width(1200).height(630).url()]
+      images: isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 1200, 630)
+        ? [safeImageUrl(product.mainImage, 1200, 630)!]
         : [],
     },
   }
@@ -80,9 +80,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Image */}
           <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100">
-            {product.mainImage ? (
+            {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 800, 800) ? (
               <Image
-                src={urlFor(product.mainImage).width(800).height(800).url()}
+                src={safeImageUrl(product.mainImage, 800, 800)!}
                 alt={productName || 'Prodotto'}
                 fill
                 className="object-cover"

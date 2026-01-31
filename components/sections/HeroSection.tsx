@@ -5,7 +5,7 @@ import { useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
@@ -30,8 +30,8 @@ export default function HeroSection({ data }: HeroSectionProps) {
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
-  const backgroundUrl = data.backgroundImage
-    ? urlFor(data.backgroundImage).width(1920).quality(85).url()
+  const backgroundUrl = isValidImage(data.backgroundImage)
+    ? safeImageUrl(data.backgroundImage, 1920)
     : null
 
   return (

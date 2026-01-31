@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Facebook, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
 
 interface FooterProps {
@@ -43,9 +43,9 @@ export default function Footer({ settings, navigation }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div>
-            {settings?.logo ? (
+            {isValidImage(settings?.logo) && safeImageUrl(settings.logo, 200) ? (
               <Image
-                src={urlFor(settings.logo).width(200).url()}
+                src={safeImageUrl(settings.logo, 200)!}
                 alt={companyName}
                 width={150}
                 height={50}

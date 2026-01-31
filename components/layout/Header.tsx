@@ -6,7 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
 
 interface HeaderProps {
@@ -50,9 +50,9 @@ export default function Header({ settings, navigation }: HeaderProps) {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            {settings?.logo ? (
+            {isValidImage(settings?.logo) && safeImageUrl(settings.logo, 200) ? (
               <Image
-                src={urlFor(settings.logo).width(200).url()}
+                src={safeImageUrl(settings.logo, 200)!}
                 alt={companyName}
                 width={150}
                 height={50}

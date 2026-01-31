@@ -5,7 +5,7 @@ import { useRef } from 'react'
 import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Check } from 'lucide-react'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 
@@ -76,7 +76,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
       <div className="container-glos">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Image with parallax effect */}
-          {data.image ? (
+          {isValidImage(data.image) && safeImageUrl(data.image, 800, 600) ? (
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -89,7 +89,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                 className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl"
               >
                 <Image
-                  src={urlFor(data.image).width(800).height(600).url()}
+                  src={safeImageUrl(data.image, 800, 600)!}
                   alt=""
                   fill
                   className="object-cover"

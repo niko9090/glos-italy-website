@@ -147,45 +147,111 @@ export function getClient(isDraftMode = false) {
 const builder = imageUrlBuilder(client)
 
 /**
+ * Check if a Sanity image source is valid and can be resolved to a URL.
+ * Returns false for null, undefined, or objects without asset reference.
+ */
+export function isValidImage(source: unknown): source is SanityImageSource {
+  if (!source || typeof source !== 'object') return false
+
+  const img = source as Record<string, unknown>
+
+  // Check for asset reference (most common case)
+  if (img.asset && typeof img.asset === 'object') {
+    const asset = img.asset as Record<string, unknown>
+    // Must have _ref or _id
+    return Boolean(asset._ref || asset._id)
+  }
+
+  // Check for direct asset reference
+  if (img._ref || img._id) return true
+
+  // Check for asset URL directly
+  if (typeof img.url === 'string') return true
+
+  return false
+}
+
+/**
  * Returns an image URL builder for Sanity images.
  * Chain methods like .width(), .height(), .format() before calling .url()
+ *
+ * NOTE: Always check isValidImage() before calling this, or use getImageUrl() which handles invalid images.
  */
 export function urlFor(source: SanityImageSource) {
   return builder.image(source)
 }
 
 /**
+ * Safely get image URL, returning null for invalid images.
+ * Use this instead of urlFor().url() when you're not sure if the image is valid.
+ */
+export function safeImageUrl(
+  source: unknown,
+  width?: number,
+  height?: number
+): string | null {
+  if (!isValidImage(source)) {
+    return null
+  }
+
+  try {
+    let imageBuilder = builder.image(source).auto('format').fit('max')
+
+    if (width) {
+      imageBuilder = imageBuilder.width(width)
+    }
+    if (height) {
+      imageBuilder = imageBuilder.height(height)
+    }
+
+    return imageBuilder.url()
+  } catch (error) {
+    console.warn('[safeImageUrl] Failed to generate image URL:', error)
+    return null
+  }
+}
+
+/**
  * Get optimized image URL with optional dimensions.
  * Automatically applies format optimization and max fit.
+ * Returns empty string if image is invalid.
  */
 export function getImageUrl(
-  source: SanityImageSource,
+  source: SanityImageSource | unknown,
   width?: number,
   height?: number
 ): string {
-  let imageBuilder = builder.image(source).auto('format').fit('max')
-
-  if (width) {
-    imageBuilder = imageBuilder.width(width)
-  }
-  if (height) {
-    imageBuilder = imageBuilder.height(height)
-  }
-
-  return imageBuilder.url()
+  const url = safeImageUrl(source, width, height)
+  return url || ''
 }
 
 /**
  * Get image URL with blur placeholder for Next.js Image component.
  * Returns both the full URL and a tiny blurred version for placeholder.
+ * Returns null values if image is invalid.
  */
-export function getImageWithBlur(source: SanityImageSource) {
-  const url = urlFor(source).width(1200).auto('format').url()
-  const blurDataURL = urlFor(source).width(24).blur(10).url()
+export function getImageWithBlur(source: SanityImageSource | unknown) {
+  if (!isValidImage(source)) {
+    return {
+      url: null,
+      blurDataURL: null,
+    }
+  }
 
-  return {
-    url,
-    blurDataURL,
+  try {
+    const url = urlFor(source).width(1200).auto('format').url()
+    const blurDataURL = urlFor(source).width(24).blur(10).url()
+
+    return {
+      url,
+      blurDataURL,
+    }
+  } catch (error) {
+    console.warn('[getImageWithBlur] Failed to generate image URLs:', error)
+    return {
+      url: null,
+      blurDataURL: null,
+    }
   }
 }
 

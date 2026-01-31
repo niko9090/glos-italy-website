@@ -3,7 +3,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 
 interface ProductGalleryProps {
   mainImage: any
@@ -14,15 +14,16 @@ interface ProductGalleryProps {
 export default function ProductGallery({ mainImage, gallery, productName }: ProductGalleryProps) {
   const [activeImage, setActiveImage] = useState(mainImage)
 
-  const allImages = [mainImage, ...(gallery || [])].filter(Boolean)
+  // Filter out invalid images (missing asset reference)
+  const allImages = [mainImage, ...(gallery || [])].filter(img => isValidImage(img))
 
   return (
     <div>
       {/* Main Image */}
       <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-4">
-        {activeImage ? (
+        {isValidImage(activeImage) && safeImageUrl(activeImage, 800, 800) ? (
           <Image
-            src={urlFor(activeImage).width(800).height(800).url()}
+            src={safeImageUrl(activeImage, 800, 800)!}
             alt={productName}
             fill
             className="object-contain"
@@ -43,7 +44,7 @@ export default function ProductGallery({ mainImage, gallery, productName }: Prod
               }`}
             >
               <Image
-                src={urlFor(image).width(160).height(160).url()}
+                src={safeImageUrl(image, 160, 160)!}
                 alt={`${productName} - ${index + 1}`}
                 fill
                 className="object-cover"

@@ -4,7 +4,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Star, Quote } from 'lucide-react'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import type { Testimonial } from '@/lib/sanity/fetch'
 import { getTextValue } from '@/lib/utils/textHelpers'
 
@@ -169,13 +169,13 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                 transition={{ delay: 0.5, type: 'spring', stiffness: 100 }}
                 className="flex items-center gap-4"
               >
-                {testimonial.avatar ? (
+                {isValidImage(testimonial.avatar) && safeImageUrl(testimonial.avatar, 96, 96) ? (
                   <motion.div
                     whileHover={{ scale: 1.1 }}
                     className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-transparent group-hover:ring-primary/30 transition-all duration-300"
                   >
                     <Image
-                      src={urlFor(testimonial.avatar).width(96).height(96).url()}
+                      src={safeImageUrl(testimonial.avatar, 96, 96)!}
                       alt={getTextValue(testimonial.author)}
                       fill
                       className="object-cover"

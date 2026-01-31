@@ -5,7 +5,7 @@ import { useState, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
-import { urlFor } from '@/lib/sanity/client'
+import { urlFor, isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 
@@ -96,6 +96,9 @@ export default function GallerySection({ data }: GallerySectionProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [[page, direction], setPage] = useState([0, 0])
 
+  // Filter out invalid images (missing asset reference)
+  const validImages = data.images?.filter(img => isValidImage(img)) || []
+
   const openLightbox = (index: number) => {
     setLightboxIndex(index)
     setPage([index, 0])
@@ -106,17 +109,17 @@ export default function GallerySection({ data }: GallerySectionProps) {
   }, [])
 
   const paginate = useCallback((newDirection: number) => {
-    if (lightboxIndex !== null && data.images) {
+    if (lightboxIndex !== null && validImages) {
       const newIndex = lightboxIndex + newDirection
       const wrappedIndex = newIndex < 0
-        ? data.images.length - 1
-        : newIndex >= data.images.length
+        ? validImages.length - 1
+        : newIndex >= validImages.length
           ? 0
           : newIndex
       setLightboxIndex(wrappedIndex)
       setPage([wrappedIndex, newDirection])
     }
-  }, [lightboxIndex, data.images])
+  }, [lightboxIndex, validImages])
 
   // Keyboard navigation
   useEffect(() => {
@@ -170,7 +173,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
           viewport={{ once: true, margin: '-50px' }}
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
         >
-          {data.images?.map((image, index) => (
+          {validImages?.map((image, index) => (
             <motion.button
               key={image._key}
               variants={thumbnailVariants}
@@ -185,7 +188,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                          ring-2 ring-transparent hover:ring-primary/50 transition-all duration-300"
             >
               <Image
-                src={urlFor(image).width(400).height(400).url()}
+                src={safeImageUrl(image, 400, 400)!}
                 alt={getTextValue(image.caption)}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -219,7 +222,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
 
         {/* Lightbox */}
         <AnimatePresence>
-          {lightboxIndex !== null && data.images && (
+          {lightboxIndex !== null && validImages && (
             <motion.div
               variants={lightboxVariants}
               initial="hidden"
@@ -253,7 +256,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                   className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-white/10 backdrop-blur-sm
                              rounded-full text-white text-sm font-medium"
                 >
-                  {lightboxIndex + 1} di {data.images.length}
+                  {lightboxIndex + 1} di {validImages.length}
                 </motion.div>
               </AnimatePresence>
 
@@ -297,14 +300,14 @@ export default function GallerySection({ data }: GallerySectionProps) {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Image
-                    src={urlFor(data.images[lightboxIndex]).width(1600).url()}
-                    alt={getTextValue(data.images[lightboxIndex].caption)}
+                    src={safeImageUrl(validImages[lightboxIndex], 1600)!}
+                    alt={getTextValue(validImages[lightboxIndex].caption)}
                     fill
                     className="object-contain"
                   />
 
                   {/* Caption with slide-up animation */}
-                  {data.images[lightboxIndex].caption && (
+                  {validImages[lightboxIndex].caption && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -312,7 +315,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                       className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent"
                     >
                       <p className="text-white text-center text-lg">
-                        {getTextValue(data.images[lightboxIndex].caption)}
+                        {getTextValue(validImages[lightboxIndex].caption)}
                       </p>
                     </motion.div>
                   )}
@@ -321,7 +324,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
 
               {/* Thumbnail strip */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 px-4 py-2 bg-black/50 backdrop-blur-sm rounded-full">
-                {data.images.slice(0, 7).map((img, idx) => (
+                {validImages.slice(0, 7).map((img, idx) => (
                   <motion.button
                     key={img._key}
                     whileHover={{ scale: 1.1 }}
@@ -335,16 +338,16 @@ export default function GallerySection({ data }: GallerySectionProps) {
                                ${lightboxIndex === idx ? 'ring-2 ring-white scale-110' : 'opacity-60 hover:opacity-100'}`}
                   >
                     <Image
-                      src={urlFor(img).width(80).height(80).url()}
+                      src={safeImageUrl(img, 80, 80)!}
                       alt=""
                       fill
                       className="object-cover"
                     />
                   </motion.button>
                 ))}
-                {data.images.length > 7 && (
+                {validImages.length > 7 && (
                   <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-white text-xs">
-                    +{data.images.length - 7}
+                    +{validImages.length - 7}
                   </div>
                 )}
               </div>

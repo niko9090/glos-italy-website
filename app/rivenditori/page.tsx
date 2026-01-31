@@ -4,7 +4,7 @@ import Image from 'next/image'
 import nextDynamic from 'next/dynamic'
 import { draftMode } from 'next/headers'
 import { getAllDealers } from '@/lib/sanity/fetch'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { MapPin, Phone, Mail, Award } from 'lucide-react'
 import { getTextValue } from '@/lib/utils/textHelpers'
 
@@ -42,10 +42,10 @@ export default async function DealersPage() {
   const DealerCard = ({ dealer }: { dealer: any }) => (
     <article className="card p-6">
       <div className="flex items-start gap-4">
-        {dealer.logo ? (
+        {isValidImage(dealer.logo) && safeImageUrl(dealer.logo, 128, 128) ? (
           <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
             <Image
-              src={urlFor(dealer.logo).width(128).height(128).url()}
+              src={safeImageUrl(dealer.logo, 128, 128)!}
               alt={String(dealer.name || '')}
               fill
               className="object-contain"

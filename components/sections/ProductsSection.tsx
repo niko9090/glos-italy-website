@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import type { Product } from '@/lib/sanity/fetch'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
@@ -121,9 +121,9 @@ function ProductCard({ product }: { product: Product }) {
           {/* Shimmer placeholder */}
           {!imageLoaded && <ImagePlaceholder />}
 
-          {product.mainImage ? (
+          {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 600, 450) ? (
             <Image
-              src={urlFor(product.mainImage).width(600).height(450).url()}
+              src={safeImageUrl(product.mainImage, 600, 450)!}
               alt={String(product.name || '')}
               fill
               className={`object-cover transition-transform duration-700 ease-out group-hover:scale-110 ${

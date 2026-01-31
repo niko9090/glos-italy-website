@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { draftMode } from 'next/headers'
 import { getAllProducts, getAllCategories } from '@/lib/sanity/fetch'
-import { urlFor } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 
@@ -61,9 +61,9 @@ export default async function ProductsPage() {
               <Link href={`/prodotti/${product.slug?.current}`}>
                 {/* Image */}
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  {product.mainImage ? (
+                  {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 600, 450) ? (
                     <Image
-                      src={urlFor(product.mainImage).width(600).height(450).url()}
+                      src={safeImageUrl(product.mainImage, 600, 450)!}
                       alt={String(product.name || '')}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

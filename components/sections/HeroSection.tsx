@@ -70,14 +70,6 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ data }: HeroSectionProps) {
-  // DEBUG: Verifica cosa arriva dal CMS
-  console.log('=== HeroSection DEBUG ===')
-  console.log('backgroundType RAW:', data.backgroundType, typeof data.backgroundType)
-  console.log('backgroundGradient RAW:', data.backgroundGradient, typeof data.backgroundGradient)
-  console.log('backgroundColor RAW:', data.backgroundColor, typeof data.backgroundColor)
-  console.log('backgroundImage exists:', !!data.backgroundImage)
-  console.log('=========================')
-
   const { t } = useLanguage()
   const containerRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
@@ -288,43 +280,41 @@ export default function HeroSection({ data }: HeroSectionProps) {
         </motion.div>
       )}
 
-      {backgroundType === 'gradient' && (() => {
-        const gradientStyles: Record<string, string> = {
-          'blue-dark': 'linear-gradient(to bottom right, #0047AB, #003380, #111827)',
-          'blue-purple': 'linear-gradient(to bottom right, #2563eb, #9333ea, #581c87)',
-          'green-blue': 'linear-gradient(to bottom right, #22c55e, #0d9488, #1d4ed8)',
-          'orange-pink': 'linear-gradient(to bottom right, #f97316, #ec4899, #9333ea)',
-          'black-gray': 'linear-gradient(to bottom right, #111827, #1f2937, #000000)',
-          'radial-blue': 'radial-gradient(ellipse at center, #2563eb, #1e40af, #111827)',
-        }
-        const selectedGradient = String(data.backgroundGradient || 'blue-dark').trim()
-        const bgStyle = gradientStyles[selectedGradient] || gradientStyles['blue-dark']
-        console.log('GRADIENT FINAL:', selectedGradient, '→', bgStyle)
-        return (
-          <div
-            className="absolute inset-0 z-0"
-            style={{ background: bgStyle }}
-          />
-        )
-      })()}
+      {backgroundType === 'gradient' && (
+        <div
+          className="absolute inset-0"
+          style={{
+            zIndex: 0,
+            background: data.backgroundGradient === 'blue-purple'
+              ? 'linear-gradient(to bottom right, #2563eb, #9333ea, #581c87)'
+              : data.backgroundGradient === 'green-blue'
+              ? 'linear-gradient(to bottom right, #22c55e, #0d9488, #1d4ed8)'
+              : data.backgroundGradient === 'orange-pink'
+              ? 'linear-gradient(to bottom right, #f97316, #ec4899, #9333ea)'
+              : data.backgroundGradient === 'black-gray'
+              ? 'linear-gradient(to bottom right, #111827, #1f2937, #000000)'
+              : data.backgroundGradient === 'radial-blue'
+              ? 'radial-gradient(ellipse at center, #2563eb, #1e40af, #111827)'
+              : 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
+          }}
+        />
+      )}
 
-      {backgroundType === 'solid' && (() => {
-        const colorStyles: Record<string, string> = {
-          'primary': '#0047AB',
-          'dark-blue': '#1e3a8a',
-          'black': '#000000',
-          'gray-dark': '#1f2937',
-        }
-        const selectedColor = String(data.backgroundColor || 'primary').trim()
-        const bgColor = colorStyles[selectedColor] || colorStyles['primary']
-        console.log('SOLID FINAL:', selectedColor, '→', bgColor)
-        return (
-          <div
-            className="absolute inset-0 z-0"
-            style={{ backgroundColor: bgColor }}
-          />
-        )
-      })()}
+      {backgroundType === 'solid' && (
+        <div
+          className="absolute inset-0"
+          style={{
+            zIndex: 0,
+            backgroundColor: data.backgroundColor === 'dark-blue'
+              ? '#1e3a8a'
+              : data.backgroundColor === 'black'
+              ? '#000000'
+              : data.backgroundColor === 'gray-dark'
+              ? '#1f2937'
+              : '#0047AB'
+          }}
+        />
+      )}
 
       {/* Default gradient if no background */}
       {!backgroundUrl && backgroundType === 'image' && (

@@ -7,22 +7,13 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { useLanguage } from '@/lib/context/LanguageContext'
+import LanguageSelector from '@/components/LanguageSelector'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
 
 interface HeaderProps {
   settings: SiteSettings | null
   navigation: Navigation | null
-}
-
-// Helper per estrarre valore da campo che può essere stringa o oggetto multilingua
-function getTextValue(value: unknown): string {
-  if (!value) return ''
-  if (typeof value === 'string') return value
-  if (typeof value === 'object') {
-    const obj = value as Record<string, unknown>
-    if ('it' in obj) return String(obj.it || obj.en || obj.es || '')
-  }
-  return ''
 }
 
 // Menu di fallback se Sanity non ha dati
@@ -35,7 +26,8 @@ const defaultNavItems = [
 
 export default function Header({ settings, navigation }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const companyName = getTextValue(settings?.companyName) || 'GLOS Italy'
+  const { t } = useLanguage()
+  const companyName = t(settings?.companyName) || 'GLOS Italy'
 
   // Usa items da Sanity se esistono, altrimenti usa il fallback
   const navItems = navigation?.items && navigation.items.length > 0
@@ -73,13 +65,18 @@ export default function Header({ settings, navigation }: HeaderProps) {
                 href={item.href || '#'}
                 className="text-gray-700 hover:text-primary font-medium py-2 transition-colors"
               >
-                {getTextValue(item.label)}
+                {t(item.label)}
               </Link>
             ))}
           </nav>
 
           {/* Right Section */}
           <div className="flex items-center gap-4">
+            {/* Language Selector (Desktop) */}
+            <div className="hidden lg:block">
+              <LanguageSelector variant="compact" />
+            </div>
+
             {/* CTA Button (Desktop) */}
             <Link href="/contatti" className="hidden lg:block btn-primary">
               Contattaci
@@ -115,9 +112,14 @@ export default function Header({ settings, navigation }: HeaderProps) {
                     onClick={toggleMobileMenu}
                     className="block py-3 text-gray-700 font-medium hover:text-primary"
                   >
-                    {getTextValue(item.label)}
+                    {t(item.label)}
                   </Link>
                 ))}
+
+                {/* Language Selector (Mobile) */}
+                <div className="py-3 border-t border-gray-100 mt-2">
+                  <LanguageSelector variant="flags-only" />
+                </div>
 
                 {/* CTA Button (Mobile) */}
                 <Link

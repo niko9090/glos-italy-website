@@ -4,6 +4,7 @@
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import Link from 'next/link'
 import { CSSProperties } from 'react'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 // Tipi per i blocchi Portable Text
 type PortableTextBlock = {
@@ -839,7 +840,7 @@ const components: PortableTextComponents = {
 }
 
 // Estrae il contenuto dalla struttura multilingua
-function extractContent(value: unknown): PortableTextBlock[] | string | null {
+function extractContent(value: unknown, language: 'it' | 'en' | 'es' = 'it'): PortableTextBlock[] | string | null {
   if (!value) return null
 
   if (Array.isArray(value)) {
@@ -852,7 +853,8 @@ function extractContent(value: unknown): PortableTextBlock[] | string | null {
 
   if (typeof value === 'object') {
     const obj = value as Record<string, unknown>
-    const content = obj.it || obj.en || obj.es
+    // Usa la lingua corrente, poi fallback a italiano, poi inglese
+    const content = obj[language] || obj.it || obj.en || obj.es
 
     if (Array.isArray(content)) {
       return content as PortableTextBlock[]
@@ -867,7 +869,8 @@ function extractContent(value: unknown): PortableTextBlock[] | string | null {
 }
 
 export default function RichText({ value, className = '' }: RichTextProps) {
-  const content = extractContent(value)
+  const { language } = useLanguage()
+  const content = extractContent(value, language)
 
   if (!content) {
     return null
@@ -885,7 +888,8 @@ export default function RichText({ value, className = '' }: RichTextProps) {
 }
 
 export function RichTextInline({ value, className = '' }: RichTextProps) {
-  const content = extractContent(value)
+  const { language } = useLanguage()
+  const content = extractContent(value, language)
 
   if (!content) {
     return null

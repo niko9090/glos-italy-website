@@ -1,8 +1,11 @@
 // Footer Component
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Facebook, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
 
 interface FooterProps {
@@ -10,32 +13,14 @@ interface FooterProps {
   navigation: Navigation | null
 }
 
-// Helper per estrarre valore da campo che può essere stringa o oggetto multilingua
-function getTextValue(value: unknown): string {
-  if (!value) return ''
-  if (typeof value === 'string') return value
-  if (typeof value === 'object') {
-    const obj = value as Record<string, unknown>
-    // Se è un oggetto multilingua {it, en, es}
-    if ('it' in obj) return String(obj.it || obj.en || obj.es || '')
-    // Se è un oggetto indirizzo {street, city, ...}
-    if ('street' in obj || 'city' in obj) {
-      const addr = obj as { street?: string; city?: string; province?: string; postalCode?: string; country?: string }
-      return [addr.street, addr.city, addr.province, addr.postalCode, addr.country]
-        .filter(Boolean)
-        .join(', ')
-    }
-  }
-  return ''
-}
-
 export default function Footer({ settings, navigation }: FooterProps) {
+  const { t } = useLanguage()
   const currentYear = new Date().getFullYear()
 
   // Estrai valori sicuri
-  const companyName = getTextValue(settings?.companyName) || 'GLOS Italy'
-  const slogan = getTextValue(settings?.slogan)
-  const address = getTextValue(settings?.address)
+  const companyName = t(settings?.companyName) || 'GLOS Italy'
+  const slogan = t(settings?.slogan)
+  const address = t(settings?.address)
 
   return (
     <footer className="bg-gray-900 text-white">
@@ -106,7 +91,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     href={item.href || '#'}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {getTextValue(item.label)}
+                    {t(item.label)}
                   </Link>
                 </li>
               ))}
@@ -144,10 +129,10 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 <li className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-primary flex-shrink-0" />
                   <a
-                    href={`tel:${getTextValue(settings.phone).replace(/\s/g, '')}`}
+                    href={`tel:${t(settings.phone).replace(/\s/g, '')}`}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {getTextValue(settings.phone)}
+                    {t(settings.phone)}
                   </a>
                 </li>
               )}
@@ -155,10 +140,10 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 <li className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-primary flex-shrink-0" />
                   <a
-                    href={`mailto:${getTextValue(settings.email)}`}
+                    href={`mailto:${t(settings.email)}`}
                     className="text-gray-400 hover:text-white transition-colors"
                   >
-                    {getTextValue(settings.email)}
+                    {t(settings.email)}
                   </a>
                 </li>
               )}

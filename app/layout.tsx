@@ -7,6 +7,7 @@ import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import { LanguageProvider } from '@/lib/context/LanguageContext'
 
 // Helper per estrarre valore da campo che può essere stringa o oggetto multilingua
 function getTextValue(value: unknown): string {
@@ -67,9 +68,11 @@ export default async function RootLayout({
   return (
     <html lang="it" className={`${inter.variable} ${poppins.variable}`}>
       <body className="min-h-screen flex flex-col bg-white text-gray-900 antialiased">
-        <Header settings={settings} navigation={navigation} />
-        <main className="flex-grow">{children}</main>
-        <Footer settings={settings} navigation={navigation} />
+        <LanguageProvider>
+          <Header settings={settings} navigation={navigation} />
+          <main className="flex-grow">{children}</main>
+          <Footer settings={settings} navigation={navigation} />
+        </LanguageProvider>
         {/* Visual Editing per Sanity - attivo solo in draft mode */}
         {isDraftMode && <VisualEditing />}
       </body>

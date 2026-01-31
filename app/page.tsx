@@ -1,6 +1,6 @@
 // Homepage
 import { draftMode } from 'next/headers'
-import { getPageBySlug, getFeaturedProducts, getFeaturedTestimonials } from '@/lib/sanity/fetch'
+import { getPageBySlug, getFeaturedProducts } from '@/lib/sanity/fetch'
 import { SectionRenderer } from '@/components/sections/SectionRenderer'
 
 // Force dynamic rendering to support draft mode
@@ -10,10 +10,9 @@ export default async function HomePage() {
   // CORRETTO: draftMode() e' async in Next.js 14.x App Router
   const { isEnabled: isDraftMode } = await draftMode()
 
-  const [page, products, testimonials] = await Promise.all([
+  const [page, products] = await Promise.all([
     getPageBySlug('home', isDraftMode),
     getFeaturedProducts(isDraftMode),
-    getFeaturedTestimonials(isDraftMode),
   ])
 
   if (!page) {
@@ -34,7 +33,6 @@ export default async function HomePage() {
           key={section._key || index}
           section={section}
           products={products}
-          testimonials={testimonials}
         />
       ))}
     </>

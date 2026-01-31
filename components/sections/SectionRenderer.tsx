@@ -2,7 +2,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import type { Product, Testimonial } from '@/lib/sanity/fetch'
+import type { Product } from '@/lib/sanity/fetch'
 
 // Lazy load section components
 const HeroSection = dynamic(() => import('./HeroSection'))
@@ -35,10 +35,9 @@ const EmbedSection = dynamic(() => import('./EmbedSection'))
 interface SectionRendererProps {
   section: any
   products?: Product[]
-  testimonials?: Testimonial[]
 }
 
-export function SectionRenderer({ section, products, testimonials }: SectionRendererProps) {
+export function SectionRenderer({ section, products }: SectionRendererProps) {
   if (!section || !section._type) {
     return null
   }
@@ -91,7 +90,7 @@ export function SectionRenderer({ section, products, testimonials }: SectionRend
 
     // === SOCIAL PROOF ===
     case 'testimonialsSection':
-      return <TestimonialsSection data={section} testimonials={testimonials} />
+      return <TestimonialsSection data={section} />
 
     case 'logoCloudSection':
       return <LogoCloudSection data={section} />

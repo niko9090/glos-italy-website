@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Phone } from 'lucide-react'
 import { getTextValue } from '@/lib/utils/textHelpers'
+import RichText from '@/components/RichText'
 
 interface CTASectionProps {
   data: {
@@ -41,10 +42,10 @@ export default function CTASection({ data }: CTASectionProps) {
             </h2>
           )}
 
-          {getTextValue(data.subtitle) && (
-            <p className="text-xl mb-8 opacity-90">
-              {getTextValue(data.subtitle)}
-            </p>
+          {data.subtitle && (
+            <div className="text-xl mb-8 opacity-90">
+              <RichText value={data.subtitle} />
+            </div>
           )}
 
           <div className="flex flex-wrap justify-center gap-4">

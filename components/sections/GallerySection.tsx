@@ -7,10 +7,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import { urlFor } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
+import RichText from '@/components/RichText'
 
 interface GallerySectionProps {
   data: {
     title?: string
+    subtitle?: unknown
     images?: Array<{
       _key: string
       asset: any
@@ -145,7 +147,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
     <section className="section bg-white overflow-hidden">
       <div className="container-glos">
         {/* Header */}
-        {data.title && (
+        {(data.title || data.subtitle) && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -153,7 +155,14 @@ export default function GallerySection({ data }: GallerySectionProps) {
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
+            {data.title && (
+              <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
+            )}
+            {data.subtitle && (
+              <div className="section-subtitle mx-auto">
+                <RichText value={data.subtitle} />
+              </div>
+            )}
           </motion.div>
         )}
 

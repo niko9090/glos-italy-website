@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { urlFor } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
+import RichText from '@/components/RichText'
 
 interface FeaturesSectionProps {
   data: {
@@ -122,16 +123,16 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
               </motion.h2>
             )}
 
-            {getTextValue(data.subtitle) && (
-              <motion.p
+            {data.subtitle && (
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
                 className="section-subtitle mb-8"
               >
-                {getTextValue(data.subtitle)}
-              </motion.p>
+                <RichText value={data.subtitle} />
+              </motion.div>
             )}
 
             {/* Features List with stagger */}

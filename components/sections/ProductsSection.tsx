@@ -8,6 +8,7 @@ import { motion } from 'framer-motion'
 import { urlFor } from '@/lib/sanity/client'
 import type { Product } from '@/lib/sanity/fetch'
 import { getTextValue } from '@/lib/utils/textHelpers'
+import RichText from '@/components/RichText'
 
 interface ProductsSectionProps {
   data: {
@@ -71,7 +72,9 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
           )}
 
           {data.subtitle && (
-            <p className="section-subtitle mx-auto">{getTextValue(data.subtitle)}</p>
+            <div className="section-subtitle mx-auto">
+              <RichText value={data.subtitle} />
+            </div>
           )}
         </div>
 

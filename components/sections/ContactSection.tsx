@@ -5,11 +5,12 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Send, MapPin, Phone, Mail, CheckCircle } from 'lucide-react'
 import { getTextValue } from '@/lib/utils/textHelpers'
+import RichText from '@/components/RichText'
 
 interface ContactSectionProps {
   data: {
     title?: string
-    subtitle?: string
+    subtitle?: unknown
     showForm?: boolean
     showMap?: boolean
     showContactInfo?: boolean
@@ -35,11 +36,13 @@ export default function ContactSection({ data }: ContactSectionProps) {
       <div className="container-glos">
         {/* Header */}
         <div className="text-center mb-12">
-          {getTextValue(data.title) && (
+          {data.title && (
             <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
           )}
-          {getTextValue(data.subtitle) && (
-            <p className="section-subtitle mx-auto">{getTextValue(data.subtitle)}</p>
+          {data.subtitle && (
+            <div className="section-subtitle mx-auto">
+              <RichText value={data.subtitle} />
+            </div>
           )}
         </div>
 

@@ -8,6 +8,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { urlFor } from '@/lib/sanity/client'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { getTextValue } from '@/lib/utils/textHelpers'
+import RichText from '@/components/RichText'
 
 interface HeroSectionProps {
   data: {
@@ -76,10 +77,10 @@ export default function HeroSection({ data }: HeroSectionProps) {
             </h1>
           )}
 
-          {getTextValue(data.subtitle) && (
-            <p className="text-xl md:text-2xl text-white/90 mb-10">
-              {getTextValue(data.subtitle)}
-            </p>
+          {data.subtitle && (
+            <div className="text-xl md:text-2xl text-white/90 mb-10">
+              <RichText value={data.subtitle} />
+            </div>
           )}
 
           {getTextValue(data.buttonText) && data.buttonLink && (

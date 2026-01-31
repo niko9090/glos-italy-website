@@ -250,6 +250,13 @@ export default function HeroSection({ data }: HeroSectionProps) {
   const backgroundType = data.backgroundType || 'image'
   const animationVariants = getAnimationVariants()
 
+  // DEBUG: Log valori sfondo
+  console.log('=== HERO BG DEBUG ===', {
+    backgroundType,
+    backgroundGradient: data.backgroundGradient,
+    backgroundColor: data.backgroundColor,
+  })
+
   // Merge legacy button with new buttons array
   const buttons = data.buttons?.length
     ? data.buttons
@@ -279,14 +286,6 @@ export default function HeroSection({ data }: HeroSectionProps) {
           <div className={`absolute inset-0 ${getOverlayClass()}`} />
         </motion.div>
       )}
-
-      {/* DEBUG LOG */}
-      {console.log('=== HERO BG DEBUG ===', {
-        backgroundType,
-        backgroundGradient: data.backgroundGradient,
-        backgroundColor: data.backgroundColor,
-        rawData: JSON.stringify({ type: data.backgroundType, gradient: data.backgroundGradient, color: data.backgroundColor })
-      })}
 
       {/* Gradient background */}
       {backgroundType === 'gradient' && (

@@ -181,35 +181,49 @@ export const categoryBySlugQuery = groq`
 // ============================================
 
 export const allDealersQuery = groq`
-  *[_type == "dealer" && isActive == true] | order(name asc) {
+  *[_type == "dealer" && isActive == true] | order(isFeatured desc, name asc) {
     _id,
     name,
     type,
+    description,
     logo,
     email,
     phone,
+    website,
+    openingHours,
+    country,
     city,
     address,
     location,
     regions,
     certifications,
-    isActive
+    youtubeVideo,
+    gallery,
+    isActive,
+    isFeatured
   }
 `
 
 export const dealersByCityQuery = groq`
-  *[_type == "dealer" && isActive == true && city == $city] | order(name asc) {
+  *[_type == "dealer" && isActive == true && city == $city] | order(isFeatured desc, name asc) {
     _id,
     name,
     type,
+    description,
     logo,
     email,
     phone,
+    website,
+    openingHours,
+    country,
     city,
     address,
     location,
     regions,
-    certifications
+    certifications,
+    youtubeVideo,
+    gallery,
+    isFeatured
   }
 `
 

@@ -363,8 +363,83 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
             className={`${getLayoutClasses()} ${gapClasses[data.gap || 'lg']}`}
           >
             {data.items?.map((item, index) => {
-              const ItemWrapper = item.link ? Link : 'div'
-              const wrapperProps = item.link ? { href: item.link } : {}
+              const wrapperClassName = `block ${
+                data.iconPosition === 'left' ? 'flex items-start gap-4' :
+                data.iconPosition === 'right' ? 'flex items-start gap-4 flex-row-reverse' :
+                ''
+              }`
+
+              const itemContent = (
+                <>
+                  {/* Timeline dot */}
+                  {layout === 'timeline' && (
+                    <div className="absolute left-0 top-0 -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-white" />
+                  )}
+
+                  {/* Icon */}
+                  {data.iconPosition !== 'hidden' && (item.icon || item.iconImage) && (
+                    <div className={`flex-shrink-0 ${
+                      data.iconPosition === 'top' ? 'mb-4' : ''
+                    } ${data.iconPosition === 'background' ? 'absolute right-4 top-4 opacity-10 text-6xl' : ''}`}>
+                      {item.iconImage && isValidImage(item.iconImage) ? (
+                        <div className={iconSizeClasses[data.iconSize || 'lg']}>
+                          <Image
+                            src={safeImageUrl(item.iconImage, 64) || ''}
+                            alt=""
+                            width={48}
+                            height={48}
+                            className="object-contain"
+                          />
+                        </div>
+                      ) : item.icon ? (
+                        <div className={`${getIconStyleClasses(item.color)} ${iconSizeClasses[data.iconSize || 'lg']} flex items-center justify-center ${
+                          data.hoverEffect === 'icon-bounce' ? 'group-hover:animate-bounce' : ''
+                        } ${data.iconAnimation === 'pulse' ? 'animate-pulse' : ''} ${
+                          data.iconAnimation === 'bounce' ? 'animate-bounce' : ''
+                        }`}>
+                          {item.icon}
+                        </div>
+                      ) : (
+                        <div className={`${getIconStyleClasses(item.color)} ${iconSizeClasses[data.iconSize || 'lg']} flex items-center justify-center`}>
+                          <Check className="w-6 h-6" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Content */}
+                  <div className={`flex-1 ${data.textAlign === 'center' && data.iconPosition === 'top' ? 'text-center' : ''}`}>
+                    {/* Badge */}
+                    {!!item.badge && (
+                      <span className="inline-block px-2 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-2">
+                        {t(item.badge)}
+                      </span>
+                    )}
+
+                    {/* Title */}
+                    {!!item.title && (
+                      <h3 className={`text-lg font-semibold mb-2 ${item.link ? 'group-hover:text-primary transition-colors' : ''}`}>
+                        {t(item.title)}
+                      </h3>
+                    )}
+
+                    {/* Description */}
+                    {!!item.description && (
+                      <p className="text-sm opacity-70 leading-relaxed">
+                        {t(item.description)}
+                      </p>
+                    )}
+
+                    {/* Link arrow */}
+                    {item.link && (
+                      <div className="mt-3 flex items-center gap-1 text-primary font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>Scopri di più</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
+                    )}
+                  </div>
+                </>
+              )
 
               return (
                 <motion.div
@@ -374,79 +449,15 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                     layout === 'alternating' && index % 2 === 1 ? 'md:flex-row-reverse' : ''
                   } ${layout === 'timeline' ? 'relative pl-8 border-l-2 border-primary/30' : ''}`}
                 >
-                  <ItemWrapper {...wrapperProps} className={`block ${
-                    data.iconPosition === 'left' ? 'flex items-start gap-4' :
-                    data.iconPosition === 'right' ? 'flex items-start gap-4 flex-row-reverse' :
-                    ''
-                  }`}>
-                    {/* Timeline dot */}
-                    {layout === 'timeline' && (
-                      <div className="absolute left-0 top-0 -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-white" />
-                    )}
-
-                    {/* Icon */}
-                    {data.iconPosition !== 'hidden' && (item.icon || item.iconImage) && (
-                      <div className={`flex-shrink-0 ${
-                        data.iconPosition === 'top' ? 'mb-4' : ''
-                      } ${data.iconPosition === 'background' ? 'absolute right-4 top-4 opacity-10 text-6xl' : ''}`}>
-                        {item.iconImage && isValidImage(item.iconImage) ? (
-                          <div className={iconSizeClasses[data.iconSize || 'lg']}>
-                            <Image
-                              src={safeImageUrl(item.iconImage, 64) || ''}
-                              alt=""
-                              width={48}
-                              height={48}
-                              className="object-contain"
-                            />
-                          </div>
-                        ) : item.icon ? (
-                          <div className={`${getIconStyleClasses(item.color)} ${iconSizeClasses[data.iconSize || 'lg']} flex items-center justify-center ${
-                            data.hoverEffect === 'icon-bounce' ? 'group-hover:animate-bounce' : ''
-                          } ${data.iconAnimation === 'pulse' ? 'animate-pulse' : ''} ${
-                            data.iconAnimation === 'bounce' ? 'animate-bounce' : ''
-                          }`}>
-                            {item.icon}
-                          </div>
-                        ) : (
-                          <div className={`${getIconStyleClasses(item.color)} ${iconSizeClasses[data.iconSize || 'lg']} flex items-center justify-center`}>
-                            <Check className="w-6 h-6" />
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Content */}
-                    <div className={`flex-1 ${data.textAlign === 'center' && data.iconPosition === 'top' ? 'text-center' : ''}`}>
-                      {/* Badge */}
-                      {!!item.badge && (
-                        <span className="inline-block px-2 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-2">
-                          {t(item.badge)}
-                        </span>
-                      )}
-
-                      {/* Title */}
-                      {!!item.title && (
-                        <h3 className={`text-lg font-semibold mb-2 ${item.link ? 'group-hover:text-primary transition-colors' : ''}`}>
-                          {t(item.title)}
-                        </h3>
-                      )}
-
-                      {/* Description */}
-                      {!!item.description && (
-                        <p className="text-sm opacity-70 leading-relaxed">
-                          {t(item.description)}
-                        </p>
-                      )}
-
-                      {/* Link arrow */}
-                      {item.link && (
-                        <div className="mt-3 flex items-center gap-1 text-primary font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                          <span>Scopri di più</span>
-                          <ArrowRight className="w-4 h-4" />
-                        </div>
-                      )}
+                  {item.link ? (
+                    <Link href={item.link} className={wrapperClassName}>
+                      {itemContent}
+                    </Link>
+                  ) : (
+                    <div className={wrapperClassName}>
+                      {itemContent}
                     </div>
-                  </ItemWrapper>
+                  )}
 
                   {/* Divider */}
                   {data.dividers && index < (data.items?.length || 0) - 1 && layout === 'list' && (

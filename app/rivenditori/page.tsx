@@ -1,7 +1,7 @@
 // Dealers Page
 import { Metadata } from 'next'
 import Image from 'next/image'
-import dynamic from 'next/dynamic'
+import nextDynamic from 'next/dynamic'
 import { draftMode } from 'next/headers'
 import { getAllDealers } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
@@ -9,7 +9,7 @@ import { MapPin, Phone, Mail, Award } from 'lucide-react'
 import { getTextValue } from '@/lib/utils/textHelpers'
 
 // Import dinamico per Leaflet (non supporta SSR)
-const DealersMap = dynamic(() => import('@/components/DealersMap'), {
+const DealersMap = nextDynamic(() => import('@/components/DealersMap'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-96 bg-gray-100 rounded-2xl flex items-center justify-center">

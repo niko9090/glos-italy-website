@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface TextImageSectionProps {
@@ -20,6 +20,7 @@ interface TextImageSectionProps {
     imageShadow?: string
     imageBorder?: boolean
     imageAnimation?: string
+    animation?: string // Animazione entrata (none, fade, slide-left, slide-right, zoom)
     buttonText?: unknown
     buttonLink?: string
     secondaryButtonText?: unknown
@@ -63,7 +64,49 @@ const imageShadowClasses: Record<string, string> = {
   large: 'shadow-2xl',
 }
 
+// Animazioni entrata
+const getEntryAnimation = (animation: string | undefined, fromDirection: 'left' | 'right') => {
+  if (!animation || animation === 'none') {
+    return { initial: {}, whileInView: {}, transition: {} }
+  }
+
+  const animations: Record<string, { initial: any; whileInView: any; transition: any }> = {
+    fade: {
+      initial: { opacity: 0 },
+      whileInView: { opacity: 1 },
+      transition: { duration: 0.6 },
+    },
+    'slide-left': {
+      initial: { opacity: 0, x: -50 },
+      whileInView: { opacity: 1, x: 0 },
+      transition: { duration: 0.6 },
+    },
+    'slide-right': {
+      initial: { opacity: 0, x: 50 },
+      whileInView: { opacity: 1, x: 0 },
+      transition: { duration: 0.6 },
+    },
+    zoom: {
+      initial: { opacity: 0, scale: 0.9 },
+      whileInView: { opacity: 1, scale: 1 },
+      transition: { duration: 0.6 },
+    },
+  }
+
+  // Default slide from direction
+  if (!animations[animation]) {
+    return {
+      initial: { opacity: 0, x: fromDirection === 'left' ? -50 : 50 },
+      whileInView: { opacity: 1, x: 0 },
+      transition: { duration: 0.6 },
+    }
+  }
+
+  return animations[animation]
+}
+
 export default function TextImageSection({ data }: TextImageSectionProps) {
+  const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'white']
   const paddingClass = paddingClasses[data.verticalPadding || 'medium']
   const textColor = data.backgroundColor === 'dark' || data.backgroundColor === 'primary' ? 'text-white' : 'text-gray-900'
@@ -72,12 +115,16 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
   const imageShape = imageShapeClasses[data.imageShape || 'rounded']
   const imageShadow = imageShadowClasses[data.imageShadow || 'medium']
 
+  // Ottieni animazioni basate sulle impostazioni
+  const imageAnim = getEntryAnimation(data.animation, imagePosition === 'left' ? 'left' : 'right')
+  const textAnim = getEntryAnimation(data.animation, imagePosition === 'left' ? 'right' : 'left')
+
   const imageContent = isValidImage(data.image) ? (
     <motion.div
-      initial={{ opacity: 0, x: imagePosition === 'left' ? -50 : 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={imageAnim.initial}
+      whileInView={imageAnim.whileInView}
       viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      transition={imageAnim.transition}
       className={`relative ${imageSize} flex-shrink-0`}
     >
       <motion.div
@@ -104,10 +151,10 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
 
   const textContent = (
     <motion.div
-      initial={{ opacity: 0, x: imagePosition === 'left' ? 50 : -50 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={textAnim.initial}
+      whileInView={textAnim.whileInView}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: 0.1 }}
+      transition={{ ...textAnim.transition, delay: 0.1 }}
       className={`flex-1 ${textColor}`}
     >
       {data.title ? (
@@ -130,12 +177,12 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
         <div className="flex flex-wrap gap-4">
           {data.buttonText && data.buttonLink ? (
             <Link href={data.buttonLink} className="btn-primary">
-              {getTextValue(data.buttonText)}
+              {t(data.buttonText)}
             </Link>
           ) : null}
           {data.secondaryButtonText && data.secondaryButtonLink ? (
             <Link href={data.secondaryButtonLink} className="btn-secondary">
-              {getTextValue(data.secondaryButtonText)}
+              {t(data.secondaryButtonText)}
             </Link>
           ) : null}
         </div>

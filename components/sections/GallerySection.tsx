@@ -425,7 +425,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                   )}
 
                   {/* Caption */}
-                  {image.caption && data.showCaptions !== 'never' && (
+                  {!!image.caption && data.showCaptions !== 'never' && (
                     <div className={`absolute bottom-0 left-0 right-0 p-4 ${
                       data.showCaptions === 'always'
                         ? 'bg-gradient-to-t from-black/70 to-transparent'
@@ -545,7 +545,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                   />
 
                   {/* Caption */}
-                  {displayedImages[lightboxIndex].caption && (
+                  {!!displayedImages[lightboxIndex].caption && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}

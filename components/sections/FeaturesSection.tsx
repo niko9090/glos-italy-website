@@ -418,21 +418,21 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                     {/* Content */}
                     <div className={`flex-1 ${data.textAlign === 'center' && data.iconPosition === 'top' ? 'text-center' : ''}`}>
                       {/* Badge */}
-                      {item.badge && (
+                      {!!item.badge && (
                         <span className="inline-block px-2 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-2">
                           {t(item.badge)}
                         </span>
                       )}
 
                       {/* Title */}
-                      {item.title && (
+                      {!!item.title && (
                         <h3 className={`text-lg font-semibold mb-2 ${item.link ? 'group-hover:text-primary transition-colors' : ''}`}>
                           {t(item.title)}
                         </h3>
                       )}
 
                       {/* Description */}
-                      {item.description && (
+                      {!!item.description && (
                         <p className="text-sm opacity-70 leading-relaxed">
                           {t(item.description)}
                         </p>

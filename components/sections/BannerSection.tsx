@@ -48,30 +48,27 @@ export default function BannerSection({ data }: BannerSectionProps) {
   const sizeClass = sizeClasses[data.size || 'normal']
   const isFixed = data.position?.startsWith('fixed')
 
-  const content = (
+  const renderContent = () => (
     <motion.div
       initial={data.animated ? { x: '-100%' } : { opacity: 0 }}
       animate={data.animated ? { x: 0 } : { opacity: 1 }}
       transition={data.animated ? { duration: 20, repeat: Infinity, ease: 'linear' } : undefined}
       className="flex items-center justify-center gap-4 flex-wrap"
     >
-      {/* Icon */}
-      {data.icon && <span className="text-2xl">{data.icon}</span>}
+      {data.icon ? <span className="text-2xl">{data.icon}</span> : null}
 
-      {/* Text */}
-      <div className={`${data.animated ? 'whitespace-nowrap' : ''}`}>
+      <div className={data.animated ? 'whitespace-nowrap' : ''}>
         <RichText value={data.text} />
       </div>
 
-      {/* Button */}
-      {data.buttonText && data.buttonLink && (
+      {data.buttonText && data.buttonLink ? (
         <Link
           href={data.buttonLink}
           className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full font-medium transition-all backdrop-blur-sm"
         >
           {getTextValue(data.buttonText)}
         </Link>
-      )}
+      ) : null}
     </motion.div>
   )
 
@@ -87,10 +84,10 @@ export default function BannerSection({ data }: BannerSectionProps) {
         <div className="relative flex items-center justify-center">
           {data.animated ? (
             <div className="overflow-hidden w-full">
-              {content}
+              {renderContent()}
             </div>
           ) : (
-            content
+            renderContent()
           )}
 
           {/* Dismiss Button */}

@@ -311,7 +311,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
         />
       )}
 
-      {/* Solid background */}
+      {/* Solid background - TEST con rosso per vedere se si vede */}
       {backgroundType === 'solid' && (
         <div
           data-debug="solid-bg"
@@ -319,16 +319,10 @@ export default function HeroSection({ data }: HeroSectionProps) {
             position: 'absolute',
             top: 0,
             left: 0,
-            right: 0,
-            bottom: 0,
+            width: '100%',
+            height: '100%',
             zIndex: 1,
-            backgroundColor: data.backgroundColor === 'dark-blue'
-              ? '#1e3a8a'
-              : data.backgroundColor === 'black'
-              ? '#000000'
-              : data.backgroundColor === 'gray-dark'
-              ? '#1f2937'
-              : '#0047AB'
+            backgroundColor: '#FF0000'
           }}
         />
       )}

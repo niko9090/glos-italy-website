@@ -166,9 +166,9 @@ export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
                   <h3 className={`text-xl font-semibold mb-2 ${textColor} group-hover:text-primary transition-colors`}>
                     {getTextValue(box.title)}
                   </h3>
-                  {box.description && (
+                  {box.description ? (
                     <p className="text-gray-600">{getTextValue(box.description)}</p>
-                  )}
+                  ) : null}
                 </div>
               </motion.div>
             )

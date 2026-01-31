@@ -146,11 +146,11 @@ export default function TabsSection({ data }: TabsSectionProps) {
                     )}
 
                     {/* Button */}
-                    {activeContent.buttonText && activeContent.buttonLink && (
+                    {activeContent.buttonText && activeContent.buttonLink ? (
                       <Link href={activeContent.buttonLink} className="btn-primary mt-6 inline-block">
                         {getTextValue(activeContent.buttonText)}
                       </Link>
-                    )}
+                    ) : null}
                   </div>
                 ) : (
                   <div className={`grid lg:grid-cols-2 gap-8 items-center ${contentLayout === 'image-text' ? 'lg:grid-flow-dense' : ''}`}>

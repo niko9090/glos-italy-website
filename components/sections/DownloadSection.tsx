@@ -134,9 +134,9 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
               <h3 className={`font-semibold group-hover:text-primary transition-colors ${textColor}`}>
                 {getTextValue(file.title)}
               </h3>
-              {file.description && layout !== 'compact' && (
+              {file.description && layout !== 'compact' ? (
                 <p className="text-sm text-gray-600 mt-1">{getTextValue(file.description)}</p>
-              )}
+              ) : null}
               {data.showFileSize && file.fileSize && (
                 <span className="text-xs text-gray-500 mt-1 block">{file.fileSize}</span>
               )}

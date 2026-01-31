@@ -20,20 +20,40 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         heading: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
+        serif: ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'monospace'],
+        display: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
+        handwriting: ['Caveat', 'cursive', 'system-ui'],
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-out',
-        'slide-up': 'slideUp 0.5s ease-out',
-        'slide-down': 'slideDown 0.5s ease-out',
+        // Base animations
+        'fade-in': 'fadeIn 0.5s ease-out forwards',
+        'slide-up': 'slideUp 0.5s ease-out forwards',
+        'slide-down': 'slideDown 0.5s ease-out forwards',
+        'slide-left': 'slideLeft 0.5s ease-out forwards',
+        'slide-right': 'slideRight 0.5s ease-out forwards',
         'slide-in-right': 'slide-in-right 0.5s ease-out',
         'slide-in-left': 'slide-in-left 0.5s ease-out',
         'scale-in': 'scale-in 0.4s ease-out',
+
+        // Zoom animations
+        'zoom-in': 'zoomIn 0.5s ease-out forwards',
+        'zoom-out': 'zoomOut 0.5s ease-out forwards',
+
+        // Special animations
+        'flip': 'flip 0.6s ease-out forwards',
+        'rotate-in': 'rotate-in 0.5s ease-out',
+        'shake': 'shake 0.5s ease-in-out',
+        'wave': 'wave 1.5s ease-in-out infinite',
+        'glitter': 'glitter 2s linear infinite',
+        'typewriter': 'typewriter 2s steps(40) forwards, blink 0.75s step-end infinite',
+        'draw': 'draw 2s ease-out forwards',
+
+        // Continuous animations
         'shimmer': 'shimmer 2s infinite',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'float': 'float 3s ease-in-out infinite',
         'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',
-        'rotate-in': 'rotate-in 0.5s ease-out',
-        'shake': 'shake 0.5s ease-in-out',
       },
       keyframes: {
         fadeIn: {
@@ -41,12 +61,20 @@ const config: Config = {
           '100%': { opacity: '1' },
         },
         slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '0%': { opacity: '0', transform: 'translateY(30px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         slideDown: {
-          '0%': { opacity: '0', transform: 'translateY(-20px)' },
+          '0%': { opacity: '0', transform: 'translateY(-30px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        slideLeft: {
+          '0%': { opacity: '0', transform: 'translateX(30px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        slideRight: {
+          '0%': { opacity: '0', transform: 'translateX(-30px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
         },
         'slide-in-right': {
           '0%': { opacity: '0', transform: 'translateX(30px)' },
@@ -59,6 +87,18 @@ const config: Config = {
         'scale-in': {
           '0%': { opacity: '0', transform: 'scale(0.9)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        zoomIn: {
+          '0%': { opacity: '0', transform: 'scale(0.5)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        zoomOut: {
+          '0%': { opacity: '0', transform: 'scale(1.5)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        flip: {
+          '0%': { opacity: '0', transform: 'rotateY(90deg)' },
+          '100%': { opacity: '1', transform: 'rotateY(0)' },
         },
         shimmer: {
           '0%': { backgroundPosition: '-200% 0' },
@@ -82,13 +122,43 @@ const config: Config = {
         },
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },
-          '25%': { transform: 'translateX(-5px)' },
-          '75%': { transform: 'translateX(5px)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' },
+        },
+        wave: {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(20deg)' },
+          '75%': { transform: 'rotate(-20deg)' },
+        },
+        glitter: {
+          '0%, 100%': { opacity: '1', filter: 'brightness(1)' },
+          '50%': { opacity: '0.8', filter: 'brightness(1.5)' },
+        },
+        typewriter: {
+          '0%': { width: '0', opacity: '1' },
+          '100%': { width: '100%', opacity: '1' },
+        },
+        blink: {
+          '0%, 100%': { borderColor: 'transparent' },
+          '50%': { borderColor: 'currentColor' },
+        },
+        draw: {
+          '0%': { strokeDashoffset: '1000', opacity: '0' },
+          '100%': { strokeDashoffset: '0', opacity: '1' },
         },
       },
       transitionTimingFunction: {
         'bounce-in': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
         'smooth-out': 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      },
+      transitionDuration: {
+        '2000': '2000ms',
+      },
+      transitionDelay: {
+        '200': '200ms',
+        '500': '500ms',
+        '1000': '1000ms',
+        '2000': '2000ms',
       },
     },
   },

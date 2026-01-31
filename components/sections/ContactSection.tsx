@@ -497,10 +497,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
                   {data.contactItems.map((item) => (
                     <div key={item._key} className="flex items-start gap-4">
                       <div className={getIconStyleClasses()}>
-                        {item.icon || getContactIcon(item.type)}
+                        {item.icon ? String(item.icon) : getContactIcon(item.type)}
                       </div>
                       <div>
-                        {item.label && (
+                        {!!item.label && (
                           <p className="text-sm opacity-70">{t(item.label)}</p>
                         )}
                         {item.link ? (

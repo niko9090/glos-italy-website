@@ -379,7 +379,7 @@ export default function CTASection({ data }: CTASectionProps) {
           className={`flex flex-col ${getLayoutClasses()} ${layout !== 'split' ? contentWidthClasses[data.contentWidth || 'normal'] : ''} ${layout === 'centered' || layout === 'minimal' ? 'mx-auto' : ''}`}
         >
           {/* Badge */}
-          {data.badge?.text && (
+          {!!data.badge?.text && (
             <motion.span
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -393,7 +393,7 @@ export default function CTASection({ data }: CTASectionProps) {
           )}
 
           {/* Eyebrow */}
-          {data.eyebrow && (
+          {!!data.eyebrow && (
             <p className="text-sm font-semibold tracking-widest uppercase mb-4 opacity-80">
               {t(data.eyebrow)}
             </p>
@@ -405,14 +405,14 @@ export default function CTASection({ data }: CTASectionProps) {
           </h2>
 
           {/* Subtitle */}
-          {data.subtitle && (
+          {!!data.subtitle && (
             <div className="text-xl mb-4 opacity-90">
               <RichText value={data.subtitle} />
             </div>
           )}
 
           {/* Description */}
-          {data.description && (
+          {!!data.description && (
             <p className="mb-6 opacity-80">
               {t(data.description)}
             </p>

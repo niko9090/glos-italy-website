@@ -281,11 +281,17 @@ export default function HeroSection({ data }: HeroSectionProps) {
       )}
 
       {backgroundType === 'gradient' && (
-        <div className={`absolute inset-0 z-0 ${gradientClasses[data.backgroundGradient as keyof typeof gradientClasses] || gradientClasses['blue-dark']}`} />
+        <div
+          className={`absolute inset-0 z-0 ${gradientClasses[data.backgroundGradient as keyof typeof gradientClasses] || gradientClasses['blue-dark']}`}
+          style={{ background: !gradientClasses[data.backgroundGradient as keyof typeof gradientClasses] ? 'linear-gradient(to bottom right, #0047AB, #003380, #111827)' : undefined }}
+        />
       )}
 
       {backgroundType === 'solid' && (
-        <div className={`absolute inset-0 z-0 ${solidBgClasses[data.backgroundColor || 'primary']}`} />
+        <div
+          className={`absolute inset-0 z-0 ${solidBgClasses[data.backgroundColor as keyof typeof solidBgClasses] || 'bg-primary'}`}
+          style={{ backgroundColor: !solidBgClasses[data.backgroundColor as keyof typeof solidBgClasses] ? 'var(--color-primary, #0047AB)' : undefined }}
+        />
       )}
 
       {/* Default gradient if no background */}

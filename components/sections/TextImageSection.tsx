@@ -4,85 +4,135 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface TextImageSectionProps {
   data: {
+    eyebrow?: unknown
     title?: unknown
-    subtitle?: unknown
     content?: unknown
+    buttons?: Array<{
+      _key: string
+      text?: unknown
+      link?: string
+      variant?: string
+      icon?: string
+    }>
     image?: any
-    imagePosition?: string
-    imageSize?: string
     imageShape?: string
     imageShadow?: string
-    imageBorder?: boolean
-    imageAnimation?: string
-    animation?: string // Animazione entrata (none, fade, slide-left, slide-right, zoom)
-    buttonText?: unknown
-    buttonLink?: string
-    secondaryButtonText?: unknown
-    secondaryButtonLink?: string
+    imageBorder?: string
+    imagePosition?: string
+    imageSize?: string
+    verticalAlign?: string
+    contentWidth?: string
     backgroundColor?: string
-    verticalPadding?: string
+    paddingY?: string
+    animation?: string
   }
 }
 
+// Background colors
 const bgClasses: Record<string, string> = {
   white: 'bg-white',
-  gray: 'bg-gray-50',
-  dark: 'bg-gray-900',
-  primary: 'bg-primary',
-  gradient: 'bg-gradient-to-br from-primary/10 to-secondary/10',
+  'gray-light': 'bg-gray-50',
+  gray: 'bg-gray-200',
+  primary: 'bg-primary text-white',
+  'primary-light': 'bg-blue-50',
+  black: 'bg-gray-900 text-white',
+  'gradient-blue': 'bg-gradient-to-br from-primary to-blue-700 text-white',
 }
 
+// Padding
 const paddingClasses: Record<string, string> = {
-  small: 'py-8 md:py-12',
-  medium: 'py-12 md:py-20',
-  large: 'py-20 md:py-32',
+  sm: 'py-8 md:py-12',
+  md: 'py-12 md:py-16',
+  lg: 'py-16 md:py-24',
+  xl: 'py-24 md:py-32',
 }
 
+// Image sizes
 const imageSizeClasses: Record<string, string> = {
-  small: 'lg:w-1/3',
-  medium: 'lg:w-1/2',
-  large: 'lg:w-2/3',
+  small: 'lg:w-[30%]',
+  medium: 'lg:w-[40%]',
+  large: 'lg:w-[50%]',
+  xlarge: 'lg:w-[60%]',
 }
 
+// Image shapes
 const imageShapeClasses: Record<string, string> = {
-  square: 'rounded-none',
+  rectangle: 'rounded-lg',
+  square: 'rounded-lg aspect-square',
   rounded: 'rounded-2xl',
-  circle: 'rounded-full',
+  circle: 'rounded-full aspect-square',
   blob: 'rounded-[30%_70%_70%_30%_/_30%_30%_70%_70%]',
 }
 
+// Image shadows
 const imageShadowClasses: Record<string, string> = {
   none: '',
-  small: 'shadow-lg',
-  medium: 'shadow-xl',
-  large: 'shadow-2xl',
+  sm: 'shadow-md',
+  md: 'shadow-lg',
+  lg: 'shadow-xl',
+  xl: 'shadow-2xl',
 }
 
-// Animazioni entrata
-const getEntryAnimation = (animation: string | undefined, fromDirection: 'left' | 'right') => {
+// Image borders
+const imageBorderClasses: Record<string, string> = {
+  none: '',
+  thin: 'ring-2 ring-gray-200',
+  medium: 'ring-4 ring-gray-200',
+  decorative: 'ring-4 ring-primary/30',
+}
+
+// Vertical alignment
+const verticalAlignClasses: Record<string, string> = {
+  top: 'items-start',
+  center: 'items-center',
+  bottom: 'items-end',
+}
+
+// Content width
+const contentWidthClasses: Record<string, string> = {
+  normal: 'max-w-6xl',
+  wide: 'max-w-7xl',
+  full: 'max-w-full',
+}
+
+// Button variants
+const buttonVariantClasses: Record<string, string> = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary border-2 border-current',
+  ghost: 'bg-transparent hover:bg-gray-100 text-current px-6 py-3 rounded-lg transition-colors',
+  link: 'text-primary hover:underline inline-flex items-center gap-2',
+}
+
+// Animation variants
+const getAnimationVariants = (animation: string | undefined) => {
   if (!animation || animation === 'none') {
-    return { initial: {}, whileInView: {}, transition: {} }
+    return {
+      initial: {},
+      whileInView: {},
+      transition: { duration: 0 },
+    }
   }
 
-  const animations: Record<string, { initial: any; whileInView: any; transition: any }> = {
+  const variants: Record<string, any> = {
     fade: {
       initial: { opacity: 0 },
       whileInView: { opacity: 1 },
       transition: { duration: 0.6 },
     },
     'slide-left': {
-      initial: { opacity: 0, x: -50 },
+      initial: { opacity: 0, x: -60 },
       whileInView: { opacity: 1, x: 0 },
       transition: { duration: 0.6 },
     },
     'slide-right': {
-      initial: { opacity: 0, x: 50 },
+      initial: { opacity: 0, x: 60 },
       whileInView: { opacity: 1, x: 0 },
       transition: { duration: 0.6 },
     },
@@ -93,98 +143,103 @@ const getEntryAnimation = (animation: string | undefined, fromDirection: 'left' 
     },
   }
 
-  // Default slide from direction
-  if (!animations[animation]) {
-    return {
-      initial: { opacity: 0, x: fromDirection === 'left' ? -50 : 50 },
-      whileInView: { opacity: 1, x: 0 },
-      transition: { duration: 0.6 },
-    }
-  }
-
-  return animations[animation]
+  return variants[animation] || variants.fade
 }
 
 export default function TextImageSection({ data }: TextImageSectionProps) {
   const { t } = useLanguage()
+
+  // Get classes from data
   const bgClass = bgClasses[data.backgroundColor || 'white']
-  const paddingClass = paddingClasses[data.verticalPadding || 'medium']
-  const textColor = data.backgroundColor === 'dark' || data.backgroundColor === 'primary' ? 'text-white' : 'text-gray-900'
-  const imagePosition = data.imagePosition || 'right'
+  const paddingClass = paddingClasses[data.paddingY || 'lg']
   const imageSize = imageSizeClasses[data.imageSize || 'medium']
-  const imageShape = imageShapeClasses[data.imageShape || 'rounded']
-  const imageShadow = imageShadowClasses[data.imageShadow || 'medium']
+  const imageShape = imageShapeClasses[data.imageShape || 'rectangle']
+  const imageShadow = imageShadowClasses[data.imageShadow || 'md']
+  const imageBorder = imageBorderClasses[data.imageBorder || 'none']
+  const verticalAlign = verticalAlignClasses[data.verticalAlign || 'center']
+  const contentWidth = contentWidthClasses[data.contentWidth || 'normal']
+  const imagePosition = data.imagePosition || 'right'
 
-  // Ottieni animazioni basate sulle impostazioni
-  const imageAnim = getEntryAnimation(data.animation, imagePosition === 'left' ? 'left' : 'right')
-  const textAnim = getEntryAnimation(data.animation, imagePosition === 'left' ? 'right' : 'left')
+  // Determine text color based on background
+  const isDark = ['primary', 'black', 'gradient-blue'].includes(data.backgroundColor || '')
+  const textColor = isDark ? 'text-white' : 'text-gray-900'
+  const subtextColor = isDark ? 'text-white/80' : 'text-gray-600'
 
+  // Get animation settings
+  const anim = getAnimationVariants(data.animation)
+
+  // Image component
   const imageContent = isValidImage(data.image) ? (
     <motion.div
-      initial={imageAnim.initial}
-      whileInView={imageAnim.whileInView}
+      initial={anim.initial}
+      whileInView={anim.whileInView}
       viewport={{ once: true }}
-      transition={imageAnim.transition}
+      transition={{ ...anim.transition, delay: 0.1 }}
       className={`relative ${imageSize} flex-shrink-0`}
     >
-      <motion.div
-        whileHover={
-          data.imageAnimation === 'zoom'
-            ? { scale: 1.05 }
-            : data.imageAnimation === 'tilt'
-            ? { rotateY: 5, rotateX: 5 }
-            : undefined
-        }
-        className={`relative aspect-[4/3] overflow-hidden ${imageShape} ${imageShadow} ${
-          data.imageBorder ? 'ring-4 ring-primary/20' : ''
-        }`}
-      >
-        <Image
-          src={safeImageUrl(data.image, 800, 600)!}
-          alt=""
-          fill
-          className="object-cover"
-        />
-      </motion.div>
+      <div className={`relative overflow-hidden ${imageShape} ${imageShadow} ${imageBorder}`}>
+        <div className={`relative ${data.imageShape === 'square' || data.imageShape === 'circle' ? 'aspect-square' : 'aspect-[4/3]'}`}>
+          <Image
+            src={safeImageUrl(data.image, 800, 600)!}
+            alt={data.image?.alt || ''}
+            fill
+            className="object-cover"
+          />
+        </div>
+      </div>
     </motion.div>
   ) : null
 
+  // Text content
   const textContent = (
     <motion.div
-      initial={textAnim.initial}
-      whileInView={textAnim.whileInView}
+      initial={anim.initial}
+      whileInView={anim.whileInView}
       viewport={{ once: true }}
-      transition={{ ...textAnim.transition, delay: 0.1 }}
+      transition={anim.transition}
       className={`flex-1 ${textColor}`}
     >
+      {/* Eyebrow */}
+      {data.eyebrow ? (
+        <div className={`text-sm font-semibold uppercase tracking-wider mb-3 ${isDark ? 'text-white/70' : 'text-primary'}`}>
+          {t(data.eyebrow)}
+        </div>
+      ) : null}
+
+      {/* Title */}
       {data.title ? (
-        <h2 className="section-title mb-4">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
           <RichText value={data.title} />
         </h2>
       ) : null}
-      {data.subtitle ? (
-        <div className="section-subtitle mb-6">
-          <RichText value={data.subtitle} />
-        </div>
-      ) : null}
+
+      {/* Content */}
       {data.content ? (
-        <div className="prose prose-lg max-w-none mb-8">
+        <div className={`prose prose-lg max-w-none mb-8 ${subtextColor}`}>
           <RichText value={data.content} />
         </div>
       ) : null}
 
-      {(data.buttonText || data.secondaryButtonText) ? (
+      {/* Buttons */}
+      {data.buttons && data.buttons.length > 0 ? (
         <div className="flex flex-wrap gap-4">
-          {data.buttonText && data.buttonLink ? (
-            <Link href={data.buttonLink} className="btn-primary">
-              {t(data.buttonText)}
-            </Link>
-          ) : null}
-          {data.secondaryButtonText && data.secondaryButtonLink ? (
-            <Link href={data.secondaryButtonLink} className="btn-secondary">
-              {t(data.secondaryButtonText)}
-            </Link>
-          ) : null}
+          {data.buttons.map((button) => {
+            const buttonClass = buttonVariantClasses[button.variant || 'primary']
+            const buttonText = t(button.text)
+
+            if (!buttonText || !button.link) return null
+
+            return (
+              <Link
+                key={button._key}
+                href={button.link}
+                className={buttonClass}
+              >
+                {buttonText}
+                {button.variant === 'link' && <ArrowRight className="w-4 h-4" />}
+              </Link>
+            )
+          })}
         </div>
       ) : null}
     </motion.div>
@@ -192,8 +247,8 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
 
   return (
     <section className={`${paddingClass} ${bgClass}`}>
-      <div className="container-glos">
-        <div className={`flex flex-col lg:flex-row gap-12 items-center ${
+      <div className={`container-glos mx-auto ${contentWidth}`}>
+        <div className={`flex flex-col lg:flex-row gap-8 lg:gap-12 ${verticalAlign} ${
           imagePosition === 'left' ? 'lg:flex-row-reverse' : ''
         }`}>
           {textContent}

@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface TabsSectionProps {
@@ -43,6 +43,7 @@ const bgClasses: Record<string, string> = {
 
 export default function TabsSection({ data }: TabsSectionProps) {
   const [activeTab, setActiveTab] = useState(0)
+  const { t } = useLanguage()
 
   const bgClass = bgClasses[data.backgroundColor || 'white']
   const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
@@ -114,7 +115,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                 className={currentStyle.tab(index === activeTab)}
               >
                 {tab.icon && <span className="mr-2">{tab.icon}</span>}
-                {getTextValue(tab.label)}
+                {t(tab.label)}
               </button>
             ))}
           </div>
@@ -139,7 +140,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                         {activeContent.features.map((feature) => (
                           <li key={feature._key} className="flex items-start gap-3">
                             <span className="text-primary">{feature.icon || <Check className="w-5 h-5" />}</span>
-                            <span>{getTextValue(feature.text)}</span>
+                            <span>{t(feature.text)}</span>
                           </li>
                         ))}
                       </ul>
@@ -148,7 +149,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                     {/* Button */}
                     {activeContent.buttonText && activeContent.buttonLink ? (
                       <Link href={activeContent.buttonLink} className="btn-primary mt-6 inline-block">
-                        {getTextValue(activeContent.buttonText)}
+                        {t(activeContent.buttonText)}
                       </Link>
                     ) : null}
                   </div>
@@ -166,7 +167,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                           {activeContent.features.map((feature) => (
                             <li key={feature._key} className="flex items-start gap-3">
                               <span className="text-primary text-xl">{feature.icon || '✓'}</span>
-                              <span>{getTextValue(feature.text)}</span>
+                              <span>{t(feature.text)}</span>
                             </li>
                           ))}
                         </ul>
@@ -174,7 +175,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
 
                       {activeContent.buttonText && activeContent.buttonLink ? (
                         <Link href={activeContent.buttonLink} className="btn-primary mt-6 inline-block">
-                          {getTextValue(activeContent.buttonText)}
+                          {t(activeContent.buttonText)}
                         </Link>
                       ) : null}
                     </div>

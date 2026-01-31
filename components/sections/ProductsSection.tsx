@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import type { Product } from '@/lib/sanity/fetch'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface ProductsSectionProps {
@@ -60,6 +60,7 @@ function ImagePlaceholder() {
 }
 
 export default function ProductsSection({ data, products }: ProductsSectionProps) {
+  const { t } = useLanguage()
   const displayProducts = products?.slice(0, data.limit || 6) || []
 
   return (
@@ -93,7 +94,7 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
         {data.buttonText && data.buttonLink && (
           <div className="text-center mt-12">
             <Link href={data.buttonLink} className="btn-primary">
-              {getTextValue(data.buttonText)}
+              {t(data.buttonText)}
             </Link>
           </div>
         )}
@@ -104,6 +105,7 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
 
 // Separate ProductCard component for better organization
 function ProductCard({ product }: { product: Product }) {
+  const { t } = useLanguage()
   const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
@@ -171,7 +173,7 @@ function ProductCard({ product }: { product: Product }) {
           )}
 
           <h3 className="text-xl font-semibold mt-1 mb-2 group-hover:text-primary transition-colors duration-300">
-            {getTextValue(product.name)}
+            {t(product.name)}
           </h3>
 
           <div className="text-gray-600 line-clamp-2">

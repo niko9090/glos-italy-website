@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Download, FileText, FileSpreadsheet, FileImage, Film, Archive, File } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface DownloadSectionProps {
@@ -62,6 +62,7 @@ const itemVariants = {
 }
 
 export default function DownloadSection({ data }: DownloadSectionProps) {
+  const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'gray']
   const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'grid'
@@ -132,10 +133,10 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
 
             <div>
               <h3 className={`font-semibold group-hover:text-primary transition-colors ${textColor}`}>
-                {getTextValue(file.title)}
+                {t(file.title)}
               </h3>
               {file.description && layout !== 'compact' ? (
-                <p className="text-sm text-gray-600 mt-1">{getTextValue(file.description)}</p>
+                <p className="text-sm text-gray-600 mt-1">{t(file.description)}</p>
               ) : null}
               {data.showFileSize && file.fileSize && (
                 <span className="text-xs text-gray-500 mt-1 block">{file.fileSize}</span>

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Play } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface VideoSectionProps {

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface FeaturesSectionProps {
@@ -60,6 +60,7 @@ const iconContainerVariants = {
 }
 
 export default function FeaturesSection({ data }: FeaturesSectionProps) {
+  const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
   // Parallax for the image
@@ -161,10 +162,10 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                   {/* Text content */}
                   <div>
                     <h3 className="text-lg font-semibold mb-1 group-hover:text-primary transition-colors duration-300">
-                      {getTextValue(item.title)}
+                      {t(item.title)}
                     </h3>
                     <p className="text-gray-600 leading-relaxed">
-                      {getTextValue(item.description)}
+                      {t(item.description)}
                     </p>
                   </div>
                 </motion.div>

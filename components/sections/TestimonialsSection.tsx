@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { Star, Quote } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import type { Testimonial } from '@/lib/sanity/fetch'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 interface TestimonialsSectionProps {
   data: {
@@ -87,6 +87,8 @@ function AnimatedStar({ filled, delay }: { filled: boolean; delay: number }) {
 }
 
 export default function TestimonialsSection({ data, testimonials }: TestimonialsSectionProps) {
+  const { t } = useLanguage()
+
   if (!testimonials || testimonials.length === 0) {
     return null
   }
@@ -103,10 +105,10 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
           className="text-center mb-12"
         >
           {data.title && (
-            <h2 className="section-title mb-4">{getTextValue(data.title)}</h2>
+            <h2 className="section-title mb-4">{t(data.title)}</h2>
           )}
           {data.subtitle && (
-            <p className="section-subtitle mx-auto">{getTextValue(data.subtitle)}</p>
+            <p className="section-subtitle mx-auto">{t(data.subtitle)}</p>
           )}
         </motion.div>
 
@@ -158,7 +160,7 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                 transition={{ delay: 0.4 }}
                 className="text-gray-700 mb-6 italic leading-relaxed"
               >
-                "{getTextValue(testimonial.quote)}"
+                "{t(testimonial.quote)}"
               </motion.blockquote>
 
               {/* Author */}
@@ -176,7 +178,7 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                   >
                     <Image
                       src={safeImageUrl(testimonial.avatar, 96, 96)!}
-                      alt={getTextValue(testimonial.author)}
+                      alt={t(testimonial.author)}
                       fill
                       className="object-cover"
                     />
@@ -184,13 +186,13 @@ export default function TestimonialsSection({ data, testimonials }: Testimonials
                 ) : null}
                 <div>
                   <p className="font-semibold group-hover:text-primary transition-colors duration-300">
-                    {getTextValue(testimonial.author)}
+                    {t(testimonial.author)}
                   </p>
                   {(testimonial.role || testimonial.company) && (
                     <p className="text-sm text-gray-500">
-                      {getTextValue(testimonial.role)}
+                      {t(testimonial.role)}
                       {testimonial.role && testimonial.company && ', '}
-                      {getTextValue(testimonial.company)}
+                      {t(testimonial.company)}
                     </p>
                   )}
                 </div>

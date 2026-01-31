@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Plus, Minus } from 'lucide-react'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface FaqSectionProps {
@@ -33,6 +33,7 @@ const bgClasses: Record<string, string> = {
 export default function FaqSection({ data }: FaqSectionProps) {
   const [openItems, setOpenItems] = useState<string[]>([])
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const { t } = useLanguage()
 
   const bgClass = bgClasses[data.backgroundColor || 'white']
   const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
@@ -79,7 +80,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
               }`}
             >
               <span className={`font-semibold ${isOpen ? 'text-primary' : textColor}`}>
-                {getTextValue(item.question)}
+                {t(item.question)}
               </span>
               <motion.div
                 animate={{ rotate: isOpen ? 180 : 0 }}
@@ -121,7 +122,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
           className="border-b border-gray-200 pb-8 last:border-0"
         >
           <h3 className={`text-xl font-semibold mb-3 ${textColor}`}>
-            {getTextValue(item.question)}
+            {t(item.question)}
           </h3>
           <div className="text-gray-600">
             <RichText value={item.answer} />
@@ -143,7 +144,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
           className="bg-white rounded-xl p-6 shadow-md"
         >
           <h3 className={`text-lg font-semibold mb-3 ${textColor}`}>
-            {getTextValue(item.question)}
+            {t(item.question)}
           </h3>
           <div className="text-gray-600 text-sm">
             <RichText value={item.answer} />
@@ -192,7 +193,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
                 onClick={() => toggleItem(item._key)}
                 className="w-full px-6 py-4 flex items-center justify-between text-left"
               >
-                <span className="font-semibold">{getTextValue(item.question)}</span>
+                <span className="font-semibold">{t(item.question)}</span>
                 {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
               </button>
               <AnimatePresence>

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import { urlFor, isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface GallerySectionProps {
@@ -93,6 +93,7 @@ const counterVariants = {
 }
 
 export default function GallerySection({ data }: GallerySectionProps) {
+  const { t } = useLanguage()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [[page, direction], setPage] = useState([0, 0])
 
@@ -189,7 +190,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
             >
               <Image
                 src={safeImageUrl(image, 400, 400)!}
-                alt={getTextValue(image.caption)}
+                alt={t(image.caption)}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -212,7 +213,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent
                                 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                   <p className="text-white text-sm truncate">
-                    {getTextValue(image.caption)}
+                    {t(image.caption)}
                   </p>
                 </div>
               )}
@@ -301,7 +302,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 >
                   <Image
                     src={safeImageUrl(validImages[lightboxIndex], 1600)!}
-                    alt={getTextValue(validImages[lightboxIndex].caption)}
+                    alt={t(validImages[lightboxIndex].caption)}
                     fill
                     className="object-contain"
                   />
@@ -315,7 +316,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                       className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent"
                     >
                       <p className="text-white text-center text-lg">
-                        {getTextValue(validImages[lightboxIndex].caption)}
+                        {t(validImages[lightboxIndex].caption)}
                       </p>
                     </motion.div>
                   )}

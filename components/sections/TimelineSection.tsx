@@ -4,7 +4,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface TimelineSectionProps {
@@ -41,6 +41,7 @@ const lineColorClasses: Record<string, string> = {
 }
 
 export default function TimelineSection({ data }: TimelineSectionProps) {
+  const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'white']
   const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
   const lineColor = lineColorClasses[data.lineColor || 'primary']
@@ -92,8 +93,8 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
                         <Image src={safeImageUrl(item.image, 300, 200)!} alt="" fill className="object-cover" />
                       </div>
                     )}
-                    <h3 className={`font-semibold mb-2 ${textColor}`}>{getTextValue(item.title)}</h3>
-                    <p className="text-sm text-gray-600">{getTextValue(item.description)}</p>
+                    <h3 className={`font-semibold mb-2 ${textColor}`}>{t(item.title)}</h3>
+                    <p className="text-sm text-gray-600">{t(item.description)}</p>
                   </div>
                 </motion.div>
               ))}
@@ -166,8 +167,8 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
                       </div>
                     )}
 
-                    <h3 className={`text-xl font-semibold mb-2 ${textColor}`}>{getTextValue(item.title)}</h3>
-                    <p className="text-gray-600">{getTextValue(item.description)}</p>
+                    <h3 className={`text-xl font-semibold mb-2 ${textColor}`}>{t(item.title)}</h3>
+                    <p className="text-gray-600">{t(item.description)}</p>
                   </motion.div>
                 </div>
               </motion.div>

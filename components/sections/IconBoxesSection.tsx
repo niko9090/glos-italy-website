@@ -3,7 +3,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface IconBoxesSectionProps {
@@ -65,6 +65,7 @@ const itemVariants = {
 }
 
 export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
+  const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'white']
   const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
   const columns = data.columns || 3
@@ -164,10 +165,10 @@ export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
                 {/* Text */}
                 <div className={data.iconPosition === 'left' ? 'flex-1' : ''}>
                   <h3 className={`text-xl font-semibold mb-2 ${textColor} group-hover:text-primary transition-colors`}>
-                    {getTextValue(box.title)}
+                    {t(box.title)}
                   </h3>
                   {box.description ? (
-                    <p className="text-gray-600">{getTextValue(box.description)}</p>
+                    <p className="text-gray-600">{t(box.description)}</p>
                   ) : null}
                 </div>
               </motion.div>

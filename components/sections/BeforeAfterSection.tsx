@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface BeforeAfterSectionProps {
@@ -165,6 +165,7 @@ function ComparisonSlider({
 }
 
 export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
+  const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'gray']
   const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'slider-horizontal'
@@ -234,7 +235,7 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
 
               {comparison.caption ? (
                 <p className={`text-center mt-4 ${textColor}`}>
-                  {getTextValue(comparison.caption)}
+                  {t(comparison.caption)}
                 </p>
               ) : null}
             </motion.div>

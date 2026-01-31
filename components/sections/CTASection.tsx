@@ -4,7 +4,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Phone } from 'lucide-react'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface CTASectionProps {
@@ -19,6 +19,7 @@ interface CTASectionProps {
 }
 
 export default function CTASection({ data }: CTASectionProps) {
+  const { t } = useLanguage()
   const bgClasses = {
     blue: 'bg-primary text-white',
     dark: 'bg-gray-900 text-white',
@@ -45,12 +46,12 @@ export default function CTASection({ data }: CTASectionProps) {
           </div>
 
           <div className="flex flex-wrap justify-center gap-4">
-            {getTextValue(data.buttonText) && data.buttonLink && (
+            {t(data.buttonText) && data.buttonLink && (
               <Link
                 href={data.buttonLink}
                 className="btn bg-white text-primary hover:bg-gray-100"
               >
-                {getTextValue(data.buttonText)}
+                {t(data.buttonText)}
               </Link>
             )}
           </div>
@@ -58,11 +59,11 @@ export default function CTASection({ data }: CTASectionProps) {
           {data.phone && (
             <div className="mt-8">
               <a
-                href={`tel:${getTextValue(data.phone).replace(/\s/g, '')}`}
+                href={`tel:${t(data.phone).replace(/\s/g, '')}`}
                 className="inline-flex items-center gap-2 text-lg font-medium"
               >
                 <Phone className="w-5 h-5" />
-                {getTextValue(data.phone)}
+                {t(data.phone)}
               </a>
             </div>
           )}

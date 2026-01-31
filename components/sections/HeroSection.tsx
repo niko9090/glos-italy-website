@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { ArrowRight, ChevronDown } from 'lucide-react'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface HeroSectionProps {
@@ -21,6 +21,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ data }: HeroSectionProps) {
+  const { t } = useLanguage()
   const containerRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -79,12 +80,12 @@ export default function HeroSection({ data }: HeroSectionProps) {
             <RichText value={data.subtitle} />
           </div>
 
-          {getTextValue(data.buttonText) && data.buttonLink && (
+          {t(data.buttonText) && data.buttonLink && (
             <Link
               href={data.buttonLink}
               className="btn-primary inline-flex items-center gap-2"
             >
-              {getTextValue(data.buttonText)}
+              {t(data.buttonText)}
               <ArrowRight className="w-5 h-5" />
             </Link>
           )}

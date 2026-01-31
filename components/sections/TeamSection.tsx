@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Mail, Phone, Linkedin, Twitter } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface TeamSectionProps {
@@ -66,6 +66,7 @@ const itemVariants = {
 }
 
 export default function TeamSection({ data }: TeamSectionProps) {
+  const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'gray']
   const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
   const columns = data.columns || 3
@@ -120,11 +121,11 @@ export default function TeamSection({ data }: TeamSectionProps) {
               {/* Name & Role */}
               <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
               {member.role ? (
-                <p className="text-primary font-medium mb-3">{getTextValue(member.role)}</p>
+                <p className="text-primary font-medium mb-3">{t(member.role)}</p>
               ) : null}
 
               {data.showBio && member.bio ? (
-                <p className="text-gray-600 text-sm mb-4">{getTextValue(member.bio)}</p>
+                <p className="text-gray-600 text-sm mb-4">{t(member.bio)}</p>
               ) : null}
 
               {/* Contact & Social */}

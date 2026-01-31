@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface CarouselSectionProps {
@@ -59,6 +59,7 @@ const textPositionClasses: Record<string, string> = {
 }
 
 export default function CarouselSection({ data }: CarouselSectionProps) {
+  const { t } = useLanguage()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
 
@@ -151,7 +152,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                     transition={{ delay: 0.2 }}
                     className="text-3xl md:text-5xl font-bold text-white mb-4"
                   >
-                    {getTextValue(currentSlide.title)}
+                    {t(currentSlide.title)}
                   </motion.h3>
                 ) : null}
                 {currentSlide.description ? (
@@ -161,7 +162,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                     transition={{ delay: 0.3 }}
                     className="text-lg md:text-xl text-white/90 mb-6"
                   >
-                    {getTextValue(currentSlide.description)}
+                    {t(currentSlide.description)}
                   </motion.p>
                 ) : null}
                 {currentSlide.buttonText && currentSlide.buttonLink ? (
@@ -171,7 +172,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                     transition={{ delay: 0.4 }}
                   >
                     <Link href={currentSlide.buttonLink} className="btn-primary">
-                      {getTextValue(currentSlide.buttonText)}
+                      {t(currentSlide.buttonText)}
                     </Link>
                   </motion.div>
                 ) : null}

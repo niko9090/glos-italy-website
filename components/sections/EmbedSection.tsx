@@ -1,7 +1,7 @@
 // Embed Section Component
 'use client'
 
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface EmbedSectionProps {

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface BannerSectionProps {
@@ -41,6 +41,7 @@ const sizeClasses: Record<string, string> = {
 
 export default function BannerSection({ data }: BannerSectionProps) {
   const [isDismissed, setIsDismissed] = useState(false)
+  const { t } = useLanguage()
 
   if (isDismissed) return null
 
@@ -48,28 +49,53 @@ export default function BannerSection({ data }: BannerSectionProps) {
   const sizeClass = sizeClasses[data.size || 'normal']
   const isFixed = data.position?.startsWith('fixed')
 
-  const renderContent = () => (
-    <motion.div
-      initial={data.animated ? { x: '-100%' } : { opacity: 0 }}
-      animate={data.animated ? { x: 0 } : { opacity: 1 }}
-      transition={data.animated ? { duration: 20, repeat: Infinity, ease: 'linear' } : undefined}
-      className="flex items-center justify-center gap-4 flex-wrap"
-    >
+  // Marquee content (repeated for seamless loop)
+  const MarqueeContent = () => (
+    <div className="flex items-center gap-8 px-4">
       {data.icon ? <span className="text-2xl">{data.icon}</span> : null}
-
-      <div className={data.animated ? 'whitespace-nowrap' : ''}>
+      <div className="whitespace-nowrap">
         <RichText value={data.text} />
       </div>
+    </div>
+  )
 
+  const renderContent = () => (
+    <div className="flex items-center justify-center gap-4 flex-wrap">
+      {data.icon ? <span className="text-2xl">{data.icon}</span> : null}
+      <div>
+        <RichText value={data.text} />
+      </div>
       {data.buttonText && data.buttonLink ? (
         <Link
           href={data.buttonLink}
           className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full font-medium transition-all backdrop-blur-sm"
         >
-          {getTextValue(data.buttonText)}
+          {t(data.buttonText)}
         </Link>
       ) : null}
-    </motion.div>
+    </div>
+  )
+
+  const renderMarquee = () => (
+    <div className="overflow-hidden w-full">
+      <motion.div
+        className="flex"
+        animate={{ x: ['0%', '-50%'] }}
+        transition={{
+          x: {
+            repeat: Infinity,
+            repeatType: 'loop',
+            duration: 20,
+            ease: 'linear',
+          },
+        }}
+      >
+        <MarqueeContent />
+        <MarqueeContent />
+        <MarqueeContent />
+        <MarqueeContent />
+      </motion.div>
+    </div>
   )
 
   const banner = (
@@ -82,15 +108,8 @@ export default function BannerSection({ data }: BannerSectionProps) {
     >
       <div className={data.fullWidth ? 'px-4' : 'container-glos'}>
         <div className="relative flex items-center justify-center">
-          {data.animated ? (
-            <div className="overflow-hidden w-full">
-              {renderContent()}
-            </div>
-          ) : (
-            renderContent()
-          )}
+          {data.animated ? renderMarquee() : renderContent()}
 
-          {/* Dismiss Button */}
           {data.dismissible && (
             <button
               onClick={() => setIsDismissed(true)}
@@ -105,7 +124,6 @@ export default function BannerSection({ data }: BannerSectionProps) {
     </div>
   )
 
-  // For fixed position, we need to add spacing
   if (isFixed) {
     return (
       <>

@@ -134,7 +134,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                     <RichText value={activeContent.content} />
 
                     {/* Features */}
-                    {activeContent.features && activeContent.features.length > 0 && (
+                    {activeContent.features && activeContent.features.length > 0 ? (
                       <ul className="mt-6 space-y-3">
                         {activeContent.features.map((feature) => (
                           <li key={feature._key} className="flex items-start gap-3">
@@ -143,7 +143,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                           </li>
                         ))}
                       </ul>
-                    )}
+                    ) : null}
 
                     {/* Button */}
                     {activeContent.buttonText && activeContent.buttonLink ? (
@@ -161,7 +161,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                       </div>
 
                       {/* Features */}
-                      {activeContent.features && activeContent.features.length > 0 && (
+                      {activeContent.features && activeContent.features.length > 0 ? (
                         <ul className="mt-6 space-y-3">
                           {activeContent.features.map((feature) => (
                             <li key={feature._key} className="flex items-start gap-3">
@@ -170,14 +170,13 @@ export default function TabsSection({ data }: TabsSectionProps) {
                             </li>
                           ))}
                         </ul>
-                      )}
+                      ) : null}
 
-                      {/* Button */}
-                      {activeContent.buttonText && activeContent.buttonLink && (
+                      {activeContent.buttonText && activeContent.buttonLink ? (
                         <Link href={activeContent.buttonLink} className="btn-primary mt-6 inline-block">
                           {getTextValue(activeContent.buttonText)}
                         </Link>
-                      )}
+                      ) : null}
                     </div>
 
                     {/* Image */}

@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
-import { getPageBySlug, getPageSlugs, getFeaturedProducts, getAllTestimonials } from '@/lib/sanity/fetch'
+import { getPageBySlug, getPageSlugs, getFeaturedProducts } from '@/lib/sanity/fetch'
 import { SectionRenderer } from '@/components/sections/SectionRenderer'
 
 // Helper per estrarre testo da campi multilingua
@@ -54,10 +54,7 @@ export default async function DynamicPage({ params }: PageProps) {
   }
 
   // Fetch additional data for sections that need it
-  const [products, testimonials] = await Promise.all([
-    getFeaturedProducts(isDraftMode),
-    getAllTestimonials(isDraftMode),
-  ])
+  const products = await getFeaturedProducts(isDraftMode)
 
   return (
     <>
@@ -66,7 +63,6 @@ export default async function DynamicPage({ params }: PageProps) {
           key={section._key || index}
           section={section}
           products={products}
-          testimonials={testimonials}
         />
       ))}
     </>

@@ -26,7 +26,8 @@ export const metadata: Metadata = {
   description: 'Trova il rivenditore GLOS Italy piu vicino a te',
 }
 
-export const revalidate = 60
+// Force dynamic rendering to support draft mode
+export const dynamic = 'force-dynamic'
 
 export default async function DealersPage() {
   // CORRETTO: draftMode() e' async in Next.js 14.x App Router

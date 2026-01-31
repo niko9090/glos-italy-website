@@ -3,7 +3,8 @@ import { draftMode } from 'next/headers'
 import { getPageBySlug, getFeaturedProducts, getFeaturedTestimonials } from '@/lib/sanity/fetch'
 import { SectionRenderer } from '@/components/sections/SectionRenderer'
 
-export const revalidate = 60 // Revalidate every 60 seconds
+// Force dynamic rendering to support draft mode
+export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
   // CORRETTO: draftMode() e' async in Next.js 14.x App Router

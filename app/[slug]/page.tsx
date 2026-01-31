@@ -16,7 +16,8 @@ function getTextValue(value: unknown): string {
   return ''
 }
 
-export const revalidate = 60
+// Force dynamic rendering to support draft mode
+export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: Promise<{ slug: string }>

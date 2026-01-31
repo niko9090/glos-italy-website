@@ -23,7 +23,8 @@ interface ProductPageProps {
   params: Promise<{ slug: string }>
 }
 
-export const revalidate = 60
+// Force dynamic rendering to support draft mode
+export const dynamic = 'force-dynamic'
 
 export async function generateStaticParams() {
   const slugs = await getProductSlugs()

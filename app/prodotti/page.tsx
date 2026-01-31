@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   description: 'Scopri tutti i prodotti GLOS Italy - qualita Made in Italy',
 }
 
-export const revalidate = 60
+// Force dynamic rendering to support draft mode
+export const dynamic = 'force-dynamic'
 
 export default async function ProductsPage() {
   // CORRETTO: draftMode() e' async in Next.js 14.x App Router

@@ -311,17 +311,17 @@ export default function GallerySection({ data }: GallerySectionProps) {
           viewport={{ once: true }}
           className={`text-center mb-12 ${darkBg ? 'text-white' : ''}`}
         >
-          {data.title && (
+          {!!data.title && (
             <h2 className="section-title mb-4">
               <RichText value={data.title} />
             </h2>
           )}
-          {data.subtitle && (
+          {!!data.subtitle && (
             <div className="section-subtitle mx-auto">
               <RichText value={data.subtitle} />
             </div>
           )}
-          {data.description && (
+          {!!data.description && (
             <div className="max-w-2xl mx-auto mt-4 opacity-70">
               <RichText value={data.description} />
             </div>

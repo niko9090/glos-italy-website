@@ -276,14 +276,14 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
   return (
     <section className={`relative overflow-hidden ${bgClasses[data.backgroundColor || 'transparent']}`}>
       {/* Section Header */}
-      {(data.title || data.subtitle) && (
+      {!!(data.title || data.subtitle) && (
         <div className="container-glos py-8 text-center">
-          {data.title && (
+          {!!data.title && (
             <h2 className="section-title mb-4">
               <RichText value={data.title} />
             </h2>
           )}
-          {data.subtitle && (
+          {!!data.subtitle && (
             <div className="section-subtitle">
               <RichText value={data.subtitle} />
             </div>

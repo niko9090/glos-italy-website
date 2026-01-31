@@ -296,22 +296,22 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
             viewport={{ once: true }}
             className={`mb-12 ${data.textAlign === 'left' ? 'text-left' : data.textAlign === 'right' ? 'text-right' : 'text-center'}`}
           >
-            {data.eyebrow && (
+            {!!data.eyebrow && (
               <p className="text-sm font-semibold tracking-widest uppercase mb-4 text-primary">
                 {t(data.eyebrow)}
               </p>
             )}
-            {data.title && (
+            {!!data.title && (
               <h2 className="section-title mb-4">
                 <RichText value={data.title} />
               </h2>
             )}
-            {data.subtitle && (
+            {!!data.subtitle && (
               <div className="section-subtitle mb-4">
                 <RichText value={data.subtitle} />
               </div>
             )}
-            {data.description && (
+            {!!data.description && (
               <div className="max-w-2xl mx-auto opacity-70">
                 <RichText value={data.description} />
               </div>

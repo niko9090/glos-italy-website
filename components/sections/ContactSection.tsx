@@ -322,22 +322,22 @@ export default function ContactSection({ data }: ContactSectionProps) {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          {data.eyebrow && (
+          {!!data.eyebrow && (
             <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${darkBg ? 'opacity-80' : 'text-primary'}`}>
               {t(data.eyebrow)}
             </p>
           )}
-          {data.title && (
+          {!!data.title && (
             <h2 className="section-title mb-4">
               <RichText value={data.title} />
             </h2>
           )}
-          {data.subtitle && (
+          {!!data.subtitle && (
             <div className="section-subtitle">
               <RichText value={data.subtitle} />
             </div>
           )}
-          {data.description && (
+          {!!data.description && (
             <p className="mt-4 max-w-2xl mx-auto opacity-80">
               {t(data.description)}
             </p>
@@ -354,10 +354,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
               viewport={{ once: true }}
               className={`${cardStyleClasses[data.cardStyle || 'shadow']} ${data.layout === 'form-right' ? 'lg:order-2' : ''}`}
             >
-              {data.formTitle && (
+              {!!data.formTitle && (
                 <h3 className="text-xl font-semibold mb-2">{t(data.formTitle)}</h3>
               )}
-              {data.formSubtitle && (
+              {!!data.formSubtitle && (
                 <p className="text-sm opacity-70 mb-6">{t(data.formSubtitle)}</p>
               )}
 
@@ -448,7 +448,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                   </div>
 
                   {/* Privacy */}
-                  {data.privacyText && (
+                  {!!data.privacyText && (
                     <div className="text-sm opacity-70">
                       <RichText value={data.privacyText} />
                     </div>
@@ -490,7 +490,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
             {/* Contact Items */}
             {data.showContactInfo !== false && data.contactItems && data.contactItems.length > 0 && (
               <div className={cardStyleClasses[data.cardStyle || 'shadow']}>
-                {data.contactInfoTitle && (
+                {!!data.contactInfoTitle && (
                   <h3 className="text-xl font-semibold mb-6">{t(data.contactInfoTitle)}</h3>
                 )}
                 <div className="space-y-4">
@@ -545,7 +545,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
             {/* Social Links */}
             {data.showSocialLinks && data.socialLinks && data.socialLinks.length > 0 && (
               <div>
-                {data.socialTitle && (
+                {!!data.socialTitle && (
                   <h3 className="text-lg font-semibold mb-4">{t(data.socialTitle)}</h3>
                 )}
                 <div className="flex flex-wrap gap-3">

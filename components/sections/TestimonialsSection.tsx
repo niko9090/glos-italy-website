@@ -753,20 +753,20 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
-            {data.eyebrow && (
+            {!!data.eyebrow && (
               <p className="text-sm font-semibold tracking-widest uppercase mb-4 opacity-70">
                 {t(data.eyebrow)}
               </p>
             )}
-            {data.title && (
+            {!!data.title && (
               <h2 className="section-title mb-4">
                 <RichText value={data.title} />
               </h2>
             )}
-            {data.subtitle && (
+            {!!data.subtitle && (
               <p className="section-subtitle mx-auto mb-4">{t(data.subtitle)}</p>
             )}
-            {data.description && (
+            {!!data.description && (
               <div className="max-w-2xl mx-auto opacity-80">
                 <RichText value={data.description} />
               </div>
@@ -783,7 +783,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             className="text-center mb-12"
           >
             <div className="inline-flex flex-col items-center gap-2 p-6 bg-white/10 backdrop-blur-sm rounded-2xl">
-              {data.aggregateRatingTitle && (
+              {!!data.aggregateRatingTitle && (
                 <p className="text-sm opacity-70">{t(data.aggregateRatingTitle)}</p>
               )}
               <div className="flex items-center gap-3">

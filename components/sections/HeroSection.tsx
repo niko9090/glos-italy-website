@@ -280,16 +280,22 @@ export default function HeroSection({ data }: HeroSectionProps) {
         </motion.div>
       )}
 
+      {/* DEBUG: Mostra tipo sfondo selezionato */}
+      <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 9999, background: 'red', color: 'white', padding: '4px 8px', fontSize: '12px' }}>
+        DEBUG: backgroundType = {backgroundType || 'UNDEFINED'}
+      </div>
+
       {/* Gradient background */}
       {backgroundType === 'gradient' && (
         <div
+          data-debug="gradient-bg"
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            zIndex: 0,
+            zIndex: 1,
             background: data.backgroundGradient === 'blue-purple'
               ? 'linear-gradient(to bottom right, #2563eb, #9333ea, #581c87)'
               : data.backgroundGradient === 'green-blue'
@@ -308,13 +314,14 @@ export default function HeroSection({ data }: HeroSectionProps) {
       {/* Solid background */}
       {backgroundType === 'solid' && (
         <div
+          data-debug="solid-bg"
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            zIndex: 0,
+            zIndex: 1,
             backgroundColor: data.backgroundColor === 'dark-blue'
               ? '#1e3a8a'
               : data.backgroundColor === 'black'
@@ -329,13 +336,14 @@ export default function HeroSection({ data }: HeroSectionProps) {
       {/* Default gradient if image selected but no image uploaded */}
       {backgroundType === 'image' && !backgroundUrl && (
         <div
+          data-debug="default-bg"
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            zIndex: 0,
+            zIndex: 1,
             background: 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
           }}
         />

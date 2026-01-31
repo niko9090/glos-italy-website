@@ -6,6 +6,7 @@ import { draftMode } from 'next/headers'
 import { getAllProducts, getAllCategories } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
+import RichText from '@/components/RichText'
 
 export const metadata: Metadata = {
   title: 'Prodotti',
@@ -96,11 +97,9 @@ export default async function ProductsPage() {
                     {getTextValue(product.name)}
                   </h2>
 
-                  {product.shortDescription && (
-                    <p className="text-gray-600 line-clamp-2">
-                      {getTextValue(product.shortDescription)}
-                    </p>
-                  )}
+                  <div className="text-gray-600 line-clamp-2">
+                    <RichText value={product.shortDescription} />
+                  </div>
                 </div>
               </Link>
             </article>

@@ -174,11 +174,9 @@ function ProductCard({ product }: { product: Product }) {
             {getTextValue(product.name)}
           </h3>
 
-          {product.shortDescription && (
-            <p className="text-gray-600 line-clamp-2">
-              {getTextValue(product.shortDescription)}
-            </p>
-          )}
+          <div className="text-gray-600 line-clamp-2">
+            <RichText value={product.shortDescription} />
+          </div>
         </div>
       </Link>
     </motion.article>

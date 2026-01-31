@@ -7,17 +7,8 @@ import { draftMode } from 'next/headers'
 import { getProductBySlug, getProductSlugs } from '@/lib/sanity/fetch'
 import { urlFor } from '@/lib/sanity/client'
 import { ArrowLeft } from 'lucide-react'
-
-// Helper per estrarre testo da campi multilingua
-function getTextValue(value: unknown): string {
-  if (!value) return ''
-  if (typeof value === 'string') return value
-  if (typeof value === 'object') {
-    const obj = value as Record<string, unknown>
-    if ('it' in obj) return String(obj.it || obj.en || obj.es || '')
-  }
-  return ''
-}
+import RichText from '@/components/RichText'
+import { getTextValue } from '@/lib/utils/textHelpers'
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>
@@ -67,8 +58,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   // Estrai valori sicuri
   const productName = getTextValue(product.name)
-  const shortDesc = getTextValue(product.shortDescription)
-  const fullDesc = getTextValue(product.fullDescription)
   const categoryName = getTextValue(product.category?.name)
 
   // Specifications array
@@ -125,11 +114,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             {/* Short Description */}
-            {shortDesc && (
-              <p className="text-lg text-gray-600 mb-6">
-                {shortDesc}
-              </p>
-            )}
+            <div className="text-lg text-gray-600 mb-6">
+              <RichText value={product.shortDescription} />
+            </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4 mb-8">
@@ -159,14 +146,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         {/* Full Description */}
-        {fullDesc && (
-          <div className="mt-16 border-t pt-12">
-            <h2 className="text-2xl font-semibold mb-6">Descrizione Completa</h2>
-            <div className="prose prose-lg max-w-none">
-              {fullDesc}
-            </div>
+        <div className="mt-16 border-t pt-12">
+          <h2 className="text-2xl font-semibold mb-6">Descrizione Completa</h2>
+          <div className="prose prose-lg max-w-none">
+            <RichText value={product.fullDescription} />
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

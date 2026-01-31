@@ -1,9 +1,9 @@
-// Componente per renderizzare Rich Text da Sanity con formattazione completa
+// Componente per renderizzare Rich Text da Sanity con formattazione ULTRA completa
 'use client'
 
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import Link from 'next/link'
-import { CSSProperties, ReactNode } from 'react'
+import { CSSProperties } from 'react'
 
 // Tipi per i blocchi Portable Text
 type PortableTextBlock = {
@@ -40,14 +40,19 @@ const textColorMap: Record<string, string> = {
   yellow: 'text-yellow-500',
   green: 'text-green-600',
   'green-dark': 'text-green-800',
+  lime: 'text-lime-500',
   cyan: 'text-cyan-500',
+  sky: 'text-sky-500',
   purple: 'text-purple-600',
   'purple-dark': 'text-purple-800',
   pink: 'text-pink-500',
+  'pink-hot': 'text-pink-600',
   brown: 'text-amber-700',
   gold: 'text-yellow-600',
   silver: 'text-gray-400',
   bronze: 'text-amber-600',
+  diamond: 'text-cyan-400',
+  rainbow: 'bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 bg-clip-text text-transparent',
 }
 
 // ============================================
@@ -64,6 +69,8 @@ const highlightColorMap: Record<string, string> = {
   lightred: 'bg-red-200',
   lightcyan: 'bg-cyan-200',
   beige: 'bg-amber-100',
+  'gold-light': 'bg-yellow-100',
+  'violet-light': 'bg-violet-200',
 }
 
 // ============================================
@@ -163,28 +170,88 @@ const textDecorationMap: Record<string, string> = {
 }
 
 // ============================================
-// STILI OMBRA TESTO (CSS inline per effetti complessi)
+// MAPPA ICONE
 // ============================================
-const getTextShadowStyle = (shadow: string, color?: string): CSSProperties => {
-  const baseColor = color ? getColorValue(color) : 'rgba(0,0,0,0.3)'
-
-  const shadows: Record<string, string> = {
-    none: 'none',
-    sm: `1px 1px 2px ${baseColor}`,
-    md: `2px 2px 4px ${baseColor}`,
-    lg: `3px 3px 6px ${baseColor}`,
-    xl: `4px 4px 8px ${baseColor}`,
-    'neon-blue': '0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f',
-    'neon-green': '0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0',
-    'neon-pink': '0 0 10px #f0f, 0 0 20px #f0f, 0 0 30px #f0f',
-    'neon-gold': '0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700',
-    'glow-white': '0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff',
-    long: `4px 4px 0 ${baseColor}, 8px 8px 0 rgba(0,0,0,0.1)`,
-    '3d': `1px 1px 0 #ccc, 2px 2px 0 #c9c9c9, 3px 3px 0 #bbb, 4px 4px 0 #b9b9b9, 5px 5px 0 #aaa`,
-    retro: `3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000`,
-  }
-
-  return { textShadow: shadows[shadow] || 'none' }
+const iconMap: Record<string, string> = {
+  // Frecce
+  'arrow-right': '→',
+  'arrow-left': '←',
+  'arrow-up': '↑',
+  'arrow-down': '↓',
+  'arrow-diagonal': '↗',
+  'arrow-filled': '➜',
+  'triangle-right': '▶',
+  'triangle-left': '◀',
+  // Check e status
+  'check': '✓',
+  'check-filled': '✔',
+  'x': '✗',
+  'x-filled': '✘',
+  'warning': '⚠',
+  'stop': '⛔',
+  'info': 'ℹ',
+  'question': '❓',
+  'exclamation': '❗',
+  // Stelle
+  'star': '★',
+  'star-empty': '☆',
+  'star-4': '✦',
+  'star-sparkle': '✧',
+  'star-bright': '🌟',
+  // Cuori
+  'heart': '♥',
+  'heart-empty': '♡',
+  'heart-sparkle': '💖',
+  // Forme
+  'circle': '●',
+  'circle-empty': '○',
+  'square': '■',
+  'square-empty': '□',
+  'diamond': '◆',
+  'diamond-empty': '◇',
+  // Business
+  'phone': '📞',
+  'email': '✉',
+  'location': '📍',
+  'web': '🌐',
+  'business': '💼',
+  'calendar': '📅',
+  'clock': '⏰',
+  'money': '💰',
+  'target': '🎯',
+  'trophy': '🏆',
+  // Tech
+  'lightning': '⚡',
+  'gear': '🔧',
+  'lock': '🔒',
+  'unlock': '🔓',
+  'bell': '🔔',
+  'bulb': '💡',
+  'rocket': '🚀',
+  'settings': '⚙️',
+  // Social
+  'like': '👍',
+  'dislike': '👎',
+  'user': '👤',
+  'users': '👥',
+  'chat': '💬',
+  'megaphone': '📣',
+  // Natura
+  'sun': '☀',
+  'moon': '🌙',
+  'fire': '🔥',
+  'drop': '💧',
+  'leaf': '🌿',
+  'flower': '🌸',
+  // Simboli
+  'copyright': '©',
+  'registered': '®',
+  'trademark': '™',
+  'infinity': '∞',
+  'section': '§',
+  'paragraph': '¶',
+  'dagger': '†',
+  'double-dagger': '‡',
 }
 
 // Helper per ottenere valori colore CSS
@@ -204,16 +271,48 @@ const getColorValue = (color: string): string => {
     yellow: '#eab308',
     green: '#16a34a',
     'green-dark': '#166534',
+    lime: '#84cc16',
     cyan: '#06b6d4',
+    sky: '#0ea5e9',
     purple: '#9333ea',
     'purple-dark': '#6b21a8',
     pink: '#ec4899',
+    'pink-hot': '#db2777',
     brown: '#b45309',
     gold: '#ca8a04',
     silver: '#9ca3af',
     bronze: '#d97706',
+    diamond: '#22d3ee',
   }
   return colorValues[color] || color
+}
+
+// ============================================
+// STILI OMBRA TESTO
+// ============================================
+const getTextShadowStyle = (shadow: string, color?: string): CSSProperties => {
+  const baseColor = color ? getColorValue(color) : 'rgba(0,0,0,0.3)'
+
+  const shadows: Record<string, string> = {
+    none: 'none',
+    sm: `1px 1px 2px ${baseColor}`,
+    md: `2px 2px 4px ${baseColor}`,
+    lg: `3px 3px 6px ${baseColor}`,
+    xl: `4px 4px 8px ${baseColor}`,
+    'neon-blue': '0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f',
+    'neon-green': '0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0',
+    'neon-pink': '0 0 10px #f0f, 0 0 20px #f0f, 0 0 30px #f0f',
+    'neon-gold': '0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700',
+    'neon-red': '0 0 10px #f00, 0 0 20px #f00, 0 0 30px #f00',
+    'neon-purple': '0 0 10px #a855f7, 0 0 20px #a855f7, 0 0 30px #a855f7',
+    'glow-white': '0 0 10px #fff, 0 0 20px #fff, 0 0 40px #fff',
+    long: `4px 4px 0 ${baseColor}, 8px 8px 0 rgba(0,0,0,0.1)`,
+    '3d': `1px 1px 0 #ccc, 2px 2px 0 #c9c9c9, 3px 3px 0 #bbb, 4px 4px 0 #b9b9b9, 5px 5px 0 #aaa`,
+    retro: `3px 3px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000`,
+    inset: `inset 2px 2px 4px rgba(0,0,0,0.3)`,
+  }
+
+  return { textShadow: shadows[shadow] || 'none' }
 }
 
 // ============================================
@@ -234,6 +333,10 @@ const getTextGradientStyle = (gradient: string): CSSProperties => {
     candy: 'linear-gradient(90deg, #ec4899, #8b5cf6, #06b6d4)',
     electric: 'linear-gradient(90deg, #eab308, #22c55e)',
     dark: 'linear-gradient(90deg, #4b5563, #1f2937)',
+    ice: 'linear-gradient(90deg, #ffffff, #67e8f9)',
+    citrus: 'linear-gradient(90deg, #f97316, #facc15)',
+    grape: 'linear-gradient(90deg, #8b5cf6, #3b82f6)',
+    sakura: 'linear-gradient(90deg, #f9a8d4, #fce7f3)',
   }
 
   if (!gradient || gradient === 'none') return {}
@@ -243,13 +346,13 @@ const getTextGradientStyle = (gradient: string): CSSProperties => {
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     backgroundClip: 'text',
-  }
+  } as CSSProperties
 }
 
 // ============================================
-// ANIMAZIONI TESTO (CSS Classes)
+// ANIMAZIONI
 // ============================================
-const getAnimationClass = (animation: string, duration: string = 'normal', delay: string = '0'): string => {
+const getAnimationClass = (animation: string, duration: string = 'normal', delay: string = '0', repeat: string = 'once'): string => {
   if (!animation || animation === 'none') return ''
 
   const durationMap: Record<string, string> = {
@@ -285,9 +388,13 @@ const getAnimationClass = (animation: string, duration: string = 'normal', delay
     glitter: 'animate-glitter',
     shake: 'animate-shake',
     float: 'animate-float',
+    pop: 'animate-scale-in',
+    focus: 'animate-pulse',
   }
 
-  return `${animationMap[animation] || ''} ${durationMap[duration] || ''} ${delayMap[delay] || ''}`.trim()
+  const repeatClass = repeat === 'infinite' ? 'animate-infinite' : ''
+
+  return `${animationMap[animation] || ''} ${durationMap[duration] || ''} ${delayMap[delay] || ''} ${repeatClass}`.trim()
 }
 
 // ============================================
@@ -310,17 +417,41 @@ const getTextOutlineStyle = (width: string, color: string): CSSProperties => {
 // ============================================
 // BADGE STYLES
 // ============================================
-const getBadgeClass = (variant: string): string => {
+const getBadgeClass = (variant: string, rounded: boolean = false): string => {
+  const roundedClass = rounded ? 'rounded-full' : 'rounded'
   const variants: Record<string, string> = {
-    default: 'bg-gray-200 text-gray-800 px-2 py-0.5 rounded text-sm',
-    primary: 'bg-primary text-white px-2 py-0.5 rounded text-sm',
-    success: 'bg-green-500 text-white px-2 py-0.5 rounded text-sm',
-    warning: 'bg-orange-500 text-white px-2 py-0.5 rounded text-sm',
-    danger: 'bg-red-500 text-white px-2 py-0.5 rounded text-sm',
-    info: 'bg-cyan-500 text-white px-2 py-0.5 rounded text-sm',
-    outline: 'border border-gray-400 text-gray-700 px-2 py-0.5 rounded text-sm',
+    default: `bg-gray-200 text-gray-800 px-2 py-0.5 ${roundedClass} text-sm`,
+    primary: `bg-primary text-white px-2 py-0.5 ${roundedClass} text-sm`,
+    success: `bg-green-500 text-white px-2 py-0.5 ${roundedClass} text-sm`,
+    warning: `bg-orange-500 text-white px-2 py-0.5 ${roundedClass} text-sm`,
+    danger: `bg-red-500 text-white px-2 py-0.5 ${roundedClass} text-sm`,
+    info: `bg-cyan-500 text-white px-2 py-0.5 ${roundedClass} text-sm`,
+    purple: `bg-purple-500 text-white px-2 py-0.5 ${roundedClass} text-sm`,
+    pink: `bg-pink-500 text-white px-2 py-0.5 ${roundedClass} text-sm`,
+    outline: `border border-gray-400 text-gray-700 px-2 py-0.5 ${roundedClass} text-sm`,
+    gradient: `bg-gradient-to-r from-primary to-cyan-500 text-white px-2 py-0.5 ${roundedClass} text-sm`,
   }
   return variants[variant] || variants.default
+}
+
+// ============================================
+// BUTTON STYLES
+// ============================================
+const getButtonClass = (variant: string, size: string = 'md'): string => {
+  const sizeClasses: Record<string, string> = {
+    sm: 'px-3 py-1 text-sm',
+    md: 'px-4 py-2',
+    lg: 'px-6 py-3 text-lg',
+  }
+  const variants: Record<string, string> = {
+    primary: 'bg-primary text-white hover:bg-primary-dark',
+    secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300',
+    outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
+    ghost: 'text-primary hover:bg-primary/10',
+    success: 'bg-green-500 text-white hover:bg-green-600',
+    danger: 'bg-red-500 text-white hover:bg-red-600',
+  }
+  return `inline-block ${sizeClasses[size] || sizeClasses.md} ${variants[variant] || variants.primary} rounded-lg font-medium transition-colors cursor-pointer`
 }
 
 // ============================================
@@ -331,6 +462,7 @@ const components: PortableTextComponents = {
     normal: ({ children }) => <p className="mb-4 last:mb-0">{children}</p>,
     lead: ({ children }) => <p className="text-xl md:text-2xl text-gray-600 mb-6 leading-relaxed">{children}</p>,
     hero: ({ children }) => <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight">{children}</h1>,
+    display: ({ children }) => <h1 className="text-6xl md:text-8xl font-black mb-6 leading-none">{children}</h1>,
     h1: ({ children }) => <h1 className="text-4xl md:text-5xl font-bold mb-4">{children}</h1>,
     h2: ({ children }) => <h2 className="text-3xl md:text-4xl font-bold mb-3">{children}</h2>,
     h3: ({ children }) => <h3 className="text-2xl md:text-3xl font-semibold mb-3">{children}</h3>,
@@ -350,7 +482,22 @@ const components: PortableTextComponents = {
     ),
     callout: ({ children }) => (
       <div className="bg-blue-50 border-l-4 border-primary p-4 my-4 rounded-r">
-        {children}
+        <span className="mr-2">ℹ️</span>{children}
+      </div>
+    ),
+    'callout-success': ({ children }) => (
+      <div className="bg-green-50 border-l-4 border-green-500 p-4 my-4 rounded-r">
+        <span className="mr-2">✅</span>{children}
+      </div>
+    ),
+    'callout-warning': ({ children }) => (
+      <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4 rounded-r">
+        <span className="mr-2">⚠️</span>{children}
+      </div>
+    ),
+    'callout-error': ({ children }) => (
+      <div className="bg-red-50 border-l-4 border-red-500 p-4 my-4 rounded-r">
+        <span className="mr-2">❌</span>{children}
       </div>
     ),
     caption: ({ children }) => <p className="text-sm text-gray-500 italic mb-2">{children}</p>,
@@ -365,15 +512,37 @@ const components: PortableTextComponents = {
     bullet: ({ children }) => <ul className="list-disc pl-6 mb-4 space-y-1">{children}</ul>,
     number: ({ children }) => <ol className="list-decimal pl-6 mb-4 space-y-1">{children}</ol>,
     check: ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    'check-red': ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
     arrow: ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    'arrow-green': ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
     star: ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    'star-blue': ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    heart: ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    'dot-blue': ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    'dot-green': ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    'dot-red': ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    diamond: ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    lightning: ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    fire: ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
+    rocket: ({ children }) => <ul className="pl-6 mb-4 space-y-1 list-none">{children}</ul>,
   },
   listItem: {
     bullet: ({ children }) => <li>{children}</li>,
     number: ({ children }) => <li>{children}</li>,
     check: ({ children }) => <li className="flex items-start gap-2"><span className="text-green-500">✓</span>{children}</li>,
+    'check-red': ({ children }) => <li className="flex items-start gap-2"><span className="text-red-500">✗</span>{children}</li>,
     arrow: ({ children }) => <li className="flex items-start gap-2"><span className="text-primary">→</span>{children}</li>,
+    'arrow-green': ({ children }) => <li className="flex items-start gap-2"><span className="text-green-500">➜</span>{children}</li>,
     star: ({ children }) => <li className="flex items-start gap-2"><span className="text-yellow-500">★</span>{children}</li>,
+    'star-blue': ({ children }) => <li className="flex items-start gap-2"><span className="text-primary">★</span>{children}</li>,
+    heart: ({ children }) => <li className="flex items-start gap-2"><span className="text-red-500">♥</span>{children}</li>,
+    'dot-blue': ({ children }) => <li className="flex items-start gap-2"><span className="text-primary">●</span>{children}</li>,
+    'dot-green': ({ children }) => <li className="flex items-start gap-2"><span className="text-green-500">●</span>{children}</li>,
+    'dot-red': ({ children }) => <li className="flex items-start gap-2"><span className="text-red-500">●</span>{children}</li>,
+    diamond: ({ children }) => <li className="flex items-start gap-2"><span className="text-purple-500">◆</span>{children}</li>,
+    lightning: ({ children }) => <li className="flex items-start gap-2"><span className="text-yellow-500">⚡</span>{children}</li>,
+    fire: ({ children }) => <li className="flex items-start gap-2"><span>🔥</span>{children}</li>,
+    rocket: ({ children }) => <li className="flex items-start gap-2"><span>🚀</span>{children}</li>,
   },
   marks: {
     // Decoratori base
@@ -414,6 +583,20 @@ const components: PortableTextComponents = {
           {children}
         </a>
       )
+    },
+
+    // Icona inline
+    inlineIcon: ({ children, value }) => {
+      const icon = iconMap[value?.icon] || value?.icon || ''
+      const colorClass = textColorMap[value?.color] || ''
+      const sizeMap: Record<string, string> = {
+        sm: 'text-sm',
+        base: 'text-base',
+        lg: 'text-lg',
+        xl: 'text-xl',
+      }
+      const sizeClass = sizeMap[value?.size] || 'text-base'
+      return <span className={`${colorClass} ${sizeClass} inline-flex items-center`}>{icon}{children}</span>
     },
 
     // Colore testo
@@ -491,7 +674,7 @@ const components: PortableTextComponents = {
 
     // Animazione
     textAnimation: ({ children, value }) => {
-      const animationClass = getAnimationClass(value?.animation, value?.duration, value?.delay)
+      const animationClass = getAnimationClass(value?.animation, value?.duration, value?.delay, value?.repeat)
       return <span className={animationClass}>{children}</span>
     },
 
@@ -503,8 +686,14 @@ const components: PortableTextComponents = {
 
     // Badge
     badge: ({ children, value }) => {
-      const badgeClass = getBadgeClass(value?.variant)
+      const badgeClass = getBadgeClass(value?.variant, value?.rounded)
       return <span className={badgeClass}>{children}</span>
+    },
+
+    // Button style
+    buttonStyle: ({ children, value }) => {
+      const buttonClass = getButtonClass(value?.variant, value?.size)
+      return <span className={buttonClass}>{children}</span>
     },
 
     // Tooltip
@@ -526,6 +715,21 @@ const components: PortableTextComponents = {
         </span>
       )
     },
+
+    // Bordo inline
+    inlineBorder: ({ children, value }) => {
+      const borderStyle = value?.style || 'solid'
+      const color = getColorValue(value?.color || 'gray')
+      const rounded = value?.rounded ? 'rounded' : ''
+      return (
+        <span
+          className={`inline-block px-2 py-0.5 ${rounded}`}
+          style={{ border: `1px ${borderStyle} ${color}` }}
+        >
+          {children}
+        </span>
+      )
+    },
   },
 
   // Tipi custom (blocco stilizzato)
@@ -542,9 +746,13 @@ const components: PortableTextComponents = {
         green: 'bg-green-500 text-white',
         red: 'bg-red-500 text-white',
         yellow: 'bg-yellow-200',
-        'gradient-h': 'bg-gradient-to-r from-primary to-cyan-500',
-        'gradient-v': 'bg-gradient-to-b from-primary to-cyan-500',
-        'gradient-d': 'bg-gradient-to-br from-primary to-cyan-500',
+        orange: 'bg-orange-500 text-white',
+        purple: 'bg-purple-500 text-white',
+        pink: 'bg-pink-500 text-white',
+        cyan: 'bg-cyan-500 text-white',
+        'gradient-h': 'bg-gradient-to-r from-primary to-cyan-500 text-white',
+        'gradient-v': 'bg-gradient-to-b from-primary to-cyan-500 text-white',
+        'gradient-d': 'bg-gradient-to-br from-primary to-cyan-500 text-white',
         glass: 'bg-white/30 backdrop-blur-md',
       }
 
@@ -571,6 +779,7 @@ const components: PortableTextComponents = {
         xl: 'shadow-xl',
         inner: 'shadow-inner',
         colored: 'shadow-lg shadow-primary/30',
+        neon: 'shadow-lg shadow-primary/50',
       }
 
       const paddingClasses: Record<string, string> = {
@@ -579,12 +788,20 @@ const components: PortableTextComponents = {
         md: 'p-4',
         lg: 'p-6',
         xl: 'p-8',
+        '2xl': 'p-12',
+      }
+
+      const alignClasses: Record<string, string> = {
+        left: 'text-left',
+        center: 'text-center',
+        right: 'text-right',
       }
 
       const bgClass = bgClasses[value.background] || ''
       const borderClass = borderClasses[value.border] || ''
       const shadowClass = shadowClasses[value.shadow] || ''
       const paddingClass = paddingClasses[value.padding] || 'p-4'
+      const alignClass = alignClasses[value.textAlign] || ''
       const animationClass = getAnimationClass(value.animation)
 
       // Gradiente custom
@@ -611,7 +828,7 @@ const components: PortableTextComponents = {
 
       return (
         <div
-          className={`my-4 ${bgClass} ${borderClass} ${shadowClass} ${paddingClass} ${animationClass}`.trim()}
+          className={`my-4 ${bgClass} ${borderClass} ${shadowClass} ${paddingClass} ${alignClass} ${animationClass}`.trim()}
           style={{ ...gradientStyle, ...borderColorStyle }}
         >
           {value.content && <PortableText value={value.content} components={components} />}
@@ -625,21 +842,16 @@ const components: PortableTextComponents = {
 function extractContent(value: unknown): PortableTextBlock[] | string | null {
   if (!value) return null
 
-  // Se è già un array (Portable Text diretto)
   if (Array.isArray(value)) {
     return value
   }
 
-  // Se è una stringa
   if (typeof value === 'string') {
     return value
   }
 
-  // Se è un oggetto multilingua
   if (typeof value === 'object') {
     const obj = value as Record<string, unknown>
-
-    // Prova a estrarre la lingua italiana, poi inglese, poi spagnola
     const content = obj.it || obj.en || obj.es
 
     if (Array.isArray(content)) {
@@ -661,12 +873,10 @@ export default function RichText({ value, className = '' }: RichTextProps) {
     return null
   }
 
-  // Se è una stringa semplice, renderizza come paragrafo
   if (typeof content === 'string') {
     return <p className={className}>{content}</p>
   }
 
-  // Se è Portable Text, usa il renderer
   return (
     <div className={className}>
       <PortableText value={content} components={components} />
@@ -674,7 +884,6 @@ export default function RichText({ value, className = '' }: RichTextProps) {
   )
 }
 
-// Export anche una versione inline senza wrapper div
 export function RichTextInline({ value, className = '' }: RichTextProps) {
   const content = extractContent(value)
 

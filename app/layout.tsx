@@ -74,7 +74,7 @@ export default async function RootLayout({
           <Footer settings={settings} navigation={navigation} />
         </LanguageProvider>
         {/* Visual Editing per Sanity - attivo solo in draft mode */}
-        {isDraftMode && <VisualEditing />}
+        {isDraftMode && <VisualEditing refresh={{ inFrame: true, button: true }} />}
       </body>
     </html>
   )

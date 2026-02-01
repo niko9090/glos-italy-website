@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { useEffect, useState } from 'react'
+import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { X, MapPin, Phone, Mail, Globe, Award, Clock } from 'lucide-react'
 
 // Fix per le icone Leaflet in Next.js - usa CDN
 const defaultIcon = L.icon({
@@ -75,16 +76,27 @@ interface Dealer {
   _id: string
   name?: string
   type?: string
+  description?: string
   city?: string
   address?: string
   country?: string
   phone?: string
   email?: string
+  website?: string
+  openingHours?: string
+  youtubeVideo?: string
   location?: {
     lat?: number
     lng?: number
   }
   certifications?: string[]
+}
+
+// Estrae l'ID del video YouTube dall'URL
+function getYouTubeId(url: string): string | null {
+  if (!url) return null
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/)
+  return match ? match[1] : null
 }
 
 interface DealersMapProps {
@@ -98,9 +110,19 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
   const [isMounted, setIsMounted] = useState(false)
   const [geocodedDealers, setGeocodedDealers] = useState<Record<string, { lat: number; lng: number }>>({})
   const [isGeocoding, setIsGeocoding] = useState(false)
+  const [modalDealer, setModalDealer] = useState<Dealer | null>(null)
 
   useEffect(() => {
     setIsMounted(true)
+  }, [])
+
+  // Chiudi modal con ESC
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setModalDealer(null)
+    }
+    window.addEventListener('keydown', handleEsc)
+    return () => window.removeEventListener('keydown', handleEsc)
   }, [])
 
   // Geocodifica automatica per dealer senza coordinate
@@ -178,89 +200,196 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
     : italyCenter
   const zoom = selectedCoords ? 12 : defaultZoom
 
+  const youtubeId = modalDealer?.youtubeVideo ? getYouTubeId(modalDealer.youtubeVideo) : null
+
   return (
-    <MapContainer
-      center={center}
-      zoom={zoom}
-      className="w-full h-96 rounded-2xl z-0"
-      scrollWheelZoom={true}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+    <>
+      <MapContainer
+        center={center}
+        zoom={zoom}
+        className="w-full h-96 rounded-2xl z-0"
+        scrollWheelZoom={true}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-      {dealersWithLocation.map((dealer) => {
-        // Usa coordinate salvate o geocodificate
-        const coords = (dealer.location?.lat && dealer.location?.lng)
-          ? { lat: dealer.location.lat, lng: dealer.location.lng }
-          : geocodedDealers[dealer._id]
+        {dealersWithLocation.map((dealer) => {
+          // Usa coordinate salvate o geocodificate
+          const coords = (dealer.location?.lat && dealer.location?.lng)
+            ? { lat: dealer.location.lat, lng: dealer.location.lng }
+            : geocodedDealers[dealer._id]
 
-        if (!coords) return null
+          if (!coords) return null
 
-        return (
-          <Marker
-            key={dealer._id}
-            position={[coords.lat, coords.lng]}
-            eventHandlers={{
-              click: () => onSelectDealer?.(dealer),
-            }}
+          return (
+            <Marker
+              key={dealer._id}
+              position={[coords.lat, coords.lng]}
+              eventHandlers={{
+                click: () => {
+                  setModalDealer(dealer)
+                  onSelectDealer?.(dealer)
+                },
+              }}
+            />
+          )
+        })}
+      </MapContainer>
+
+      {/* Modal Rivenditore */}
+      {modalDealer && (
+        <div
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+          onClick={() => setModalDealer(null)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
           >
-          <Popup>
-            <div className="min-w-[200px]">
-              <h3 className="font-semibold text-gray-900 mb-1">{t(dealer.name)}</h3>
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white rounded-t-2xl z-10">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">{t(modalDealer.name)}</h2>
+                {modalDealer.type && (
+                  <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-xs rounded mt-1">
+                    {modalDealer.type === 'distributore' ? 'Distributore' :
+                     modalDealer.type === 'agente' ? 'Agente' : 'Rivenditore'}
+                  </span>
+                )}
+              </div>
+              <button
+                onClick={() => setModalDealer(null)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Chiudi"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
 
-              {t(dealer.type) && (
-                <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-xs rounded mb-2">
-                  {t(dealer.type) === 'distributore' ? 'Distributore' :
-                   t(dealer.type) === 'agente' ? 'Agente' : 'Rivenditore'}
-                </span>
+            {/* Video YouTube */}
+            {youtubeId && (
+              <div className="aspect-video w-full bg-black">
+                <iframe
+                  src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&cc_load_policy=1&cc_lang_pref=en&hl=en`}
+                  title={`Video ${modalDealer.name}`}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            )}
+
+            {/* Dettagli Rivenditore */}
+            <div className="p-6 space-y-4">
+              {/* Descrizione */}
+              {modalDealer.description && (
+                <p className="text-gray-600">{t(modalDealer.description)}</p>
               )}
 
-              {t(dealer.city) && (
-                <p className="text-sm text-gray-600 mb-1">{t(dealer.city)}</p>
-              )}
-
-              {t(dealer.address) && (
-                <p className="text-sm text-gray-500 mb-2">{t(dealer.address)}</p>
-              )}
-
-              {dealer.certifications && dealer.certifications.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {dealer.certifications.map((cert, i) => (
+              {/* Certificazioni */}
+              {modalDealer.certifications && modalDealer.certifications.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {modalDealer.certifications.map((cert, i) => (
                     <span
                       key={i}
-                      className="px-1.5 py-0.5 bg-green-100 text-green-700 text-xs rounded"
+                      className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full"
                     >
+                      <Award className="w-4 h-4" />
                       {t(cert)}
                     </span>
                   ))}
                 </div>
               )}
 
-              <div className="flex flex-col gap-1 pt-2 border-t">
-                {t(dealer.phone) && (
-                  <a
-                    href={`tel:${t(dealer.phone).replace(/\s/g, '')}`}
-                    className="text-sm text-primary hover:underline"
-                  >
-                    {t(dealer.phone)}
-                  </a>
+              {/* Info Grid */}
+              <div className="grid md:grid-cols-2 gap-4 pt-4 border-t">
+                {/* Indirizzo */}
+                {(modalDealer.address || modalDealer.city) && (
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Indirizzo</p>
+                      <p className="text-gray-600">
+                        {[modalDealer.address, modalDealer.city, modalDealer.country].filter(Boolean).join(', ')}
+                      </p>
+                    </div>
+                  </div>
                 )}
-                {t(dealer.email) && (
-                  <a
-                    href={`mailto:${t(dealer.email)}`}
-                    className="text-sm text-primary hover:underline"
-                  >
-                    {t(dealer.email)}
-                  </a>
+
+                {/* Telefono */}
+                {modalDealer.phone && (
+                  <div className="flex items-start gap-3">
+                    <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Telefono</p>
+                      <a
+                        href={`tel:${t(modalDealer.phone).replace(/\s/g, '')}`}
+                        className="text-primary hover:underline"
+                      >
+                        {t(modalDealer.phone)}
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* Email */}
+                {modalDealer.email && (
+                  <div className="flex items-start gap-3">
+                    <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Email</p>
+                      <a
+                        href={`mailto:${t(modalDealer.email)}`}
+                        className="text-primary hover:underline"
+                      >
+                        {t(modalDealer.email)}
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* Sito Web */}
+                {modalDealer.website && (
+                  <div className="flex items-start gap-3">
+                    <Globe className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Sito Web</p>
+                      <a
+                        href={modalDealer.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        Visita il sito
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* Orari */}
+                {modalDealer.openingHours && (
+                  <div className="flex items-start gap-3 md:col-span-2">
+                    <Clock className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-gray-900">Orari di Apertura</p>
+                      <p className="text-gray-600 whitespace-pre-line">{t(modalDealer.openingHours)}</p>
+                    </div>
+                  </div>
                 )}
               </div>
+
+              {/* Messaggio se non c'è video */}
+              {!youtubeId && (
+                <div className="text-center py-4 bg-gray-50 rounded-lg">
+                  <p className="text-gray-500">Nessun video disponibile per questo rivenditore</p>
+                </div>
+              )}
             </div>
-          </Popup>
-        </Marker>
-        )
-      })}
-    </MapContainer>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

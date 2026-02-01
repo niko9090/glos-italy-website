@@ -41,8 +41,10 @@ export default async function DealersPage() {
   const resellers = normalDealers.filter((d) => d.type === 'rivenditore')
   const agents = normalDealers.filter((d) => d.type === 'agente')
 
-  // Conta rivenditori con coordinate per la mappa
-  const dealersWithCoords = dealers.filter((d) => d.location?.lat && d.location?.lng)
+  // Conta rivenditori che possono apparire sulla mappa (con coordinate O con città/indirizzo per geocoding)
+  const dealersWithCoords = dealers.filter((d) =>
+    (d.location?.lat && d.location?.lng) || d.city || d.address
+  )
 
   // Helper per estrarre ID video YouTube
   const getYouTubeId = (url: string) => {

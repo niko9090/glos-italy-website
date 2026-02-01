@@ -64,7 +64,7 @@ const itemVariants = {
 export default function DownloadSection({ data }: DownloadSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'gray']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'grid'
   const columns = data.columns || 3
 
@@ -100,12 +100,12 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
         variants={itemVariants}
         whileHover={{ scale: 1.02 }}
         className={`group block bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all ${
-          layout === 'list' ? 'flex items-center' : ''
+          layout?.includes('list') ? 'flex items-center' : ''
         }`}
       >
         {/* Thumbnail */}
-        {data.showThumbnails && layout !== 'compact' && (
-          <div className={`relative ${layout === 'list' ? 'w-24 h-24 flex-shrink-0' : 'aspect-video'} bg-gray-100`}>
+        {data.showThumbnails && !layout?.includes('compact') && (
+          <div className={`relative ${layout?.includes('list') ? 'w-24 h-24 flex-shrink-0' : 'aspect-video'} bg-gray-100`}>
             {isValidImage(file.thumbnail) ? (
               <Image
                 src={safeImageUrl(file.thumbnail, 400, 300)!}
@@ -122,10 +122,10 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
         )}
 
         {/* Content */}
-        <div className={`p-4 ${layout === 'list' ? 'flex-1 flex items-center justify-between' : ''}`}>
-          <div className={layout === 'list' ? 'flex items-center gap-4' : ''}>
+        <div className={`p-4 ${layout?.includes('list') ? 'flex-1 flex items-center justify-between' : ''}`}>
+          <div className={layout?.includes('list') ? 'flex items-center gap-4' : ''}>
             {/* Icon for compact/list layout */}
-            {(layout === 'compact' || layout === 'list') && (
+            {(layout?.includes('compact') || layout?.includes('list')) && (
               <div className="flex-shrink-0">
                 {fileIcons[file.fileType || 'other']}
               </div>
@@ -135,7 +135,7 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
               <h3 className={`font-semibold group-hover:text-primary transition-colors ${textColor}`}>
                 {t(file.title)}
               </h3>
-              {file.description && layout !== 'compact' ? (
+              {file.description && !layout?.includes('compact') ? (
                 <p className="text-sm text-gray-600 mt-1">{t(file.description)}</p>
               ) : null}
               {data.showFileSize && file.fileSize && (
@@ -145,7 +145,7 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
           </div>
 
           {/* Download indicator */}
-          <div className={`${layout === 'list' ? '' : 'mt-3'} flex items-center gap-2 text-primary`}>
+          <div className={`${layout?.includes('list') ? '' : 'mt-3'} flex items-center gap-2 text-primary`}>
             <Download className="w-5 h-5 group-hover:animate-bounce" />
             <span className="text-sm font-medium">Scarica</span>
           </div>
@@ -184,7 +184,7 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
               whileInView="visible"
               viewport={{ once: true }}
               className={
-                layout === 'list'
+                layout?.includes('list')
                   ? 'space-y-4'
                   : `grid grid-cols-1 ${gridCols[columns]} gap-6`
               }

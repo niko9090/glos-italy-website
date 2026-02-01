@@ -36,7 +36,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
   const { t } = useLanguage()
 
   const bgClass = bgClasses[data.backgroundColor || 'white']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'accordion'
 
   if (!data.items || data.items.length === 0) return null
@@ -228,7 +228,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
         ) : null}
 
         {/* Category Filter (for non-sidebar layouts) */}
-        {data.showCategories && categories.length > 0 && layout !== 'sidebar' && (
+        {data.showCategories && categories.length > 0 && !layout?.includes('sidebar') && (
           <div className="flex flex-wrap justify-center gap-2 mb-8">
             <button
               onClick={() => setActiveCategory(null)}
@@ -253,10 +253,10 @@ export default function FaqSection({ data }: FaqSectionProps) {
         )}
 
         {/* Content */}
-        {layout === 'accordion' && renderAccordion()}
-        {layout === 'list' && renderList()}
-        {layout === 'two-columns' && renderTwoColumns()}
-        {layout === 'sidebar' && renderSidebar()}
+        {layout?.includes('accordion') && renderAccordion()}
+        {layout?.includes('list') && renderList()}
+        {layout?.includes('two-columns') && renderTwoColumns()}
+        {layout?.includes('sidebar') && renderSidebar()}
       </div>
     </section>
   )

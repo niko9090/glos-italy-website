@@ -5,7 +5,7 @@ import { useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { isValidImage, safeImageUrl, getFileUrl } from '@/lib/sanity/client'
 import { ArrowRight, ChevronDown, Play, Download, Phone, Mail } from 'lucide-react'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
@@ -386,6 +386,42 @@ export default function HeroSection({ data }: HeroSectionProps) {
           />
           <div className={`absolute inset-0 ${getOverlayClass()}`} />
         </motion.div>
+      )}
+
+      {/* Video background */}
+      {backgroundType?.includes('video') && (
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          {(() => {
+            const videoUrl = getFileUrl(data.backgroundVideo)
+            if (!videoUrl) {
+              // Fallback gradient if no video
+              return (
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
+                  }}
+                />
+              )
+            }
+            return (
+              <>
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute w-full h-full object-cover"
+                  style={{ minWidth: '100%', minHeight: '100%' }}
+                >
+                  <source src={videoUrl} type="video/mp4" />
+                </video>
+                <div className={`absolute inset-0 ${getOverlayClass()}`} />
+              </>
+            )
+          })()}
+        </div>
       )}
 
       {/* Gradient background - usa includes() per gestire caratteri stega */}

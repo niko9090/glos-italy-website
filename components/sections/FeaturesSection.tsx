@@ -89,8 +89,8 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
 
   // Text color
   const getTextColor = () => {
-    if (data.textColor === 'dark') return 'text-gray-900'
-    if (data.textColor === 'light') return 'text-white'
+    if (data.textColor?.includes('dark')) return 'text-gray-900'
+    if (data.textColor?.includes('light')) return 'text-white'
     const darkBgs = ['black', 'primary', 'gradient-blue', 'gradient-dark']
     return darkBgs.includes(data.backgroundColor || 'white') ? 'text-white' : 'text-gray-900'
   }
@@ -178,31 +178,17 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
   // Layout classes
   const getLayoutClasses = () => {
     const layout = data.layout || 'grid-3'
-    switch (layout) {
-      case 'list':
-        return 'flex flex-col'
-      case 'grid-2':
-        return 'grid grid-cols-1 md:grid-cols-2'
-      case 'grid-3':
-        return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-      case 'grid-4':
-        return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
-      case 'cards':
-      case 'cards-icons':
-        return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-      case 'alternating':
-        return 'flex flex-col'
-      case 'centered':
-        return 'flex flex-col max-w-2xl mx-auto'
-      case 'sidebar':
-        return 'grid grid-cols-1 lg:grid-cols-3'
-      case 'inline':
-        return 'flex flex-wrap justify-center'
-      case 'timeline':
-        return 'flex flex-col max-w-3xl mx-auto'
-      default:
-        return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-    }
+    if (layout?.includes('list')) return 'flex flex-col'
+    if (layout?.includes('grid-2')) return 'grid grid-cols-1 md:grid-cols-2'
+    if (layout?.includes('grid-4')) return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+    if (layout?.includes('grid-3')) return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+    if (layout?.includes('cards')) return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+    if (layout?.includes('alternating')) return 'flex flex-col'
+    if (layout?.includes('centered')) return 'flex flex-col max-w-2xl mx-auto'
+    if (layout?.includes('sidebar')) return 'grid grid-cols-1 lg:grid-cols-3'
+    if (layout?.includes('inline')) return 'flex flex-wrap justify-center'
+    if (layout?.includes('timeline')) return 'flex flex-col max-w-3xl mx-auto'
+    return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
   }
 
   // Animation variants
@@ -211,7 +197,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: data.animation === 'stagger' ? 0.12 : 0,
+        staggerChildren: data.animation?.includes('stagger') ? 0.12 : 0,
         delayChildren: 0.1,
       },
     },
@@ -294,7 +280,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className={`mb-12 ${data.textAlign === 'left' ? 'text-left' : data.textAlign === 'right' ? 'text-right' : 'text-center'}`}
+            className={`mb-12 ${data.textAlign?.includes('left') ? 'text-left' : data.textAlign?.includes('right') ? 'text-right' : 'text-center'}`}
           >
             {!!data.eyebrow && (
               <p className="text-sm font-semibold tracking-widest uppercase mb-4 text-primary">
@@ -322,7 +308,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
         {/* Main Content */}
         <div className={isSplitLayout ? 'grid lg:grid-cols-2 gap-12 items-center' : contentWidthClasses[data.contentWidth || 'normal']}>
           {/* Image (left position) */}
-          {showImage && data.imagePosition === 'left' && (
+          {showImage && data.imagePosition?.includes('left') && (
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -333,11 +319,11 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
               <motion.div
                 style={data.parallax ? { y: imageY, scale: imageScale } : undefined}
                 className={`relative aspect-[4/3] overflow-hidden ${
-                  data.imageStyle === 'rounded' ? 'rounded-2xl' :
-                  data.imageStyle === 'circle' ? 'rounded-full aspect-square' :
-                  data.imageStyle === 'shadow' ? 'rounded-2xl shadow-2xl' :
-                  data.imageStyle === 'border' ? 'rounded-2xl border-4 border-primary/20' :
-                  data.imageStyle === 'float' ? 'rounded-2xl shadow-2xl transform rotate-2' :
+                  data.imageStyle?.includes('rounded') ? 'rounded-2xl' :
+                  data.imageStyle?.includes('circle') ? 'rounded-full aspect-square' :
+                  data.imageStyle?.includes('shadow') ? 'rounded-2xl shadow-2xl' :
+                  data.imageStyle?.includes('border') ? 'rounded-2xl border-4 border-primary/20' :
+                  data.imageStyle?.includes('float') ? 'rounded-2xl shadow-2xl transform rotate-2' :
                   'rounded-2xl'
                 }`}
               >
@@ -364,23 +350,23 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
           >
             {data.items?.map((item, index) => {
               const wrapperClassName = `block ${
-                data.iconPosition === 'left' ? 'flex items-start gap-4' :
-                data.iconPosition === 'right' ? 'flex items-start gap-4 flex-row-reverse' :
+                data.iconPosition?.includes('left') ? 'flex items-start gap-4' :
+                data.iconPosition?.includes('right') ? 'flex items-start gap-4 flex-row-reverse' :
                 ''
               }`
 
               const itemContent = (
                 <>
                   {/* Timeline dot */}
-                  {layout === 'timeline' && (
+                  {layout?.includes('timeline') && (
                     <div className="absolute left-0 top-0 -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-white" />
                   )}
 
                   {/* Icon */}
-                  {data.iconPosition !== 'hidden' && (item.icon || item.iconImage) && (
+                  {!data.iconPosition?.includes('hidden') && (item.icon || item.iconImage) && (
                     <div className={`flex-shrink-0 ${
-                      data.iconPosition === 'top' ? 'mb-4' : ''
-                    } ${data.iconPosition === 'background' ? 'absolute right-4 top-4 opacity-10 text-6xl' : ''}`}>
+                      data.iconPosition?.includes('top') ? 'mb-4' : ''
+                    } ${data.iconPosition?.includes('background') ? 'absolute right-4 top-4 opacity-10 text-6xl' : ''}`}>
                       {item.iconImage && isValidImage(item.iconImage) ? (
                         <div className={iconSizeClasses[data.iconSize || 'lg']}>
                           <Image
@@ -393,9 +379,9 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                         </div>
                       ) : item.icon ? (
                         <div className={`${getIconStyleClasses(item.color)} ${iconSizeClasses[data.iconSize || 'lg']} flex items-center justify-center ${
-                          data.hoverEffect === 'icon-bounce' ? 'group-hover:animate-bounce' : ''
-                        } ${data.iconAnimation === 'pulse' ? 'animate-pulse' : ''} ${
-                          data.iconAnimation === 'bounce' ? 'animate-bounce' : ''
+                          data.hoverEffect?.includes('icon-bounce') ? 'group-hover:animate-bounce' : ''
+                        } ${data.iconAnimation?.includes('pulse') ? 'animate-pulse' : ''} ${
+                          data.iconAnimation?.includes('bounce') ? 'animate-bounce' : ''
                         }`}>
                           {item.icon}
                         </div>
@@ -408,7 +394,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                   )}
 
                   {/* Content */}
-                  <div className={`flex-1 ${data.textAlign === 'center' && data.iconPosition === 'top' ? 'text-center' : ''}`}>
+                  <div className={`flex-1 ${data.textAlign?.includes('center') && data.iconPosition?.includes('top') ? 'text-center' : ''}`}>
                     {/* Badge */}
                     {!!item.badge && (
                       <span className="inline-block px-2 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-2">
@@ -446,8 +432,8 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                   key={item._key}
                   variants={getItemVariants()}
                   className={`${cardStyleClasses[data.cardStyle || 'none']} ${hoverEffectClasses[data.hoverEffect || 'lift']} ${
-                    layout === 'alternating' && index % 2 === 1 ? 'md:flex-row-reverse' : ''
-                  } ${layout === 'timeline' ? 'relative pl-8 border-l-2 border-primary/30' : ''}`}
+                    layout?.includes('alternating') && index % 2 === 1 ? 'md:flex-row-reverse' : ''
+                  } ${layout?.includes('timeline') ? 'relative pl-8 border-l-2 border-primary/30' : ''}`}
                 >
                   {item.link ? (
                     <Link href={item.link} className={wrapperClassName}>
@@ -460,7 +446,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                   )}
 
                   {/* Divider */}
-                  {data.dividers && index < (data.items?.length || 0) - 1 && layout === 'list' && (
+                  {data.dividers && index < (data.items?.length || 0) - 1 && layout?.includes('list') && (
                     <div className="border-b border-gray-200 mt-6" />
                   )}
                 </motion.div>
@@ -469,7 +455,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
           </motion.div>
 
           {/* Image (right position) */}
-          {showImage && data.imagePosition === 'right' && (
+          {showImage && data.imagePosition?.includes('right') && (
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -480,11 +466,11 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
               <motion.div
                 style={data.parallax ? { y: imageY, scale: imageScale } : undefined}
                 className={`relative aspect-[4/3] overflow-hidden ${
-                  data.imageStyle === 'rounded' ? 'rounded-2xl' :
-                  data.imageStyle === 'circle' ? 'rounded-full aspect-square' :
-                  data.imageStyle === 'shadow' ? 'rounded-2xl shadow-2xl' :
-                  data.imageStyle === 'border' ? 'rounded-2xl border-4 border-primary/20' :
-                  data.imageStyle === 'float' ? 'rounded-2xl shadow-2xl transform -rotate-2' :
+                  data.imageStyle?.includes('rounded') ? 'rounded-2xl' :
+                  data.imageStyle?.includes('circle') ? 'rounded-full aspect-square' :
+                  data.imageStyle?.includes('shadow') ? 'rounded-2xl shadow-2xl' :
+                  data.imageStyle?.includes('border') ? 'rounded-2xl border-4 border-primary/20' :
+                  data.imageStyle?.includes('float') ? 'rounded-2xl shadow-2xl transform -rotate-2' :
                   'rounded-2xl'
                 }`}
               >

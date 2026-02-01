@@ -51,11 +51,11 @@ export default function VideoSection({ data }: VideoSectionProps) {
   const [isPlaying, setIsPlaying] = useState(data.autoplay || false)
 
   const bgClass = bgClasses[data.backgroundColor || 'white']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const aspectRatio = data.aspectRatio?.replace('/', ' / ') || '16 / 9'
 
   const renderVideo = () => {
-    if (data.videoType === 'youtube' && data.youtubeUrl) {
+    if (data.videoType?.includes('youtube') && data.youtubeUrl) {
       const videoId = getYouTubeId(data.youtubeUrl)
       if (!videoId) return null
 
@@ -69,7 +69,7 @@ export default function VideoSection({ data }: VideoSectionProps) {
       )
     }
 
-    if (data.videoType === 'vimeo' && data.vimeoUrl) {
+    if (data.videoType?.includes('vimeo') && data.vimeoUrl) {
       const videoId = getVimeoId(data.vimeoUrl)
       if (!videoId) return null
 
@@ -83,7 +83,7 @@ export default function VideoSection({ data }: VideoSectionProps) {
       )
     }
 
-    if (data.videoType === 'file' && data.videoFile?.asset?.url) {
+    if (data.videoType?.includes('file') && data.videoFile?.asset?.url) {
       return (
         <video
           src={data.videoFile.asset.url}
@@ -150,15 +150,15 @@ export default function VideoSection({ data }: VideoSectionProps) {
     </div>
   ) : null
 
-  if (data.layout === 'side-text') {
+  if (data.layout?.includes('side-text')) {
     return (
       <section className={`section ${bgClass}`}>
         <div className="container-glos">
-          <div className={`grid lg:grid-cols-2 gap-12 items-center ${data.textPosition === 'right' ? '' : 'lg:grid-flow-dense'}`}>
-            <div className={data.textPosition === 'right' ? 'lg:order-2' : ''}>
+          <div className={`grid lg:grid-cols-2 gap-12 items-center ${data.textPosition?.includes('right') ? '' : 'lg:grid-flow-dense'}`}>
+            <div className={data.textPosition?.includes('right') ? 'lg:order-2' : ''}>
               {textContent}
             </div>
-            <div className={data.textPosition === 'right' ? 'lg:order-1' : ''}>
+            <div className={data.textPosition?.includes('right') ? 'lg:order-1' : ''}>
               {videoContent}
             </div>
           </div>
@@ -169,13 +169,13 @@ export default function VideoSection({ data }: VideoSectionProps) {
 
   return (
     <section className={`section ${bgClass}`}>
-      <div className={data.layout === 'full-width' ? '' : 'container-glos'}>
+      <div className={data.layout?.includes('full-width') ? '' : 'container-glos'}>
         {textContent && (
           <div className="text-center mb-12 max-w-3xl mx-auto px-4">
             {textContent}
           </div>
         )}
-        <div className={data.layout === 'full-width' ? '' : 'max-w-5xl mx-auto'}>
+        <div className={data.layout?.includes('full-width') ? '' : 'max-w-5xl mx-auto'}>
           {videoContent}
         </div>
       </div>

@@ -178,7 +178,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
       className={`relative ${imageSize} flex-shrink-0`}
     >
       <div className={`relative overflow-hidden ${imageShape} ${imageShadow} ${imageBorder}`}>
-        <div className={`relative ${data.imageShape === 'square' || data.imageShape === 'circle' ? 'aspect-square' : 'aspect-[4/3]'}`}>
+        <div className={`relative ${data.imageShape?.includes('square') || data.imageShape?.includes('circle') ? 'aspect-square' : 'aspect-[4/3]'}`}>
           <Image
             src={safeImageUrl(data.image, 800, 600)!}
             alt={(data.image as any)?.alt || ''}
@@ -236,7 +236,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
                 className={buttonClass}
               >
                 {buttonText}
-                {button.variant === 'link' && <ArrowRight className="w-4 h-4" />}
+                {button.variant?.includes('link') && <ArrowRight className="w-4 h-4" />}
               </Link>
             )
           })}
@@ -249,7 +249,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
     <section className={`${paddingClass} ${bgClass}`}>
       <div className={`container-glos mx-auto ${contentWidth}`}>
         <div className={`flex flex-col lg:flex-row gap-8 lg:gap-12 ${verticalAlign} ${
-          imagePosition === 'left' ? 'lg:flex-row-reverse' : ''
+          imagePosition?.includes('left') ? 'lg:flex-row-reverse' : ''
         }`}>
           {textContent}
           {imageContent}

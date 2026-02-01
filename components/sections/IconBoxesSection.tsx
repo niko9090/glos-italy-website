@@ -67,7 +67,7 @@ const itemVariants = {
 export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'white']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const columns = data.columns || 3
   const iconSize = iconSizeClasses[data.iconSize || 'large']
   const textAlign = data.textAlign || 'center'
@@ -142,15 +142,15 @@ export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
               <motion.div
                 variants={itemVariants}
                 className={`group p-6 transition-all duration-300 ${boxClasses} ${hoverClasses} ${
-                  textAlign === 'center' ? 'text-center' : 'text-left'
-                } ${data.iconPosition === 'left' ? 'flex items-start gap-4' : ''}`}
+                  textAlign?.includes('center') ? 'text-center' : 'text-left'
+                } ${data.iconPosition?.includes('left') ? 'flex items-start gap-4' : ''}`}
               >
                 {/* Icon */}
                 <div
                   className={`${iconSize} ${
-                    data.iconPosition === 'center' || data.boxStyle === 'icon-centered'
+                    data.iconPosition?.includes('center') || data.boxStyle?.includes('icon-centered')
                       ? 'mx-auto mb-4'
-                      : data.iconPosition === 'left'
+                      : data.iconPosition?.includes('left')
                       ? 'flex-shrink-0'
                       : 'mb-4'
                   }`}
@@ -163,7 +163,7 @@ export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
                 </div>
 
                 {/* Text */}
-                <div className={data.iconPosition === 'left' ? 'flex-1' : ''}>
+                <div className={data.iconPosition?.includes('left') ? 'flex-1' : ''}>
                   <h3 className={`text-xl font-semibold mb-2 ${textColor} group-hover:text-primary transition-colors`}>
                     {t(box.title)}
                   </h3>

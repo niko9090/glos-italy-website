@@ -68,7 +68,7 @@ const itemVariants = {
 export default function TeamSection({ data }: TeamSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'gray']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const columns = data.columns || 3
   const photoShape = photoShapeClasses[data.photoShape || 'circle']
   const cardStyle = cardStyleClasses[data.cardStyle || 'shadow']

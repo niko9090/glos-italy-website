@@ -208,8 +208,8 @@ export default function GallerySection({ data }: GallerySectionProps) {
     const colsMobile = data.columnsMobile || 2
     const layout = data.layout || 'grid'
 
-    if (layout === 'carousel') return 'flex overflow-x-auto snap-x snap-mandatory'
-    if (layout === 'masonry') return `columns-${colsMobile} md:columns-${cols} space-y-${data.gap || 'md'}`
+    if (layout?.includes('carousel')) return 'flex overflow-x-auto snap-x snap-mandatory'
+    if (layout?.includes('masonry')) return `columns-${colsMobile} md:columns-${cols} space-y-${data.gap || 'md'}`
 
     const colClasses: Record<number, string> = {
       1: 'grid-cols-1',
@@ -248,7 +248,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: data.animation === 'fade-stagger' ? 0.08 : 0,
+        staggerChildren: data.animation?.includes('fade-stagger') ? 0.08 : 0,
         delayChildren: 0.1,
       },
     },
@@ -334,17 +334,17 @@ export default function GallerySection({ data }: GallerySectionProps) {
             {/* Category Filters */}
             {data.enableFilters && categories.length > 1 && (
               <div className={`flex flex-wrap justify-center gap-2 ${
-                data.filterStyle === 'tabs' ? 'border-b border-gray-200' :
-                data.filterStyle === 'dropdown' ? '' : ''
+                data.filterStyle?.includes('tabs') ? 'border-b border-gray-200' :
+                data.filterStyle?.includes('dropdown') ? '' : ''
               }`}>
                 {categories.map(cat => (
                   <button
                     key={cat}
                     onClick={() => setActiveFilter(cat)}
                     className={`px-4 py-2 font-medium transition-all ${
-                      data.filterStyle === 'pills'
+                      data.filterStyle?.includes('pills')
                         ? `rounded-full ${activeFilter === cat ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`
-                        : data.filterStyle === 'tabs'
+                        : data.filterStyle?.includes('tabs')
                         ? `border-b-2 ${activeFilter === cat ? 'border-primary text-primary' : 'border-transparent hover:border-gray-300'}`
                         : `rounded-lg ${activeFilter === cat ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`
                     }`}
@@ -389,18 +389,18 @@ export default function GallerySection({ data }: GallerySectionProps) {
               <motion.div
                 key={image._key}
                 variants={getItemVariants()}
-                whileHover={data.hoverEffect === 'lift' ? { y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.15)' } : undefined}
+                whileHover={data.hoverEffect?.includes('lift') ? { y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.15)' } : undefined}
                 className={`group relative overflow-hidden ${roundedClasses[data.rounded || 'md']} ${shadowClasses[data.shadow || 'none']} ${
-                  data.border === 'thin' ? 'ring-1 ring-gray-200' :
-                  data.border === 'normal' ? 'ring-2 ring-gray-200' :
-                  data.border === 'decorative' ? 'ring-2 ring-primary/30' : ''
+                  data.border?.includes('thin') ? 'ring-1 ring-gray-200' :
+                  data.border?.includes('normal') ? 'ring-2 ring-gray-200' :
+                  data.border?.includes('decorative') ? 'ring-2 ring-primary/30' : ''
                 } ${image.featured ? 'md:col-span-2 md:row-span-2' : ''} ${
-                  data.layout === 'carousel' ? 'flex-shrink-0 w-80 snap-center' : ''
-                } ${data.layout === 'masonry' ? 'break-inside-avoid mb-4' : ''}`}
+                  data.layout?.includes('carousel') ? 'flex-shrink-0 w-80 snap-center' : ''
+                } ${data.layout?.includes('masonry') ? 'break-inside-avoid mb-4' : ''}`}
               >
                 <ImageWrapper
                   {...(wrapperProps as any)}
-                  className={`block relative ${aspectClasses[data.aspectRatio || 'square']} ${data.layout === 'masonry' ? 'w-full' : 'w-full h-full'}`}
+                  className={`block relative ${aspectClasses[data.aspectRatio || 'square']} ${data.layout?.includes('masonry') ? 'w-full' : 'w-full h-full'}`}
                 >
                   <Image
                     src={safeImageUrl(image, 600, 600)!}
@@ -410,9 +410,9 @@ export default function GallerySection({ data }: GallerySectionProps) {
                   />
 
                   {/* Hover Overlay */}
-                  {(data.hoverEffect === 'overlay' || data.hoverEffect === 'overlay-color' || data.enableLightbox) && (
+                  {(data.hoverEffect?.includes('overlay') || data.enableLightbox) && (
                     <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center ${
-                      data.hoverEffect === 'overlay-color' ? 'bg-primary/60' : 'bg-black/40'
+                      data.hoverEffect?.includes('overlay-color') ? 'bg-primary/60' : 'bg-black/40'
                     }`}>
                       <motion.div
                         initial={{ scale: 0 }}
@@ -425,11 +425,11 @@ export default function GallerySection({ data }: GallerySectionProps) {
                   )}
 
                   {/* Caption */}
-                  {!!image.caption && data.showCaptions !== 'never' && (
+                  {!!image.caption && !data.showCaptions?.includes('never') && (
                     <div className={`absolute bottom-0 left-0 right-0 p-4 ${
-                      data.showCaptions === 'always'
+                      data.showCaptions?.includes('always')
                         ? 'bg-gradient-to-t from-black/70 to-transparent'
-                        : data.showCaptions === 'hover'
+                        : data.showCaptions?.includes('hover') && !data.showCaptions?.includes('hover-slide')
                         ? 'bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity'
                         : 'bg-gradient-to-t from-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform'
                     }`}>
@@ -463,7 +463,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
               animate="visible"
               exit="exit"
               className={`fixed inset-0 z-50 flex items-center justify-center ${
-                data.lightboxStyle === 'minimal' ? 'bg-white' : 'bg-black/95'
+                data.lightboxStyle?.includes('minimal') ? 'bg-white' : 'bg-black/95'
               }`}
               onClick={closeLightbox}
             >
@@ -475,7 +475,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 onClick={closeLightbox}
                 className={`absolute top-4 right-4 p-3 rounded-full z-10 ${
-                  data.lightboxStyle === 'minimal'
+                  data.lightboxStyle?.includes('minimal')
                     ? 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                     : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20'
                 }`}
@@ -488,7 +488,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-sm font-medium ${
-                  data.lightboxStyle === 'minimal'
+                  data.lightboxStyle?.includes('minimal')
                     ? 'bg-gray-100 text-gray-800'
                     : 'bg-white/10 backdrop-blur-sm text-white'
                 }`}
@@ -503,7 +503,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 whileHover={{ scale: 1.1, x: -5 }}
                 onClick={(e) => { e.stopPropagation(); paginate(-1) }}
                 className={`absolute left-4 p-3 rounded-full z-10 ${
-                  data.lightboxStyle === 'minimal'
+                  data.lightboxStyle?.includes('minimal')
                     ? 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                     : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20'
                 }`}
@@ -517,7 +517,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 whileHover={{ scale: 1.1, x: 5 }}
                 onClick={(e) => { e.stopPropagation(); paginate(1) }}
                 className={`absolute right-4 p-3 rounded-full z-10 ${
-                  data.lightboxStyle === 'minimal'
+                  data.lightboxStyle?.includes('minimal')
                     ? 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                     : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20'
                 }`}
@@ -551,12 +551,12 @@ export default function GallerySection({ data }: GallerySectionProps) {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
                       className={`absolute bottom-0 left-0 right-0 p-6 ${
-                        data.lightboxStyle === 'minimal'
+                        data.lightboxStyle?.includes('minimal')
                           ? 'bg-white text-gray-800'
                           : 'bg-gradient-to-t from-black/80 via-black/40 to-transparent'
                       }`}
                     >
-                      <p className={`text-center text-lg ${data.lightboxStyle === 'minimal' ? '' : 'text-white'}`}>
+                      <p className={`text-center text-lg ${data.lightboxStyle?.includes('minimal') ? '' : 'text-white'}`}>
                         {t(displayedImages[lightboxIndex].caption)}
                       </p>
                     </motion.div>
@@ -565,7 +565,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
               </AnimatePresence>
 
               {/* Thumbnails (if enabled) */}
-              {data.lightboxStyle === 'thumbnails' && (
+              {data.lightboxStyle?.includes('thumbnails') && (
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 px-4 py-2 bg-black/50 backdrop-blur-sm rounded-full">
                   {displayedImages.slice(0, 7).map((img, idx) => (
                     <motion.button

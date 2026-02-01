@@ -46,7 +46,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
   const { t } = useLanguage()
 
   const bgClass = bgClasses[data.backgroundColor || 'white']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const tabStyle = data.tabStyle || 'pills'
   const contentLayout = data.contentLayout || 'text-image'
 
@@ -105,7 +105,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
           </div>
         ) : null}
 
-        <div className={tabStyle === 'vertical' ? 'flex flex-col md:flex-row gap-8' : ''}>
+        <div className={tabStyle?.includes('vertical') ? 'flex flex-col md:flex-row gap-8' : ''}>
           {/* Tab Buttons */}
           <div className={currentStyle.container}>
             {data.tabs.map((tab, index) => (
@@ -130,7 +130,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                 exit={data.animated ? { opacity: 0, y: -10 } : undefined}
                 transition={{ duration: 0.3 }}
               >
-                {contentLayout === 'text-only' ? (
+                {contentLayout?.includes('text-only') ? (
                   <div className={`prose prose-lg max-w-none ${textColor}`}>
                     <RichText value={activeContent.content} />
 
@@ -154,9 +154,9 @@ export default function TabsSection({ data }: TabsSectionProps) {
                     ) : null}
                   </div>
                 ) : (
-                  <div className={`grid lg:grid-cols-2 gap-8 items-center ${contentLayout === 'image-text' ? 'lg:grid-flow-dense' : ''}`}>
+                  <div className={`grid lg:grid-cols-2 gap-8 items-center ${contentLayout?.includes('image-text') ? 'lg:grid-flow-dense' : ''}`}>
                     {/* Text */}
-                    <div className={`${contentLayout === 'image-text' ? 'lg:order-2' : ''} ${textColor}`}>
+                    <div className={`${contentLayout?.includes('image-text') ? 'lg:order-2' : ''} ${textColor}`}>
                       <div className="prose prose-lg max-w-none">
                         <RichText value={activeContent.content} />
                       </div>
@@ -182,7 +182,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
 
                     {/* Image */}
                     {isValidImage(activeContent.image) && (
-                      <div className={contentLayout === 'image-text' ? 'lg:order-1' : ''}>
+                      <div className={contentLayout?.includes('image-text') ? 'lg:order-1' : ''}>
                         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
                           <Image
                             src={safeImageUrl(activeContent.image, 800, 600)!}

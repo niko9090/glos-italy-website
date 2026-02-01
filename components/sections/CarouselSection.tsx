@@ -316,7 +316,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                 src={safeImageUrl(currentSlide.image, 1920, 1080)!}
                 alt=""
                 fill
-                className={`object-cover ${data.hoverEffect === 'zoom' ? 'transition-transform duration-700 hover:scale-110' : ''}`}
+                className={`object-cover ${data.hoverEffect?.includes('zoom') ? 'transition-transform duration-700 hover:scale-110' : ''}`}
                 priority={currentIndex === 0}
               />
             </div>
@@ -413,14 +413,14 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
           <>
             <button
               onClick={goToPrev}
-              className={`${getArrowClasses()} ${data.arrowStyle === 'outside' ? '-left-12' : 'left-4'}`}
+              className={`${getArrowClasses()} ${data.arrowStyle?.includes('outside') ? '-left-12' : 'left-4'}`}
               aria-label="Previous slide"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={goToNext}
-              className={`${getArrowClasses()} ${data.arrowStyle === 'outside' ? '-right-12' : 'right-4'}`}
+              className={`${getArrowClasses()} ${data.arrowStyle?.includes('outside') ? '-right-12' : 'right-4'}`}
               aria-label="Next slide"
             >
               <ChevronRight className="w-6 h-6" />
@@ -431,12 +431,12 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
         {/* Dots/Indicators */}
         {data.showDots !== false && totalSlides > 1 && (
           <div className={`absolute z-10 flex ${
-            data.dotsPosition === 'top' ? 'top-4 left-1/2 -translate-x-1/2' :
-            data.dotsPosition === 'left' ? 'left-4 top-1/2 -translate-y-1/2 flex-col' :
-            data.dotsPosition === 'right' ? 'right-4 top-1/2 -translate-y-1/2 flex-col' :
+            data.dotsPosition?.includes('top') ? 'top-4 left-1/2 -translate-x-1/2' :
+            data.dotsPosition?.includes('left') ? 'left-4 top-1/2 -translate-y-1/2 flex-col' :
+            data.dotsPosition?.includes('right') ? 'right-4 top-1/2 -translate-y-1/2 flex-col' :
             'bottom-4 left-1/2 -translate-x-1/2'
           } gap-2`}>
-            {data.dotsStyle === 'progress' ? (
+            {data.dotsStyle?.includes('progress') ? (
               // Progress bar
               <div className="w-32 h-1 bg-white/30 rounded-full overflow-hidden">
                 <motion.div
@@ -446,12 +446,12 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                   transition={{ duration: 0.3 }}
                 />
               </div>
-            ) : data.dotsStyle === 'numbers' ? (
+            ) : data.dotsStyle?.includes('numbers') ? (
               // Numbers
               <div className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm">
                 {currentIndex + 1} / {totalSlides}
               </div>
-            ) : data.dotsStyle === 'lines' ? (
+            ) : data.dotsStyle?.includes('lines') ? (
               // Lines
               validSlides.map((_, idx) => (
                 <button
@@ -462,7 +462,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                   } rounded-full`}
                 />
               ))
-            ) : data.dotsStyle === 'thumbnails' ? (
+            ) : data.dotsStyle?.includes('thumbnails') ? (
               // Thumbnails
               <div className="flex gap-2 p-2 bg-black/30 backdrop-blur-sm rounded-lg">
                 {validSlides.slice(0, 5).map((slide, idx) => (

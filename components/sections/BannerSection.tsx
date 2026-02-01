@@ -102,7 +102,7 @@ export default function BannerSection({ data }: BannerSectionProps) {
     <div
       className={`${variantClass} ${sizeClass} ${
         isFixed
-          ? `fixed left-0 right-0 z-50 ${data.position === 'fixed-top' ? 'top-0' : 'bottom-0'}`
+          ? `fixed left-0 right-0 z-50 ${data.position?.includes('fixed-top') ? 'top-0' : 'bottom-0'}`
           : ''
       }`}
     >
@@ -127,9 +127,9 @@ export default function BannerSection({ data }: BannerSectionProps) {
   if (isFixed) {
     return (
       <>
-        {data.position === 'fixed-top' && <div className={sizeClass} />}
+        {data.position?.includes('fixed-top') && <div className={sizeClass} />}
         {banner}
-        {data.position === 'fixed-bottom' && <div className={sizeClass} />}
+        {data.position?.includes('fixed-bottom') && <div className={sizeClass} />}
       </>
     )
   }

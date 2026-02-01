@@ -178,10 +178,10 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
   // Text color based on background
   const getTextColor = () => {
-    if (data.textColor === 'dark') return 'text-gray-900'
-    if (data.textColor === 'light') return 'text-white'
+    if (data.textColor?.includes('dark')) return 'text-gray-900'
+    if (data.textColor?.includes('light')) return 'text-white'
     const darkBgs = ['primary', 'black', 'gradient']
-    return darkBgs.includes(data.backgroundColor || 'gray-light') ? 'text-white' : 'text-gray-900'
+    return darkBgs.some(bg => (data.backgroundColor || 'gray-light').includes(bg)) ? 'text-white' : 'text-gray-900'
   }
 
   // Accent color classes
@@ -253,7 +253,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: data.animation === 'stagger' ? 0.15 : 0,
+        staggerChildren: data.animation?.includes('stagger') ? 0.15 : 0,
         delayChildren: 0.1,
       },
     },
@@ -322,7 +322,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
     )
 
     const authorInfo = (
-      <div className={avatarPos === 'left' || avatarPos === 'right' ? '' : 'text-center'}>
+      <div className={avatarPos?.includes('left') || avatarPos?.includes('right') ? '' : 'text-center'}>
         <p className="font-semibold">{testimonial.author}</p>
         {(showCompany && (testimonial.role || testimonial.company)) && (
           <p className="text-sm opacity-70">
@@ -358,7 +358,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         className={`relative group ${cardStyleClasses[data.cardStyle || 'shadow']} ${hoverClasses[data.hoverEffect || 'lift']} ${isFeatured ? 'md:col-span-2' : ''}`}
       >
         {/* Quote icon for 'icon' style */}
-        {data.quoteStyle === 'icon' && (
+        {data.quoteStyle?.includes('icon') && (
           <Quote className={`absolute top-4 right-4 w-8 h-8 ${accentColor} opacity-20`} />
         )}
 
@@ -375,7 +375,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         )}
 
         {/* Avatar top position */}
-        {avatarPos === 'top' && (
+        {avatarPos?.includes('top') && (
           <div className="flex flex-col items-center mb-6">
             {avatarElement}
             <div className="mt-4">{authorInfo}</div>
@@ -383,7 +383,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         )}
 
         {/* Avatar left position */}
-        {avatarPos === 'left' && (
+        {avatarPos?.includes('left') && (
           <div className="flex gap-4 items-start mb-4">
             {avatarElement}
             {authorInfo}
@@ -392,23 +392,23 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
         {/* Rating */}
         {showRating && testimonial.rating && (
-          <div className={`mb-4 ${avatarPos === 'top' ? 'flex justify-center' : ''}`}>
+          <div className={`mb-4 ${avatarPos?.includes('top') ? 'flex justify-center' : ''}`}>
             <RatingDisplay rating={testimonial.rating} style={data.ratingStyle} />
           </div>
         )}
 
         {/* Quote */}
         <blockquote className={`${quoteStyleClasses[data.quoteStyle || 'quotes']} ${quoteSizeClasses[data.quoteSize || 'md']} leading-relaxed mb-6`}>
-          {data.quoteStyle === 'quotes' && (
+          {data.quoteStyle?.includes('quotes') && (
             <span className={`absolute -top-2 -left-2 text-6xl ${accentColor} opacity-20 font-serif`}>"</span>
           )}
-          <span className={data.quoteStyle === 'italic' ? 'italic' : ''}>
+          <span className={data.quoteStyle?.includes('italic') ? 'italic' : ''}>
             "{t(testimonial.quote)}"
           </span>
         </blockquote>
 
         {/* Avatar right position */}
-        {avatarPos === 'right' && (
+        {avatarPos?.includes('right') && (
           <div className="flex gap-4 items-center justify-end">
             {authorInfo}
             {avatarElement}
@@ -416,7 +416,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         )}
 
         {/* Avatar bottom position (default) */}
-        {avatarPos === 'bottom' && (
+        {avatarPos?.includes('bottom') && (
           <div className="flex items-center gap-4">
             {avatarElement}
             {authorInfo}
@@ -461,9 +461,9 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
-          initial={{ opacity: 0, x: data.transitionEffect === 'slide' ? 100 : 0, scale: data.transitionEffect === 'zoom' ? 0.8 : 1 }}
+          initial={{ opacity: 0, x: data.transitionEffect?.includes('slide') ? 100 : 0, scale: data.transitionEffect?.includes('zoom') ? 0.8 : 1 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
-          exit={{ opacity: 0, x: data.transitionEffect === 'slide' ? -100 : 0, scale: data.transitionEffect === 'zoom' ? 0.8 : 1 }}
+          exit={{ opacity: 0, x: data.transitionEffect?.includes('slide') ? -100 : 0, scale: data.transitionEffect?.includes('zoom') ? 0.8 : 1 }}
           transition={{ duration: 0.5 }}
           className="max-w-3xl mx-auto"
         >
@@ -735,7 +735,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
       className={`relative overflow-hidden ${paddingClasses[data.paddingY || 'lg']} ${bgClasses[data.backgroundColor || 'gray-light']} ${textColor}`}
     >
       {/* Pattern background */}
-      {data.backgroundColor === 'pattern' && (
+      {data.backgroundColor?.includes('pattern') && (
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
             backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23000\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',

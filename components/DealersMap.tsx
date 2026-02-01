@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -19,17 +19,56 @@ const defaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = defaultIcon
 
+// Google Maps API Key (stessa usata in EmbedSection)
+const GOOGLE_MAPS_API_KEY = 'AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8'
+
+// Cache geocoding per evitare chiamate ripetute
+const geocodeCache: Record<string, { lat: number; lng: number } | null> = {}
+
+// Funzione per geocodificare un indirizzo
+async function geocodeAddress(address: string, city: string, country?: string): Promise<{ lat: number; lng: number } | null> {
+  const fullAddress = [address, city, country || 'Italia'].filter(Boolean).join(', ')
+
+  // Controlla cache
+  if (geocodeCache[fullAddress] !== undefined) {
+    return geocodeCache[fullAddress]
+  }
+
+  try {
+    const encoded = encodeURIComponent(fullAddress)
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encoded}&key=${GOOGLE_MAPS_API_KEY}`
+    )
+    const data = await response.json()
+
+    if (data.status === 'OK' && data.results?.[0]?.geometry?.location) {
+      const location = data.results[0].geometry.location
+      const result = { lat: location.lat, lng: location.lng }
+      geocodeCache[fullAddress] = result
+      return result
+    }
+
+    geocodeCache[fullAddress] = null
+    return null
+  } catch (error) {
+    console.error('Geocoding error:', error)
+    geocodeCache[fullAddress] = null
+    return null
+  }
+}
+
 interface Dealer {
   _id: string
   name?: string
   type?: string
   city?: string
   address?: string
+  country?: string
   phone?: string
   email?: string
   location?: {
-    lat: number
-    lng: number
+    lat?: number
+    lng?: number
   }
   certifications?: string[]
 }
@@ -43,10 +82,45 @@ interface DealersMapProps {
 export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: DealersMapProps) {
   const { t } = useLanguage()
   const [isMounted, setIsMounted] = useState(false)
+  const [geocodedDealers, setGeocodedDealers] = useState<Record<string, { lat: number; lng: number }>>({})
+  const [isGeocoding, setIsGeocoding] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  // Geocodifica automatica per dealer senza coordinate
+  useEffect(() => {
+    const dealersNeedingGeocode = dealers.filter(
+      (d) => (!d.location?.lat || !d.location?.lng) && (d.city || d.address)
+    )
+
+    if (dealersNeedingGeocode.length === 0) return
+
+    setIsGeocoding(true)
+
+    const geocodeAll = async () => {
+      const results: Record<string, { lat: number; lng: number }> = {}
+
+      for (const dealer of dealersNeedingGeocode) {
+        const address = dealer.address || ''
+        const city = dealer.city || ''
+        const country = dealer.country
+
+        if (city) {
+          const coords = await geocodeAddress(address, city, country)
+          if (coords) {
+            results[dealer._id] = coords
+          }
+        }
+      }
+
+      setGeocodedDealers(results)
+      setIsGeocoding(false)
+    }
+
+    geocodeAll()
+  }, [dealers])
 
   // Placeholder durante il caricamento
   if (!isMounted) {
@@ -64,16 +138,31 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
   const italyCenter: [number, number] = [42.5, 12.5]
   const defaultZoom = 6
 
-  // Filtra dealer con coordinate valide
-  const dealersWithLocation = dealers.filter(
-    (d) => d.location?.lat && d.location?.lng
-  )
+  // Combina dealer con coordinate e dealer geocodificati
+  const dealersWithLocation = dealers.filter((d) => {
+    // Ha coordinate salvate
+    if (d.location?.lat && d.location?.lng) return true
+    // Ha coordinate geocodificate
+    if (geocodedDealers[d._id]) return true
+    return false
+  })
 
   // Se c'e un dealer selezionato con coordinate, centra su di esso
-  const center: [number, number] = selectedDealer?.location
-    ? [selectedDealer.location.lat, selectedDealer.location.lng]
+  const getSelectedDealerCoords = () => {
+    if (selectedDealer?.location?.lat && selectedDealer?.location?.lng) {
+      return { lat: selectedDealer.location.lat, lng: selectedDealer.location.lng }
+    }
+    if (selectedDealer && geocodedDealers[selectedDealer._id]) {
+      return geocodedDealers[selectedDealer._id]
+    }
+    return null
+  }
+
+  const selectedCoords = getSelectedDealerCoords()
+  const center: [number, number] = selectedCoords
+    ? [selectedCoords.lat, selectedCoords.lng]
     : italyCenter
-  const zoom = selectedDealer?.location ? 12 : defaultZoom
+  const zoom = selectedCoords ? 12 : defaultZoom
 
   return (
     <MapContainer
@@ -87,14 +176,22 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {dealersWithLocation.map((dealer) => (
-        <Marker
-          key={dealer._id}
-          position={[dealer.location!.lat, dealer.location!.lng]}
-          eventHandlers={{
-            click: () => onSelectDealer?.(dealer),
-          }}
-        >
+      {dealersWithLocation.map((dealer) => {
+        // Usa coordinate salvate o geocodificate
+        const coords = (dealer.location?.lat && dealer.location?.lng)
+          ? { lat: dealer.location.lat, lng: dealer.location.lng }
+          : geocodedDealers[dealer._id]
+
+        if (!coords) return null
+
+        return (
+          <Marker
+            key={dealer._id}
+            position={[coords.lat, coords.lng]}
+            eventHandlers={{
+              click: () => onSelectDealer?.(dealer),
+            }}
+          >
           <Popup>
             <div className="min-w-[200px]">
               <h3 className="font-semibold text-gray-900 mb-1">{t(dealer.name)}</h3>
@@ -148,7 +245,8 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
             </div>
           </Popup>
         </Marker>
-      ))}
+        )
+      })}
     </MapContainer>
   )
 }

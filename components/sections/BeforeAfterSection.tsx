@@ -167,7 +167,7 @@ function ComparisonSlider({
 export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'gray']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'slider-horizontal'
   const aspectRatio = data.aspectRatio?.replace('/', ' / ') || '16 / 9'
 
@@ -192,7 +192,7 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
           </div>
         ) : null}
 
-        <div className={layout === 'grid' ? 'grid md:grid-cols-2 gap-8' : 'space-y-12'}>
+        <div className={layout?.includes('grid') ? 'grid md:grid-cols-2 gap-8' : 'space-y-12'}>
           {validComparisons.map((comparison) => (
             <motion.div
               key={comparison._key}
@@ -210,7 +210,7 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
                   initialPosition={data.sliderPosition || 50}
                   aspectRatio={aspectRatio}
                   rounded={data.rounded !== false}
-                  isVertical={layout === 'slider-vertical'}
+                  isVertical={layout?.includes('slider-vertical') ?? false}
                 />
               ) : (
                 <div className="grid grid-cols-2 gap-4">

@@ -255,3 +255,60 @@ export function getImageWithBlur(source: SanityImageSource | unknown) {
   }
 }
 
+// ===========================================
+// FILE URL BUILDER (for videos and other files)
+// ===========================================
+
+/**
+ * Check if a Sanity file source is valid.
+ */
+export function isValidFile(source: unknown): boolean {
+  if (!source || typeof source !== 'object') return false
+
+  const file = source as Record<string, unknown>
+
+  // Check for asset reference
+  if (file.asset && typeof file.asset === 'object') {
+    const asset = file.asset as Record<string, unknown>
+    return Boolean(asset._ref || asset._id)
+  }
+
+  return Boolean(file._ref || file._id)
+}
+
+/**
+ * Get the URL for a Sanity file (video, PDF, etc.)
+ * Files are stored at: https://cdn.sanity.io/files/{projectId}/{dataset}/{assetId}.{extension}
+ */
+export function getFileUrl(source: unknown): string | null {
+  if (!source || typeof source !== 'object') return null
+
+  const file = source as Record<string, unknown>
+
+  // Get the asset reference
+  let assetRef: string | null = null
+
+  if (file.asset && typeof file.asset === 'object') {
+    const asset = file.asset as Record<string, unknown>
+    assetRef = (asset._ref as string) || (asset._id as string) || null
+  } else {
+    assetRef = (file._ref as string) || (file._id as string) || null
+  }
+
+  if (!assetRef) return null
+
+  // Parse the asset reference: file-{assetId}-{extension}
+  // Example: file-abc123-mp4 -> abc123.mp4
+  const match = assetRef.match(/^file-([a-zA-Z0-9]+)-([a-zA-Z0-9]+)$/)
+  if (!match) {
+    // Try alternative format or direct URL
+    if (typeof (file as any).url === 'string') {
+      return (file as any).url
+    }
+    return null
+  }
+
+  const [, assetId, extension] = match
+  return `https://cdn.sanity.io/files/${projectId}/${dataset}/${assetId}.${extension}`
+}
+

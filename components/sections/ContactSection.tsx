@@ -120,10 +120,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
   // Text color
   const getTextColor = () => {
-    if (data.textColor === 'dark') return 'text-gray-900'
-    if (data.textColor === 'light') return 'text-white'
+    if (data.textColor?.includes('dark')) return 'text-gray-900'
+    if (data.textColor?.includes('light')) return 'text-white'
     const darkBgs = ['primary', 'black', 'gradient']
-    return darkBgs.includes(data.backgroundColor || 'white') ? 'text-white' : 'text-gray-900'
+    return darkBgs.some(bg => (data.backgroundColor || 'white').includes(bg)) ? 'text-white' : 'text-gray-900'
   }
 
   // Padding classes
@@ -170,18 +170,12 @@ export default function ContactSection({ data }: ContactSectionProps) {
   // Form input classes based on style
   const getInputClasses = () => {
     const base = 'w-full px-4 py-3 transition-all focus:outline-none focus:ring-2 focus:ring-primary/50'
-    switch (data.formStyle) {
-      case 'minimal':
-        return `${base} border-b border-gray-200 focus:border-primary bg-transparent`
-      case 'bordered':
-        return `${base} border-2 border-gray-200 rounded-lg focus:border-primary bg-transparent`
-      case 'floating':
-        return `${base} border border-gray-200 rounded-lg peer placeholder-transparent`
-      case 'card':
-        return `${base} border border-gray-100 rounded-lg bg-gray-50 focus:bg-white`
-      default: // classic
-        return `${base} border border-gray-200 rounded-lg`
-    }
+    const formStyle = data.formStyle || 'classic'
+    if (formStyle?.includes('minimal')) return `${base} border-b border-gray-200 focus:border-primary bg-transparent`
+    if (formStyle?.includes('bordered')) return `${base} border-2 border-gray-200 rounded-lg focus:border-primary bg-transparent`
+    if (formStyle?.includes('floating')) return `${base} border border-gray-200 rounded-lg peer placeholder-transparent`
+    if (formStyle?.includes('card')) return `${base} border border-gray-100 rounded-lg bg-gray-50 focus:bg-white`
+    return `${base} border border-gray-200 rounded-lg`
   }
 
   // Animation variants
@@ -274,26 +268,15 @@ export default function ContactSection({ data }: ContactSectionProps) {
   // Layout classes
   const getLayoutClasses = () => {
     const layout = data.layout || 'form-left'
-    switch (layout) {
-      case 'form-left':
-        return 'grid lg:grid-cols-2 gap-12'
-      case 'form-right':
-        return 'grid lg:grid-cols-2 gap-12'
-      case 'stacked':
-        return 'flex flex-col gap-12'
-      case 'map-first':
-        return 'flex flex-col-reverse gap-12'
-      case 'form-only':
-        return 'max-w-2xl mx-auto'
-      case 'info-only':
-        return 'max-w-4xl mx-auto'
-      case 'grid':
-        return 'grid md:grid-cols-3 gap-8'
-      case 'map-overlay':
-        return 'relative'
-      default:
-        return 'grid lg:grid-cols-2 gap-12'
-    }
+    if (layout?.includes('form-left')) return 'grid lg:grid-cols-2 gap-12'
+    if (layout?.includes('form-right')) return 'grid lg:grid-cols-2 gap-12'
+    if (layout?.includes('stacked')) return 'flex flex-col gap-12'
+    if (layout?.includes('map-first')) return 'flex flex-col-reverse gap-12'
+    if (layout?.includes('form-only')) return 'max-w-2xl mx-auto'
+    if (layout?.includes('info-only')) return 'max-w-4xl mx-auto'
+    if (layout?.includes('grid')) return 'grid md:grid-cols-3 gap-8'
+    if (layout?.includes('map-overlay')) return 'relative'
+    return 'grid lg:grid-cols-2 gap-12'
   }
 
   // Use default fields if no custom fields defined
@@ -349,10 +332,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
           {/* Contact Form */}
           {data.showForm !== false && (
             <motion.div
-              initial={{ opacity: 0, x: data.layout === 'form-right' ? 50 : -50 }}
+              initial={{ opacity: 0, x: data.layout?.includes('form-right') ? 50 : -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className={`${cardStyleClasses[data.cardStyle || 'shadow']} ${data.layout === 'form-right' ? 'lg:order-2' : ''}`}
+              className={`${cardStyleClasses[data.cardStyle || 'shadow']} ${data.layout?.includes('form-right') ? 'lg:order-2' : ''}`}
             >
               {!!data.formTitle && (
                 <h3 className="text-xl font-semibold mb-2">{t(data.formTitle)}</h3>
@@ -482,10 +465,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
           {/* Contact Info & Map */}
           <motion.div
-            initial={{ opacity: 0, x: data.layout === 'form-right' ? -50 : 50 }}
+            initial={{ opacity: 0, x: data.layout?.includes('form-right') ? -50 : 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className={`space-y-8 ${data.layout === 'form-right' ? 'lg:order-1' : ''}`}
+            className={`space-y-8 ${data.layout?.includes('form-right') ? 'lg:order-1' : ''}`}
           >
             {/* Contact Items */}
             {data.showContactInfo !== false && data.contactItems && data.contactItems.length > 0 && (
@@ -568,7 +551,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
             {/* Map */}
             {data.showMap !== false && (
               <div className={`${mapHeightClasses[data.mapHeight || 'md']} rounded-xl overflow-hidden`}>
-                {data.mapType === 'google' && data.mapEmbedUrl ? (
+                {data.mapType?.includes('google') && data.mapEmbedUrl ? (
                   <iframe
                     src={data.mapEmbedUrl}
                     width="100%"
@@ -578,7 +561,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                   />
-                ) : data.mapType === 'image' && isValidImage(data.mapImage) ? (
+                ) : data.mapType?.includes('image') && isValidImage(data.mapImage) ? (
                   <div className="relative w-full h-full">
                     <Image
                       src={safeImageUrl(data.mapImage, 800, 600)!}

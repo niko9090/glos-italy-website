@@ -43,14 +43,14 @@ const lineColorClasses: Record<string, string> = {
 export default function TimelineSection({ data }: TimelineSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'white']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const lineColor = lineColorClasses[data.lineColor || 'primary']
   const layout = data.layout || 'vertical-alternate'
 
   if (!data.items || data.items.length === 0) return null
 
   // Horizontal layout
-  if (layout === 'horizontal') {
+  if (layout?.includes('horizontal')) {
     return (
       <section className={`section ${bgClass} overflow-hidden`}>
         <div className="container-glos">
@@ -106,8 +106,8 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
   }
 
   // Vertical layouts
-  const isAlternate = layout === 'vertical-alternate'
-  const isLeft = layout === 'vertical-left'
+  const isAlternate = layout?.includes('vertical-alternate')
+  const isLeft = layout?.includes('vertical-left')
 
   return (
     <section className={`section ${bgClass}`}>

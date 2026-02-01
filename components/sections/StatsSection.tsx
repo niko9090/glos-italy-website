@@ -129,9 +129,9 @@ export default function StatsSection({ data }: StatsSectionProps) {
 
   // Text color classes based on background
   const getTextColor = () => {
-    if (data.textColor === 'white') return 'text-white'
-    if (data.textColor === 'black') return 'text-gray-900'
-    if (data.textColor === 'primary') return 'text-primary'
+    if (data.textColor?.includes('white')) return 'text-white'
+    if (data.textColor?.includes('black')) return 'text-gray-900'
+    if (data.textColor?.includes('primary')) return 'text-primary'
     // Auto
     const darkBgs = ['dark', 'primary', 'gradient-blue', 'gradient-dark', 'image']
     return darkBgs.includes(data.backgroundColor || 'primary') ? 'text-white' : 'text-gray-900'
@@ -167,9 +167,9 @@ export default function StatsSection({ data }: StatsSectionProps) {
     const cols = data.columns || 4
     const layout = data.layout || 'grid'
 
-    if (layout === 'row') return 'flex flex-wrap justify-center gap-8 md:gap-16'
-    if (layout === 'vertical') return 'flex flex-col gap-8 max-w-2xl mx-auto'
-    if (layout === 'timeline') return 'flex flex-col gap-6 max-w-3xl mx-auto'
+    if (layout?.includes('row')) return 'flex flex-wrap justify-center gap-8 md:gap-16'
+    if (layout?.includes('vertical')) return 'flex flex-col gap-8 max-w-2xl mx-auto'
+    if (layout?.includes('timeline')) return 'flex flex-col gap-6 max-w-3xl mx-auto'
 
     const colClasses: Record<number, string> = {
       2: 'grid-cols-1 md:grid-cols-2',
@@ -206,7 +206,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: data.entranceAnimation === 'stagger' ? 0.15 : 0,
+        staggerChildren: data.entranceAnimation?.includes('stagger') ? 0.15 : 0,
         delayChildren: 0.1,
       },
     },
@@ -266,7 +266,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
   return (
     <section className={`relative overflow-hidden ${paddingClasses[data.paddingY || 'lg']} ${bgClasses[backgroundColor]} ${textColor}`}>
       {/* Background Image */}
-      {backgroundColor === 'image' && backgroundUrl && (
+      {backgroundColor?.includes('image') && backgroundUrl && (
         <div className="absolute inset-0 z-0">
           <Image
             src={backgroundUrl}
@@ -292,7 +292,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
       <div className="container-glos relative z-10">
         {/* Header */}
         {!!(data.title || data.subtitle || data.description) && (
-          <div className={`mb-12 ${data.alignment === 'left' ? 'text-left' : data.alignment === 'right' ? 'text-right' : 'text-center'}`}>
+          <div className={`mb-12 ${data.alignment?.includes('left') ? 'text-left' : data.alignment?.includes('right') ? 'text-right' : 'text-center'}`}>
             {!!data.title && (
               <h2 className="section-title mb-4">
                 <RichText value={data.title} />
@@ -323,11 +323,11 @@ export default function StatsSection({ data }: StatsSectionProps) {
             const statContent = (
               <>
                 {/* Icon */}
-                {data.iconPosition !== 'hidden' && (stat.icon || stat.iconImage) && (
+                {!data.iconPosition?.includes('hidden') && (stat.icon || stat.iconImage) && (
                   <div className={`mb-3 ${
-                    data.iconPosition === 'left' ? 'inline-block mr-4 align-middle' :
-                    data.iconPosition === 'right' ? 'inline-block ml-4 align-middle float-right' :
-                    data.iconPosition === 'background' ? 'absolute inset-0 flex items-center justify-center opacity-10 text-8xl' :
+                    data.iconPosition?.includes('left') ? 'inline-block mr-4 align-middle' :
+                    data.iconPosition?.includes('right') ? 'inline-block ml-4 align-middle float-right' :
+                    data.iconPosition?.includes('background') ? 'absolute inset-0 flex items-center justify-center opacity-10 text-8xl' :
                     'block text-center'
                   }`}>
                     {stat.iconImage && isValidImage(stat.iconImage) ? (
@@ -399,7 +399,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
         </motion.div>
 
         {/* Dividers between items */}
-        {data.dividers && data.layout === 'row' && (
+        {data.dividers && data.layout?.includes('row') && (
           <div className="hidden md:flex absolute inset-y-0 left-0 right-0 items-center justify-around pointer-events-none">
             {data.items?.slice(0, -1).map((_, i) => (
               <div key={i} className="w-px h-20 bg-current opacity-20" />

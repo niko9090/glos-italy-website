@@ -33,7 +33,7 @@ const bgClasses: Record<string, string> = {
 
 export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
   const bgClass = bgClasses[data.backgroundColor || 'gray']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'grid'
   const columns = data.columns || 5
 
@@ -98,7 +98,7 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
   }
 
   // Marquee layout
-  if (layout === 'marquee') {
+  if (layout?.includes('marquee')) {
     return (
       <section className={`section ${bgClass} overflow-hidden`}>
         <div className="container-glos">
@@ -136,7 +136,7 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
   }
 
   // Carousel layout
-  if (layout === 'carousel') {
+  if (layout?.includes('carousel')) {
     return (
       <section className={`section ${bgClass}`}>
         <div className="container-glos">

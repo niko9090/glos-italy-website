@@ -46,7 +46,7 @@ const textAlignClasses: Record<string, string> = {
 export default function RichTextSection({ data }: RichTextSectionProps) {
   const bgClass = bgClasses[data.backgroundColor || 'white']
   const paddingClass = paddingClasses[data.verticalPadding || 'medium']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const maxWidth = maxWidthClasses[data.maxWidth || 'medium']
   const textAlign = textAlignClasses[data.textAlign || 'left']
   const columns = data.columns || 1

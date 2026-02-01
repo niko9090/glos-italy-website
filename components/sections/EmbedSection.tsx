@@ -33,38 +33,31 @@ const bgClasses: Record<string, string> = {
 
 export default function EmbedSection({ data }: EmbedSectionProps) {
   const bgClass = bgClasses[data.backgroundColor || 'white']
-  const textColor = data.backgroundColor === 'dark' ? 'text-white' : 'text-gray-900'
+  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const height = data.height || '450'
-  const isFullWidth = data.width === 'full'
+  const isFullWidth = data.width?.includes('full')
 
   const getEmbedUrl = (): string | null => {
-    switch (data.embedType) {
-      case 'google-maps':
-        if (data.googleMapsUrl) {
-          return data.googleMapsUrl
-        }
-        if (data.googleMapsAddress) {
-          const encoded = encodeURIComponent(data.googleMapsAddress)
-          return `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encoded}`
-        }
-        return null
-      case 'google-form':
-        return data.googleFormUrl || null
-      case 'calendly':
-        return data.calendlyUrl || null
-      case 'typeform':
-        return data.typeformUrl || null
-      case 'iframe':
-        return data.iframeUrl || null
-      default:
-        return null
+    const embedType = data.embedType || ''
+    if (embedType?.includes('google-maps')) {
+      if (data.googleMapsUrl) return data.googleMapsUrl
+      if (data.googleMapsAddress) {
+        const encoded = encodeURIComponent(data.googleMapsAddress)
+        return `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encoded}`
+      }
+      return null
     }
+    if (embedType?.includes('google-form')) return data.googleFormUrl || null
+    if (embedType?.includes('calendly')) return data.calendlyUrl || null
+    if (embedType?.includes('typeform')) return data.typeformUrl || null
+    if (embedType?.includes('iframe')) return data.iframeUrl || null
+    return null
   }
 
   const embedUrl = getEmbedUrl()
 
   const renderEmbed = () => {
-    if (data.embedType === 'custom' && data.customHtml) {
+    if (data.embedType?.includes('custom') && data.customHtml) {
       return (
         <div
           dangerouslySetInnerHTML={{ __html: data.customHtml }}

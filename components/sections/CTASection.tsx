@@ -90,13 +90,13 @@ export default function CTASection({ data }: CTASectionProps) {
     offset: ['start end', 'end start'],
   })
 
-  const parallaxY = useTransform(scrollYProgress, [0, 1], ['0%', data.backgroundAnimation === 'parallax' ? '20%' : '0%'])
+  const parallaxY = useTransform(scrollYProgress, [0, 1], ['0%', data.backgroundAnimation?.includes('parallax') ? '20%' : '0%'])
 
   // Background classes based on type
   const getBackgroundClasses = () => {
     const bgType = data.backgroundType || 'gradient'
 
-    if (bgType === 'solid') {
+    if (bgType?.includes('solid')) {
       const solidColors: Record<string, string> = {
         primary: 'bg-primary',
         'primary-dark': 'bg-blue-900',
@@ -111,7 +111,7 @@ export default function CTASection({ data }: CTASectionProps) {
       return solidColors[data.backgroundColor || 'primary'] || 'bg-primary'
     }
 
-    if (bgType === 'gradient') {
+    if (bgType?.includes('gradient')) {
       const gradients: Record<string, string> = {
         'blue-dark': 'bg-gradient-to-r from-primary via-primary-dark to-blue-900',
         'blue-purple': 'bg-gradient-to-r from-blue-600 via-purple-600 to-purple-900',
@@ -131,7 +131,7 @@ export default function CTASection({ data }: CTASectionProps) {
       return gradientClass
     }
 
-    if (bgType === 'pattern') {
+    if (bgType?.includes('pattern')) {
       return 'bg-primary'
     }
 
@@ -140,8 +140,8 @@ export default function CTASection({ data }: CTASectionProps) {
 
   // Text color based on background
   const getTextColor = () => {
-    if (data.textColor === 'white') return 'text-white'
-    if (data.textColor === 'black') return 'text-gray-900'
+    if (data.textColor?.includes('white')) return 'text-white'
+    if (data.textColor?.includes('black')) return 'text-gray-900'
 
     // Auto - check background
     const lightBgs = ['white']
@@ -303,20 +303,12 @@ export default function CTASection({ data }: CTASectionProps) {
 
   // Layout specific classes
   const getLayoutClasses = () => {
-    switch (layout) {
-      case 'left':
-        return 'text-left items-start'
-      case 'right':
-        return 'text-right items-end'
-      case 'split':
-        return 'text-left'
-      case 'minimal':
-        return 'text-center items-center'
-      case 'floating-card':
-        return 'text-center items-center'
-      default:
-        return 'text-center items-center'
-    }
+    if (layout?.includes('left') && !layout?.includes('slide')) return 'text-left items-start'
+    if (layout?.includes('right') && !layout?.includes('slide')) return 'text-right items-end'
+    if (layout?.includes('split')) return 'text-left'
+    if (layout?.includes('minimal')) return 'text-center items-center'
+    if (layout?.includes('floating-card')) return 'text-center items-center'
+    return 'text-center items-center'
   }
 
   return (
@@ -329,7 +321,7 @@ export default function CTASection({ data }: CTASectionProps) {
       } ${textColor} ${borderRadiusClasses[data.borderRadius || 'none']} ${shadowClasses[data.shadow || 'none']}`}
     >
       {/* Background Image/Video */}
-      {data.backgroundType === 'image' && backgroundUrl && (
+      {data.backgroundType?.includes('image') && backgroundUrl && (
         <motion.div
           className="absolute inset-0 z-0"
           style={{ y: parallaxY }}
@@ -361,22 +353,22 @@ export default function CTASection({ data }: CTASectionProps) {
       )}
 
       {/* Pattern overlay */}
-      {data.backgroundType === 'pattern' && data.pattern && (
+      {data.backgroundType?.includes('pattern') && data.pattern && (
         <div className={`absolute inset-0 opacity-10 ${
-          data.pattern === 'dots' ? 'bg-[radial-gradient(circle,_white_1px,_transparent_1px)] bg-[size:20px_20px]' :
-          data.pattern === 'grid' ? 'bg-[linear-gradient(to_right,_white_1px,_transparent_1px),_linear-gradient(to_bottom,_white_1px,_transparent_1px)] bg-[size:40px_40px]' :
-          data.pattern === 'diagonal' ? 'bg-[repeating-linear-gradient(45deg,_transparent,_transparent_10px,_white_10px,_white_11px)]' :
+          data.pattern?.includes('dots') ? 'bg-[radial-gradient(circle,_white_1px,_transparent_1px)] bg-[size:20px_20px]' :
+          data.pattern?.includes('grid') ? 'bg-[linear-gradient(to_right,_white_1px,_transparent_1px),_linear-gradient(to_bottom,_white_1px,_transparent_1px)] bg-[size:40px_40px]' :
+          data.pattern?.includes('diagonal') ? 'bg-[repeating-linear-gradient(45deg,_transparent,_transparent_10px,_white_10px,_white_11px)]' :
           ''
         }`} />
       )}
 
-      <div className={`container-glos relative z-10 ${layout === 'split' ? 'grid md:grid-cols-2 gap-12 items-center' : ''}`}>
+      <div className={`container-glos relative z-10 ${layout?.includes('split') ? 'grid md:grid-cols-2 gap-12 items-center' : ''}`}>
         <motion.div
           {...animationVariants}
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
-          className={`flex flex-col ${getLayoutClasses()} ${layout !== 'split' ? contentWidthClasses[data.contentWidth || 'normal'] : ''} ${layout === 'centered' || layout === 'minimal' ? 'mx-auto' : ''}`}
+          className={`flex flex-col ${getLayoutClasses()} ${!layout?.includes('split') ? contentWidthClasses[data.contentWidth || 'normal'] : ''} ${layout?.includes('centered') || layout?.includes('minimal') ? 'mx-auto' : ''}`}
         >
           {/* Badge */}
           {!!data.badge?.text && (
@@ -420,7 +412,7 @@ export default function CTASection({ data }: CTASectionProps) {
 
           {/* Highlights */}
           {data.highlights && data.highlights.length > 0 && (
-            <div className={`flex flex-wrap gap-4 mb-8 ${layout === 'centered' ? 'justify-center' : ''}`}>
+            <div className={`flex flex-wrap gap-4 mb-8 ${layout?.includes('centered') ? 'justify-center' : ''}`}>
               {data.highlights.map((highlight) => (
                 <div key={highlight._key} className="flex items-center gap-2">
                   <span className="text-lg">{highlight.icon ? String(highlight.icon) : <Check className="w-5 h-5" />}</span>
@@ -432,7 +424,7 @@ export default function CTASection({ data }: CTASectionProps) {
 
           {/* Buttons */}
           {buttons.length > 0 && (
-            <div className={`flex flex-wrap gap-4 ${layout === 'centered' || layout === 'minimal' ? 'justify-center' : layout === 'right' ? 'justify-end' : 'justify-start'}`}>
+            <div className={`flex flex-wrap gap-4 ${layout?.includes('centered') || layout?.includes('minimal') ? 'justify-center' : layout?.includes('right') && !layout?.includes('slide') ? 'justify-end' : 'justify-start'}`}>
               {buttons.map((button, index) => (
                 <Link
                   key={button._key}
@@ -455,7 +447,7 @@ export default function CTASection({ data }: CTASectionProps) {
 
           {/* Contact Info */}
           {data.showContactInfo && (data.phone || data.email || data.whatsapp) && (
-            <div className={`flex flex-wrap gap-6 mt-8 ${layout === 'centered' ? 'justify-center' : ''}`}>
+            <div className={`flex flex-wrap gap-6 mt-8 ${layout?.includes('centered') ? 'justify-center' : ''}`}>
               {data.phone && (
                 <a
                   href={`tel:${data.phone.replace(/\s/g, '')}`}
@@ -490,7 +482,7 @@ export default function CTASection({ data }: CTASectionProps) {
         </motion.div>
 
         {/* Decorative Image (for split layout) */}
-        {layout === 'split' && decorativeUrl && (
+        {layout?.includes('split') && decorativeUrl && (
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -508,14 +500,14 @@ export default function CTASection({ data }: CTASectionProps) {
       </div>
 
       {/* Decorative Image (positioned absolutely) */}
-      {layout !== 'split' && decorativeUrl && data.decorativeImagePosition && (
+      {!layout?.includes('split') && decorativeUrl && data.decorativeImagePosition && (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           className={`absolute z-5 ${
-            data.decorativeImagePosition === 'left' ? 'left-0 top-1/2 -translate-y-1/2 w-1/3' :
-            data.decorativeImagePosition === 'right' ? 'right-0 top-1/2 -translate-y-1/2 w-1/3' :
+            data.decorativeImagePosition?.includes('left') ? 'left-0 top-1/2 -translate-y-1/2 w-1/3' :
+            data.decorativeImagePosition?.includes('right') ? 'right-0 top-1/2 -translate-y-1/2 w-1/3' :
             'inset-0 opacity-20'
           }`}
         >

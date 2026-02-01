@@ -241,19 +241,19 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
       {/* Modal Rivenditore */}
       {modalDealer && (
         <div
-          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
           onClick={() => setModalDealer(null)}
         >
           <div
-            className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+            className="bg-white rounded-xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white rounded-t-2xl z-10">
+            {/* Header compatto */}
+            <div className="flex items-center justify-between p-3 border-b sticky top-0 bg-white rounded-t-xl z-10">
               <div>
-                <h2 className="text-xl font-bold text-gray-900">{t(modalDealer.name)}</h2>
+                <h2 className="text-lg font-bold text-gray-900">{t(modalDealer.name)}</h2>
                 {modalDealer.type && (
-                  <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-xs rounded mt-1">
+                  <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-xs rounded">
                     {modalDealer.type === 'distributore' ? 'Distributore' :
                      modalDealer.type === 'agente' ? 'Agente' : 'Rivenditore'}
                   </span>
@@ -261,10 +261,10 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
               </div>
               <button
                 onClick={() => setModalDealer(null)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="Chiudi"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -272,7 +272,7 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
             {youtubeId && (
               <div className="aspect-video w-full bg-black">
                 <iframe
-                  src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&cc_load_policy=1&cc_lang_pref=en&hl=en`}
+                  src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&cc_load_policy=1&cc_lang_pref=en&hl=en`}
                   title={`Video ${modalDealer.name}`}
                   className="w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -281,111 +281,89 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
               </div>
             )}
 
-            {/* Dettagli Rivenditore */}
-            <div className="p-6 space-y-4">
+            {/* Dettagli Rivenditore - Compatti */}
+            <div className="p-4 space-y-3">
               {/* Descrizione */}
               {modalDealer.description && (
-                <p className="text-gray-600">{t(modalDealer.description)}</p>
+                <p className="text-sm text-gray-600">{t(modalDealer.description)}</p>
               )}
 
               {/* Certificazioni */}
               {modalDealer.certifications && modalDealer.certifications.length > 0 && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1">
                   {modalDealer.certifications.map((cert, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full"
                     >
-                      <Award className="w-4 h-4" />
+                      <Award className="w-3 h-3" />
                       {t(cert)}
                     </span>
                   ))}
                 </div>
               )}
 
-              {/* Info Grid */}
-              <div className="grid md:grid-cols-2 gap-4 pt-4 border-t">
+              {/* Info compatte */}
+              <div className="space-y-2 text-sm">
                 {/* Indirizzo */}
                 {(modalDealer.address || modalDealer.city) && (
-                  <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-gray-900">Indirizzo</p>
-                      <p className="text-gray-600">
-                        {[modalDealer.address, modalDealer.city, modalDealer.country].filter(Boolean).join(', ')}
-                      </p>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                    <span className="text-gray-600">
+                      {[modalDealer.address, modalDealer.city, modalDealer.country].filter(Boolean).join(', ')}
+                    </span>
                   </div>
                 )}
 
                 {/* Telefono */}
                 {modalDealer.phone && (
-                  <div className="flex items-start gap-3">
-                    <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-gray-900">Telefono</p>
-                      <a
-                        href={`tel:${t(modalDealer.phone).replace(/\s/g, '')}`}
-                        className="text-primary hover:underline"
-                      >
-                        {t(modalDealer.phone)}
-                      </a>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-primary flex-shrink-0" />
+                    <a
+                      href={`tel:${t(modalDealer.phone).replace(/\s/g, '')}`}
+                      className="text-primary hover:underline"
+                    >
+                      {t(modalDealer.phone)}
+                    </a>
                   </div>
                 )}
 
                 {/* Email */}
                 {modalDealer.email && (
-                  <div className="flex items-start gap-3">
-                    <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-gray-900">Email</p>
-                      <a
-                        href={`mailto:${t(modalDealer.email)}`}
-                        className="text-primary hover:underline"
-                      >
-                        {t(modalDealer.email)}
-                      </a>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-primary flex-shrink-0" />
+                    <a
+                      href={`mailto:${t(modalDealer.email)}`}
+                      className="text-primary hover:underline"
+                    >
+                      {t(modalDealer.email)}
+                    </a>
                   </div>
                 )}
 
                 {/* Sito Web */}
                 {modalDealer.website && (
-                  <div className="flex items-start gap-3">
-                    <Globe className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-gray-900">Sito Web</p>
-                      <a
-                        href={modalDealer.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary hover:underline"
-                      >
-                        Visita il sito
-                      </a>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-primary flex-shrink-0" />
+                    <a
+                      href={modalDealer.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Visita il sito
+                    </a>
                   </div>
                 )}
 
                 {/* Orari */}
                 {modalDealer.openingHours && (
-                  <div className="flex items-start gap-3 md:col-span-2">
-                    <Clock className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-gray-900">Orari di Apertura</p>
-                      <p className="text-gray-600 whitespace-pre-line">{t(modalDealer.openingHours)}</p>
-                    </div>
+                  <div className="flex items-start gap-2">
+                    <Clock className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-600 whitespace-pre-line">{t(modalDealer.openingHours)}</span>
                   </div>
                 )}
               </div>
-
-              {/* Messaggio se non c'è video */}
-              {!youtubeId && (
-                <div className="text-center py-4 bg-gray-50 rounded-lg">
-                  <p className="text-gray-500">Nessun video disponibile per questo rivenditore</p>
-                </div>
-              )}
             </div>
           </div>
         </div>

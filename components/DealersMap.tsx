@@ -19,15 +19,25 @@ const defaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = defaultIcon
 
-// Google Maps API Key (stessa usata in EmbedSection)
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8'
-
 // Cache geocoding per evitare chiamate ripetute
 const geocodeCache: Record<string, { lat: number; lng: number } | null> = {}
 
-// Funzione per geocodificare un indirizzo
+// Pulisce caratteri invisibili/zero-width dal testo
+function cleanText(text: string): string {
+  return text
+    .replace(/[\u200B-\u200D\uFEFF\u2060\u00A0]/g, '') // Zero-width chars
+    .replace(/\s+/g, ' ') // Multiple spaces
+    .trim()
+}
+
+// Funzione per geocodificare un indirizzo usando OpenStreetMap Nominatim (gratuito, no CORS)
 async function geocodeAddress(address: string, city: string, country?: string): Promise<{ lat: number; lng: number } | null> {
-  const fullAddress = [address, city, country || 'Italia'].filter(Boolean).join(', ')
+  // Pulisci i testi da caratteri invisibili
+  const cleanAddress = cleanText(address || '')
+  const cleanCity = cleanText(city || '')
+  const cleanCountry = cleanText(country || 'Italia')
+
+  const fullAddress = [cleanAddress, cleanCity, cleanCountry].filter(Boolean).join(', ')
 
   // Controlla cache
   if (geocodeCache[fullAddress] !== undefined) {
@@ -37,13 +47,17 @@ async function geocodeAddress(address: string, city: string, country?: string): 
   try {
     const encoded = encodeURIComponent(fullAddress)
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${encoded}&key=${GOOGLE_MAPS_API_KEY}`
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encoded}&limit=1`,
+      {
+        headers: {
+          'User-Agent': 'GLOSItaly/1.0 (https://glositaly.vercel.app)'
+        }
+      }
     )
     const data = await response.json()
 
-    if (data.status === 'OK' && data.results?.[0]?.geometry?.location) {
-      const location = data.results[0].geometry.location
-      const result = { lat: location.lat, lng: location.lng }
+    if (data && data.length > 0 && data[0].lat && data[0].lon) {
+      const result = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) }
       geocodeCache[fullAddress] = result
       return result
     }

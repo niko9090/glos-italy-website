@@ -445,9 +445,9 @@ export default function FaqSection({ data }: FaqSectionProps) {
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
         {/* Header: Eyebrow, Title, Subtitle */}
-        {(data.eyebrow || data.title || data.subtitle) && (
+        {!!(data.eyebrow || data.title || data.subtitle) && (
           <div className={`text-center mb-12 ${textColor}`}>
-            {data.eyebrow && (
+            {!!data.eyebrow && (
               <motion.p
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -457,7 +457,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
                 {t(data.eyebrow)}
               </motion.p>
             )}
-            {data.title && (
+            {!!data.title && (
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -467,7 +467,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
                 <RichText value={data.title} />
               </motion.h2>
             )}
-            {data.subtitle && (
+            {!!data.subtitle && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -555,7 +555,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
         {renderContent()}
 
         {/* CTA Section */}
-        {(data.ctaTitle || data.ctaButton) && (
+        {!!(data.ctaTitle || data.ctaButton) && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -563,12 +563,12 @@ export default function FaqSection({ data }: FaqSectionProps) {
             className="mt-16 text-center"
           >
             <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 max-w-2xl mx-auto">
-              {data.ctaTitle && (
+              {!!data.ctaTitle && (
                 <h3 className={`text-2xl font-semibold mb-4 ${textColor}`}>
                   {t(data.ctaTitle)}
                 </h3>
               )}
-              {data.ctaButton && data.ctaLink && (
+              {!!data.ctaButton && data.ctaLink && (
                 <Link
                   href={data.ctaLink}
                   className="inline-flex items-center gap-2 btn-primary"

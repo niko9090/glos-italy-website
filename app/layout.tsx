@@ -7,6 +7,7 @@ import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import PageTransition from '@/components/layout/PageTransition'
 import { LanguageProvider } from '@/lib/context/LanguageContext'
 
 // Helper per estrarre valore da campo che può essere stringa o oggetto multilingua
@@ -70,7 +71,9 @@ export default async function RootLayout({
       <body className="min-h-screen flex flex-col bg-white text-gray-900 antialiased">
         <LanguageProvider>
           <Header settings={settings} navigation={navigation} />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow">
+            <PageTransition>{children}</PageTransition>
+          </main>
           <Footer settings={settings} navigation={navigation} />
         </LanguageProvider>
         {/* Visual Editing per Sanity - attivo solo in draft mode */}

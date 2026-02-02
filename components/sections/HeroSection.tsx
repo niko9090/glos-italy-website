@@ -9,6 +9,7 @@ import { isValidImage, safeImageUrl, getFileUrl } from '@/lib/sanity/client'
 import { ArrowRight, ChevronDown, Play, Download, Phone, Mail } from 'lucide-react'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import { MOTION, staggerContainer, staggerItem, fadeInUp } from '@/lib/animations/config'
 
 interface HeroButton {
   _key: string
@@ -58,6 +59,7 @@ interface HeroSectionProps {
     textColor?: 'white' | 'black' | 'auto'
     animation?: 'none' | 'fade' | 'slide-up' | 'slide-left' | 'zoom' | 'typewriter'
     parallax?: boolean
+    parallaxIntensity?: 'subtle' | 'normal' | 'strong'
     // Advanced
     showScrollIndicator?: boolean
     scrollIndicatorText?: unknown
@@ -77,10 +79,43 @@ export default function HeroSection({ data }: HeroSectionProps) {
     offset: ['start start', 'end start'],
   })
 
-  // Parallax effect
+  // Parallax effect - subtle by default (10-20% slower than scroll)
   const shouldParallax = data.parallax !== false
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', shouldParallax ? '30%' : '0%'])
+
+  // Parallax intensity mapping - subtle is 10-15%, normal is 15-20%, strong is 25-30%
+  const parallaxIntensityMap = {
+    subtle: '15%',
+    normal: '20%',
+    strong: '30%',
+  }
+  const parallaxAmount = parallaxIntensityMap[data.parallaxIntensity || 'subtle']
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', shouldParallax ? parallaxAmount : '0%'])
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, shouldParallax ? 0 : 1])
+
+  // Stagger animation variants for text content
+  const heroContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: MOTION.STAGGER.NORMAL,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
+  const heroItemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: MOTION.DURATION.SLOW,
+        ease: MOTION.EASE.OUT,
+      },
+    },
+  }
 
   // Height classes
   const heightClasses: Record<string, string> = {
@@ -512,14 +547,15 @@ export default function HeroSection({ data }: HeroSectionProps) {
         style={{ opacity: contentOpacity }}
       >
         <motion.div
-          {...animationVariants}
+          variants={heroContainerVariants}
+          initial="hidden"
+          animate="visible"
           className={`${widthClasses[width]} ${textColorClasses[textColor]}`}
         >
           {/* Badge */}
           {!!data.badge?.text && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+              variants={heroItemVariants}
               className={`inline-block px-4 py-1 rounded-full text-white text-sm font-semibold mb-4 ${
                 badgeColorClasses[data.badge.color || 'blue']
               }`}
@@ -531,9 +567,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           {/* Eyebrow */}
           {!!data.eyebrow && (
             <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+              variants={heroItemVariants}
               className="text-sm md:text-base font-semibold tracking-widest uppercase mb-4 opacity-80"
             >
               {t(data.eyebrow)}
@@ -541,40 +575,55 @@ export default function HeroSection({ data }: HeroSectionProps) {
           )}
 
           {/* Title */}
-          <h1 className={`font-bold mb-6 ${titleSizeClasses[titleSize]}`}>
+          <motion.h1
+            variants={heroItemVariants}
+            className={`font-bold mb-6 ${titleSizeClasses[titleSize]}`}
+          >
             <RichText value={data.title} />
-          </h1>
+          </motion.h1>
 
           {/* Subtitle */}
           {!!data.subtitle && (
-            <div className="text-xl md:text-2xl mb-10 opacity-90">
+            <motion.div
+              variants={heroItemVariants}
+              className="text-xl md:text-2xl mb-10 opacity-90"
+            >
               <RichText value={data.subtitle} />
-            </div>
+            </motion.div>
           )}
 
           {/* Buttons */}
           {buttons.length > 0 && (
-            <div className={`flex flex-wrap gap-4 ${
-              position.includes('center') ? 'justify-center' :
-              position.includes('right') ? 'justify-end' :
-              'justify-start'
-            }`}>
+            <motion.div
+              variants={heroItemVariants}
+              className={`flex flex-wrap gap-4 ${
+                position.includes('center') ? 'justify-center' :
+                position.includes('right') ? 'justify-end' :
+                'justify-start'
+              }`}
+            >
               {buttons.map((button, index) => (
-                <Link
+                <motion.div
                   key={button._key}
-                  href={button.link || '#'}
-                  className={`inline-flex items-center gap-2 ${
-                    buttonVariantClasses[button.variant || 'primary']
-                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: MOTION.DURATION.FAST }}
                 >
-                  {button.iconPosition === 'left' && button.icon && getIcon(button.icon)}
-                  {t(button.text)}
-                  {(button.iconPosition !== 'left' || !button.icon) && (
-                    index === 0 ? getIcon(button.icon || 'arrow-right') : button.icon && getIcon(button.icon)
-                  )}
-                </Link>
+                  <Link
+                    href={button.link || '#'}
+                    className={`inline-flex items-center gap-2 ${
+                      buttonVariantClasses[button.variant || 'primary']
+                    }`}
+                  >
+                    {button.iconPosition === 'left' && button.icon && getIcon(button.icon)}
+                    {t(button.text)}
+                    {(button.iconPosition !== 'left' || !button.icon) && (
+                      index === 0 ? getIcon(button.icon || 'arrow-right') : button.icon && getIcon(button.icon)
+                    )}
+                  </Link>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
         </motion.div>
       </motion.div>
@@ -583,9 +632,13 @@ export default function HeroSection({ data }: HeroSectionProps) {
       {showScroll && (
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: MOTION.DURATION.SLOWER + MOTION.STAGGER.NORMAL * 4,
+            duration: MOTION.DURATION.NORMAL,
+            ease: MOTION.EASE.OUT,
+          }}
         >
           {!!data.scrollIndicatorText && (
             <p className={`text-sm mb-2 opacity-60 ${textColorClasses[textColor]}`}>
@@ -594,7 +647,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           )}
           <motion.div
             animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
             className={`opacity-60 ${textColorClasses[textColor]}`}
           >
             <ChevronDown className="w-8 h-8" />

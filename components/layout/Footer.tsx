@@ -47,15 +47,17 @@ export default function Footer({ settings, navigation }: FooterProps) {
             )}
 
             {/* Social Links */}
-            <div className="flex gap-4">
+            <div className="flex gap-4" role="list" aria-label="Link ai social media">
               {settings?.facebook && (
                 <a
                   href={settings.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
+                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                  aria-label="Seguici su Facebook (si apre in una nuova finestra)"
+                  role="listitem"
                 >
-                  <Facebook className="w-5 h-5" />
+                  <Facebook className="w-5 h-5" aria-hidden="true" />
                 </a>
               )}
               {settings?.instagram && (
@@ -63,9 +65,11 @@ export default function Footer({ settings, navigation }: FooterProps) {
                   href={settings.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
+                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                  aria-label="Seguici su Instagram (si apre in una nuova finestra)"
+                  role="listitem"
                 >
-                  <Instagram className="w-5 h-5" />
+                  <Instagram className="w-5 h-5" aria-hidden="true" />
                 </a>
               )}
               {settings?.linkedin && (
@@ -73,9 +77,11 @@ export default function Footer({ settings, navigation }: FooterProps) {
                   href={settings.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
+                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                  aria-label="Seguici su LinkedIn (si apre in una nuova finestra)"
+                  role="listitem"
                 >
-                  <Linkedin className="w-5 h-5" />
+                  <Linkedin className="w-5 h-5" aria-hidden="true" />
                 </a>
               )}
             </div>

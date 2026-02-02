@@ -466,6 +466,9 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 data.lightboxStyle?.includes('minimal') ? 'bg-white' : 'bg-black/95'
               }`}
               onClick={closeLightbox}
+              role="dialog"
+              aria-modal="true"
+              aria-label={`Visualizzatore immagini - Immagine ${lightboxIndex + 1} di ${displayedImages.length}`}
             >
               {/* Close Button */}
               <motion.button
@@ -474,13 +477,14 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 transition={{ delay: 0.2 }}
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 onClick={closeLightbox}
-                className={`absolute top-4 right-4 p-3 rounded-full z-10 ${
+                className={`absolute top-4 right-4 p-3 rounded-full z-10 focus-ring ${
                   data.lightboxStyle?.includes('minimal')
                     ? 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                     : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20'
                 }`}
+                aria-label="Chiudi galleria"
               >
-                <X className="w-6 h-6" />
+                <X className="w-6 h-6" aria-hidden="true" />
               </motion.button>
 
               {/* Counter */}
@@ -502,13 +506,14 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 animate={{ opacity: 1, x: 0 }}
                 whileHover={{ scale: 1.1, x: -5 }}
                 onClick={(e) => { e.stopPropagation(); paginate(-1) }}
-                className={`absolute left-4 p-3 rounded-full z-10 ${
+                className={`absolute left-4 p-3 rounded-full z-10 focus-ring ${
                   data.lightboxStyle?.includes('minimal')
                     ? 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                     : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20'
                 }`}
+                aria-label="Immagine precedente"
               >
-                <ChevronLeft className="w-8 h-8" />
+                <ChevronLeft className="w-8 h-8" aria-hidden="true" />
               </motion.button>
 
               <motion.button
@@ -516,13 +521,14 @@ export default function GallerySection({ data }: GallerySectionProps) {
                 animate={{ opacity: 1, x: 0 }}
                 whileHover={{ scale: 1.1, x: 5 }}
                 onClick={(e) => { e.stopPropagation(); paginate(1) }}
-                className={`absolute right-4 p-3 rounded-full z-10 ${
+                className={`absolute right-4 p-3 rounded-full z-10 focus-ring ${
                   data.lightboxStyle?.includes('minimal')
                     ? 'bg-gray-100 text-gray-800 hover:bg-gray-200'
                     : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20'
                 }`}
+                aria-label="Immagine successiva"
               >
-                <ChevronRight className="w-8 h-8" />
+                <ChevronRight className="w-8 h-8" aria-hidden="true" />
               </motion.button>
 
               {/* Image */}
@@ -566,7 +572,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
 
               {/* Thumbnails (if enabled) */}
               {data.lightboxStyle?.includes('thumbnails') && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 px-4 py-2 bg-black/50 backdrop-blur-sm rounded-full">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 px-4 py-2 bg-black/50 backdrop-blur-sm rounded-full" role="group" aria-label="Miniature immagini">
                   {displayedImages.slice(0, 7).map((img, idx) => (
                     <motion.button
                       key={img._key}
@@ -576,20 +582,23 @@ export default function GallerySection({ data }: GallerySectionProps) {
                         setLightboxIndex(idx)
                         setPage([idx, idx > lightboxIndex ? 1 : -1])
                       }}
-                      className={`relative w-10 h-10 rounded-lg overflow-hidden transition-all ${
+                      className={`relative w-10 h-10 rounded-lg overflow-hidden transition-all focus-ring-white ${
                         lightboxIndex === idx ? 'ring-2 ring-white scale-110' : 'opacity-60 hover:opacity-100'
                       }`}
+                      aria-label={`Vai all'immagine ${idx + 1} di ${displayedImages.length}`}
+                      aria-current={lightboxIndex === idx ? 'true' : undefined}
                     >
                       <Image
                         src={safeImageUrl(img, 80, 80)!}
                         alt=""
                         fill
                         className="object-cover"
+                        aria-hidden="true"
                       />
                     </motion.button>
                   ))}
                   {displayedImages.length > 7 && (
-                    <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-white text-xs">
+                    <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center text-white text-xs" aria-hidden="true">
                       +{displayedImages.length - 7}
                     </div>
                   )}

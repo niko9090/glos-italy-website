@@ -34,20 +34,27 @@ export default function ProductGallery({ mainImage, gallery, productName }: Prod
 
       {/* Thumbnails */}
       {allImages.length > 1 && (
-        <div className="flex gap-3 overflow-x-auto pb-2">
+        <div
+          className="flex gap-3 overflow-x-auto pb-2"
+          role="group"
+          aria-label={`Galleria immagini ${productName}`}
+        >
           {allImages.map((image, index) => (
             <button
               key={index}
               onClick={() => setActiveImage(image)}
-              className={`relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-colors ${
+              className={`relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-colors focus-ring ${
                 activeImage === image ? 'border-primary' : 'border-transparent hover:border-gray-300'
               }`}
+              aria-label={`Mostra immagine ${index + 1} di ${allImages.length} per ${productName}`}
+              aria-pressed={activeImage === image}
             >
               <Image
                 src={safeImageUrl(image, 160, 160)!}
-                alt={`${productName} - ${index + 1}`}
+                alt=""
                 fill
                 className="object-cover"
+                aria-hidden="true"
               />
             </button>
           ))}

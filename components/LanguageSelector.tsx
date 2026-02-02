@@ -36,19 +36,20 @@ export default function LanguageSelector({ variant = 'default', className = '' }
 
   if (variant === 'flags-only') {
     return (
-      <div className={`flex gap-1 ${className}`}>
+      <div className={`flex gap-1 ${className}`} role="group" aria-label="Seleziona lingua">
         {LANGUAGES.map(lang => (
           <button
             key={lang.id}
             onClick={() => handleSelect(lang.id)}
-            className={`p-1.5 rounded-md transition-all ${
+            className={`p-1.5 rounded-md transition-all focus-ring ${
               language === lang.id
                 ? 'bg-primary/10 scale-110'
                 : 'hover:bg-gray-100 opacity-60 hover:opacity-100'
             }`}
-            title={lang.label}
+            aria-label={`Cambia lingua a ${lang.label}`}
+            aria-pressed={language === lang.id}
           >
-            <span className="text-lg">{lang.flag}</span>
+            <span className="text-lg" aria-hidden="true">{lang.flag}</span>
           </button>
         ))}
       </div>
@@ -59,21 +60,24 @@ export default function LanguageSelector({ variant = 'default', className = '' }
     <div ref={ref} className={`relative ${className}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+        className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors focus-ring ${
           variant === 'compact'
             ? 'hover:bg-gray-100'
             : 'bg-gray-100 hover:bg-gray-200'
         }`}
+        aria-label={`Seleziona lingua. Lingua corrente: ${currentLang.label}`}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
       >
         {variant === 'compact' ? (
-          <Globe className="w-4 h-4 text-gray-600" />
+          <Globe className="w-4 h-4 text-gray-600" aria-hidden="true" />
         ) : (
-          <span className="text-lg">{currentLang.flag}</span>
+          <span className="text-lg" aria-hidden="true">{currentLang.flag}</span>
         )}
         <span className="text-sm font-medium text-gray-700">
           {variant === 'compact' ? currentLang.id.toUpperCase() : currentLang.label}
         </span>
-        <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
       </button>
 
       <AnimatePresence>
@@ -84,18 +88,22 @@ export default function LanguageSelector({ variant = 'default', className = '' }
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.15 }}
             className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50 min-w-[150px]"
+            role="listbox"
+            aria-label="Seleziona lingua"
           >
             {LANGUAGES.map(lang => (
               <button
                 key={lang.id}
                 onClick={() => handleSelect(lang.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors focus-ring-inset ${
                   language === lang.id
                     ? 'bg-primary/10 text-primary'
                     : 'hover:bg-gray-50 text-gray-700'
                 }`}
+                role="option"
+                aria-selected={language === lang.id}
               >
-                <span className="text-lg">{lang.flag}</span>
+                <span className="text-lg" aria-hidden="true">{lang.flag}</span>
                 <span className="font-medium">{lang.label}</span>
               </button>
             ))}

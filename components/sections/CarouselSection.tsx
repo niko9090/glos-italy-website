@@ -413,17 +413,17 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
           <>
             <button
               onClick={goToPrev}
-              className={`${getArrowClasses()} ${data.arrowStyle?.includes('outside') ? '-left-12' : 'left-4'}`}
-              aria-label="Previous slide"
+              className={`${getArrowClasses()} ${data.arrowStyle?.includes('outside') ? '-left-12' : 'left-4'} focus-ring-white`}
+              aria-label="Slide precedente"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-6 h-6" aria-hidden="true" />
             </button>
             <button
               onClick={goToNext}
-              className={`${getArrowClasses()} ${data.arrowStyle?.includes('outside') ? '-right-12' : 'right-4'}`}
-              aria-label="Next slide"
+              className={`${getArrowClasses()} ${data.arrowStyle?.includes('outside') ? '-right-12' : 'right-4'} focus-ring-white`}
+              aria-label="Slide successiva"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-6 h-6" aria-hidden="true" />
             </button>
           </>
         )}
@@ -457,32 +457,37 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                 <button
                   key={idx}
                   onClick={() => goToSlide(idx)}
-                  className={`h-1 transition-all ${
+                  className={`h-1 transition-all focus-ring-white ${
                     idx === currentIndex ? 'w-8 bg-white' : 'w-4 bg-white/50 hover:bg-white/70'
                   } rounded-full`}
+                  aria-label={`Vai alla slide ${idx + 1} di ${totalSlides}`}
+                  aria-current={idx === currentIndex ? 'true' : undefined}
                 />
               ))
             ) : data.dotsStyle?.includes('thumbnails') ? (
               // Thumbnails
-              <div className="flex gap-2 p-2 bg-black/30 backdrop-blur-sm rounded-lg">
+              <div className="flex gap-2 p-2 bg-black/30 backdrop-blur-sm rounded-lg" role="group" aria-label="Miniature slide">
                 {validSlides.slice(0, 5).map((slide, idx) => (
                   <button
                     key={idx}
                     onClick={() => goToSlide(idx)}
-                    className={`relative w-12 h-8 rounded overflow-hidden transition-all ${
+                    className={`relative w-12 h-8 rounded overflow-hidden transition-all focus-ring-white ${
                       idx === currentIndex ? 'ring-2 ring-white scale-110' : 'opacity-60 hover:opacity-100'
                     }`}
+                    aria-label={`Vai alla slide ${idx + 1} di ${totalSlides}`}
+                    aria-current={idx === currentIndex ? 'true' : undefined}
                   >
                     <Image
                       src={safeImageUrl(slide.image, 80, 60)!}
                       alt=""
                       fill
                       className="object-cover"
+                      aria-hidden="true"
                     />
                   </button>
                 ))}
                 {validSlides.length > 5 && (
-                  <div className="w-12 h-8 bg-white/20 rounded flex items-center justify-center text-white text-xs">
+                  <div className="w-12 h-8 bg-white/20 rounded flex items-center justify-center text-white text-xs" aria-hidden="true">
                     +{validSlides.length - 5}
                   </div>
                 )}
@@ -493,9 +498,11 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                 <button
                   key={idx}
                   onClick={() => goToSlide(idx)}
-                  className={`rounded-full transition-all ${
+                  className={`rounded-full transition-all focus-ring-white ${
                     idx === currentIndex ? 'w-8 h-3 bg-white' : 'w-3 h-3 bg-white/50 hover:bg-white/70'
                   }`}
+                  aria-label={`Vai alla slide ${idx + 1} di ${totalSlides}`}
+                  aria-current={idx === currentIndex ? 'true' : undefined}
                 />
               ))
             )}

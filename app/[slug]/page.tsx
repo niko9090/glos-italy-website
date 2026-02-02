@@ -2,19 +2,11 @@
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
-import { getPageBySlug, getPageSlugs, getFeaturedProducts } from '@/lib/sanity/fetch'
+import { getPageBySlug, getPageSlugs, getFeaturedProducts, getSiteSettings } from '@/lib/sanity/fetch'
 import { SectionRenderer } from '@/components/sections/SectionRenderer'
-
-// Helper per estrarre testo da campi multilingua
-function getTextValue(value: unknown): string {
-  if (!value) return ''
-  if (typeof value === 'string') return value
-  if (typeof value === 'object') {
-    const obj = value as Record<string, unknown>
-    if ('it' in obj) return String(obj.it || obj.en || obj.es || '')
-  }
-  return ''
-}
+import { generatePageMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
+import { getTextValue } from '@/lib/utils/textHelpers'
+import { OrganizationSchema, BreadcrumbSchema, WebPageSchema } from '@/components/seo/JsonLd'
 
 // Force dynamic rendering to support draft mode
 export const dynamic = 'force-dynamic'
@@ -35,11 +27,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const page = await getPageBySlug(slug)
 
   if (!page) {
-    return { title: 'Pagina non trovata' }
+    return {
+      title: 'Pagina non trovata',
+      robots: { index: false, follow: false },
+    }
   }
 
+  // Use enhanced metadata generation
+  const baseMetadata = generatePageMetadata({
+    title: page.title,
+    seoTitle: page.seo?.metaTitle || getTextValue(page.title),
+    seoDescription: page.seo?.metaDescription || getTextValue(page.description),
+    description: page.description,
+    slug: page.slug,
+    ogImage: page.seo?.ogImage,
+    noIndex: (page as any).noIndex,
+  })
+
+  // Add canonical URL
   return {
-    title: getTextValue(page.title) || 'GLOS Italy',
+    ...baseMetadata,
+    alternates: {
+      canonical: `${SITE_URL}/${slug}`,
+    },
   }
 }
 
@@ -47,17 +57,36 @@ export default async function DynamicPage({ params }: PageProps) {
   // CORRETTO: draftMode() e' async in Next.js 14.x App Router
   const { isEnabled: isDraftMode } = await draftMode()
   const { slug } = await params
-  const page = await getPageBySlug(slug, isDraftMode)
+
+  const [page, products, settings] = await Promise.all([
+    getPageBySlug(slug, isDraftMode),
+    getFeaturedProducts(isDraftMode),
+    getSiteSettings(isDraftMode),
+  ])
 
   if (!page) {
     notFound()
   }
 
-  // Fetch additional data for sections that need it
-  const products = await getFeaturedProducts(isDraftMode)
+  // Prepare breadcrumb data
+  const pageTitle = getTextValue(page.title) || slug
+  const breadcrumbItems = [
+    { name: 'Home', url: '/' },
+    { name: pageTitle, url: `/${slug}` },
+  ]
 
   return (
     <>
+      {/* Structured Data */}
+      <OrganizationSchema data={settings || {}} />
+      <BreadcrumbSchema items={breadcrumbItems} />
+      <WebPageSchema
+        title={pageTitle}
+        description={getTextValue(page.description)}
+        url={`/${slug}`}
+      />
+
+      {/* Page Content */}
       {page.sections?.map((section, index) => (
         <SectionRenderer
           key={section._key || index}

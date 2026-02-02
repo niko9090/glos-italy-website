@@ -3,14 +3,32 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { draftMode } from 'next/headers'
-import { getAllProducts, getAllCategories } from '@/lib/sanity/fetch'
+import { getAllProducts, getAllCategories, getSiteSettings } from '@/lib/sanity/fetch'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
+import { SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
+import { OrganizationSchema, BreadcrumbSchema, WebPageSchema } from '@/components/seo/JsonLd'
 
 export const metadata: Metadata = {
   title: 'Prodotti',
-  description: 'Scopri tutti i prodotti GLOS Italy - qualita Made in Italy',
+  description: 'Scopri tutti i prodotti GLOS Italy - macchinari di precisione per vernici, blender e taglierine Made in Italy.',
+  alternates: {
+    canonical: `${SITE_URL}/prodotti`,
+  },
+  openGraph: {
+    title: 'Prodotti | GLOS Italy',
+    description: 'Scopri tutti i prodotti GLOS Italy - macchinari di precisione per vernici, blender e taglierine Made in Italy.',
+    url: `${SITE_URL}/prodotti`,
+    siteName: SITE_NAME,
+    locale: 'it_IT',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Prodotti | GLOS Italy',
+    description: 'Scopri tutti i prodotti GLOS Italy - macchinari di precisione per vernici, blender e taglierine Made in Italy.',
+  },
 }
 
 // Force dynamic rendering to support draft mode
@@ -20,99 +38,117 @@ export default async function ProductsPage() {
   // CORRETTO: draftMode() e' async in Next.js 14.x App Router
   const { isEnabled: isDraftMode } = await draftMode()
 
-  const [products, categories] = await Promise.all([
+  const [products, categories, settings] = await Promise.all([
     getAllProducts(isDraftMode),
     getAllCategories(isDraftMode),
+    getSiteSettings(isDraftMode),
   ])
 
-  return (
-    <div className="section">
-      <div className="container-glos">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="section-title mb-4">I Nostri Prodotti</h1>
-          <p className="section-subtitle mx-auto">
-            Qualita e innovazione Made in Italy per ogni esigenza
-          </p>
-        </div>
+  // Breadcrumb data
+  const breadcrumbItems = [
+    { name: 'Home', url: '/' },
+    { name: 'Prodotti', url: '/prodotti' },
+  ]
 
-        {/* Categories Filter */}
-        {categories.length > 0 && (
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            <button className="px-4 py-2 bg-primary text-white rounded-full text-sm font-medium">
-              Tutti
-            </button>
-            {categories.map((category) => (
-              <Link
-                key={category._id}
-                href={`/prodotti/categoria/${category.slug?.current}`}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
-              >
-                {getTextValue(category.name)} ({category.productCount})
-              </Link>
+  return (
+    <>
+      {/* Structured Data */}
+      <OrganizationSchema data={settings || {}} />
+      <BreadcrumbSchema items={breadcrumbItems} />
+      <WebPageSchema
+        title="Prodotti"
+        description="Scopri tutti i prodotti GLOS Italy - macchinari di precisione per vernici, blender e taglierine Made in Italy."
+        url="/prodotti"
+      />
+
+      <div className="section">
+        <div className="container-glos">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="section-title mb-4">I Nostri Prodotti</h1>
+            <p className="section-subtitle mx-auto">
+              Qualita e innovazione Made in Italy per ogni esigenza
+            </p>
+          </div>
+
+          {/* Categories Filter */}
+          {categories.length > 0 && (
+            <nav className="flex flex-wrap justify-center gap-3 mb-12" aria-label="Filtra per categoria">
+              <button className="px-4 py-2 bg-primary text-white rounded-full text-sm font-medium">
+                Tutti
+              </button>
+              {categories.map((category) => (
+                <Link
+                  key={category._id}
+                  href={`/prodotti/categoria/${category.slug?.current}`}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
+                >
+                  {getTextValue(category.name)} ({category.productCount})
+                </Link>
+              ))}
+            </nav>
+          )}
+
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {products.map((product) => (
+              <article key={product._id} className="card group">
+                <Link href={`/prodotti/${product.slug?.current}`}>
+                  {/* Image */}
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 600, 450) ? (
+                      <Image
+                        src={safeImageUrl(product.mainImage, 600, 450)!}
+                        alt={getTextValue(product.name) || 'Prodotto'}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : null}
+
+                    {/* Badges */}
+                    <div className="absolute top-4 left-4 flex gap-2">
+                      {product.isNew && (
+                        <span className="px-3 py-1 bg-accent text-white text-sm font-medium rounded-full">
+                          Nuovo
+                        </span>
+                      )}
+                      {product.isFeatured && (
+                        <span className="px-3 py-1 bg-secondary text-gray-900 text-sm font-medium rounded-full">
+                          In Evidenza
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    {product.category && (
+                      <span className="text-sm text-primary font-medium">
+                        {getTextValue(product.category.name)}
+                      </span>
+                    )}
+
+                    <h2 className="text-xl font-semibold mt-1 mb-2 group-hover:text-primary transition-colors">
+                      {getTextValue(product.name)}
+                    </h2>
+
+                    <div className="text-gray-600 line-clamp-2">
+                      <RichText value={product.shortDescription} />
+                    </div>
+                  </div>
+                </Link>
+              </article>
             ))}
           </div>
-        )}
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product) => (
-            <article key={product._id} className="card group">
-              <Link href={`/prodotti/${product.slug?.current}`}>
-                {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 600, 450) ? (
-                    <Image
-                      src={safeImageUrl(product.mainImage, 600, 450)!}
-                      alt={String(product.name || '')}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : null}
-
-                  {/* Badges */}
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    {product.isNew && (
-                      <span className="px-3 py-1 bg-accent text-white text-sm font-medium rounded-full">
-                        Nuovo
-                      </span>
-                    )}
-                    {product.isFeatured && (
-                      <span className="px-3 py-1 bg-secondary text-gray-900 text-sm font-medium rounded-full">
-                        In Evidenza
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  {product.category && (
-                    <span className="text-sm text-primary font-medium">
-                      {getTextValue(product.category.name)}
-                    </span>
-                  )}
-
-                  <h2 className="text-xl font-semibold mt-1 mb-2 group-hover:text-primary transition-colors">
-                    {getTextValue(product.name)}
-                  </h2>
-
-                  <div className="text-gray-600 line-clamp-2">
-                    <RichText value={product.shortDescription} />
-                  </div>
-                </div>
-              </Link>
-            </article>
-          ))}
+          {/* Empty State */}
+          {products.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">Nessun prodotto disponibile al momento.</p>
+            </div>
+          )}
         </div>
-
-        {/* Empty State */}
-        {products.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">Nessun prodotto disponibile al momento.</p>
-          </div>
-        )}
       </div>
-    </div>
+    </>
   )
 }

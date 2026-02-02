@@ -85,10 +85,12 @@ export default function Header({ settings, navigation }: HeaderProps) {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className="lg:hidden p-2 text-gray-700"
-              aria-label="Menu"
+              className="lg:hidden p-2 text-gray-700 focus-ring rounded-lg"
+              aria-label={isMobileMenuOpen ? 'Chiudi menu di navigazione' : 'Apri menu di navigazione'}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMobileMenuOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -98,10 +100,13 @@ export default function Header({ settings, navigation }: HeaderProps) {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden bg-white border-t"
+            role="navigation"
+            aria-label="Menu di navigazione mobile"
           >
             <div className="container-glos py-4">
               <nav className="flex flex-col gap-2">

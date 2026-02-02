@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 import {
   MOTION,
@@ -117,6 +118,12 @@ interface TimelineSectionProps {
     showImages?: boolean
     animated?: boolean
     backgroundColor?: string
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
   }
 }
 
@@ -144,7 +151,7 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
   // Horizontal layout
   if (layout?.includes('horizontal')) {
     return (
-      <section className={`section ${bgClass} overflow-hidden`}>
+      <section className={`${getSpacingClasses(data)} ${bgClass} overflow-hidden`}>
         <div className="container-glos">
           {/* Animated Title */}
           {(data.title || data.subtitle) ? (
@@ -228,7 +235,7 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
   const isLeft = layout?.includes('vertical-left')
 
   return (
-    <section className={`section ${bgClass}`}>
+    <section className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className="container-glos">
         {/* Animated Title */}
         {(data.title || data.subtitle) ? (

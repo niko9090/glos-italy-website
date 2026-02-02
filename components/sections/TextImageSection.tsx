@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface TextImageSectionProps {
@@ -30,7 +31,12 @@ interface TextImageSectionProps {
     verticalAlign?: string
     contentWidth?: string
     backgroundColor?: string
-    paddingY?: string
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
     animation?: string
   }
 }
@@ -151,7 +157,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
 
   // Get classes from data
   const bgClass = bgClasses[data.backgroundColor || 'white']
-  const paddingClass = paddingClasses[data.paddingY || 'lg']
+  const spacingClass = getSpacingClasses(data)
   const imageSize = imageSizeClasses[data.imageSize || 'medium']
   const imageShape = imageShapeClasses[data.imageShape || 'rectangle']
   const imageShadow = imageShadowClasses[data.imageShadow || 'md']
@@ -246,7 +252,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
   )
 
   return (
-    <section className={`${paddingClass} ${bgClass}`}>
+    <section className={`${spacingClass} ${bgClass}`}>
       <div className={`container-glos mx-auto ${contentWidth}`}>
         <div className={`flex flex-col lg:flex-row gap-8 lg:gap-12 ${verticalAlign} ${
           imagePosition?.includes('left') ? 'lg:flex-row-reverse' : ''

@@ -8,6 +8,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Check, ArrowRight } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface FeatureItem {
@@ -48,7 +49,12 @@ interface FeaturesSectionProps {
     textColor?: 'auto' | 'dark' | 'light'
     accentColor?: 'primary' | 'green' | 'purple' | 'orange' | 'red' | 'gradient'
     dividers?: boolean
-    paddingY?: 'sm' | 'md' | 'lg' | 'xl'
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
     // Animation
     animation?: 'none' | 'fade' | 'fade-up' | 'stagger' | 'zoom' | 'slide-left' | 'slide-right' | 'flip'
     hoverEffect?: 'none' | 'scale' | 'lift' | 'glow' | 'border-color' | 'bg-color' | 'icon-bounce'
@@ -271,7 +277,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
   return (
     <section
       ref={sectionRef}
-      className={`${paddingClasses[data.paddingY || 'lg']} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden`}
+      className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden`}
     >
       <div className="container-glos">
         {/* Header */}

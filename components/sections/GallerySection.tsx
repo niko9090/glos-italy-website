@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn, Filter, Search } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface GalleryImage {
@@ -27,6 +28,12 @@ interface GallerySectionProps {
     subtitle?: unknown
     description?: unknown
     images?: GalleryImage[]
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
     // Layout
     layout?: 'grid' | 'masonry' | 'carousel' | 'justified' | 'collage' | 'featured-grid' | 'circular'
     columns?: number
@@ -302,7 +309,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
   const darkBg = ['black', 'primary'].includes(backgroundColor)
 
   return (
-    <section className={`section ${bgClasses[backgroundColor]} overflow-hidden`}>
+    <section className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} overflow-hidden`}>
       <div className="container-glos">
         {/* Header */}
         <motion.div

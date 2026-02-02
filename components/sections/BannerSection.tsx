@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface BannerSectionProps {
@@ -20,6 +21,12 @@ interface BannerSectionProps {
     position?: string
     fullWidth?: boolean
     animated?: boolean
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
   }
 }
 
@@ -98,9 +105,11 @@ export default function BannerSection({ data }: BannerSectionProps) {
     </div>
   )
 
+  const marginClasses = getSpacingClasses({ marginTop: data.marginTop, marginBottom: data.marginBottom })
+
   const banner = (
     <div
-      className={`${variantClass} ${sizeClass} ${
+      className={`${variantClass} ${sizeClass} ${marginClasses} ${
         isFixed
           ? `fixed left-0 right-0 z-50 ${data.position?.includes('fixed-top') ? 'top-0' : 'bottom-0'}`
           : ''

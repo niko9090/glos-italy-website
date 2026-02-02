@@ -8,6 +8,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { Star, Quote, ChevronLeft, ChevronRight, Play, ExternalLink, Calendar, Building2 } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface TestimonialItem {
@@ -60,7 +61,12 @@ interface TestimonialsSectionProps {
     backgroundColor?: 'white' | 'gray-light' | 'gray' | 'primary' | 'primary-light' | 'black' | 'gradient' | 'pattern'
     textColor?: 'auto' | 'dark' | 'light'
     accentColor?: 'primary' | 'green' | 'purple' | 'orange' | 'red' | 'gold'
-    paddingY?: 'sm' | 'md' | 'lg' | 'xl'
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
     // Animation
     animation?: 'none' | 'fade' | 'fade-up' | 'stagger' | 'zoom' | 'slide' | 'flip'
     hoverEffect?: 'none' | 'scale' | 'lift' | 'glow' | 'tilt'
@@ -732,7 +738,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
   return (
     <section
       ref={containerRef}
-      className={`relative overflow-hidden ${paddingClasses[data.paddingY || 'lg']} ${bgClasses[data.backgroundColor || 'gray-light']} ${textColor}`}
+      className={`relative overflow-hidden ${getSpacingClasses(data)} ${bgClasses[data.backgroundColor || 'gray-light']} ${textColor}`}
     >
       {/* Pattern background */}
       {data.backgroundColor?.includes('pattern') && (

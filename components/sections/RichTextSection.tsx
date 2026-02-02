@@ -2,6 +2,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface RichTextSectionProps {
@@ -13,7 +14,12 @@ interface RichTextSectionProps {
     textAlign?: string     // Schema: 'left' | 'center' | 'right' | 'justify'
     dropCap?: boolean
     backgroundColor?: string  // Schema: 'white' | 'gray-light' | 'cream' | 'primary-light' | 'black' | 'gradient'
-    paddingY?: string      // Schema: 'none' | 'sm' | 'md' | 'lg' | 'xl'
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
     dividers?: string      // Schema: 'none' | 'top' | 'bottom' | 'both'
   }
 }
@@ -68,7 +74,7 @@ const getDividerClasses = (dividers: string | undefined): string => {
 
 export default function RichTextSection({ data }: RichTextSectionProps) {
   const bgClass = bgClasses[data.backgroundColor || 'white'] || bgClasses['white']
-  const paddingClass = paddingClasses[data.paddingY || 'lg'] || paddingClasses['lg']
+  const spacingClass = getSpacingClasses(data)
   const textColor = data.backgroundColor === 'black' ? 'text-white' : 'text-gray-900'
   const contentWidth = contentWidthClasses[data.contentWidth || 'normal'] || contentWidthClasses['normal']
   const textAlign = textAlignClasses[data.textAlign || 'left'] || textAlignClasses['left']
@@ -82,7 +88,7 @@ export default function RichTextSection({ data }: RichTextSectionProps) {
   }
 
   return (
-    <section className={`${paddingClass} ${bgClass} ${dividerClass}`}>
+    <section className={`${spacingClass} ${bgClass} ${dividerClass}`}>
       <div className="container-glos">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

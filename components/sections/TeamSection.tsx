@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { Mail, Phone, Linkedin, Twitter } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 import {
   MOTION,
@@ -18,6 +19,12 @@ interface TeamSectionProps {
   data: {
     title?: unknown
     subtitle?: unknown
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
     members?: Array<{
       _key: string
       name: string
@@ -103,7 +110,7 @@ export default function TeamSection({ data }: TeamSectionProps) {
   }
 
   return (
-    <section className={`section ${bgClass}`}>
+    <section className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <motion.div

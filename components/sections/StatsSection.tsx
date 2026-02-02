@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface StatItem {
@@ -44,7 +45,12 @@ interface StatsSectionProps {
     numberSize?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
     numberWeight?: 'normal' | 'medium' | 'bold' | 'extrabold'
     cardStyle?: 'none' | 'elevated' | 'bordered' | 'glass' | 'gradient'
-    paddingY?: 'sm' | 'md' | 'lg' | 'xl'
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
     // Animation
     countAnimation?: boolean
     countDuration?: number
@@ -264,7 +270,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
     : null
 
   return (
-    <section className={`relative overflow-hidden ${paddingClasses[data.paddingY || 'lg']} ${bgClasses[backgroundColor]} ${textColor}`}>
+    <section className={`relative overflow-hidden ${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor}`}>
       {/* Background Image */}
       {backgroundColor?.includes('image') && backgroundUrl && (
         <div className="absolute inset-0 z-0">

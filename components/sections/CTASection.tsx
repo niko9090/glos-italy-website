@@ -8,6 +8,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Phone, Mail, ArrowRight, MessageCircle, Check } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface CTAButton {
@@ -62,7 +63,12 @@ interface CTASectionProps {
     size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
     fullWidth?: boolean
     contentWidth?: 'narrow' | 'normal' | 'wide'
-    paddingY?: 'sm' | 'md' | 'lg' | 'xl'
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string // legacy
+    marginTop?: string
+    marginBottom?: string
     // Style
     textColor?: 'auto' | 'white' | 'black'
     titleSize?: 'normal' | 'large' | 'xl' | 'xxl'
@@ -316,7 +322,7 @@ export default function CTASection({ data }: CTASectionProps) {
       ref={sectionRef}
       className={`relative overflow-hidden ${
         data.fullWidth !== false ? '' : 'container-glos my-8'
-      } ${sizeClasses[data.size || 'lg'] || paddingClasses[data.paddingY || 'lg']} ${
+      } ${data.size ? sizeClasses[data.size] : getSpacingClasses(data)} ${
         data.fullWidth !== false ? getBackgroundClasses() : ''
       } ${textColor} ${borderRadiusClasses[data.borderRadius || 'none']} ${shadowClasses[data.shadow || 'none']}`}
     >

@@ -31,6 +31,9 @@ const IconBoxesSection = dynamic(() => import('./IconBoxesSection'))
 const BeforeAfterSection = dynamic(() => import('./BeforeAfterSection'))
 const DownloadSection = dynamic(() => import('./DownloadSection'))
 const EmbedSection = dynamic(() => import('./EmbedSection'))
+const MapSection = dynamic(() => import('./MapSection'))
+const CounterSection = dynamic(() => import('./CounterSection'))
+const PricingSection = dynamic(() => import('./PricingSection'))
 
 interface SectionRendererProps {
   section: any
@@ -114,6 +117,15 @@ export function SectionRenderer({ section, products }: SectionRendererProps) {
 
     case 'embedSection':
       return <EmbedSection data={section} />
+
+    case 'mapSection':
+      return <MapSection data={section} dealers={section.dealers} />
+
+    case 'counterSection':
+      return <CounterSection data={section} />
+
+    case 'pricingSection':
+      return <PricingSection data={section} />
 
     default:
       // Log unknown section types in development

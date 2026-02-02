@@ -5,6 +5,11 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import {
+  MOTION,
+  staggerContainer,
+  tapScale,
+} from '@/lib/animations/config'
 
 interface IconBoxesSectionProps {
   data: {
@@ -51,17 +56,53 @@ const iconSizeClasses: Record<string, string> = {
   xlarge: 'text-5xl',
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
+// Varianti per titolo con animazione d'ingresso
+const titleVariants = {
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    y: 0,
+    transition: {
+      duration: MOTION.DURATION.SLOW,
+      ease: MOTION.EASE.OUT,
+    },
   },
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+// Varianti per icona con effetto pulse/bounce su hover
+const iconVariants = {
+  initial: { scale: 1 },
+  hover: {
+    scale: 1.15,
+    transition: {
+      type: 'spring',
+      stiffness: 400,
+      damping: 10,
+    },
+  },
+  tap: { scale: 0.95 },
+}
+
+// Varianti per box con hover lift + shadow
+const boxVariants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: MOTION.SPRING.GENTLE,
+  },
+  hover: {
+    y: -8,
+    boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+    transition: {
+      duration: MOTION.DURATION.FAST,
+      ease: MOTION.EASE.OUT,
+    },
+  },
+  tap: tapScale,
 }
 
 export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
@@ -119,18 +160,24 @@ export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
-          <div className={`text-center mb-12 ${textColor}`}>
+          <motion.div
+            variants={titleVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={MOTION.VIEWPORT.ONCE}
+            className={`text-center mb-12 ${textColor}`}
+          >
             {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
             {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
-          </div>
+          </motion.div>
         ) : null}
 
         {/* Boxes Grid */}
         <motion.div
-          variants={containerVariants}
+          variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={MOTION.VIEWPORT.ONCE}
           className={`grid grid-cols-1 ${gridCols[columns]} gap-6`}
         >
           {data.boxes.map((box) => {
@@ -140,13 +187,22 @@ export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
 
             const content = (
               <motion.div
-                variants={itemVariants}
-                className={`group p-6 transition-all duration-300 ${boxClasses} ${hoverClasses} ${
+                variants={boxVariants}
+                initial="hidden"
+                whileInView="visible"
+                whileHover="hover"
+                whileTap="tap"
+                viewport={MOTION.VIEWPORT.ONCE}
+                className={`group p-6 cursor-pointer ${boxClasses} ${
                   textAlign?.includes('center') ? 'text-center' : 'text-left'
                 } ${data.iconPosition?.includes('left') ? 'flex items-start gap-4' : ''}`}
               >
                 {/* Icon */}
-                <div
+                <motion.div
+                  variants={iconVariants}
+                  initial="initial"
+                  whileHover="hover"
+                  whileTap="tap"
                   className={`${iconSize} ${
                     data.iconPosition?.includes('center') || data.boxStyle?.includes('icon-centered')
                       ? 'mx-auto mb-4'
@@ -160,7 +216,7 @@ export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
                   >
                     {box.icon}
                   </span>
-                </div>
+                </motion.div>
 
                 {/* Text */}
                 <div className={data.iconPosition?.includes('left') ? 'flex-1' : ''}>

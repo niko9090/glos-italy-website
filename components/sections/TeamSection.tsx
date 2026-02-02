@@ -7,6 +7,12 @@ import { Mail, Phone, Linkedin, Twitter } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import {
+  MOTION,
+  staggerContainer,
+  staggerItem,
+  hoverLift,
+} from '@/lib/animations/config'
 
 interface TeamSectionProps {
   data: {
@@ -52,17 +58,32 @@ const photoShapeClasses: Record<string, string> = {
   rounded: 'rounded-2xl',
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
+// Variante per animazione titolo (fade-up)
+const titleVariants = {
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    y: 0,
+    transition: {
+      duration: MOTION.DURATION.SLOW,
+      ease: MOTION.EASE.OUT,
+    },
   },
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
+// Variante per le icone social su hover
+const socialIconVariants = {
+  initial: { scale: 1 },
+  hover: {
+    scale: 1.15,
+    rotate: 5,
+    transition: {
+      type: 'spring',
+      stiffness: 400,
+      damping: 10,
+    },
+  },
+  tap: { scale: 0.9 },
 }
 
 export default function TeamSection({ data }: TeamSectionProps) {
@@ -85,26 +106,32 @@ export default function TeamSection({ data }: TeamSectionProps) {
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
-          <div className={`text-center mb-12 ${textColor}`}>
+          <motion.div
+            variants={titleVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={MOTION.VIEWPORT.ONCE}
+            className={`text-center mb-12 ${textColor}`}
+          >
             {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
             {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
-          </div>
+          </motion.div>
         ) : null}
 
         {/* Team Grid */}
         <motion.div
-          variants={containerVariants}
+          variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={MOTION.VIEWPORT.ONCE}
           className={`grid grid-cols-1 ${gridCols[columns as keyof typeof gridCols]} gap-8`}
         >
           {data.members.map((member) => (
             <motion.div
               key={member._key}
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className={`p-6 rounded-2xl bg-white ${cardStyle} text-center`}
+              variants={staggerItem}
+              whileHover={hoverLift}
+              className={`p-6 rounded-2xl bg-white ${cardStyle} text-center cursor-pointer`}
             >
               {/* Photo */}
               {isValidImage(member.photo) && (
@@ -132,40 +159,56 @@ export default function TeamSection({ data }: TeamSectionProps) {
               {data.showSocial && (
                 <div className="flex justify-center gap-3 mt-4">
                   {member.email && (
-                    <a
+                    <motion.a
                       href={`mailto:${member.email}`}
-                      className="p-2 rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-all"
+                      className="p-2 rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-colors"
+                      variants={socialIconVariants}
+                      initial="initial"
+                      whileHover="hover"
+                      whileTap="tap"
                     >
                       <Mail className="w-5 h-5" />
-                    </a>
+                    </motion.a>
                   )}
                   {member.phone && (
-                    <a
+                    <motion.a
                       href={`tel:${member.phone.replace(/\s/g, '')}`}
-                      className="p-2 rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-all"
+                      className="p-2 rounded-full bg-gray-100 hover:bg-primary hover:text-white transition-colors"
+                      variants={socialIconVariants}
+                      initial="initial"
+                      whileHover="hover"
+                      whileTap="tap"
                     >
                       <Phone className="w-5 h-5" />
-                    </a>
+                    </motion.a>
                   )}
                   {member.linkedin && (
-                    <a
+                    <motion.a
                       href={member.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-full bg-gray-100 hover:bg-[#0077B5] hover:text-white transition-all"
+                      className="p-2 rounded-full bg-gray-100 hover:bg-[#0077B5] hover:text-white transition-colors"
+                      variants={socialIconVariants}
+                      initial="initial"
+                      whileHover="hover"
+                      whileTap="tap"
                     >
                       <Linkedin className="w-5 h-5" />
-                    </a>
+                    </motion.a>
                   )}
                   {member.twitter && (
-                    <a
+                    <motion.a
                       href={member.twitter}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-full bg-gray-100 hover:bg-black hover:text-white transition-all"
+                      className="p-2 rounded-full bg-gray-100 hover:bg-black hover:text-white transition-colors"
+                      variants={socialIconVariants}
+                      initial="initial"
+                      whileHover="hover"
+                      whileTap="tap"
                     >
                       <Twitter className="w-5 h-5" />
-                    </a>
+                    </motion.a>
                   )}
                 </div>
               )}

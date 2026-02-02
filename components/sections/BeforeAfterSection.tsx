@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import { fadeInUp, scaleIn, MOTION } from '@/lib/animations/config'
 
 interface BeforeAfterSectionProps {
   data: {
@@ -125,29 +126,34 @@ function ComparisonSlider({
         <Image src={beforeImage} alt="Prima" fill className="object-cover" />
       </div>
 
-      {/* Slider Line */}
-      <div
+      {/* Slider Line - Animated with spring physics */}
+      <motion.div
         className={`absolute bg-white shadow-lg ${
           isVertical
             ? 'left-0 right-0 h-1 cursor-ns-resize'
             : 'top-0 bottom-0 w-1 cursor-ew-resize'
         }`}
         style={isVertical ? { top: `${position}%` } : { left: `${position}%` }}
+        animate={isVertical ? { top: `${position}%` } : { left: `${position}%` }}
+        transition={MOTION.SPRING.SOFT}
       >
         {/* Handle */}
-        <div
+        <motion.div
           className={`absolute ${
             isVertical
               ? 'left-1/2 -translate-x-1/2 -translate-y-1/2'
               : 'top-1/2 -translate-x-1/2 -translate-y-1/2'
           } w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center`}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: MOTION.DURATION.FAST }}
         >
           <div className="flex gap-0.5">
             <div className="w-0.5 h-4 bg-gray-400 rounded" />
             <div className="w-0.5 h-4 bg-gray-400 rounded" />
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Labels */}
       {showLabels && (
@@ -181,7 +187,13 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
-          <div className={`text-center mb-12 ${textColor}`}>
+          <motion.div
+            className={`text-center mb-12 ${textColor}`}
+            initial={fadeInUp.initial}
+            whileInView={fadeInUp.animate}
+            viewport={MOTION.VIEWPORT.ONCE}
+            transition={{ duration: MOTION.DURATION.SLOW, ease: MOTION.EASE.OUT }}
+          >
             {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
             {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
             {data.description ? (
@@ -189,16 +201,21 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
                 <RichText value={data.description} />
               </div>
             ) : null}
-          </div>
+          </motion.div>
         ) : null}
 
         <div className={layout?.includes('grid') ? 'grid md:grid-cols-2 gap-8' : 'space-y-12'}>
-          {validComparisons.map((comparison) => (
+          {validComparisons.map((comparison, index) => (
             <motion.div
               key={comparison._key}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              initial={{ ...scaleIn.initial, y: 30 }}
+              whileInView={{ ...scaleIn.animate, y: 0 }}
+              viewport={MOTION.VIEWPORT.ONCE}
+              transition={{
+                duration: MOTION.DURATION.SLOW,
+                delay: index * MOTION.STAGGER.NORMAL,
+                ease: MOTION.EASE.OUT,
+              }}
             >
               {layout.startsWith('slider') ? (
                 <ComparisonSlider

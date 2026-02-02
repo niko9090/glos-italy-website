@@ -6,6 +6,12 @@ import { motion } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import {
+  MOTION,
+  fadeInUp,
+  staggerContainerFast,
+  staggerItem,
+} from '@/lib/animations/config'
 
 interface LogoCloudSectionProps {
   data: {
@@ -48,17 +54,36 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
     6: 'grid-cols-3 md:grid-cols-6',
   }
 
+  // Logo item variants for stagger animation
+  const logoItemVariant = {
+    hidden: { opacity: 0, scale: 0.8, y: 20 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        ...MOTION.SPRING.GENTLE,
+        duration: MOTION.DURATION.NORMAL,
+      },
+    },
+  }
+
+  // Hover animation with scale and brightness
+  const logoHover = {
+    scale: 1.1,
+    filter: 'brightness(1.1)',
+    transition: { duration: MOTION.DURATION.FAST },
+  }
+
   const renderLogo = (logo: typeof validLogos[0], index: number) => {
     const content = (
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: index * 0.05 }}
-        whileHover={{ scale: 1.1 }}
+        variants={logoItemVariant}
+        whileHover={logoHover}
+        whileTap={{ scale: 0.95 }}
         className={`relative h-16 flex items-center justify-center px-4 ${
           data.grayscale ? 'grayscale hover:grayscale-0' : ''
-        } transition-all duration-300`}
+        } transition-all duration-300 cursor-pointer`}
       >
         <Image
           src={safeImageUrl(logo.logo, 200, 100)!}
@@ -103,20 +128,34 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
       <section className={`section ${bgClass} overflow-hidden`}>
         <div className="container-glos">
           {(data.title || data.subtitle) ? (
-            <div className={`text-center mb-12 ${textColor}`}>
+            <motion.div
+              initial="initial"
+              whileInView="animate"
+              viewport={MOTION.VIEWPORT.ONCE}
+              variants={fadeInUp}
+              transition={{ duration: MOTION.DURATION.SLOW, ease: MOTION.EASE.OUT }}
+              className={`text-center mb-12 ${textColor}`}
+            >
               {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
               {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
-            </div>
+            </motion.div>
           ) : null}
         </div>
 
-        {/* Marquee */}
-        <div className="relative">
+        {/* Marquee - mantiene animazione CSS infinita */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={MOTION.VIEWPORT.ONCE}
+          transition={{ duration: MOTION.DURATION.NORMAL, delay: 0.2 }}
+          className="relative"
+        >
           <div className="flex animate-marquee gap-12">
             {[...validLogos, ...validLogos].map((logo, index) => (
-              <div
+              <motion.div
                 key={`${logo._key}-${index}`}
-                className={`flex-shrink-0 h-16 w-32 flex items-center justify-center ${
+                whileHover={logoHover}
+                className={`flex-shrink-0 h-16 w-32 flex items-center justify-center cursor-pointer ${
                   data.grayscale ? 'grayscale hover:grayscale-0' : ''
                 } transition-all duration-300`}
               >
@@ -127,10 +166,10 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
                   height={60}
                   className="object-contain max-h-12"
                 />
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
     )
   }
@@ -141,20 +180,33 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
       <section className={`section ${bgClass}`}>
         <div className="container-glos">
           {(data.title || data.subtitle) ? (
-            <div className={`text-center mb-12 ${textColor}`}>
+            <motion.div
+              initial="initial"
+              whileInView="animate"
+              viewport={MOTION.VIEWPORT.ONCE}
+              variants={fadeInUp}
+              transition={{ duration: MOTION.DURATION.SLOW, ease: MOTION.EASE.OUT }}
+              className={`text-center mb-12 ${textColor}`}
+            >
               {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
               {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
-            </div>
+            </motion.div>
           ) : null}
 
-          {/* Carousel */}
-          <div className="flex overflow-x-auto gap-8 pb-4 snap-x scrollbar-hide">
+          {/* Carousel con stagger */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={MOTION.VIEWPORT.ONCE}
+            variants={staggerContainerFast}
+            className="flex overflow-x-auto gap-8 pb-4 snap-x scrollbar-hide"
+          >
             {validLogos.map((logo, index) => (
-              <div key={logo._key} className="flex-shrink-0 snap-center">
+              <motion.div key={logo._key} variants={staggerItem} className="flex-shrink-0 snap-center">
                 {renderLogo(logo, index)}
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
     )
@@ -165,16 +217,29 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
     <section className={`section ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
-          <div className={`text-center mb-12 ${textColor}`}>
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={MOTION.VIEWPORT.ONCE}
+            variants={fadeInUp}
+            transition={{ duration: MOTION.DURATION.SLOW, ease: MOTION.EASE.OUT }}
+            className={`text-center mb-12 ${textColor}`}
+          >
             {data.title ? <h2 className="section-title mb-4"><RichText value={data.title} /></h2> : null}
             {data.subtitle ? <div className="section-subtitle"><RichText value={data.subtitle} /></div> : null}
-          </div>
+          </motion.div>
         ) : null}
 
-        {/* Grid */}
-        <div className={`grid ${gridCols[columns]} gap-8 items-center justify-items-center`}>
+        {/* Grid con stagger animation */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={MOTION.VIEWPORT.ONCE}
+          variants={staggerContainerFast}
+          className={`grid ${gridCols[columns]} gap-8 items-center justify-items-center`}
+        >
           {validLogos.map((logo, index) => renderLogo(logo, index))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

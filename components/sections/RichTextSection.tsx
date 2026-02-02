@@ -9,46 +9,70 @@ interface RichTextSectionProps {
     title?: unknown
     content?: unknown
     columns?: number
-    maxWidth?: string
-    textAlign?: string
+    contentWidth?: string  // Schema: 'narrow' | 'normal' | 'wide' | 'full'
+    textAlign?: string     // Schema: 'left' | 'center' | 'right' | 'justify'
     dropCap?: boolean
-    backgroundColor?: string
-    verticalPadding?: string
+    backgroundColor?: string  // Schema: 'white' | 'gray-light' | 'cream' | 'primary-light' | 'black' | 'gradient'
+    paddingY?: string      // Schema: 'none' | 'sm' | 'md' | 'lg' | 'xl'
+    dividers?: string      // Schema: 'none' | 'top' | 'bottom' | 'both'
   }
 }
 
+// Background classes matching schema values
 const bgClasses: Record<string, string> = {
-  white: 'bg-white',
-  gray: 'bg-gray-50',
-  dark: 'bg-gray-900',
+  'white': 'bg-white',
+  'gray-light': 'bg-gray-50',
+  'cream': 'bg-amber-50',
+  'primary-light': 'bg-blue-50',
+  'black': 'bg-gray-900',
+  'gradient': 'bg-gradient-to-br from-gray-50 to-blue-50',
 }
 
+// Padding classes matching schema values
 const paddingClasses: Record<string, string> = {
-  small: 'py-8 md:py-12',
-  medium: 'py-12 md:py-20',
-  large: 'py-20 md:py-32',
+  'none': 'py-0',
+  'sm': 'py-8 md:py-12',
+  'md': 'py-12 md:py-16',
+  'lg': 'py-16 md:py-24',
+  'xl': 'py-24 md:py-32',
 }
 
-const maxWidthClasses: Record<string, string> = {
-  narrow: 'max-w-2xl',
-  medium: 'max-w-4xl',
-  wide: 'max-w-6xl',
-  full: 'max-w-none',
+// Content width classes matching schema values
+const contentWidthClasses: Record<string, string> = {
+  'narrow': 'max-w-2xl',
+  'normal': 'max-w-4xl',
+  'wide': 'max-w-6xl',
+  'full': 'max-w-none',
 }
 
 const textAlignClasses: Record<string, string> = {
-  left: 'text-left',
-  center: 'text-center',
-  right: 'text-right',
-  justify: 'text-justify',
+  'left': 'text-left',
+  'center': 'text-center',
+  'right': 'text-right',
+  'justify': 'text-justify',
+}
+
+// Divider classes matching schema values
+const getDividerClasses = (dividers: string | undefined): string => {
+  switch (dividers) {
+    case 'top':
+      return 'border-t border-gray-200'
+    case 'bottom':
+      return 'border-b border-gray-200'
+    case 'both':
+      return 'border-t border-b border-gray-200'
+    default:
+      return ''
+  }
 }
 
 export default function RichTextSection({ data }: RichTextSectionProps) {
-  const bgClass = bgClasses[data.backgroundColor || 'white']
-  const paddingClass = paddingClasses[data.verticalPadding || 'medium']
-  const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
-  const maxWidth = maxWidthClasses[data.maxWidth || 'medium']
-  const textAlign = textAlignClasses[data.textAlign || 'left']
+  const bgClass = bgClasses[data.backgroundColor || 'white'] || bgClasses['white']
+  const paddingClass = paddingClasses[data.paddingY || 'lg'] || paddingClasses['lg']
+  const textColor = data.backgroundColor === 'black' ? 'text-white' : 'text-gray-900'
+  const contentWidth = contentWidthClasses[data.contentWidth || 'normal'] || contentWidthClasses['normal']
+  const textAlign = textAlignClasses[data.textAlign || 'left'] || textAlignClasses['left']
+  const dividerClass = getDividerClasses(data.dividers)
   const columns = data.columns || 1
 
   const columnClasses: Record<number, string> = {
@@ -58,13 +82,13 @@ export default function RichTextSection({ data }: RichTextSectionProps) {
   }
 
   return (
-    <section className={`${paddingClass} ${bgClass}`}>
+    <section className={`${paddingClass} ${bgClass} ${dividerClass}`}>
       <div className="container-glos">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`${maxWidth} mx-auto ${textColor}`}
+          className={`${contentWidth} mx-auto ${textColor}`}
         >
           {data.title ? (
             <h2 className={`section-title mb-8 ${textAlign}`}>

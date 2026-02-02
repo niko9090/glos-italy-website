@@ -88,7 +88,12 @@ interface ContactSectionProps {
     layout?: 'form-left' | 'form-right' | 'stacked' | 'map-first' | 'form-only' | 'info-only' | 'grid' | 'map-overlay'
     formWidth?: 'narrow' | 'normal' | 'wide'
     contentWidth?: 'narrow' | 'normal' | 'wide' | 'full'
-    paddingY?: 'sm' | 'md' | 'lg' | 'xl'
+    paddingY?: string
+    paddingTop?: string
+    paddingBottom?: string
+    marginTop?: string
+    marginBottom?: string
+    containerMaxWidth?: string
     // Style
     backgroundColor?: 'white' | 'gray-light' | 'gray' | 'primary' | 'primary-light' | 'black' | 'gradient'
     textColor?: 'auto' | 'dark' | 'light'
@@ -126,12 +131,87 @@ export default function ContactSection({ data }: ContactSectionProps) {
     return darkBgs.some(bg => (data.backgroundColor || 'white').includes(bg)) ? 'text-white' : 'text-gray-900'
   }
 
-  // Padding classes
-  const paddingClasses: Record<string, string> = {
-    sm: 'py-8 md:py-12',
-    md: 'py-12 md:py-16',
-    lg: 'py-16 md:py-24',
-    xl: 'py-24 md:py-32',
+  // Padding classes (legacy paddingY)
+  const paddingYClasses: Record<string, string> = {
+    none: 'py-0',
+    sm: 'py-4 md:py-6',
+    md: 'py-8 md:py-12',
+    lg: 'py-12 md:py-16',
+    xl: 'py-16 md:py-24',
+    '2xl': 'py-24 md:py-32',
+  }
+
+  // Padding Top classes
+  const paddingTopClasses: Record<string, string> = {
+    none: 'pt-0',
+    sm: 'pt-4 md:pt-6',
+    md: 'pt-8 md:pt-12',
+    lg: 'pt-12 md:pt-16',
+    xl: 'pt-16 md:pt-24',
+    '2xl': 'pt-24 md:pt-32',
+  }
+
+  // Padding Bottom classes
+  const paddingBottomClasses: Record<string, string> = {
+    none: 'pb-0',
+    sm: 'pb-4 md:pb-6',
+    md: 'pb-8 md:pb-12',
+    lg: 'pb-12 md:pb-16',
+    xl: 'pb-16 md:pb-24',
+    '2xl': 'pb-24 md:pb-32',
+  }
+
+  // Margin Top classes
+  const marginTopClasses: Record<string, string> = {
+    none: 'mt-0',
+    sm: 'mt-4 md:mt-6',
+    md: 'mt-8 md:mt-12',
+    lg: 'mt-12 md:mt-16',
+    xl: 'mt-16 md:mt-24',
+  }
+
+  // Margin Bottom classes
+  const marginBottomClasses: Record<string, string> = {
+    none: 'mb-0',
+    sm: 'mb-4 md:mb-6',
+    md: 'mb-8 md:mb-12',
+    lg: 'mb-12 md:mb-16',
+    xl: 'mb-16 md:mb-24',
+  }
+
+  // Container width classes
+  const containerMaxWidthClasses: Record<string, string> = {
+    narrow: 'max-w-3xl',
+    normal: 'max-w-6xl',
+    wide: 'max-w-7xl',
+    full: 'max-w-none',
+  }
+
+  // Compute spacing classes
+  const getSpacingClasses = () => {
+    const classes: string[] = []
+
+    // Use paddingTop/Bottom if specified, otherwise fallback to paddingY
+    if (data.paddingTop) {
+      classes.push(paddingTopClasses[data.paddingTop] || '')
+    }
+    if (data.paddingBottom) {
+      classes.push(paddingBottomClasses[data.paddingBottom] || '')
+    }
+    // If neither paddingTop nor paddingBottom, use legacy paddingY
+    if (!data.paddingTop && !data.paddingBottom) {
+      classes.push(paddingYClasses[data.paddingY || 'lg'] || paddingYClasses.lg)
+    }
+
+    // Margins
+    if (data.marginTop) {
+      classes.push(marginTopClasses[data.marginTop] || '')
+    }
+    if (data.marginBottom) {
+      classes.push(marginBottomClasses[data.marginBottom] || '')
+    }
+
+    return classes.filter(Boolean).join(' ')
   }
 
   // Map height classes
@@ -286,8 +366,13 @@ export default function ContactSection({ data }: ContactSectionProps) {
     { _key: 'message', type: 'textarea' as const, name: 'message', label: 'Messaggio', placeholder: 'Scrivi il tuo messaggio...', required: true, width: 'full' as const },
   ]
 
+  // Get container class
+  const containerClass = data.containerMaxWidth
+    ? `${containerMaxWidthClasses[data.containerMaxWidth] || ''} mx-auto px-4 md:px-6`
+    : 'container-glos'
+
   return (
-    <section className={`${paddingClasses[data.paddingY || 'lg']} ${bgClasses[backgroundColor]} ${textColor} relative overflow-hidden`}>
+    <section className={`${getSpacingClasses()} ${bgClasses[backgroundColor]} ${textColor} relative overflow-hidden`}>
       {/* Decorations */}
       {data.showDecorations && (
         <>
@@ -296,7 +381,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
         </>
       )}
 
-      <div className="container-glos relative z-10">
+      <div className={`${containerClass} relative z-10`}>
         {/* Header */}
         <motion.div
           {...animationVariants}

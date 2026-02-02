@@ -45,6 +45,11 @@ interface FaqSectionProps {
     allowMultiple?: boolean
     showSearch?: boolean
     showNumbers?: boolean
+    // Spacing
+    paddingTop?: string
+    paddingBottom?: string
+    marginTop?: string
+    marginBottom?: string
     // Style
     cardStyle?: 'minimal' | 'border' | 'shadow' | 'divider'
     iconStyle?: 'plus' | 'arrow' | 'chevron' | 'none'
@@ -74,6 +79,41 @@ const cardStyleClasses: Record<string, string> = {
   border: 'border border-gray-200 rounded-xl',
   shadow: 'bg-white rounded-xl shadow-md',
   divider: 'border-b border-gray-200',
+}
+
+// Classi per spaziatura
+const paddingTopClasses: Record<string, string> = {
+  none: 'pt-0',
+  sm: 'pt-4 md:pt-6',
+  md: 'pt-8 md:pt-12',
+  lg: 'pt-12 md:pt-16',
+  xl: 'pt-16 md:pt-24',
+  '2xl': 'pt-24 md:pt-32',
+}
+
+const paddingBottomClasses: Record<string, string> = {
+  none: 'pb-0',
+  sm: 'pb-4 md:pb-6',
+  md: 'pb-8 md:pb-12',
+  lg: 'pb-12 md:pb-16',
+  xl: 'pb-16 md:pb-24',
+  '2xl': 'pb-24 md:pb-32',
+}
+
+const marginTopClasses: Record<string, string> = {
+  none: 'mt-0',
+  sm: 'mt-4 md:mt-6',
+  md: 'mt-8 md:mt-12',
+  lg: 'mt-12 md:mt-16',
+  xl: 'mt-16 md:mt-24',
+}
+
+const marginBottomClasses: Record<string, string> = {
+  none: 'mb-0',
+  sm: 'mb-4 md:mb-6',
+  md: 'mb-8 md:mb-12',
+  lg: 'mb-12 md:mb-16',
+  xl: 'mb-16 md:mb-24',
 }
 
 // Animazione per il contenuto della risposta
@@ -441,8 +481,14 @@ export default function FaqSection({ data }: FaqSectionProps) {
     }
   }
 
+  // Compute spacing classes
+  const ptClass = paddingTopClasses[data.paddingTop || 'lg'] || paddingTopClasses.lg
+  const pbClass = paddingBottomClasses[data.paddingBottom || 'lg'] || paddingBottomClasses.lg
+  const mtClass = marginTopClasses[data.marginTop || 'none'] || ''
+  const mbClass = marginBottomClasses[data.marginBottom || 'none'] || ''
+
   return (
-    <section className={`section ${bgClass}`}>
+    <section className={`${ptClass} ${pbClass} ${mtClass} ${mbClass} ${bgClass}`}>
       <div className="container-glos">
         {/* Header: Eyebrow, Title, Subtitle */}
         {!!(data.eyebrow || data.title || data.subtitle) && (

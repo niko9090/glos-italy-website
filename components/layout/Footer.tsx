@@ -23,7 +23,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
   const address = t(settings?.address)
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="metal-dark text-white">
       <div className="container-glos py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}

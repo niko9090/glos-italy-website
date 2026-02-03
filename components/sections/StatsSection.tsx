@@ -141,6 +141,10 @@ export default function StatsSection({ data }: StatsSectionProps) {
     primary: 'bg-primary',
     'gradient-blue': 'bg-gradient-to-br from-primary via-primary-dark to-blue-900',
     'gradient-dark': 'bg-gradient-to-br from-gray-800 via-gray-900 to-black',
+    'metal': 'metal-gradient',
+    'metal-dark': 'metal-dark',
+    'metal-brushed': 'metal-brushed',
+    'metal-chrome': 'metal-chrome',
     image: '',
   }
 
@@ -150,7 +154,9 @@ export default function StatsSection({ data }: StatsSectionProps) {
     if (data.textColor?.includes('black')) return 'text-gray-900'
     if (data.textColor?.includes('primary')) return 'text-primary'
     // Auto
-    const darkBgs = ['dark', 'primary', 'gradient-blue', 'gradient-dark', 'image']
+    const darkBgs = ['dark', 'primary', 'gradient-blue', 'gradient-dark', 'metal-dark', 'image']
+    const lightBgs = ['white', 'gray', 'metal', 'metal-brushed', 'metal-chrome']
+    if (lightBgs.includes(data.backgroundColor || '')) return 'text-gray-900'
     return darkBgs.includes(data.backgroundColor || 'primary') ? 'text-white' : 'text-gray-900'
   }
 
@@ -205,6 +211,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
     bordered: 'border-2 border-current/20 rounded-2xl p-6',
     glass: 'bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10',
     gradient: 'bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-6',
+    metal: 'card-metal rounded-2xl p-6',
   }
 
   // Color accent classes

@@ -334,6 +334,12 @@ export default function HeroSection({ data }: HeroSectionProps) {
     if (gradient.includes('dawn')) return 'linear-gradient(to bottom right, #fef3c7, #fcd34d, #f97316, #be123c)'
     if (gradient.includes('grape')) return 'linear-gradient(to bottom right, #7c3aed, #6d28d9, #5b21b6, #4c1d95)'
 
+    // Metal
+    if (gradient.includes('metal-chrome')) return 'linear-gradient(135deg, #e8e8e8 0%, #d1d1d1 25%, #b8b8b8 50%, #d1d1d1 75%, #e8e8e8 100%)'
+    if (gradient.includes('metal-dark')) return 'linear-gradient(135deg, #3d3d3d 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #3d3d3d 100%)'
+    if (gradient.includes('metal-blue')) return 'linear-gradient(135deg, #4a5568 0%, #2d3748 25%, #1a202c 50%, #2d3748 75%, #4a5568 100%)'
+    if (gradient.includes('metal-steel')) return 'linear-gradient(135deg, #94a3b8 0%, #64748b 25%, #475569 50%, #64748b 75%, #94a3b8 100%)'
+
     // Default
     return 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
   }
@@ -385,6 +391,12 @@ export default function HeroSection({ data }: HeroSectionProps) {
     if (color.includes('gold')) return '#fbbf24'
     if (color.includes('white')) return '#ffffff'
     if (color.includes('cream')) return '#fef3c7'
+
+    // Metal
+    if (color.includes('metal-silver')) return '#c0c0c0'
+    if (color.includes('metal-steel')) return '#71797E'
+    if (color.includes('metal-iron')) return '#48494B'
+    if (color.includes('metal-titanium')) return '#878681'
 
     // Default
     return '#0047AB'

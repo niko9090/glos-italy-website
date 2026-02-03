@@ -91,13 +91,19 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
     'primary-light': 'bg-blue-50',
     'gradient-blue': 'bg-gradient-to-br from-primary via-primary-dark to-blue-900',
     'gradient-dark': 'bg-gradient-to-br from-gray-800 via-gray-900 to-black',
+    'metal': 'metal-gradient',
+    'metal-dark': 'metal-dark',
+    'metal-brushed': 'metal-brushed',
+    'metal-chrome': 'metal-chrome',
   }
 
   // Text color
   const getTextColor = () => {
     if (data.textColor?.includes('dark')) return 'text-gray-900'
     if (data.textColor?.includes('light')) return 'text-white'
-    const darkBgs = ['black', 'primary', 'gradient-blue', 'gradient-dark']
+    const darkBgs = ['black', 'primary', 'gradient-blue', 'gradient-dark', 'metal-dark']
+    const lightBgs = ['white', 'gray-light', 'gray', 'primary-light', 'metal', 'metal-brushed', 'metal-chrome']
+    if (lightBgs.includes(data.backgroundColor || 'white')) return 'text-gray-900'
     return darkBgs.includes(data.backgroundColor || 'white') ? 'text-white' : 'text-gray-900'
   }
 
@@ -168,6 +174,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
     glass: 'bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.1)] hover:bg-white/15 hover:border-white/30 hover:shadow-[0_16px_48px_rgba(0,71,171,0.15)] transition-all duration-300',
     gradient: 'bg-gradient-to-br from-white/15 to-white/5 rounded-2xl p-8 border border-white/10 hover:from-white/20 hover:to-white/10 transition-all duration-300',
     colored: 'bg-primary/5 rounded-2xl p-8 hover:bg-primary/10 transition-all duration-300',
+    metal: 'card-metal rounded-2xl p-8',
   }
 
   // Hover effect classes

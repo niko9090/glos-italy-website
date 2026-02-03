@@ -37,7 +37,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
+    <header className="sticky top-0 z-50 header-metal">
       <div className="container-glos">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -104,7 +104,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white border-t"
+            className="lg:hidden metal-brushed border-t border-gray-300/50"
             role="navigation"
             aria-label="Menu di navigazione mobile"
           >

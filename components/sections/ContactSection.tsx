@@ -1,4 +1,4 @@
-// Contact Section Component - VERSIONE AVANZATA
+// Contact Section Component - VERSIONE GLASSMORPHISM v2.0
 'use client'
 
 import { useState } from 'react'
@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
   MapPin, Phone, Mail, Clock, MessageCircle, Send,
-  Facebook, Instagram, Linkedin, Twitter, Youtube
+  Facebook, Instagram, Linkedin, Twitter, Youtube, CheckCircle2, AlertCircle
 } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
@@ -122,6 +122,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
   const [formData, setFormData] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [focusedField, setFocusedField] = useState<string | null>(null)
 
   // Background classes
   const bgClasses: Record<string, string> = {
@@ -233,13 +234,13 @@ export default function ContactSection({ data }: ContactSectionProps) {
     xl: 'h-[500px]',
   }
 
-  // Card style classes
+  // Card style classes - NUOVI stili glassmorphism
   const cardStyleClasses: Record<string, string> = {
     none: '',
-    border: 'border border-gray-200 rounded-xl p-6',
-    shadow: 'shadow-xl rounded-xl p-6 bg-white',
-    glass: 'bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20',
-    colored: 'bg-primary/5 rounded-xl p-6',
+    border: 'border border-gray-200 rounded-2xl p-6 md:p-8',
+    shadow: 'shadow-2xl rounded-2xl p-6 md:p-8 bg-white',
+    glass: 'bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl',
+    colored: 'bg-primary/5 rounded-2xl p-6 md:p-8',
   }
 
   // Icon style classes
@@ -248,25 +249,26 @@ export default function ContactSection({ data }: ContactSectionProps) {
       case 'simple':
         return 'text-primary'
       case 'circle-filled':
-        return 'w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center'
+        return 'w-12 h-12 bg-gradient-to-br from-primary to-primary-dark text-white rounded-full flex items-center justify-center shadow-lg'
       case 'circle-outlined':
         return 'w-12 h-12 border-2 border-primary text-primary rounded-full flex items-center justify-center'
       case 'square':
-        return 'w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center'
+        return 'w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center'
       default:
-        return 'w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center'
+        return 'w-12 h-12 bg-gradient-to-br from-primary to-primary-dark text-white rounded-full flex items-center justify-center shadow-lg'
     }
   }
 
-  // Form input classes based on style
-  const getInputClasses = () => {
-    const base = 'w-full px-4 py-3 transition-all focus:outline-none focus:ring-2 focus:ring-primary/50'
-    const formStyle = data.formStyle || 'classic'
-    if (formStyle?.includes('minimal')) return `${base} border-b border-gray-200 focus:border-primary bg-transparent`
-    if (formStyle?.includes('bordered')) return `${base} border-2 border-gray-200 rounded-lg focus:border-primary bg-transparent`
-    if (formStyle?.includes('floating')) return `${base} border border-gray-200 rounded-lg peer placeholder-transparent`
-    if (formStyle?.includes('card')) return `${base} border border-gray-100 rounded-lg bg-gray-50 focus:bg-white`
-    return `${base} border border-gray-200 rounded-lg`
+  // Form input classes - NUOVO stile con bordi colorati al focus
+  const getInputClasses = (fieldName?: string) => {
+    const isFocused = focusedField === fieldName
+    const base = 'w-full px-4 py-3.5 transition-all duration-300 ease-out focus:outline-none bg-white/60 backdrop-blur-sm'
+    const borderBase = 'border-2 rounded-xl'
+    const focusStyles = isFocused
+      ? 'border-primary ring-4 ring-primary/20 bg-white shadow-lg'
+      : 'border-gray-200/80 hover:border-gray-300'
+
+    return `${base} ${borderBase} ${focusStyles}`
   }
 
   // Animation variants
@@ -334,16 +336,32 @@ export default function ContactSection({ data }: ContactSectionProps) {
     }
   }
 
-  // Handle form submission
+  // Handle form submission - NUOVA implementazione con API
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus('idle')
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      setSubmitStatus('success')
-      setFormData({})
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          requestType: formData.requestType || undefined,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (response.ok && result.success) {
+        setSubmitStatus('success')
+        setFormData({})
+      } else {
+        throw new Error(result.error || 'Errore durante l\'invio')
+      }
     } catch {
       setSubmitStatus('error')
     } finally {
@@ -356,18 +374,18 @@ export default function ContactSection({ data }: ContactSectionProps) {
   const darkBg = ['primary', 'black', 'gradient'].includes(backgroundColor)
   const animationVariants = getAnimationVariants()
 
-  // Layout classes
+  // Layout classes - AGGIORNATI per bilanciamento altezze
   const getLayoutClasses = () => {
     const layout = data.layout || 'form-left'
-    if (layout?.includes('form-left')) return 'grid lg:grid-cols-2 gap-12'
-    if (layout?.includes('form-right')) return 'grid lg:grid-cols-2 gap-12'
+    if (layout?.includes('form-left')) return 'grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch'
+    if (layout?.includes('form-right')) return 'grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch'
     if (layout?.includes('stacked')) return 'flex flex-col gap-12'
     if (layout?.includes('map-first')) return 'flex flex-col-reverse gap-12'
     if (layout?.includes('form-only')) return 'max-w-2xl mx-auto'
     if (layout?.includes('info-only')) return 'max-w-4xl mx-auto'
-    if (layout?.includes('grid')) return 'grid md:grid-cols-3 gap-8'
+    if (layout?.includes('grid')) return 'grid md:grid-cols-3 gap-8 items-stretch'
     if (layout?.includes('map-overlay')) return 'relative'
-    return 'grid lg:grid-cols-2 gap-12'
+    return 'grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch'
   }
 
   // Use default fields if no custom fields defined
@@ -387,8 +405,9 @@ export default function ContactSection({ data }: ContactSectionProps) {
       {/* Decorations */}
       {data.showDecorations && (
         <>
-          <div className="absolute top-0 right-0 w-64 h-64 bg-current opacity-5 rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-current opacity-5 rounded-full translate-y-1/2 -translate-x-1/2" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-primary/3 rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl" />
         </>
       )}
 
@@ -425,47 +444,64 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
         {/* Main Layout */}
         <div className={getLayoutClasses()}>
-          {/* Contact Form */}
+          {/* Contact Form - NUOVO STILE GLASSMORPHISM */}
           {data.showForm !== false && (
             <motion.div
               initial={{ opacity: 0, x: data.layout?.includes('form-right') ? 50 : -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className={`${cardStyleClasses[data.cardStyle || 'shadow']} ${data.layout?.includes('form-right') ? 'lg:order-2' : ''}`}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className={`
+                bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8
+                border border-white/30 shadow-2xl
+                flex flex-col min-h-full
+                ${data.layout?.includes('form-right') ? 'lg:order-2' : ''}
+              `}
             >
               {!!data.formTitle && (
-                <h3 className="text-xl font-semibold mb-2">{String(t(data.formTitle) || '')}</h3>
+                <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                  {String(t(data.formTitle) || '')}
+                </h3>
               )}
               {!!data.formSubtitle && (
-                <p className="text-sm opacity-70 mb-6">{String(t(data.formSubtitle) || '')}</p>
+                <p className="text-gray-600 mb-6">{String(t(data.formSubtitle) || '')}</p>
               )}
 
               {submitStatus === 'success' ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-12"
+                  className="text-center py-12 flex-1 flex flex-col items-center justify-center"
                 >
-                  <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Send className="w-8 h-8" />
+                  <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
+                    <CheckCircle2 className="w-10 h-10" />
                   </div>
-                  <p className="text-lg font-medium">
+                  <p className="text-xl font-semibold text-gray-900">
                     {t(data.formSuccessMessage) || 'Messaggio inviato con successo!'}
                   </p>
+                  <p className="text-gray-600 mt-2">Ti risponderemo al piu presto.</p>
+                  <button
+                    onClick={() => setSubmitStatus('idle')}
+                    className="mt-6 text-primary hover:text-primary-dark font-medium transition-colors"
+                  >
+                    Invia un altro messaggio
+                  </button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-5 flex-1 flex flex-col">
                   {/* Request Type Dropdown */}
                   {data.showRequestType !== false && data.requestTypes && data.requestTypes.length > 0 && (
-                    <div className="mb-4">
-                      <label className="text-sm font-medium mb-1 block">
+                    <div>
+                      <label className="text-sm font-semibold text-gray-700 mb-2 block">
                         {t(data.requestTypeLabel) || 'Tipo di richiesta'} <span className="text-red-500">*</span>
                       </label>
                       <select
                         name="requestType"
                         required
-                        className={getInputClasses()}
+                        className={getInputClasses('requestType')}
                         value={formData['requestType'] || ''}
+                        onFocus={() => setFocusedField('requestType')}
+                        onBlur={() => setFocusedField(null)}
                         onChange={(e) => setFormData({ ...formData, requestType: e.target.value })}
                       >
                         <option value="">Seleziona il tipo di richiesta...</option>
@@ -478,37 +514,41 @@ export default function ContactSection({ data }: ContactSectionProps) {
                     </div>
                   )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 flex-1">
                     {formFields.map((field) => (
                       <div
                         key={field._key}
-                        className={field.width === 'half' ? '' : 'md:col-span-2'}
+                        className={`${field.width === 'half' ? '' : 'md:col-span-2'} ${field.type === 'textarea' ? 'flex flex-col flex-1' : ''}`}
                       >
                         {field.type === 'textarea' ? (
-                          <div className="relative">
-                            <label className="text-sm font-medium mb-1 block">
+                          <div className="relative flex flex-col flex-1">
+                            <label className="text-sm font-semibold text-gray-700 mb-2 block">
                               {String(t(field.label) || '')} {field.required && <span className="text-red-500">*</span>}
                             </label>
                             <textarea
                               name={field.name}
                               placeholder={t(field.placeholder) || ''}
                               required={field.required}
-                              rows={4}
-                              className={getInputClasses()}
+                              rows={5}
+                              className={`${getInputClasses(field.name)} flex-1 min-h-[140px] resize-none`}
                               value={formData[field.name || ''] || ''}
+                              onFocus={() => setFocusedField(field.name || null)}
+                              onBlur={() => setFocusedField(null)}
                               onChange={(e) => setFormData({ ...formData, [field.name || '']: e.target.value })}
                             />
                           </div>
                         ) : field.type === 'select' ? (
                           <div>
-                            <label className="text-sm font-medium mb-1 block">
+                            <label className="text-sm font-semibold text-gray-700 mb-2 block">
                               {String(t(field.label) || '')} {field.required && <span className="text-red-500">*</span>}
                             </label>
                             <select
                               name={field.name}
                               required={field.required}
-                              className={getInputClasses()}
+                              className={getInputClasses(field.name)}
                               value={formData[field.name || ''] || ''}
+                              onFocus={() => setFocusedField(field.name || null)}
+                              onBlur={() => setFocusedField(null)}
                               onChange={(e) => setFormData({ ...formData, [field.name || '']: e.target.value })}
                             >
                               <option value="">{t(field.placeholder) || 'Seleziona...'}</option>
@@ -518,20 +558,20 @@ export default function ContactSection({ data }: ContactSectionProps) {
                             </select>
                           </div>
                         ) : field.type === 'checkbox' ? (
-                          <label className="flex items-center gap-2 cursor-pointer">
+                          <label className="flex items-center gap-3 cursor-pointer group">
                             <input
                               type="checkbox"
                               name={field.name}
                               required={field.required}
-                              className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary"
+                              className="w-5 h-5 rounded border-2 border-gray-300 text-primary focus:ring-primary focus:ring-offset-0 transition-all"
                               checked={!!formData[field.name || '']}
                               onChange={(e) => setFormData({ ...formData, [field.name || '']: e.target.checked ? 'true' : '' })}
                             />
-                            <span className="text-sm">{String(t(field.label) || '')}</span>
+                            <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">{String(t(field.label) || '')}</span>
                           </label>
                         ) : (
                           <div className="relative">
-                            <label className="text-sm font-medium mb-1 block">
+                            <label className="text-sm font-semibold text-gray-700 mb-2 block">
                               {String(t(field.label) || '')} {field.required && <span className="text-red-500">*</span>}
                             </label>
                             <input
@@ -539,8 +579,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
                               name={field.name}
                               placeholder={t(field.placeholder) || ''}
                               required={field.required}
-                              className={getInputClasses()}
+                              className={getInputClasses(field.name)}
                               value={formData[field.name || ''] || ''}
+                              onFocus={() => setFocusedField(field.name || null)}
+                              onBlur={() => setFocusedField(null)}
                               onChange={(e) => setFormData({ ...formData, [field.name || '']: e.target.value })}
                             />
                           </div>
@@ -551,74 +593,104 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
                   {/* Privacy */}
                   {!!data.privacyText && (
-                    <div className="text-sm opacity-70">
+                    <div className="text-sm text-gray-500">
                       <RichText value={data.privacyText} />
                     </div>
                   )}
 
-                  {/* Submit Button */}
+                  {/* Submit Button - NUOVO STILE con gradiente e hover animato */}
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="btn-primary w-full flex items-center justify-center gap-2"
+                    className="
+                      w-full py-4 px-6
+                      bg-gradient-to-r from-primary via-primary to-primary-dark
+                      hover:from-primary-dark hover:via-primary hover:to-primary
+                      text-white font-semibold text-lg
+                      rounded-xl shadow-lg hover:shadow-xl
+                      transform hover:-translate-y-0.5 active:translate-y-0
+                      transition-all duration-300 ease-out
+                      flex items-center justify-center gap-3
+                      disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none
+                      group
+                    "
                   >
                     {isSubmitting ? (
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <>
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span>Invio in corso...</span>
+                      </>
                     ) : (
                       <>
-                        {t(data.submitButtonText) || 'Invia Messaggio'}
-                        {data.submitButtonIcon || <Send className="w-5 h-5" />}
+                        <span>{t(data.submitButtonText) || 'Invia Messaggio'}</span>
+                        <Send className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
                       </>
                     )}
                   </button>
 
                   {submitStatus === 'error' && (
-                    <p className="text-red-500 text-sm text-center">
-                      {t(data.formErrorMessage) || 'Si è verificato un errore. Riprova.'}
-                    </p>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex items-center gap-2 text-red-600 text-sm bg-red-50 rounded-lg p-3"
+                    >
+                      <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                      <span>{t(data.formErrorMessage) || 'Si e verificato un errore. Riprova.'}</span>
+                    </motion.div>
                   )}
                 </form>
               )}
             </motion.div>
           )}
 
-          {/* Contact Info & Map */}
+          {/* Contact Info & Map - CON STILE UNIFORME per bilanciamento */}
           <motion.div
             initial={{ opacity: 0, x: data.layout?.includes('form-right') ? -50 : 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className={`space-y-8 ${data.layout?.includes('form-right') ? 'lg:order-1' : ''}`}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
+            className={`
+              flex flex-col gap-6 min-h-full
+              ${data.layout?.includes('form-right') ? 'lg:order-1' : ''}
+            `}
           >
             {/* Contact Items */}
             {data.showContactInfo !== false && data.contactItems && data.contactItems.length > 0 && (
-              <div className={cardStyleClasses[data.cardStyle || 'shadow']}>
+              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl flex-1">
                 {!!data.contactInfoTitle && (
-                  <h3 className="text-xl font-semibold mb-6">{String(t(data.contactInfoTitle) || '')}</h3>
+                  <h3 className="text-xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+                    {String(t(data.contactInfoTitle) || '')}
+                  </h3>
                 )}
-                <div className="space-y-4">
+                <div className="space-y-5">
                   {data.contactItems.map((item) => (
-                    <div key={item._key} className="flex items-start gap-4">
+                    <motion.div
+                      key={item._key}
+                      className="flex items-start gap-4 group"
+                      whileHover={{ x: 5 }}
+                      transition={{ type: 'spring', stiffness: 300 }}
+                    >
                       <div className={getIconStyleClasses()}>
                         {item.icon ? String(item.icon) : getContactIcon(item.type)}
                       </div>
                       <div>
                         {!!item.label && (
-                          <p className="text-sm opacity-70">{String(t(item.label) || '')}</p>
+                          <p className="text-sm text-gray-500 mb-0.5">{String(t(item.label) || '')}</p>
                         )}
                         {item.link ? (
                           <a
                             href={item.link}
-                            className="font-medium hover:text-primary transition-colors"
+                            className="font-medium text-gray-900 hover:text-primary transition-colors"
                             target={item.link.startsWith('http') ? '_blank' : undefined}
                             rel={item.link.startsWith('http') ? 'noopener noreferrer' : undefined}
                           >
                             {item.value}
                           </a>
                         ) : (
-                          <p className="font-medium">{item.value}</p>
+                          <p className="font-medium text-gray-900">{item.value}</p>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -626,18 +698,18 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
             {/* Opening Hours */}
             {data.showOpeningHours && data.openingHours && data.openingHours.length > 0 && (
-              <div className={cardStyleClasses[data.cardStyle || 'shadow']}>
-                <div className="flex items-center gap-3 mb-4">
+              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl">
+                <div className="flex items-center gap-3 mb-5">
                   <div className={getIconStyleClasses()}>
                     <Clock className="w-5 h-5" />
                   </div>
-                  <h3 className="text-lg font-semibold">{t(data.openingHoursTitle) || 'Orari di Apertura'}</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{t(data.openingHoursTitle) || 'Orari di Apertura'}</h3>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {data.openingHours.map((hours) => (
-                    <div key={hours._key} className="flex justify-between">
-                      <span className="opacity-80">{String(t(hours.days) || '')}</span>
-                      <span className="font-medium">{hours.hours}</span>
+                    <div key={hours._key} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+                      <span className="text-gray-600">{String(t(hours.days) || '')}</span>
+                      <span className="font-semibold text-gray-900">{hours.hours}</span>
                     </div>
                   ))}
                 </div>
@@ -646,22 +718,24 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
             {/* Social Links */}
             {data.showSocialLinks && data.socialLinks && data.socialLinks.length > 0 && (
-              <div>
+              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl">
                 {!!data.socialTitle && (
-                  <h3 className="text-lg font-semibold mb-4">{String(t(data.socialTitle) || '')}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">{String(t(data.socialTitle) || '')}</h3>
                 )}
                 <div className="flex flex-wrap gap-3">
                   {data.socialLinks.map((social) => (
-                    <a
+                    <motion.a
                       key={social._key}
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`${getIconStyleClasses()} hover:scale-110 transition-transform`}
+                      className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark text-white rounded-xl flex items-center justify-center shadow-lg hover:shadow-xl"
                       title={social.label || social.platform}
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       {getSocialIcon(social.platform)}
-                    </a>
+                    </motion.a>
                   ))}
                 </div>
               </div>
@@ -669,7 +743,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
             {/* Map */}
             {data.showMap !== false && (
-              <div className={`${mapHeightClasses[data.mapHeight || 'md']} rounded-xl overflow-hidden`}>
+              <div className={`${mapHeightClasses[data.mapHeight || 'md']} rounded-2xl overflow-hidden shadow-xl border border-white/30`}>
                 {data.mapType?.includes('google') && data.mapEmbedUrl ? (
                   <iframe
                     src={data.mapEmbedUrl}
@@ -690,8 +764,11 @@ export default function ContactSection({ data }: ContactSectionProps) {
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <MapPin className="w-12 h-12 text-gray-400" />
+                  <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                    <div className="text-center">
+                      <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                      <p className="text-gray-500 text-sm">Mappa non configurata</p>
+                    </div>
                   </div>
                 )}
               </div>

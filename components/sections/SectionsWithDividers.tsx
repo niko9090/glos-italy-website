@@ -37,6 +37,10 @@ const sectionBgMap: Record<string, 'white' | 'gray' | 'primary' | 'dark' | 'grad
   mapSection: 'gray',
   counterSection: 'primary',
   pricingSection: 'white',
+  // New business sections
+  sectorsSection: 'gray',
+  strengthsSection: 'white',
+  caseStudiesSection: 'gray',
 }
 
 // Divider types based on transition

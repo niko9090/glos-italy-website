@@ -16,3 +16,6 @@ export {
   SkeletonListItem,
   SkeletonBadge,
 } from './Skeleton'
+
+// WhatsApp Button
+export { WhatsAppButton } from './WhatsAppButton'

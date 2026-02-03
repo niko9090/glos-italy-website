@@ -275,3 +275,153 @@ export const faqsByCategoryQuery = groq`
     answer
   }
 `
+
+// ============================================
+// SETTORI (SECTORS)
+// ============================================
+
+export const allSectorsQuery = groq`
+  *[_type == "sector"] | order(order asc, name asc) {
+    _id,
+    name,
+    slug,
+    description,
+    icon,
+    image,
+    color,
+    "productCount": count(*[_type == "product" && references(^._id)])
+  }
+`
+
+export const sectorBySlugQuery = groq`
+  *[_type == "sector" && slug.current == $slug][0] {
+    _id,
+    name,
+    slug,
+    description,
+    fullDescription,
+    icon,
+    image,
+    color,
+    keyPoints,
+    "products": *[_type == "product" && references(^._id)] {
+      _id,
+      name,
+      slug,
+      shortDescription,
+      mainImage
+    }
+  }
+`
+
+export const sectorSlugsQuery = groq`
+  *[_type == "sector" && defined(slug.current)].slug.current
+`
+
+export const productsBySectorQuery = groq`
+  *[_type == "product" && isActive == true && references($sectorId)] | order(sortOrder asc) {
+    _id,
+    name,
+    slug,
+    shortDescription,
+    mainImage,
+    isNew,
+    isFeatured
+  }
+`
+
+// ============================================
+// CASE STUDIES
+// ============================================
+
+export const allCaseStudiesQuery = groq`
+  *[_type == "caseStudy"] | order(featured desc, publishedAt desc) {
+    _id,
+    title,
+    slug,
+    client,
+    clientLogo,
+    excerpt,
+    image,
+    isFeatured,
+    publishedAt,
+    sector->{
+      _id,
+      name,
+      slug
+    },
+    stats[] {
+      _key,
+      label,
+      value,
+      suffix
+    }
+  }
+`
+
+export const caseStudyBySlugQuery = groq`
+  *[_type == "caseStudy" && slug.current == $slug][0] {
+    _id,
+    title,
+    slug,
+    client,
+    clientLogo,
+    excerpt,
+    image,
+    gallery,
+    isFeatured,
+    publishedAt,
+    sector->{
+      _id,
+      name,
+      slug
+    },
+    challenge,
+    solution,
+    results,
+    resultsList[] {
+      _key,
+      text
+    },
+    stats[] {
+      _key,
+      label,
+      value,
+      suffix
+    },
+    testimonial {
+      quote,
+      author,
+      role,
+      company,
+      avatar
+    },
+    products[]->{
+      _id,
+      name,
+      slug,
+      mainImage,
+      shortDescription
+    },
+    seo
+  }
+`
+
+export const caseStudySlugsQuery = groq`
+  *[_type == "caseStudy" && defined(slug.current)].slug.current
+`
+
+export const featuredCaseStudiesQuery = groq`
+  *[_type == "caseStudy" && featured == true] | order(publishedAt desc)[0...6] {
+    _id,
+    title,
+    slug,
+    client,
+    sector->{
+      name
+    },
+    challenge,
+    results,
+    gallery
+  }
+`

@@ -46,6 +46,13 @@ interface SocialLink {
   label?: string
 }
 
+interface RequestType {
+  _key?: string
+  value?: string
+  label?: unknown
+  icon?: string
+}
+
 interface ContactSectionProps {
   data: {
     // Content
@@ -63,6 +70,10 @@ interface ContactSectionProps {
     formTitle?: unknown
     formSubtitle?: unknown
     formFields?: FormField[]
+    // Request Type (tipo di richiesta)
+    showRequestType?: boolean
+    requestTypeLabel?: unknown
+    requestTypes?: RequestType[]
     submitButtonText?: unknown
     submitButtonIcon?: string
     formSuccessMessage?: unknown
@@ -444,6 +455,29 @@ export default function ContactSection({ data }: ContactSectionProps) {
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Request Type Dropdown */}
+                  {data.showRequestType !== false && data.requestTypes && data.requestTypes.length > 0 && (
+                    <div className="mb-4">
+                      <label className="text-sm font-medium mb-1 block">
+                        {t(data.requestTypeLabel) || 'Tipo di richiesta'} <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="requestType"
+                        required
+                        className={getInputClasses()}
+                        value={formData['requestType'] || ''}
+                        onChange={(e) => setFormData({ ...formData, requestType: e.target.value })}
+                      >
+                        <option value="">Seleziona il tipo di richiesta...</option>
+                        {data.requestTypes.map((rt, idx) => (
+                          <option key={rt._key || idx} value={rt.value || ''}>
+                            {rt.icon ? `${rt.icon} ` : ''}{t(rt.label) || rt.value}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {formFields.map((field) => (
                       <div

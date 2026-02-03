@@ -16,14 +16,27 @@ const config: Config = {
         },
         secondary: 'var(--color-secondary)',
         accent: 'var(--color-accent)',
+        // Palette metallica industriale (grigi alluminio/acciaio)
+        metal: {
+          50: 'var(--color-metal-50)',   // quasi bianco
+          100: 'var(--color-metal-100)', // alluminio chiaro
+          200: 'var(--color-metal-200)', // alluminio
+          300: 'var(--color-metal-300)', // alluminio medio
+          400: 'var(--color-metal-400)', // grigio medio
+          500: 'var(--color-metal-500)', // acciaio
+          600: 'var(--color-metal-600)', // acciaio scuro
+          700: 'var(--color-metal-700)', // antracite
+          800: 'var(--color-metal-800)', // quasi nero
+          900: 'var(--color-metal-900)', // nero tecnico
+        },
       },
       fontFamily: {
+        // Inter come font principale per look industriale/meccanico
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        heading: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         serif: ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'monospace'],
-        display: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
-        handwriting: ['Caveat', 'cursive', 'system-ui'],
+        display: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       animation: {
         // Base animations

@@ -35,6 +35,11 @@ const MapSection = dynamic(() => import('./MapSection'))
 const CounterSection = dynamic(() => import('./CounterSection'))
 const PricingSection = dynamic(() => import('./PricingSection'))
 
+// New business sections
+const SectorsSection = dynamic(() => import('./SectorsSection'))
+const StrengthsSection = dynamic(() => import('./StrengthsSection'))
+const CaseStudiesSection = dynamic(() => import('./CaseStudiesSection'))
+
 interface SectionRendererProps {
   section: any
   products?: Product[]
@@ -90,6 +95,16 @@ export function SectionRenderer({ section, products }: SectionRendererProps) {
 
     case 'timelineSection':
       return <TimelineSection data={section} />
+
+    // === BUSINESS SECTIONS ===
+    case 'sectorsSection':
+      return <SectorsSection data={section} />
+
+    case 'strengthsSection':
+      return <StrengthsSection data={section} />
+
+    case 'caseStudiesSection':
+      return <CaseStudiesSection data={section} />
 
     // === SOCIAL PROOF ===
     case 'testimonialsSection':

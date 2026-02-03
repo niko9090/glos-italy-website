@@ -21,6 +21,16 @@ import {
   featuredTestimonialsQuery,
   allFaqsQuery,
   faqsByCategoryQuery,
+  // Sectors
+  allSectorsQuery,
+  sectorBySlugQuery,
+  sectorSlugsQuery,
+  productsBySectorQuery,
+  // Case Studies
+  allCaseStudiesQuery,
+  caseStudyBySlugQuery,
+  caseStudySlugsQuery,
+  featuredCaseStudiesQuery,
 } from './queries'
 
 // ===========================================
@@ -151,6 +161,51 @@ export interface FAQ {
   question?: string
   answer?: string
   category?: string
+}
+
+export interface Sector {
+  _id: string
+  name?: unknown
+  slug?: { current: string }
+  description?: unknown
+  fullDescription?: unknown
+  icon?: string
+  image?: unknown
+  color?: string
+  productCount?: number
+  keyPoints?: Array<{
+    _key: string
+    icon?: string
+    title?: unknown
+    description?: unknown
+  }>
+  products?: Product[]
+}
+
+export interface CaseStudy {
+  _id: string
+  title?: unknown
+  slug?: { current: string }
+  client?: string
+  sector?: {
+    _id: string
+    name?: unknown
+    slug?: { current: string }
+  }
+  products?: Product[]
+  challenge?: unknown
+  solution?: unknown
+  results?: unknown
+  stats?: Array<{
+    _key: string
+    label?: string
+    value?: string
+  }>
+  gallery?: unknown[]
+  testimonial?: unknown
+  testimonialAuthor?: string
+  featured?: boolean
+  publishedAt?: string
 }
 
 // ===========================================
@@ -364,6 +419,93 @@ export async function getFaqsByCategory(
     { category },
     preview,
     ['faqs']
+  )
+  return result || []
+}
+
+// ===========================================
+// SECTORS
+// Cache tags: 'sectors', 'sector-{slug}' - invalidated on sector changes
+// ===========================================
+
+export async function getSectors(preview = false): Promise<Sector[]> {
+  const result = await sanityFetch<Sector[]>(allSectorsQuery, {}, preview, [
+    'sectors',
+  ])
+  return result || []
+}
+
+export async function getSectorBySlug(
+  slug: string,
+  preview = false
+): Promise<Sector | null> {
+  return sanityFetch<Sector | null>(
+    sectorBySlugQuery,
+    { slug },
+    preview,
+    ['sectors', `sector-${slug}`]
+  )
+}
+
+export async function getSectorSlugs(): Promise<string[]> {
+  const result = await sanityFetch<string[]>(sectorSlugsQuery, {}, false, [
+    'sectors',
+  ])
+  return result || []
+}
+
+export async function getProductsBySector(
+  sectorId: string,
+  preview = false
+): Promise<Product[]> {
+  const result = await sanityFetch<Product[]>(
+    productsBySectorQuery,
+    { sectorId },
+    preview,
+    ['products', 'sectors']
+  )
+  return result || []
+}
+
+// ===========================================
+// CASE STUDIES
+// Cache tags: 'caseStudies', 'caseStudy-{slug}' - invalidated on case study changes
+// ===========================================
+
+export async function getCaseStudies(preview = false): Promise<CaseStudy[]> {
+  const result = await sanityFetch<CaseStudy[]>(allCaseStudiesQuery, {}, preview, [
+    'caseStudies',
+  ])
+  return result || []
+}
+
+export async function getCaseStudyBySlug(
+  slug: string,
+  preview = false
+): Promise<CaseStudy | null> {
+  return sanityFetch<CaseStudy | null>(
+    caseStudyBySlugQuery,
+    { slug },
+    preview,
+    ['caseStudies', `caseStudy-${slug}`]
+  )
+}
+
+export async function getCaseStudySlugs(): Promise<string[]> {
+  const result = await sanityFetch<string[]>(caseStudySlugsQuery, {}, false, [
+    'caseStudies',
+  ])
+  return result || []
+}
+
+export async function getFeaturedCaseStudies(
+  preview = false
+): Promise<CaseStudy[]> {
+  const result = await sanityFetch<CaseStudy[]>(
+    featuredCaseStudiesQuery,
+    {},
+    preview,
+    ['caseStudies']
   )
   return result || []
 }

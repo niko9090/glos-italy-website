@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { getPageBySlug, getPageSlugs, getFeaturedProducts, getSiteSettings } from '@/lib/sanity/fetch'
-import { SectionRenderer } from '@/components/sections/SectionRenderer'
+import { SectionsWithDividers } from '@/components/sections/SectionsWithDividers'
 import { generatePageMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import { OrganizationSchema, BreadcrumbSchema, WebPageSchema } from '@/components/seo/JsonLd'
@@ -86,14 +86,8 @@ export default async function DynamicPage({ params }: PageProps) {
         url={`/${slug}`}
       />
 
-      {/* Page Content */}
-      {page.sections?.map((section, index) => (
-        <SectionRenderer
-          key={section._key || index}
-          section={section}
-          products={products}
-        />
-      ))}
+      {/* Page Content with Dividers */}
+      <SectionsWithDividers sections={page.sections || []} products={products} />
     </>
   )
 }

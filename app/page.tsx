@@ -2,7 +2,7 @@
 import { Metadata } from 'next'
 import { draftMode } from 'next/headers'
 import { getPageBySlug, getFeaturedProducts, getSiteSettings } from '@/lib/sanity/fetch'
-import { SectionRenderer } from '@/components/sections/SectionRenderer'
+import { SectionsWithDividers } from '@/components/sections/SectionsWithDividers'
 import { generateSiteMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import { OrganizationSchema, WebsiteSchema, WebPageSchema } from '@/components/seo/JsonLd'
@@ -85,14 +85,8 @@ export default async function HomePage() {
         url="/"
       />
 
-      {/* Page Content */}
-      {page.sections?.map((section, index) => (
-        <SectionRenderer
-          key={section._key || index}
-          section={section}
-          products={products}
-        />
-      ))}
+      {/* Page Content with Dividers */}
+      <SectionsWithDividers sections={page.sections || []} products={products} />
     </>
   )
 }

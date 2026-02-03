@@ -179,10 +179,10 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
       >
         {slug ? (
           <Link href={`/case-studies/${slug}`} className="block w-full h-full">
-            {renderCardContent(caseStudy, imageUrl, logoUrl, isHorizontal, isImageOverlay, isFeatured)}
+            {renderCardContent(caseStudy, imageUrl, logoUrl, isHorizontal, isImageOverlay, isFeatured ?? false)}
           </Link>
         ) : (
-          renderCardContent(caseStudy, imageUrl, logoUrl, isHorizontal, isImageOverlay, isFeatured)
+          renderCardContent(caseStudy, imageUrl, logoUrl, isHorizontal, isImageOverlay, isFeatured ?? false)
         )}
       </motion.article>
     )

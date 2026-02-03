@@ -197,12 +197,12 @@ export interface CaseStudy {
   solution?: unknown
   results?: unknown
   stats?: Array<{
-    _key: string
+    _key?: string
+    number?: string
     label?: string
-    value?: string
   }>
   gallery?: unknown[]
-  testimonial?: unknown
+  testimonial?: string
   testimonialAuthor?: string
   featured?: boolean
   publishedAt?: string

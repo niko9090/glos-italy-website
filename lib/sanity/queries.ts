@@ -340,10 +340,9 @@ export const allCaseStudiesQuery = groq`
     title,
     slug,
     client,
-    clientLogo,
-    excerpt,
-    image,
-    isFeatured,
+    challenge,
+    gallery,
+    featured,
     publishedAt,
     sector->{
       _id,
@@ -352,9 +351,8 @@ export const allCaseStudiesQuery = groq`
     },
     stats[] {
       _key,
-      label,
-      value,
-      suffix
+      number,
+      label
     }
   }
 `
@@ -365,11 +363,8 @@ export const caseStudyBySlugQuery = groq`
     title,
     slug,
     client,
-    clientLogo,
-    excerpt,
-    image,
     gallery,
-    isFeatured,
+    featured,
     publishedAt,
     sector->{
       _id,
@@ -379,31 +374,20 @@ export const caseStudyBySlugQuery = groq`
     challenge,
     solution,
     results,
-    resultsList[] {
-      _key,
-      text
-    },
     stats[] {
       _key,
-      label,
-      value,
-      suffix
+      number,
+      label
     },
-    testimonial {
-      quote,
-      author,
-      role,
-      company,
-      avatar
-    },
+    testimonial,
+    testimonialAuthor,
     products[]->{
       _id,
       name,
       slug,
       mainImage,
       shortDescription
-    },
-    seo
+    }
   }
 `
 

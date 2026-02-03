@@ -105,15 +105,16 @@ export default async function CaseStudiesPage() {
           {caseStudies.length > 0 ? (
             <div className="space-y-8">
               {caseStudies.map((caseStudy, index) => {
-                const imageUrl = isValidImage(caseStudy.image) ? safeImageUrl(caseStudy.image, 800, 500) : null
-                const logoUrl = isValidImage(caseStudy.clientLogo) ? safeImageUrl(caseStudy.clientLogo, 200, 100) : null
+                // Use first gallery image as main image
+                const heroImage = caseStudy.gallery?.[0]
+                const imageUrl = isValidImage(heroImage) ? safeImageUrl(heroImage, 800, 500) : null
                 const title = getTextValue(caseStudy.title)
-                const client = getTextValue(caseStudy.client)
+                const client = caseStudy.client || ''
                 const sector = getTextValue(caseStudy.sector?.name)
-                const excerpt = getTextValue(caseStudy.excerpt)
+                const excerpt = getTextValue(caseStudy.challenge)
                 const slug = caseStudy.slug?.current
                 const stats = caseStudy.stats || []
-                const isFeatured = caseStudy.isFeatured && index === 0
+                const isFeatured = caseStudy.featured && index === 0
 
                 // Featured layout for first featured item
                 if (isFeatured) {
@@ -161,16 +162,9 @@ export default async function CaseStudiesPage() {
 
                             {/* Client */}
                             {client && (
-                              <div className="flex items-center gap-3 mb-4">
-                                {logoUrl && (
-                                  <div className="relative w-16 h-8">
-                                    <Image src={logoUrl} alt={client} fill className="object-contain" />
-                                  </div>
-                                )}
-                                <div className="flex items-center gap-2 text-gray-600">
-                                  <Building2 className="w-4 h-4" />
-                                  <span className="font-medium">{client}</span>
-                                </div>
+                              <div className="flex items-center gap-2 text-gray-600 mb-4">
+                                <Building2 className="w-4 h-4" />
+                                <span className="font-medium">{client}</span>
                               </div>
                             )}
 
@@ -184,13 +178,13 @@ export default async function CaseStudiesPage() {
                             {/* Stats */}
                             {stats.length > 0 && (
                               <div className="flex flex-wrap gap-8 py-6 border-t border-gray-100 mb-6">
-                                {stats.slice(0, 3).map((stat: any) => (
-                                  <div key={stat._key}>
+                                {stats.slice(0, 3).map((stat: any, idx: number) => (
+                                  <div key={stat._key || idx}>
                                     <div className="text-2xl lg:text-3xl font-bold text-primary">
-                                      {stat.value}{stat.suffix}
+                                      {stat.number}
                                     </div>
                                     <div className="text-sm text-gray-500">
-                                      {getTextValue(stat.label)}
+                                      {stat.label}
                                     </div>
                                   </div>
                                 ))}
@@ -236,25 +230,17 @@ export default async function CaseStudiesPage() {
                         {/* Content */}
                         <div className="flex-1 p-6 lg:p-8">
                           {/* Header */}
-                          <div className="flex items-start justify-between mb-4">
-                            <div>
-                              {/* Sector Badge */}
-                              {sector && (
-                                <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium mb-2">
-                                  {sector}
-                                </span>
-                              )}
-                              {/* Title */}
-                              <h2 className="text-xl lg:text-2xl font-bold group-hover:text-primary transition-colors">
-                                {title}
-                              </h2>
-                            </div>
-                            {/* Client Logo */}
-                            {logoUrl && (
-                              <div className="relative w-16 h-8 shrink-0 opacity-60">
-                                <Image src={logoUrl} alt="" fill className="object-contain" />
-                              </div>
+                          <div className="mb-4">
+                            {/* Sector Badge */}
+                            {sector && (
+                              <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium mb-2">
+                                {sector}
+                              </span>
                             )}
+                            {/* Title */}
+                            <h2 className="text-xl lg:text-2xl font-bold group-hover:text-primary transition-colors">
+                              {title}
+                            </h2>
                           </div>
 
                           {/* Client */}
@@ -275,13 +261,13 @@ export default async function CaseStudiesPage() {
                           {/* Stats */}
                           {stats.length > 0 && (
                             <div className="flex flex-wrap gap-6 py-4 border-t border-gray-100">
-                              {stats.slice(0, 4).map((stat: any) => (
-                                <div key={stat._key}>
+                              {stats.slice(0, 4).map((stat: any, idx: number) => (
+                                <div key={stat._key || idx}>
                                   <div className="text-lg lg:text-xl font-bold text-primary">
-                                    {stat.value}{stat.suffix}
+                                    {stat.number}
                                   </div>
                                   <div className="text-xs text-gray-500">
-                                    {getTextValue(stat.label)}
+                                    {stat.label}
                                   </div>
                                 </div>
                               ))}

@@ -282,7 +282,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             <div className="max-w-4xl mx-auto text-center">
               <Quote className="w-12 h-12 mx-auto mb-6 opacity-50" />
               <blockquote className="text-xl md:text-2xl lg:text-3xl font-medium italic mb-8">
-                &ldquo;{caseStudy.testimonial}&rdquo;
+                &ldquo;{String(caseStudy.testimonial)}&rdquo;
               </blockquote>
               {caseStudy.testimonialAuthor && (
                 <div className="font-semibold text-lg">

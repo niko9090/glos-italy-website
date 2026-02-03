@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { draftMode } from 'next/headers'
 import { getCaseStudyBySlug, getCaseStudySlugs, getSiteSettings } from '@/lib/sanity/fetch'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { ArrowLeft, ArrowRight, Building2, Quote, Package, CheckCircle, Target, Lightbulb, TrendingUp } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Building2, Quote, Package, Target, Lightbulb, TrendingUp } from 'lucide-react'
 import RichText from '@/components/RichText'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
@@ -37,17 +37,17 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
 
   const title = getTextValue(caseStudy.title)
   const client = getTextValue(caseStudy.client)
-  const excerpt = getTextValue(caseStudy.excerpt) || `Case study ${title} - ${client}`
+  const description = getTextValue(caseStudy.challenge) || `Case study ${title} - ${client}`
 
   return {
     title: `${title} | Case Study`,
-    description: excerpt,
+    description,
     alternates: {
       canonical: `${SITE_URL}/case-studies/${slug}`,
     },
     openGraph: {
       title: `${title} | Case Study GLOS Italy`,
-      description: excerpt,
+      description,
       url: `${SITE_URL}/case-studies/${slug}`,
       siteName: SITE_NAME,
       locale: 'it_IT',
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
     twitter: {
       card: 'summary_large_image',
       title: `${title} | Case Study`,
-      description: excerpt,
+      description,
     },
   }
 }
@@ -76,11 +76,12 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
   // Extract safe values
   const title = getTextValue(caseStudy.title)
-  const client = getTextValue(caseStudy.client)
+  const client = caseStudy.client || ''
   const sector = getTextValue(caseStudy.sector?.name)
-  const excerpt = getTextValue(caseStudy.excerpt)
-  const heroImageUrl = isValidImage(caseStudy.image) ? safeImageUrl(caseStudy.image, 1920, 800) : null
-  const logoUrl = isValidImage(caseStudy.clientLogo) ? safeImageUrl(caseStudy.clientLogo, 300, 150) : null
+  const challengeText = getTextValue(caseStudy.challenge)
+  // Use first gallery image as hero if available
+  const heroImage = caseStudy.gallery?.[0]
+  const heroImageUrl = isValidImage(heroImage) ? safeImageUrl(heroImage, 1920, 800) : null
   const stats = caseStudy.stats || []
   const gallery = caseStudy.gallery || []
   const products = caseStudy.products || []
@@ -99,7 +100,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
       <BreadcrumbSchema items={breadcrumbItems} />
       <WebPageSchema
         title={title}
-        description={excerpt || `Case study: ${title}`}
+        description={challengeText || `Case study: ${title}`}
         url={`/case-studies/${slug}`}
       />
 
@@ -149,23 +150,16 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
 
             {/* Client Info */}
             {client && (
-              <div className="flex items-center gap-4 mb-6">
-                {logoUrl && (
-                  <div className="relative w-24 h-12 bg-white/10 backdrop-blur-sm rounded-lg p-2">
-                    <Image src={logoUrl} alt={client} fill className="object-contain" />
-                  </div>
-                )}
-                <div className="flex items-center gap-2 text-white/90">
-                  <Building2 className="w-5 h-5" />
-                  <span className="text-lg font-medium">{client}</span>
-                </div>
+              <div className="flex items-center gap-2 text-white/90 mb-6">
+                <Building2 className="w-5 h-5" />
+                <span className="text-lg font-medium">{client}</span>
               </div>
             )}
 
-            {/* Excerpt */}
-            {excerpt && (
-              <p className="text-lg md:text-xl text-white/80 max-w-2xl">
-                {excerpt}
+            {/* Challenge Preview */}
+            {challengeText && (
+              <p className="text-lg md:text-xl text-white/80 max-w-2xl line-clamp-3">
+                {challengeText}
               </p>
             )}
           </div>
@@ -177,13 +171,13 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
         <section className="bg-primary text-white py-8">
           <div className="container-glos">
             <div className="flex flex-wrap justify-center gap-8 lg:gap-16">
-              {stats.map((stat: any) => (
-                <div key={stat._key} className="text-center">
+              {stats.map((stat: any, index: number) => (
+                <div key={stat._key || index} className="text-center">
                   <div className="text-3xl md:text-4xl lg:text-5xl font-bold">
-                    {stat.value}{stat.suffix}
+                    {stat.number}
                   </div>
                   <div className="text-sm md:text-base text-white/80 mt-1">
-                    {getTextValue(stat.label)}
+                    {stat.label}
                   </div>
                 </div>
               ))}
@@ -245,20 +239,6 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                 <RichText value={caseStudy.results} />
               </div>
 
-              {/* Results List */}
-              {caseStudy.resultsList && caseStudy.resultsList.length > 0 && (
-                <div className="mt-8 grid gap-4">
-                  {caseStudy.resultsList.map((result: any, index: number) => (
-                    <div
-                      key={result._key || index}
-                      className="flex items-start gap-3 p-4 bg-green-50 rounded-xl"
-                    >
-                      <CheckCircle className="w-6 h-6 text-green-600 shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{getTextValue(result.text)}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
         </section>
@@ -302,33 +282,13 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
             <div className="max-w-4xl mx-auto text-center">
               <Quote className="w-12 h-12 mx-auto mb-6 opacity-50" />
               <blockquote className="text-xl md:text-2xl lg:text-3xl font-medium italic mb-8">
-                &ldquo;{getTextValue(caseStudy.testimonial.quote)}&rdquo;
+                &ldquo;{caseStudy.testimonial}&rdquo;
               </blockquote>
-              <div className="flex items-center justify-center gap-4">
-                {caseStudy.testimonial.avatar && isValidImage(caseStudy.testimonial.avatar) && (
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden">
-                    <Image
-                      src={safeImageUrl(caseStudy.testimonial.avatar, 128, 128) || ''}
-                      alt=""
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-                <div className="text-left">
-                  <div className="font-semibold text-lg">
-                    {getTextValue(caseStudy.testimonial.author)}
-                  </div>
-                  {caseStudy.testimonial.role && (
-                    <div className="text-white/70">
-                      {getTextValue(caseStudy.testimonial.role)}
-                      {caseStudy.testimonial.company && (
-                        <>, {getTextValue(caseStudy.testimonial.company)}</>
-                      )}
-                    </div>
-                  )}
+              {caseStudy.testimonialAuthor && (
+                <div className="font-semibold text-lg">
+                  — {caseStudy.testimonialAuthor}
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </section>

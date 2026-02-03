@@ -9,7 +9,17 @@ import { isValidImage, safeImageUrl, getFileUrl } from '@/lib/sanity/client'
 import { ArrowRight, ChevronDown, Play, Download, Phone, Mail } from 'lucide-react'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
-import { MOTION, staggerContainer, staggerItem, fadeInUp } from '@/lib/animations/config'
+import {
+  MOTION,
+  staggerContainer,
+  staggerItem,
+  fadeInUp,
+  heroStagger,
+  heroItem,
+  badgeBounce,
+  scrollIndicatorPulse,
+  glowButton,
+} from '@/lib/animations/config'
 
 interface HeroButton {
   _key: string

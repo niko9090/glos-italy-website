@@ -13,6 +13,7 @@ import {
   staggerContainer,
   staggerItem,
   hoverLift,
+  photoHover,
 } from '@/lib/animations/config'
 
 interface TeamSectionProps {

@@ -53,7 +53,20 @@ const config: Config = {
         'shimmer': 'shimmer 2s infinite',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'float': 'float 3s ease-in-out infinite',
+        'float-slow': 'float 6s ease-in-out infinite',
+        'float-delayed': 'float 4s ease-in-out infinite 1s',
         'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',
+
+        // Modern animations
+        'gradient-shift': 'gradientShift 8s ease infinite',
+        'gradient-slow': 'gradientShift 15s ease infinite',
+        'text-reveal': 'textReveal 0.8s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+        'blob-morph': 'blobMorph 8s ease-in-out infinite',
+        'bounce-in': 'bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards',
+        'zoom-pulse': 'zoomPulse 2s ease-in-out infinite',
+        'rotate-slow': 'rotateSlow 20s linear infinite',
+        'line-draw': 'lineDraw 2s ease-out forwards',
+        'counter-bounce': 'counterBounce 0.6s ease-out',
       },
       keyframes: {
         fadeIn: {

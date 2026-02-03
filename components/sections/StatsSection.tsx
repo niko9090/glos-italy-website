@@ -60,23 +60,26 @@ interface StatsSectionProps {
   }
 }
 
-// Animated counter component
+// Animated counter component with bounce finish effect
 function AnimatedNumber({
   value,
   prefix = '',
   suffix = '',
   animate = true,
-  duration = 2000
+  duration = 2000,
+  onComplete,
 }: {
   value: string
   prefix?: string
   suffix?: string
   animate?: boolean
   duration?: number
+  onComplete?: () => void
 }) {
   const ref = useRef<HTMLSpanElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
   const [displayValue, setDisplayValue] = useState(0)
+  const [isComplete, setIsComplete] = useState(false)
 
   // Extract numeric value from string like "500" or "30"
   const targetNumber = parseInt(value?.replace(/[^0-9]/g, '') || '0', 10)
@@ -85,6 +88,7 @@ function AnimatedNumber({
   useEffect(() => {
     if (!isInView || !animate) {
       setDisplayValue(targetNumber)
+      setIsComplete(true)
       return
     }
 
@@ -94,9 +98,9 @@ function AnimatedNumber({
       const elapsed = Date.now() - startTime
       const progress = Math.min(elapsed / duration, 1)
 
-      // Ease-out cubic
-      const easeOut = 1 - Math.pow(1 - progress, 3)
-      const current = Math.floor(targetNumber * easeOut)
+      // Ease-out cubic with slight overshoot for bounce effect
+      const easeOutBack = 1 - Math.pow(1 - progress, 3) * (1 + 0.3 * (1 - progress))
+      const current = Math.floor(targetNumber * Math.min(easeOutBack, 1))
 
       setDisplayValue(current)
 
@@ -104,18 +108,25 @@ function AnimatedNumber({
         requestAnimationFrame(animateCount)
       } else {
         setDisplayValue(targetNumber)
+        setIsComplete(true)
+        onComplete?.()
       }
     }
 
     requestAnimationFrame(animateCount)
-  }, [isInView, targetNumber, animate, duration])
+  }, [isInView, targetNumber, animate, duration, onComplete])
 
   return (
-    <span ref={ref} className="tabular-nums">
+    <motion.span
+      ref={ref}
+      className="tabular-nums inline-block"
+      animate={isComplete ? { scale: [1, 1.1, 1] } : {}}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+    >
       {prefix}
       {displayValue}
       {suffix || originalSuffix}
-    </span>
+    </motion.span>
   )
 }
 

@@ -158,16 +158,16 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
     }
   }
 
-  // Card style classes
+  // Card style classes - enhanced with modern effects
   const cardStyleClasses: Record<string, string> = {
     none: '',
-    border: 'border border-gray-200 rounded-xl p-6',
-    'shadow-sm': 'shadow-sm rounded-xl p-6 bg-white',
-    'shadow-md': 'shadow-md rounded-xl p-6 bg-white',
-    'shadow-lg': 'shadow-lg rounded-xl p-6 bg-white',
-    glass: 'bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20',
-    gradient: 'bg-gradient-to-br from-white/10 to-white/5 rounded-xl p-6',
-    colored: 'bg-primary/5 rounded-xl p-6',
+    border: 'border border-gray-200 rounded-2xl p-8 hover:border-primary/30 transition-all duration-300',
+    'shadow-sm': 'shadow-sm rounded-2xl p-8 bg-white hover:shadow-lg transition-all duration-300',
+    'shadow-md': 'shadow-md rounded-2xl p-8 bg-white hover:shadow-xl transition-all duration-300',
+    'shadow-lg': 'shadow-lg rounded-2xl p-8 bg-white hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300',
+    glass: 'bg-white/10 backdrop-blur-xl rounded-2xl p-8 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.1)] hover:bg-white/15 hover:border-white/30 hover:shadow-[0_16px_48px_rgba(0,71,171,0.15)] transition-all duration-300',
+    gradient: 'bg-gradient-to-br from-white/15 to-white/5 rounded-2xl p-8 border border-white/10 hover:from-white/20 hover:to-white/10 transition-all duration-300',
+    colored: 'bg-primary/5 rounded-2xl p-8 hover:bg-primary/10 transition-all duration-300',
   }
 
   // Hover effect classes

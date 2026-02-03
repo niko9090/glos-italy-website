@@ -128,10 +128,12 @@ export default function CTASection({ data }: CTASectionProps) {
         'black-gray': 'bg-gradient-to-r from-gray-800 via-gray-900 to-black',
         'radial-blue': 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600 via-blue-800 to-gray-900',
         'radial-purple': 'bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-600 via-purple-800 to-gray-900',
+        'animated-blue': 'gradient-animated bg-gradient-to-r from-primary via-blue-600 to-primary-dark',
+        'animated-purple': 'gradient-animated bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600',
       }
       const direction = data.gradientDirection || 'to-r'
       let gradientClass = gradients[data.gradient || 'blue-dark'] || gradients['blue-dark']
-      if (direction !== 'to-r') {
+      if (direction !== 'to-r' && !gradientClass.includes('radial') && !gradientClass.includes('animated')) {
         gradientClass = gradientClass.replace('to-r', direction)
       }
       return gradientClass

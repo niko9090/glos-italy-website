@@ -28,12 +28,13 @@ const titleVariants = {
 }
 
 const lineDrawVariants = {
-  hidden: { scaleY: 0 },
+  hidden: { scaleY: 0, opacity: 0 },
   visible: {
     scaleY: 1,
+    opacity: 1,
     transition: {
-      duration: MOTION.DURATION.SLOWER,
-      ease: MOTION.EASE.IN_OUT,
+      duration: 1.5,
+      ease: [0.25, 0.46, 0.45, 0.94],
     }
   }
 }

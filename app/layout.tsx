@@ -2,9 +2,15 @@
 import type { Metadata } from 'next'
 import { Inter, Poppins } from 'next/font/google'
 import { draftMode } from 'next/headers'
-import { VisualEditing } from 'next-sanity'
+import dynamic from 'next/dynamic'
 import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
+
+// Dynamic import del componente Visual Editing (client-side only)
+const LiveVisualEditing = dynamic(
+  () => import('@/components/sanity/LiveVisualEditing'),
+  { ssr: false }
+)
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import PageTransition from '@/components/layout/PageTransition'
@@ -97,8 +103,8 @@ export default async function RootLayout({
           </main>
           <Footer settings={settings} navigation={navigation} />
         </LanguageProvider>
-        {/* Visual Editing per Sanity - attivo solo in draft mode */}
-        {isDraftMode && <VisualEditing />}
+        {/* Visual Editing + Live Updates per Sanity - attivo solo in draft mode */}
+        {isDraftMode && <LiveVisualEditing />}
       </body>
     </html>
   )

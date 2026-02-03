@@ -252,7 +252,7 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
 
               {comparison.caption ? (
                 <p className={`text-center mt-4 ${textColor}`}>
-                  {t(comparison.caption)}
+                  {String(t(comparison.caption) || '')}
                 </p>
               ) : null}
             </motion.div>

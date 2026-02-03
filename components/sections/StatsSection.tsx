@@ -411,7 +411,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
                 {/* Description */}
                 {!!stat.description && (
                   <div className="text-sm opacity-70 mt-2">
-                    {t(stat.description)}
+                    {String(t(stat.description) || '')}
                   </div>
                 )}
 

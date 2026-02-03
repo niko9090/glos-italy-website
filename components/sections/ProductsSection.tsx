@@ -99,7 +99,7 @@ export default function ProductsSection({ data, products }: ProductsSectionProps
         {data.buttonText && data.buttonLink && (
           <div className="text-center mt-12">
             <Link href={data.buttonLink} className="btn-primary">
-              {t(data.buttonText)}
+              {String(t(data.buttonText) || '')}
             </Link>
           </div>
         )}
@@ -328,7 +328,7 @@ function ProductCard({ product, variant = 'grid' }: { product: Product; variant?
             )}
 
             <h3 className="text-xl md:text-2xl font-semibold mt-1 mb-3 group-hover:text-primary transition-colors duration-300">
-              {t(product.name)}
+              {String(t(product.name) || '')}
             </h3>
 
             <div className="text-gray-600 line-clamp-3 sm:line-clamp-4">
@@ -413,7 +413,7 @@ function ProductCard({ product, variant = 'grid' }: { product: Product; variant?
           )}
 
           <h3 className="text-xl font-semibold mt-1 mb-2 group-hover:text-primary transition-colors duration-300">
-            {t(product.name)}
+            {String(t(product.name) || '')}
           </h3>
 
           <div className="text-gray-600 line-clamp-2 flex-1">

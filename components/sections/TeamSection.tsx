@@ -156,11 +156,11 @@ export default function TeamSection({ data }: TeamSectionProps) {
               {/* Name & Role */}
               <h3 className="text-xl font-semibold mb-1">{member.name}</h3>
               {member.role ? (
-                <p className="text-primary font-medium mb-3">{t(member.role)}</p>
+                <p className="text-primary font-medium mb-3">{String(t(member.role) || '')}</p>
               ) : null}
 
               {data.showBio && member.bio ? (
-                <p className="text-gray-600 text-sm mb-4">{t(member.bio)}</p>
+                <p className="text-gray-600 text-sm mb-4">{String(t(member.bio) || '')}</p>
               ) : null}
 
               {/* Contact & Social */}

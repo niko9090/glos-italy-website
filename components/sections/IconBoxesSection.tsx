@@ -221,10 +221,10 @@ export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
                 {/* Text */}
                 <div className={data.iconPosition?.includes('left') ? 'flex-1' : ''}>
                   <h3 className={`text-xl font-semibold mb-2 ${textColor} group-hover:text-primary transition-colors`}>
-                    {t(box.title)}
+                    {String(t(box.title) || '')}
                   </h3>
                   {box.description ? (
-                    <p className="text-gray-600">{t(box.description)}</p>
+                    <p className="text-gray-600">{String(t(box.description) || '')}</p>
                   ) : null}
                 </div>
               </motion.div>

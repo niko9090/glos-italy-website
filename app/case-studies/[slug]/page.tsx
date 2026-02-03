@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
   }
 
   const title = getTextValue(caseStudy.title)
-  const client = getTextValue(caseStudy.client)
+  const client = caseStudy.client || ''
   const description = getTextValue(caseStudy.challenge) || `Case study ${title} - ${client}`
 
   return {

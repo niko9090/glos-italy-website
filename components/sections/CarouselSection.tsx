@@ -349,7 +349,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                     transition={{ delay: 0.15 }}
                     className="text-sm md:text-base font-semibold tracking-widest uppercase text-white/80 mb-3"
                   >
-                    {t(currentSlide.subtitle)}
+                    {String(t(currentSlide.subtitle) || '')}
                   </motion.p>
                 )}
 
@@ -361,7 +361,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                     transition={{ delay: 0.2 }}
                     className="text-3xl md:text-5xl font-bold text-white mb-4"
                   >
-                    {t(currentSlide.title)}
+                    {String(t(currentSlide.title) || '')}
                   </motion.h3>
                 )}
 
@@ -373,7 +373,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                     transition={{ delay: 0.3 }}
                     className="text-lg md:text-xl text-white/90 mb-6"
                   >
-                    {t(currentSlide.description)}
+                    {String(t(currentSlide.description) || '')}
                   </motion.p>
                 )}
 
@@ -390,7 +390,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                         href={currentSlide.buttonLink}
                         className={buttonVariantClasses[currentSlide.buttonVariant || 'primary']}
                       >
-                        {t(currentSlide.buttonText)}
+                        {String(t(currentSlide.buttonText) || '')}
                       </Link>
                     )}
                     {!!currentSlide.secondButtonText && currentSlide.secondButtonLink && (
@@ -398,7 +398,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
                         href={currentSlide.secondButtonLink}
                         className={buttonVariantClasses['ghost']}
                       >
-                        {t(currentSlide.secondButtonText)}
+                        {String(t(currentSlide.secondButtonText) || '')}
                       </Link>
                     )}
                   </motion.div>

@@ -420,14 +420,14 @@ export default function CTASection({ data }: CTASectionProps) {
                 badgeColorClasses[data.badge.color || 'blue']
               }`}
             >
-              {t(data.badge.text)}
+              {String(t(data.badge.text) || '')}
             </motion.span>
           )}
 
           {/* Eyebrow */}
           {!!data.eyebrow && (
             <p className="text-sm font-semibold tracking-widest uppercase mb-4 opacity-80">
-              {t(data.eyebrow)}
+              {String(t(data.eyebrow) || '')}
             </p>
           )}
 
@@ -446,7 +446,7 @@ export default function CTASection({ data }: CTASectionProps) {
           {/* Description */}
           {!!data.description && (
             <p className="mb-6 opacity-80">
-              {t(data.description)}
+              {String(t(data.description) || '')}
             </p>
           )}
 
@@ -456,7 +456,7 @@ export default function CTASection({ data }: CTASectionProps) {
               {data.highlights.map((highlight) => (
                 <div key={highlight._key} className="flex items-center gap-2">
                   <span className="text-lg">{highlight.icon ? String(highlight.icon) : <Check className="w-5 h-5" />}</span>
-                  <span className="text-sm">{t(highlight.text)}</span>
+                  <span className="text-sm">{String(t(highlight.text) || '')}</span>
                 </div>
               ))}
             </div>
@@ -487,7 +487,7 @@ export default function CTASection({ data }: CTASectionProps) {
                     }`}
                   >
                     {button.iconPosition === 'left' && button.icon ? getIcon(button.icon) : null}
-                    {t(button.text)}
+                    {String(t(button.text) || '')}
                     {(button.iconPosition !== 'left' || !button.icon) && (
                       index === 0 ? getIcon(button.icon || 'arrow-right') : (button.icon ? getIcon(button.icon) : null)
                     )}

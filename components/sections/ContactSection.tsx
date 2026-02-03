@@ -403,7 +403,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
         >
           {!!data.eyebrow && (
             <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${darkBg ? 'opacity-80' : 'text-primary'}`}>
-              {t(data.eyebrow)}
+              {String(t(data.eyebrow) || '')}
             </p>
           )}
           {!!data.title && (
@@ -418,7 +418,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
           )}
           {!!data.description && (
             <p className="mt-4 max-w-2xl mx-auto opacity-80">
-              {t(data.description)}
+              {String(t(data.description) || '')}
             </p>
           )}
         </motion.div>
@@ -434,10 +434,10 @@ export default function ContactSection({ data }: ContactSectionProps) {
               className={`${cardStyleClasses[data.cardStyle || 'shadow']} ${data.layout?.includes('form-right') ? 'lg:order-2' : ''}`}
             >
               {!!data.formTitle && (
-                <h3 className="text-xl font-semibold mb-2">{t(data.formTitle)}</h3>
+                <h3 className="text-xl font-semibold mb-2">{String(t(data.formTitle) || '')}</h3>
               )}
               {!!data.formSubtitle && (
-                <p className="text-sm opacity-70 mb-6">{t(data.formSubtitle)}</p>
+                <p className="text-sm opacity-70 mb-6">{String(t(data.formSubtitle) || '')}</p>
               )}
 
               {submitStatus === 'success' ? (
@@ -487,7 +487,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                         {field.type === 'textarea' ? (
                           <div className="relative">
                             <label className="text-sm font-medium mb-1 block">
-                              {t(field.label)} {field.required && <span className="text-red-500">*</span>}
+                              {String(t(field.label) || '')} {field.required && <span className="text-red-500">*</span>}
                             </label>
                             <textarea
                               name={field.name}
@@ -502,7 +502,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                         ) : field.type === 'select' ? (
                           <div>
                             <label className="text-sm font-medium mb-1 block">
-                              {t(field.label)} {field.required && <span className="text-red-500">*</span>}
+                              {String(t(field.label) || '')} {field.required && <span className="text-red-500">*</span>}
                             </label>
                             <select
                               name={field.name}
@@ -527,12 +527,12 @@ export default function ContactSection({ data }: ContactSectionProps) {
                               checked={!!formData[field.name || '']}
                               onChange={(e) => setFormData({ ...formData, [field.name || '']: e.target.checked ? 'true' : '' })}
                             />
-                            <span className="text-sm">{t(field.label)}</span>
+                            <span className="text-sm">{String(t(field.label) || '')}</span>
                           </label>
                         ) : (
                           <div className="relative">
                             <label className="text-sm font-medium mb-1 block">
-                              {t(field.label)} {field.required && <span className="text-red-500">*</span>}
+                              {String(t(field.label) || '')} {field.required && <span className="text-red-500">*</span>}
                             </label>
                             <input
                               type={field.type || 'text'}
@@ -593,7 +593,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
             {data.showContactInfo !== false && data.contactItems && data.contactItems.length > 0 && (
               <div className={cardStyleClasses[data.cardStyle || 'shadow']}>
                 {!!data.contactInfoTitle && (
-                  <h3 className="text-xl font-semibold mb-6">{t(data.contactInfoTitle)}</h3>
+                  <h3 className="text-xl font-semibold mb-6">{String(t(data.contactInfoTitle) || '')}</h3>
                 )}
                 <div className="space-y-4">
                   {data.contactItems.map((item) => (
@@ -603,7 +603,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                       </div>
                       <div>
                         {!!item.label && (
-                          <p className="text-sm opacity-70">{t(item.label)}</p>
+                          <p className="text-sm opacity-70">{String(t(item.label) || '')}</p>
                         )}
                         {item.link ? (
                           <a
@@ -636,7 +636,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                 <div className="space-y-2">
                   {data.openingHours.map((hours) => (
                     <div key={hours._key} className="flex justify-between">
-                      <span className="opacity-80">{t(hours.days)}</span>
+                      <span className="opacity-80">{String(t(hours.days) || '')}</span>
                       <span className="font-medium">{hours.hours}</span>
                     </div>
                   ))}
@@ -648,7 +648,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
             {data.showSocialLinks && data.socialLinks && data.socialLinks.length > 0 && (
               <div>
                 {!!data.socialTitle && (
-                  <h3 className="text-lg font-semibold mb-4">{t(data.socialTitle)}</h3>
+                  <h3 className="text-lg font-semibold mb-4">{String(t(data.socialTitle) || '')}</h3>
                 )}
                 <div className="flex flex-wrap gap-3">
                   {data.socialLinks.map((social) => (

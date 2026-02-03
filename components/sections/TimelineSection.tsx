@@ -219,8 +219,8 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
                         <Image src={safeImageUrl(item.image, 300, 200)!} alt="" fill className="object-cover" />
                       </div>
                     )}
-                    <h3 className={`font-semibold mb-2 ${textColor}`}>{t(item.title)}</h3>
-                    <p className="text-sm text-gray-600">{t(item.description)}</p>
+                    <h3 className={`font-semibold mb-2 ${textColor}`}>{String(t(item.title) || '')}</h3>
+                    <p className="text-sm text-gray-600">{String(t(item.description) || '')}</p>
                   </motion.div>
                 </motion.div>
               ))}
@@ -337,8 +337,8 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
                       </motion.div>
                     )}
 
-                    <h3 className={`text-xl font-semibold mb-2 ${textColor}`}>{t(item.title)}</h3>
-                    <p className="text-gray-600">{t(item.description)}</p>
+                    <h3 className={`text-xl font-semibold mb-2 ${textColor}`}>{String(t(item.title) || '')}</h3>
+                    <p className="text-gray-600">{String(t(item.description) || '')}</p>
                   </motion.div>
                 </div>
               </motion.div>

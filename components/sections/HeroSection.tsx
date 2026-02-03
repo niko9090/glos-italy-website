@@ -570,7 +570,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
                 badgeColorClasses[data.badge.color || 'blue']
               }`}
             >
-              {t(data.badge.text)}
+              {String(t(data.badge.text) || '')}
             </motion.div>
           )}
 
@@ -580,7 +580,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
               variants={heroItemVariants}
               className="text-sm md:text-base font-semibold tracking-widest uppercase mb-4 opacity-80"
             >
-              {t(data.eyebrow)}
+              {String(t(data.eyebrow) || '')}
             </motion.p>
           )}
 
@@ -635,7 +635,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
                     } ${index === 0 ? 'shadow-lg shadow-white/20' : ''}`}
                   >
                     {button.iconPosition === 'left' && button.icon && getIcon(button.icon)}
-                    {t(button.text)}
+                    {String(t(button.text) || '')}
                     {(button.iconPosition !== 'left' || !button.icon) && (
                       index === 0 ? getIcon(button.icon || 'arrow-right') : button.icon && getIcon(button.icon)
                     )}
@@ -696,7 +696,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
         >
           {!!data.scrollIndicatorText && (
             <p className={`text-sm mb-2 opacity-60 ${textColorClasses[textColor]}`}>
-              {t(data.scrollIndicatorText)}
+              {String(t(data.scrollIndicatorText) || '')}
             </p>
           )}
           <motion.div

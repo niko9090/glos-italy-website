@@ -208,7 +208,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
       {/* Eyebrow */}
       {data.eyebrow ? (
         <div className={`text-sm font-semibold uppercase tracking-wider mb-3 ${isDark ? 'text-white/70' : 'text-primary'}`}>
-          {t(data.eyebrow)}
+          {String(t(data.eyebrow) || '')}
         </div>
       ) : null}
 

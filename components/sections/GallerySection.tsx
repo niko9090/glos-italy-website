@@ -440,7 +440,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                         ? 'bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity'
                         : 'bg-gradient-to-t from-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform'
                     }`}>
-                      <p className="text-white text-sm">{t(image.caption)}</p>
+                      <p className="text-white text-sm">{String(t(image.caption) || '')}</p>
                     </div>
                   )}
                 </ImageWrapper>
@@ -570,7 +570,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
                       }`}
                     >
                       <p className={`text-center text-lg ${data.lightboxStyle?.includes('minimal') ? '' : 'text-white'}`}>
-                        {t(displayedImages[lightboxIndex].caption)}
+                        {String(t(displayedImages[lightboxIndex].caption) || '')}
                       </p>
                     </motion.div>
                   )}

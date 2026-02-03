@@ -288,7 +288,7 @@ export default function MapSection({ data, dealers = [] }: MapSectionProps) {
             </div>
           )}
           <div className="flex-grow min-w-0">
-            <h3 className="text-lg font-semibold truncate">{t(dealer.name)}</h3>
+            <h3 className="text-lg font-semibold truncate">{String(t(dealer.name) || '')}</h3>
             <p className="text-sm text-gray-500">
               {[dealer.city, dealer.country].filter(Boolean).join(', ')}
             </p>
@@ -301,7 +301,7 @@ export default function MapSection({ data, dealers = [] }: MapSectionProps) {
                     className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full"
                   >
                     <Award className="w-3 h-3" />
-                    {t(cert)}
+                    {String(t(cert) || '')}
                   </span>
                 ))}
               </div>
@@ -310,33 +310,33 @@ export default function MapSection({ data, dealers = [] }: MapSectionProps) {
         </div>
 
         {dealer.description && (
-          <p className="mt-4 text-sm text-gray-600 line-clamp-2">{t(dealer.description)}</p>
+          <p className="mt-4 text-sm text-gray-600 line-clamp-2">{String(t(dealer.description) || '')}</p>
         )}
 
         {dealer.address && (
           <div className="flex items-start gap-2 mt-4 text-sm text-gray-600">
             <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5 text-primary" />
-            <span>{t(dealer.address)}</span>
+            <span>{String(t(dealer.address) || '')}</span>
           </div>
         )}
 
         <div className="mt-4 space-y-2">
           {dealer.phone && (
             <a
-              href={`tel:${String(t(dealer.phone)).replace(/\s/g, '')}`}
+              href={`tel:${String(t(dealer.phone) || '').replace(/\s/g, '')}`}
               className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary transition-colors"
             >
               <Phone className="w-4 h-4" />
-              {t(dealer.phone)}
+              {String(t(dealer.phone) || '')}
             </a>
           )}
           {dealer.email && (
             <a
-              href={`mailto:${t(dealer.email)}`}
+              href={`mailto:${String(t(dealer.email) || '')}`}
               className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary transition-colors"
             >
               <Mail className="w-4 h-4" />
-              {t(dealer.email)}
+              {String(t(dealer.email) || '')}
             </a>
           )}
           {dealer.website && (
@@ -357,7 +357,7 @@ export default function MapSection({ data, dealers = [] }: MapSectionProps) {
           <div className="mt-4 pt-4 border-t">
             <div className="flex items-start gap-2 text-sm text-gray-600">
               <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
-              <span className="whitespace-pre-line">{t(dealer.openingHours)}</span>
+              <span className="whitespace-pre-line">{String(t(dealer.openingHours) || '')}</span>
             </div>
           </div>
         )}
@@ -371,7 +371,7 @@ export default function MapSection({ data, dealers = [] }: MapSectionProps) {
                   key={index}
                   className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded"
                 >
-                  {t(region)}
+                  {String(t(region) || '')}
                 </span>
               ))}
             </div>

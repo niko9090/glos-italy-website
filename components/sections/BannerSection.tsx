@@ -77,7 +77,7 @@ export default function BannerSection({ data }: BannerSectionProps) {
           href={data.buttonLink}
           className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full font-medium transition-all backdrop-blur-sm"
         >
-          {t(data.buttonText)}
+          {String(t(data.buttonText) || '')}
         </Link>
       ) : null}
     </div>

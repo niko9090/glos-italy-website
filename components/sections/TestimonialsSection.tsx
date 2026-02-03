@@ -409,7 +409,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             <span className={`absolute -top-2 -left-2 text-6xl ${accentColor} opacity-20 font-serif`}>"</span>
           )}
           <span className={data.quoteStyle?.includes('italic') ? 'italic' : ''}>
-            "{t(testimonial.quote)}"
+            "{String(t(testimonial.quote) || '')}"
           </span>
         </blockquote>
 
@@ -613,7 +613,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                 ? 'bg-primary text-white rounded-bl-none'
                 : 'bg-gray-100 text-gray-900 rounded-br-none'
             }`}>
-              <p className={quoteSizeClasses[data.quoteSize || 'md']}>"{t(testimonialItem.quote)}"</p>
+              <p className={quoteSizeClasses[data.quoteSize || 'md']}>"{String(t(testimonialItem.quote) || '')}"</p>
               <div className={`absolute bottom-0 ${i % 2 === 0 ? 'left-0 -translate-x-full' : 'right-0 translate-x-full'} w-0 h-0 border-t-[20px] ${i % 2 === 0 ? 'border-t-primary' : 'border-t-gray-100'} ${i % 2 === 0 ? 'border-r-[20px] border-r-transparent' : 'border-l-[20px] border-l-transparent'}`} />
             </div>
             <div className={`flex items-center gap-3 mt-4 ${i % 2 === 0 ? '' : 'justify-end'}`}>
@@ -761,7 +761,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           >
             {!!data.eyebrow && (
               <p className="text-sm font-semibold tracking-widest uppercase mb-4 opacity-70">
-                {t(data.eyebrow)}
+                {String(t(data.eyebrow) || '')}
               </p>
             )}
             {!!data.title && (
@@ -770,7 +770,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               </h2>
             )}
             {!!data.subtitle && (
-              <p className="section-subtitle mx-auto mb-4">{t(data.subtitle)}</p>
+              <p className="section-subtitle mx-auto mb-4">{String(t(data.subtitle) || '')}</p>
             )}
             {!!data.description && (
               <div className="max-w-2xl mx-auto opacity-80">
@@ -790,7 +790,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           >
             <div className="inline-flex flex-col items-center gap-2 p-6 bg-white/10 backdrop-blur-sm rounded-2xl">
               {!!data.aggregateRatingTitle && (
-                <p className="text-sm opacity-70">{t(data.aggregateRatingTitle)}</p>
+                <p className="text-sm opacity-70">{String(t(data.aggregateRatingTitle) || '')}</p>
               )}
               <div className="flex items-center gap-3">
                 <span className="text-4xl font-bold">{aggregateRating.toFixed(1)}</span>
@@ -826,7 +826,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               href={data.ctaLink}
               className="btn-primary inline-flex items-center gap-2"
             >
-              {t(data.ctaText)}
+              {String(t(data.ctaText) || '')}
               <ExternalLink className="w-4 h-4" />
             </Link>
           </motion.div>

@@ -290,7 +290,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
           >
             {!!data.eyebrow && (
               <p className="text-sm font-semibold tracking-widest uppercase mb-4 text-primary">
-                {t(data.eyebrow)}
+                {String(t(data.eyebrow) || '')}
               </p>
             )}
             {!!data.title && (
@@ -404,21 +404,21 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                     {/* Badge */}
                     {!!item.badge && (
                       <span className="inline-block px-2 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-2">
-                        {t(item.badge)}
+                        {String(t(item.badge) || '')}
                       </span>
                     )}
 
                     {/* Title */}
                     {!!item.title && (
                       <h3 className={`text-lg font-semibold mb-2 ${item.link ? 'group-hover:text-primary transition-colors' : ''}`}>
-                        {t(item.title)}
+                        {String(t(item.title) || '')}
                       </h3>
                     )}
 
                     {/* Description */}
                     {!!item.description && (
                       <p className="text-sm opacity-70 leading-relaxed">
-                        {t(item.description)}
+                        {String(t(item.description) || '')}
                       </p>
                     )}
 
@@ -513,7 +513,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
               href={data.ctaLink}
               className={`inline-flex items-center gap-2 ${ctaVariantClasses[data.ctaVariant || 'primary']}`}
             >
-              {t(data.ctaText)}
+              {String(t(data.ctaText) || '')}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>

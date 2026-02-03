@@ -339,7 +339,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
                 isOpen ? 'text-primary' : textColor
               }`}
             >
-              {t(item.question)}
+              {String(t(item.question) || '')}
             </span>
           </div>
           <ToggleIcon isOpen={isOpen} itemKey={item._key} />
@@ -394,7 +394,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
               </span>
             )}
             <h3 className={`text-xl font-semibold ${textColor}`}>
-              {t(item.question)}
+              {String(t(item.question) || '')}
             </h3>
           </div>
           <div className={`text-gray-600 ${showNumbers ? 'ml-11' : ''}`}>
@@ -500,7 +500,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
                 viewport={{ once: true }}
                 className="text-sm font-semibold tracking-widest uppercase text-primary mb-4"
               >
-                {t(data.eyebrow)}
+                {String(t(data.eyebrow) || '')}
               </motion.p>
             )}
             {!!data.title && (
@@ -611,7 +611,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
             <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 max-w-2xl mx-auto">
               {!!data.ctaTitle && (
                 <h3 className={`text-2xl font-semibold mb-4 ${textColor}`}>
-                  {t(data.ctaTitle)}
+                  {String(t(data.ctaTitle) || '')}
                 </h3>
               )}
               {!!data.ctaButton && data.ctaLink && (
@@ -619,7 +619,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
                   href={data.ctaLink}
                   className="inline-flex items-center gap-2 btn-primary"
                 >
-                  {t(data.ctaButton)}
+                  {String(t(data.ctaButton) || '')}
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               )}

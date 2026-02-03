@@ -115,7 +115,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                 className={currentStyle.tab(index === activeTab)}
               >
                 {tab.icon && <span className="mr-2">{tab.icon}</span>}
-                {t(tab.label)}
+                {String(t(tab.label) || '')}
               </button>
             ))}
           </div>
@@ -140,7 +140,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                         {activeContent.features.map((feature) => (
                           <li key={feature._key} className="flex items-start gap-3">
                             <span className="text-primary">{feature.icon || <Check className="w-5 h-5" />}</span>
-                            <span>{t(feature.text)}</span>
+                            <span>{String(t(feature.text) || '')}</span>
                           </li>
                         ))}
                       </ul>
@@ -149,7 +149,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                     {/* Button */}
                     {activeContent.buttonText && activeContent.buttonLink ? (
                       <Link href={activeContent.buttonLink} className="btn-primary mt-6 inline-block">
-                        {t(activeContent.buttonText)}
+                        {String(t(activeContent.buttonText) || '')}
                       </Link>
                     ) : null}
                   </div>
@@ -167,7 +167,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
                           {activeContent.features.map((feature) => (
                             <li key={feature._key} className="flex items-start gap-3">
                               <span className="text-primary text-xl">{feature.icon || '✓'}</span>
-                              <span>{t(feature.text)}</span>
+                              <span>{String(t(feature.text) || '')}</span>
                             </li>
                           ))}
                         </ul>
@@ -175,7 +175,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
 
                       {activeContent.buttonText && activeContent.buttonLink ? (
                         <Link href={activeContent.buttonLink} className="btn-primary mt-6 inline-block">
-                          {t(activeContent.buttonText)}
+                          {String(t(activeContent.buttonText) || '')}
                         </Link>
                       ) : null}
                     </div>

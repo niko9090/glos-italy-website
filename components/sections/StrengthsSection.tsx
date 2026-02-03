@@ -301,7 +301,7 @@ export default function StrengthsSection({ data }: StrengthsSectionProps) {
           >
             {!!data.eyebrow && (
               <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${isDarkBg ? 'text-white/80' : 'text-primary'}`}>
-                {t(data.eyebrow)}
+                {String(t(data.eyebrow) || '')}
               </p>
             )}
             {!!data.title && (
@@ -367,12 +367,12 @@ export default function StrengthsSection({ data }: StrengthsSectionProps) {
                 >
                   {!!item.title && (
                     <h3 className="text-lg lg:text-xl font-semibold mb-2">
-                      {t(item.title)}
+                      {String(t(item.title) || '')}
                     </h3>
                   )}
                   {!!item.description && (
                     <p className={`text-sm lg:text-base ${isDarkBg ? 'text-white/70' : 'text-gray-600'} leading-relaxed`}>
-                      {t(item.description)}
+                      {String(t(item.description) || '')}
                     </p>
                   )}
                 </div>

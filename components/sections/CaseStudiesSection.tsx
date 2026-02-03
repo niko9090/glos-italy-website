@@ -465,7 +465,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
           >
             {!!data.eyebrow && (
               <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${isDarkBg ? 'text-white/80' : 'text-primary'}`}>
-                {t(data.eyebrow)}
+                {String(t(data.eyebrow) || '')}
               </p>
             )}
             {!!data.title && (
@@ -509,7 +509,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
               href={data.ctaLink}
               className="inline-flex items-center gap-2 btn-primary"
             >
-              {t(data.ctaText)}
+              {String(t(data.ctaText) || '')}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>

@@ -133,10 +133,10 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
 
             <div>
               <h3 className={`font-semibold group-hover:text-primary transition-colors ${textColor}`}>
-                {t(file.title)}
+                {String(t(file.title) || '')}
               </h3>
               {file.description && !layout?.includes('compact') ? (
-                <p className="text-sm text-gray-600 mt-1">{t(file.description)}</p>
+                <p className="text-sm text-gray-600 mt-1">{String(t(file.description) || '')}</p>
               ) : null}
               {data.showFileSize && file.fileSize && (
                 <span className="text-xs text-gray-500 mt-1 block">{file.fileSize}</span>

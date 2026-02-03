@@ -224,7 +224,7 @@ export default function SectorsSection({ data }: SectorsSectionProps) {
                 viewport={{ once: true }}
                 className="text-sm font-semibold tracking-widest uppercase mb-4 text-primary"
               >
-                {t(data.eyebrow)}
+                {String(t(data.eyebrow) || '')}
               </motion.p>
             )}
             {!!data.title && (
@@ -306,14 +306,14 @@ export default function SectorsSection({ data }: SectorsSectionProps) {
                   {/* Title */}
                   {!!sector.title && (
                     <h3 className="text-xl lg:text-2xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                      {t(sector.title)}
+                      {String(t(sector.title) || '')}
                     </h3>
                   )}
 
                   {/* Description */}
                   {data.showDescription !== false && !!sector.description && (
                     <p className={`text-sm lg:text-base ${imageUrl ? 'text-white/80' : 'text-gray-600'} line-clamp-3`}>
-                      {t(sector.description)}
+                      {String(t(sector.description) || '')}
                     </p>
                   )}
 
@@ -371,7 +371,7 @@ export default function SectorsSection({ data }: SectorsSectionProps) {
               href={data.ctaLink}
               className="inline-flex items-center gap-2 btn-primary"
             >
-              {t(data.ctaText)}
+              {String(t(data.ctaText) || '')}
               <ArrowRight className="w-5 h-5" />
             </Link>
           </motion.div>

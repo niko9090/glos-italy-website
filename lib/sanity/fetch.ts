@@ -47,6 +47,8 @@ export interface SiteSettings {
   facebook?: string
   instagram?: string
   linkedin?: string
+  whatsapp?: string
+  whatsappMessage?: string
 }
 
 export interface Navigation {

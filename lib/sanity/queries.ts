@@ -15,7 +15,9 @@ export const siteSettingsQuery = groq`
     address,
     facebook,
     instagram,
-    linkedin
+    linkedin,
+    whatsapp,
+    whatsappMessage
   }
 `
 

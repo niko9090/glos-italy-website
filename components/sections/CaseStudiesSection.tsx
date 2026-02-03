@@ -219,20 +219,20 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             {/* Sector Badge */}
             {data.showSector !== false && caseStudy.sector && (
               <span className="inline-block px-3 py-1 bg-primary/80 backdrop-blur-sm rounded-full text-xs font-medium mb-3">
-                {t(caseStudy.sector)}
+                {String(t(caseStudy.sector) || '')}
               </span>
             )}
 
             {/* Title */}
             <h3 className="text-xl lg:text-2xl font-bold mb-2 group-hover:text-primary-light transition-colors">
-              {t(caseStudy.title)}
+              {String(t(caseStudy.title) || '')}
             </h3>
 
             {/* Client */}
             {data.showClient !== false && caseStudy.client && (
               <div className="flex items-center gap-2 text-white/80 mb-3">
                 <Building2 className="w-4 h-4" />
-                <span className="text-sm">{t(caseStudy.client)}</span>
+                <span className="text-sm">{String(t(caseStudy.client) || '')}</span>
               </div>
             )}
 
@@ -244,7 +244,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
                     <div className="text-xl lg:text-2xl font-bold text-primary-light">
                       {stat.value}{stat.suffix}
                     </div>
-                    <div className="text-xs text-white/60">{t(stat.label)}</div>
+                    <div className="text-xs text-white/60">{String(t(stat.label) || '')}</div>
                   </div>
                 ))}
               </div>
@@ -286,13 +286,13 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
                 {/* Sector Badge */}
                 {data.showSector !== false && caseStudy.sector && (
                   <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium mb-2">
-                    {t(caseStudy.sector)}
+                    {String(t(caseStudy.sector) || '')}
                   </span>
                 )}
 
                 {/* Title */}
                 <h3 className="text-xl lg:text-2xl font-bold group-hover:text-primary transition-colors">
-                  {t(caseStudy.title)}
+                  {String(t(caseStudy.title) || '')}
                 </h3>
               </div>
 
@@ -308,14 +308,14 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             {data.showClient !== false && caseStudy.client && (
               <div className="flex items-center gap-2 text-gray-600 mb-3">
                 <Building2 className="w-4 h-4" />
-                <span className="text-sm font-medium">{t(caseStudy.client)}</span>
+                <span className="text-sm font-medium">{String(t(caseStudy.client) || '')}</span>
               </div>
             )}
 
             {/* Excerpt */}
             {caseStudy.excerpt && (
               <p className="text-gray-600 text-sm lg:text-base line-clamp-2 mb-4">
-                {t(caseStudy.excerpt)}
+                {String(t(caseStudy.excerpt) || '')}
               </p>
             )}
 
@@ -327,7 +327,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
                     <div className="text-lg lg:text-xl font-bold text-primary">
                       {stat.value}{stat.suffix}
                     </div>
-                    <div className="text-xs text-gray-500">{t(stat.label)}</div>
+                    <div className="text-xs text-gray-500">{String(t(stat.label) || '')}</div>
                   </div>
                 ))}
               </div>
@@ -337,11 +337,11 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             {data.showTestimonial && caseStudy.testimonialQuote && (
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <blockquote className="text-sm italic text-gray-600">
-                  &ldquo;{t(caseStudy.testimonialQuote)}&rdquo;
+                  &ldquo;{String(t(caseStudy.testimonialQuote) || '')}&rdquo;
                 </blockquote>
                 {caseStudy.testimonialAuthor && (
                   <cite className="text-xs text-gray-500 mt-1 block not-italic">
-                    - {t(caseStudy.testimonialAuthor)}
+                    - {String(t(caseStudy.testimonialAuthor) || '')}
                   </cite>
                 )}
               </div>
@@ -375,7 +375,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             {data.showSector !== false && caseStudy.sector && (
               <div className="absolute top-4 left-4">
                 <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-sm text-primary rounded-full text-xs font-medium">
-                  {t(caseStudy.sector)}
+                  {String(t(caseStudy.sector) || '')}
                 </span>
               </div>
             )}
@@ -389,20 +389,20 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             <div className="flex items-center gap-2 text-gray-500 mb-2">
               <Building2 className="w-3 h-3" />
               <span className="text-xs font-medium uppercase tracking-wide">
-                {t(caseStudy.client)}
+                {String(t(caseStudy.client) || '')}
               </span>
             </div>
           )}
 
           {/* Title */}
           <h3 className="text-lg lg:text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-2">
-            {t(caseStudy.title)}
+            {String(t(caseStudy.title) || '')}
           </h3>
 
           {/* Excerpt */}
           {caseStudy.excerpt && (
             <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-              {t(caseStudy.excerpt)}
+              {String(t(caseStudy.excerpt) || '')}
             </p>
           )}
 
@@ -415,7 +415,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
                     {stat.value}{stat.suffix}
                   </div>
                   <div className="text-[10px] text-gray-500 uppercase tracking-wide">
-                    {t(stat.label)}
+                    {String(t(stat.label) || '')}
                   </div>
                 </div>
               ))}

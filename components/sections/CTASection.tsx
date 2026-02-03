@@ -352,6 +352,38 @@ export default function CTASection({ data }: CTASectionProps) {
         <div className={`absolute inset-0 ${getBackgroundClasses()} ${borderRadiusClasses[data.borderRadius || 'none']}`} />
       )}
 
+      {/* SEMPRE VISIBILE: Particelle animate */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={`cta-particle-${i}`}
+            className="absolute rounded-full bg-white/10"
+            style={{
+              width: `${15 + i * 10}px`,
+              height: `${15 + i * 10}px`,
+              left: `${15 + i * 18}%`,
+              top: `${30 + (i % 3) * 20}%`,
+            }}
+            animate={{
+              y: [0, -25, 0],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 3 + i,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: i * 0.4,
+            }}
+          />
+        ))}
+        {/* Linea luminosa animata */}
+        <motion.div
+          className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
+          animate={{ opacity: [0.2, 0.5, 0.2] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
+
       {/* Decorations */}
       {data.showDecorations && (
         <>
@@ -430,25 +462,37 @@ export default function CTASection({ data }: CTASectionProps) {
             </div>
           )}
 
-          {/* Buttons */}
+          {/* Buttons con glow effect */}
           {buttons.length > 0 && (
             <div className={`flex flex-wrap gap-4 ${layout?.includes('centered') || layout?.includes('minimal') ? 'justify-center' : layout?.includes('right') && !layout?.includes('slide') ? 'justify-end' : 'justify-start'}`}>
               {buttons.map((button, index) => (
-                <Link
+                <motion.div
                   key={button._key}
-                  href={button.link || '#'}
-                  className={`inline-flex items-center gap-2 rounded-lg font-semibold transition-all duration-300 ${
-                    buttonVariantClasses[button.variant || 'primary']
-                  } ${buttonSizeClasses[button.size || 'lg']} ${
-                    index === 0 ? buttonAnimationClasses[data.buttonAnimation || 'none'] : ''
-                  }`}
+                  whileHover={{
+                    scale: 1.08,
+                    boxShadow: index === 0
+                      ? '0 0 40px rgba(255,255,255,0.5), 0 0 80px rgba(255,255,255,0.3)'
+                      : '0 0 25px rgba(255,255,255,0.3)',
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  className="rounded-lg"
                 >
-                  {button.iconPosition === 'left' && button.icon ? getIcon(button.icon) : null}
-                  {t(button.text)}
-                  {(button.iconPosition !== 'left' || !button.icon) && (
-                    index === 0 ? getIcon(button.icon || 'arrow-right') : (button.icon ? getIcon(button.icon) : null)
-                  )}
-                </Link>
+                  <Link
+                    href={button.link || '#'}
+                    className={`inline-flex items-center gap-2 rounded-lg font-semibold transition-all duration-300 ${
+                      buttonVariantClasses[button.variant || 'primary']
+                    } ${buttonSizeClasses[button.size || 'lg']} ${
+                      index === 0 ? `${buttonAnimationClasses[data.buttonAnimation || 'none']} shadow-lg shadow-white/30` : ''
+                    }`}
+                  >
+                    {button.iconPosition === 'left' && button.icon ? getIcon(button.icon) : null}
+                    {t(button.text)}
+                    {(button.iconPosition !== 'left' || !button.icon) && (
+                      index === 0 ? getIcon(button.icon || 'arrow-right') : (button.icon ? getIcon(button.icon) : null)
+                    )}
+                  </Link>
+                </motion.div>
               ))}
             </div>
           )}

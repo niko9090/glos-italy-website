@@ -437,9 +437,16 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
                 <motion.div
                   key={item._key}
                   variants={getItemVariants()}
-                  className={`${cardStyleClasses[data.cardStyle || 'none']} ${hoverEffectClasses[data.hoverEffect || 'lift']} ${
+                  whileHover={{
+                    y: -8,
+                    scale: 1.02,
+                    boxShadow: '0 25px 50px -12px rgba(0, 71, 171, 0.25)',
+                    transition: { duration: 0.3, ease: 'easeOut' }
+                  }}
+                  className={`${cardStyleClasses[data.cardStyle || 'shadow-md']} ${hoverEffectClasses[data.hoverEffect || 'none']} ${
                     layout?.includes('alternating') && index % 2 === 1 ? 'md:flex-row-reverse' : ''
-                  } ${layout?.includes('timeline') ? 'relative pl-8 border-l-2 border-primary/30' : ''}`}
+                  } ${layout?.includes('timeline') ? 'relative pl-8 border-l-2 border-primary/30' : ''} cursor-pointer`}
+                  style={{ transformStyle: 'preserve-3d' }}
                 >
                   {item.link ? (
                     <Link href={item.link} className={wrapperClassName}>

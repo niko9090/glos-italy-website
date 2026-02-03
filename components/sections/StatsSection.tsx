@@ -298,7 +298,32 @@ export default function StatsSection({ data }: StatsSectionProps) {
         </div>
       )}
 
-      {/* Decorations */}
+      {/* Decorazioni SEMPRE VISIBILI - particelle animate */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-20 left-[10%] w-32 h-32 rounded-full bg-white/5"
+          animate={{ y: [0, -20, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-[15%] w-24 h-24 rounded-full bg-white/5"
+          animate={{ y: [0, 20, 0], scale: [1, 0.9, 1] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        />
+        <motion.div
+          className="absolute top-1/2 right-[5%] w-16 h-16 rounded-full bg-primary/10"
+          animate={{ x: [0, 15, 0], rotate: [0, 180, 360] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+        />
+        {/* Linea decorativa animata */}
+        <motion.div
+          className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
+          animate={{ scaleX: [0.5, 1, 0.5], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
+
+      {/* Decorations originali */}
       {data.showDecorations && (
         <>
           <div className="absolute top-0 left-0 w-64 h-64 bg-current opacity-5 rounded-full -translate-x-1/2 -translate-y-1/2" />
@@ -399,14 +424,35 @@ export default function StatsSection({ data }: StatsSectionProps) {
               <motion.div
                 key={stat._key}
                 variants={getItemVariants()}
-                className={`group ${data.alignment || 'center'} ${cardStyleClasses[data.cardStyle || 'none']} ${hoverClasses[data.hoverAnimation || 'scale']}`}
+                whileHover={{
+                  scale: 1.08,
+                  y: -10,
+                  transition: { type: 'spring', stiffness: 300, damping: 20 }
+                }}
+                className={`group ${data.alignment || 'center'} ${cardStyleClasses[data.cardStyle || 'glass']} ${hoverClasses[data.hoverAnimation || 'none']} cursor-pointer relative`}
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  backdropFilter: 'blur(10px)',
+                  borderRadius: '1rem',
+                  padding: '2rem',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                }}
               >
+                {/* Glow effect on hover */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    background: 'radial-gradient(circle at center, rgba(0,71,171,0.3) 0%, transparent 70%)',
+                    filter: 'blur(20px)',
+                    zIndex: -1,
+                  }}
+                />
                 {stat.link ? (
-                  <Link href={stat.link} className="block">
+                  <Link href={stat.link} className="block relative z-10">
                     {statContent}
                   </Link>
                 ) : (
-                  <div className="block">
+                  <div className="block relative z-10">
                     {statContent}
                   </div>
                 )}

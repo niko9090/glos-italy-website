@@ -584,10 +584,13 @@ export default function HeroSection({ data }: HeroSectionProps) {
             </motion.p>
           )}
 
-          {/* Title */}
+          {/* Title - con text shadow e animazione */}
           <motion.h1
             variants={heroItemVariants}
             className={`font-bold mb-6 ${titleSizeClasses[titleSize]}`}
+            style={{
+              textShadow: '0 4px 20px rgba(0, 0, 0, 0.3), 0 2px 10px rgba(0, 71, 171, 0.2)'
+            }}
           >
             <RichText value={data.title} />
           </motion.h1>
@@ -615,15 +618,21 @@ export default function HeroSection({ data }: HeroSectionProps) {
               {buttons.map((button, index) => (
                 <motion.div
                   key={button._key}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{
+                    scale: 1.08,
+                    boxShadow: index === 0
+                      ? '0 0 40px rgba(255, 255, 255, 0.4), 0 0 80px rgba(0, 71, 171, 0.3)'
+                      : '0 0 30px rgba(255, 255, 255, 0.2)'
+                  }}
                   whileTap={{ scale: 0.95 }}
-                  transition={{ duration: MOTION.DURATION.FAST }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  className="rounded-lg"
                 >
                   <Link
                     href={button.link || '#'}
                     className={`inline-flex items-center gap-2 ${
                       buttonVariantClasses[button.variant || 'primary']
-                    }`}
+                    } ${index === 0 ? 'shadow-lg shadow-white/20' : ''}`}
                   >
                     {button.iconPosition === 'left' && button.icon && getIcon(button.icon)}
                     {t(button.text)}
@@ -637,6 +646,41 @@ export default function HeroSection({ data }: HeroSectionProps) {
           )}
         </motion.div>
       </motion.div>
+
+      {/* SEMPRE VISIBILE: Particelle fluttuanti animate */}
+      <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute rounded-full bg-white/10"
+            style={{
+              width: `${20 + i * 15}px`,
+              height: `${20 + i * 15}px`,
+              left: `${10 + i * 15}%`,
+              top: `${20 + i * 10}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 10, 0],
+              scale: [1, 1.2, 1],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 4 + i,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: i * 0.5,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* SEMPRE VISIBILE: Linee decorative animate */}
+      <motion.div
+        className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent z-[3]"
+        animate={{ scaleX: [0, 1, 0], x: ['-100%', '0%', '100%'] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      />
 
       {/* Scroll indicator */}
       {showScroll && (

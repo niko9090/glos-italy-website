@@ -217,7 +217,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
           {/* Content Overlay */}
           <div className="relative z-10 p-6 lg:p-8 w-full text-white">
             {/* Sector Badge */}
-            {data.showSector !== false && caseStudy.sector && (
+            {data.showSector !== false && !!caseStudy.sector && (
               <span className="inline-block px-3 py-1 bg-primary/80 backdrop-blur-sm rounded-full text-xs font-medium mb-3">
                 {String(t(caseStudy.sector) || '')}
               </span>
@@ -229,7 +229,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             </h3>
 
             {/* Client */}
-            {data.showClient !== false && caseStudy.client && (
+            {data.showClient !== false && !!caseStudy.client && (
               <div className="flex items-center gap-2 text-white/80 mb-3">
                 <Building2 className="w-4 h-4" />
                 <span className="text-sm">{String(t(caseStudy.client) || '')}</span>
@@ -284,7 +284,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             <div className="flex items-start justify-between mb-4">
               <div>
                 {/* Sector Badge */}
-                {data.showSector !== false && caseStudy.sector && (
+                {data.showSector !== false && !!caseStudy.sector && (
                   <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium mb-2">
                     {String(t(caseStudy.sector) || '')}
                   </span>
@@ -305,7 +305,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             </div>
 
             {/* Client */}
-            {data.showClient !== false && caseStudy.client && (
+            {data.showClient !== false && !!caseStudy.client && (
               <div className="flex items-center gap-2 text-gray-600 mb-3">
                 <Building2 className="w-4 h-4" />
                 <span className="text-sm font-medium">{String(t(caseStudy.client) || '')}</span>
@@ -313,7 +313,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             )}
 
             {/* Excerpt */}
-            {caseStudy.excerpt && (
+            {!!caseStudy.excerpt && (
               <p className="text-gray-600 text-sm lg:text-base line-clamp-2 mb-4">
                 {String(t(caseStudy.excerpt) || '')}
               </p>
@@ -334,12 +334,12 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
             )}
 
             {/* Testimonial */}
-            {data.showTestimonial && caseStudy.testimonialQuote && (
+            {data.showTestimonial && !!caseStudy.testimonialQuote && (
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <blockquote className="text-sm italic text-gray-600">
                   &ldquo;{String(t(caseStudy.testimonialQuote) || '')}&rdquo;
                 </blockquote>
-                {caseStudy.testimonialAuthor && (
+                {!!caseStudy.testimonialAuthor && (
                   <cite className="text-xs text-gray-500 mt-1 block not-italic">
                     - {String(t(caseStudy.testimonialAuthor) || '')}
                   </cite>
@@ -372,7 +372,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
               }`}
             />
             {/* Sector Badge Overlay */}
-            {data.showSector !== false && caseStudy.sector && (
+            {data.showSector !== false && !!caseStudy.sector && (
               <div className="absolute top-4 left-4">
                 <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-sm text-primary rounded-full text-xs font-medium">
                   {String(t(caseStudy.sector) || '')}
@@ -385,7 +385,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
         {/* Content */}
         <div className="p-6">
           {/* Client */}
-          {data.showClient !== false && caseStudy.client && (
+          {data.showClient !== false && !!caseStudy.client && (
             <div className="flex items-center gap-2 text-gray-500 mb-2">
               <Building2 className="w-3 h-3" />
               <span className="text-xs font-medium uppercase tracking-wide">
@@ -400,7 +400,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
           </h3>
 
           {/* Excerpt */}
-          {caseStudy.excerpt && (
+          {!!caseStudy.excerpt && (
             <p className="text-gray-600 text-sm line-clamp-2 mb-4">
               {String(t(caseStudy.excerpt) || '')}
             </p>

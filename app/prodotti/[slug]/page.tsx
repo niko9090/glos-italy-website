@@ -1,16 +1,12 @@
-// Single Product Page
+// Single Product Page - Modern Design with Gallery Lightbox
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
 import { draftMode } from 'next/headers'
-import { getProductBySlug, getProductSlugs, getSiteSettings } from '@/lib/sanity/fetch'
-import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
-import { ArrowLeft } from 'lucide-react'
-import RichText from '@/components/RichText'
-import { getTextValue } from '@/lib/utils/textHelpers'
+import { getProductBySlug, getProductSlugs, getSiteSettings, getAllProducts } from '@/lib/sanity/fetch'
 import { generateProductMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { ProductSchema, BreadcrumbSchema, OrganizationSchema } from '@/components/seo/JsonLd'
+import { getTextValue } from '@/lib/utils/textHelpers'
+import ProductPageClient from './ProductPageClient'
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>
@@ -35,10 +31,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     }
   }
 
-  // Use enhanced metadata generation
   const baseMetadata = generateProductMetadata(product)
 
-  // Add canonical URL
   return {
     ...baseMetadata,
     alternates: {
@@ -48,32 +42,45 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  // CORRETTO: draftMode() e' async in Next.js 14.x App Router
   const { isEnabled: isDraftMode } = await draftMode()
   const { slug } = await params
 
-  const [product, settings] = await Promise.all([
+  const [product, settings, allProducts] = await Promise.all([
     getProductBySlug(slug, isDraftMode),
     getSiteSettings(isDraftMode),
+    getAllProducts(isDraftMode),
   ])
 
   if (!product) {
     notFound()
   }
 
-  // Estrai valori sicuri
+  // Get related products (either from product data or fallback to same category)
+  let relatedProducts = product.relatedProducts || []
+
+  // If no related products defined, get products from same category
+  if (relatedProducts.length === 0 && product.category) {
+    relatedProducts = allProducts
+      .filter(p => p._id !== product._id && p.category?._id === product.category?._id)
+      .slice(0, 4)
+  }
+
+  // If still no related, get any other products
+  if (relatedProducts.length === 0) {
+    relatedProducts = allProducts
+      .filter(p => p._id !== product._id)
+      .slice(0, 4)
+  }
+
+  // Safe values
   const productName = getTextValue(product.name)
   const categoryName = getTextValue(product.category?.name)
-  const productDescription = getTextValue(product.shortDescription)
 
-  // Specifications array
-  const specsList = product.specifications || []
-
-  // Prepare breadcrumb data
+  // Breadcrumb data
   const breadcrumbItems = [
     { name: 'Home', url: '/' },
     { name: 'Prodotti', url: '/prodotti' },
-    ...(categoryName ? [{ name: categoryName, url: `/prodotti/categoria/${product.category?.slug?.current}` }] : []),
+    ...(categoryName ? [{ name: categoryName, url: `/prodotti?category=${product.category?._id}` }] : []),
     { name: productName, url: `/prodotti/${slug}` },
   ]
 
@@ -94,97 +101,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
         url={`/prodotti/${slug}`}
       />
 
-      <div className="section">
-        <div className="container-glos">
-          {/* Breadcrumb */}
-          <nav className="mb-8" aria-label="Breadcrumb">
-            <Link
-              href="/prodotti"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Torna ai Prodotti
-            </Link>
-          </nav>
-
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Image */}
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100">
-              {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 800, 800) ? (
-                <Image
-                  src={safeImageUrl(product.mainImage, 800, 800)!}
-                  alt={productName || 'Prodotto'}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              ) : null}
-            </div>
-
-            {/* Product Info */}
-            <div>
-              {/* Category */}
-              {categoryName && (
-                <span className="text-sm text-primary font-medium">
-                  {categoryName}
-                </span>
-              )}
-
-              {/* Title */}
-              <h1 className="text-3xl md:text-4xl font-bold mt-2 mb-4">
-                {productName}
-              </h1>
-
-              {/* Badges */}
-              <div className="flex gap-2 mb-6">
-                {product.isNew && (
-                  <span className="px-3 py-1 bg-accent text-white text-sm font-medium rounded-full">
-                    Nuovo
-                  </span>
-                )}
-              </div>
-
-              {/* Short Description */}
-              <div className="text-lg text-gray-600 mb-6">
-                <RichText value={product.shortDescription} />
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-4 mb-8">
-                <Link href="/contatti" className="btn-primary">
-                  Richiedi Informazioni
-                </Link>
-                <Link href="/rivenditori" className="btn-secondary">
-                  Trova Rivenditore
-                </Link>
-              </div>
-
-              {/* Specifications */}
-              {specsList.length > 0 && (
-                <div className="border-t pt-6">
-                  <h2 className="text-xl font-semibold mb-4">Specifiche Tecniche</h2>
-                  <ul className="space-y-2">
-                    {specsList.map((spec, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <span className="text-primary font-medium">{getTextValue(spec.label)}:</span>
-                        <span>{getTextValue(spec.value)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Full Description */}
-          <div className="mt-16 border-t pt-12">
-            <h2 className="text-2xl font-semibold mb-6">Descrizione Completa</h2>
-            <div className="prose prose-lg max-w-none">
-              <RichText value={product.fullDescription} />
-            </div>
-          </div>
-        </div>
-      </div>
+      <ProductPageClient
+        product={product}
+        relatedProducts={relatedProducts}
+      />
     </>
   )
 }

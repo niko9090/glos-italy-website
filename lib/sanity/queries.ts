@@ -100,14 +100,38 @@ export const productBySlugQuery = groq`
     shortDescription,
     fullDescription,
     mainImage,
-    gallery,
+    gallery[] {
+      _key,
+      asset,
+      alt,
+      caption,
+      hotspot,
+      crop
+    },
     category->{
       _id,
       name,
       slug
     },
-    specifications,
-    documents,
+    specifications[] {
+      _key,
+      label,
+      value
+    },
+    features[] {
+      _key,
+      icon,
+      title,
+      description
+    },
+    documents[] {
+      _key,
+      title,
+      file {
+        asset
+      },
+      fileType
+    },
     price,
     isNew,
     isFeatured,
@@ -116,7 +140,10 @@ export const productBySlugQuery = groq`
       name,
       slug,
       mainImage,
-      shortDescription
+      shortDescription,
+      category->{
+        name
+      }
     },
     seo
   }

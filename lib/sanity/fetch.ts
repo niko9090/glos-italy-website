@@ -85,21 +85,43 @@ export interface Product {
   _id: string
   name?: string
   slug?: { current: string }
-  shortDescription?: string
+  shortDescription?: unknown
   fullDescription?: unknown
   mainImage?: unknown
-  gallery?: unknown[]
+  gallery?: Array<{
+    _key?: string
+    asset?: unknown
+    alt?: string
+    caption?: string
+    hotspot?: unknown
+    crop?: unknown
+  }>
   category?: {
     _id: string
     name?: string
     slug?: { current: string }
   }
   specifications?: Array<{
+    _key?: string
     label?: string
     value?: string
   }>
-  documents?: unknown[]
+  features?: Array<{
+    _key?: string
+    icon?: string
+    title?: string
+    description?: string
+  }>
+  documents?: Array<{
+    _key?: string
+    title?: string
+    file?: {
+      asset?: unknown
+    }
+    fileType?: string
+  }>
   price?: number
+  sortOrder?: number
   isActive?: boolean
   isNew?: boolean
   isFeatured?: boolean

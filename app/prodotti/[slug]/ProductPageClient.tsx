@@ -70,8 +70,8 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
     ...(Array.isArray(product.gallery) ? product.gallery : [])
   ].filter(img => isValidImage(img))
 
-  const productName = getTextValue(product.name)
-  const categoryName = getTextValue(product.category?.name)
+  const productName: string = getTextValue(product.name)
+  const categoryName: string = getTextValue(product.category?.name)
   const specifications = product.specifications || []
   const features = (product as any).features || []
   const documents = (product as any).documents || []
@@ -248,9 +248,9 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                           {featureIcons[feature.icon] || <CheckCircle className="w-5 h-5" />}
                         </div>
                         <div>
-                          <h4 className="font-medium text-metal-800">{feature.title}</h4>
-                          {feature.description && (
-                            <p className="text-sm text-metal-500 mt-0.5">{feature.description}</p>
+                          <h4 className="font-medium text-metal-800">{String(feature.title || '')}</h4>
+                          {!!feature.description && (
+                            <p className="text-sm text-metal-500 mt-0.5">{String(feature.description)}</p>
                           )}
                         </div>
                       </div>
@@ -266,8 +266,8 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                   <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                     {specifications.slice(0, 6).map((spec: any, index: number) => (
                       <div key={index} className="flex justify-between py-2 border-b border-metal-100">
-                        <span className="text-metal-500 text-sm">{getTextValue(spec.label)}</span>
-                        <span className="text-metal-800 font-medium text-sm">{getTextValue(spec.value)}</span>
+                        <span className="text-metal-500 text-sm">{String(getTextValue(spec.label))}</span>
+                        <span className="text-metal-800 font-medium text-sm">{String(getTextValue(spec.value))}</span>
                       </div>
                     ))}
                   </div>
@@ -284,7 +284,7 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
       </section>
 
       {/* Full Description Section */}
-      {product.fullDescription && (
+      {!!product.fullDescription && (
         <section className="py-16 bg-white">
           <div className="container-glos">
             <motion.div
@@ -327,10 +327,10 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                         } hover:bg-primary/5 transition-colors`}
                       >
                         <td className="py-4 px-6 font-medium text-metal-700 border-r border-metal-200">
-                          {getTextValue(spec.label)}
+                          {String(getTextValue(spec.label))}
                         </td>
                         <td className="py-4 px-6 text-metal-900 font-semibold">
-                          {getTextValue(spec.value)}
+                          {String(getTextValue(spec.value))}
                         </td>
                       </tr>
                     ))}
@@ -372,7 +372,7 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-metal-800 group-hover:text-primary transition-colors">
-                          {doc.title}
+                          {String(doc.title || '')}
                         </h4>
                         <p className="text-sm text-metal-500 uppercase">{doc.fileType || 'Documento'}</p>
                       </div>

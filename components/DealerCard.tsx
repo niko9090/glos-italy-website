@@ -41,7 +41,12 @@ export default function DealerCard({ dealer, showFeatured = false }: DealerCardP
 
   const youtubeId = getYouTubeId(dealer.youtubeVideo || '')
   const isFeatured = dealer.isFeatured && showFeatured
-  const dealerName = getTextValue(dealer.name)
+  const dealerName: string = String(getTextValue(dealer.name) || '')
+  const dealerDescription: string = String(getTextValue(dealer.description) || '')
+  const dealerAddress: string = String(getTextValue(dealer.address) || '')
+  const dealerPhone: string = String(getTextValue(dealer.phone) || '')
+  const dealerEmail: string = String(getTextValue(dealer.email) || '')
+  const dealerOpeningHours: string = String(getTextValue(dealer.openingHours) || '')
 
   return (
     <>
@@ -96,38 +101,38 @@ export default function DealerCard({ dealer, showFeatured = false }: DealerCardP
         </div>
 
         {/* Description */}
-        {dealer.description && (
+        {!!dealerDescription && (
           <p className="mt-4 text-sm text-gray-600 line-clamp-2">
-            {getTextValue(dealer.description)}
+            {dealerDescription}
           </p>
         )}
 
         {/* Address */}
-        {dealer.address && (
+        {!!dealerAddress && (
           <div className="flex items-start gap-2 mt-4 text-sm text-gray-600">
             <MapPin className="w-4 h-4 flex-shrink-0 mt-0.5 text-primary" />
-            <span>{getTextValue(dealer.address)}</span>
+            <span>{dealerAddress}</span>
           </div>
         )}
 
         {/* Contact Info */}
         <div className="mt-4 space-y-2">
-          {dealer.phone && (
+          {!!dealerPhone && (
             <a
-              href={`tel:${getTextValue(dealer.phone).replace(/\s/g, '')}`}
+              href={`tel:${dealerPhone.replace(/\s/g, '')}`}
               className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary transition-colors"
             >
               <Phone className="w-4 h-4" />
-              {getTextValue(dealer.phone)}
+              {dealerPhone}
             </a>
           )}
-          {dealer.email && (
+          {!!dealerEmail && (
             <a
-              href={`mailto:${getTextValue(dealer.email)}`}
+              href={`mailto:${dealerEmail}`}
               className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary transition-colors"
             >
               <Mail className="w-4 h-4" />
-              {getTextValue(dealer.email)}
+              {dealerEmail}
             </a>
           )}
           {dealer.website && (
@@ -145,11 +150,11 @@ export default function DealerCard({ dealer, showFeatured = false }: DealerCardP
         </div>
 
         {/* Opening Hours */}
-        {dealer.openingHours && (
+        {!!dealerOpeningHours && (
           <div className="mt-4 pt-4 border-t">
             <div className="flex items-start gap-2 text-sm text-gray-600">
               <Clock className="w-4 h-4 flex-shrink-0 mt-0.5" />
-              <span className="whitespace-pre-line">{getTextValue(dealer.openingHours)}</span>
+              <span className="whitespace-pre-line">{dealerOpeningHours}</span>
             </div>
           </div>
         )}

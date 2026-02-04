@@ -73,9 +73,13 @@ interface StrengthsSectionProps {
     iconStyle?: 'simple' | 'filled' | 'outlined' | 'gradient' | 'circle'
     textAlign?: 'left' | 'center' | 'right'
     // Style
-    backgroundColor?: 'white' | 'gray-light' | 'gray' | 'primary' | 'primary-light' | 'gradient-blue' | 'gradient-dark'
+    backgroundColor?: 'white' | 'gray-light' | 'gray' | 'primary' | 'primary-light' | 'gradient-blue' | 'gradient-dark' | 'metal' | 'metal-dark'
     textColor?: 'auto' | 'dark' | 'light'
     cardStyle?: 'none' | 'elevated' | 'bordered' | 'glass' | 'gradient'
+    // Decoration
+    backgroundImage?: any
+    backgroundImageOpacity?: number
+    decorativeElements?: 'none' | 'circles' | 'grid' | 'waves' | 'geometric'
     // Spacing
     paddingTop?: string
     paddingBottom?: string
@@ -101,13 +105,15 @@ export default function StrengthsSection({ data }: StrengthsSectionProps) {
     'primary-light': 'bg-blue-50',
     'gradient-blue': 'bg-gradient-to-br from-primary via-primary-dark to-blue-900',
     'gradient-dark': 'bg-gradient-to-br from-gray-800 via-gray-900 to-black',
+    metal: 'bg-gradient-to-b from-metal-100 via-metal-50 to-white',
+    'metal-dark': 'bg-gradient-to-b from-metal-800 via-metal-700 to-metal-900',
   }
 
   // Text color determination
   const getTextColor = () => {
     if (data.textColor === 'dark') return 'text-gray-900'
     if (data.textColor === 'light') return 'text-white'
-    const darkBgs = ['primary', 'gradient-blue', 'gradient-dark']
+    const darkBgs = ['primary', 'gradient-blue', 'gradient-dark', 'metal-dark']
     return darkBgs.includes(data.backgroundColor || 'white') ? 'text-white' : 'text-gray-900'
   }
 
@@ -239,7 +245,7 @@ export default function StrengthsSection({ data }: StrengthsSectionProps) {
 
   const backgroundColor = data.backgroundColor || 'white'
   const textColor = getTextColor()
-  const isDarkBg = ['primary', 'gradient-blue', 'gradient-dark'].includes(backgroundColor)
+  const isDarkBg = ['primary', 'gradient-blue', 'gradient-dark', 'metal-dark'].includes(backgroundColor)
 
   // Render icon
   const renderIcon = (item: StrengthItem) => {
@@ -282,12 +288,72 @@ export default function StrengthsSection({ data }: StrengthsSectionProps) {
     return null
   }
 
+  // Decorative elements renderer
+  const renderDecorativeElements = () => {
+    switch (data.decorativeElements) {
+      case 'circles':
+        return (
+          <>
+            <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
+            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
+            <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl" />
+          </>
+        )
+      case 'grid':
+        return (
+          <div
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage: `linear-gradient(rgba(0,71,171,.15) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(0,71,171,.15) 1px, transparent 1px)`,
+              backgroundSize: '50px 50px',
+            }}
+          />
+        )
+      case 'waves':
+        return (
+          <svg className="absolute bottom-0 left-0 w-full h-32 opacity-10" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path fill="currentColor" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+          </svg>
+        )
+      case 'geometric':
+        return (
+          <>
+            <div className="absolute top-20 left-10 w-16 h-16 border-2 border-primary/20 rotate-45" />
+            <div className="absolute bottom-20 right-20 w-24 h-24 border-2 border-primary/10 rounded-full" />
+            <div className="absolute top-1/3 right-1/4 w-8 h-8 bg-primary/10 rotate-12" />
+            <div className="absolute bottom-1/3 left-1/5 w-12 h-12 border border-primary/15 rounded-lg rotate-6" />
+          </>
+        )
+      default:
+        return null
+    }
+  }
+
   return (
     <section
       ref={sectionRef}
-      className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden`}
+      className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden relative`}
     >
-      <div className="container-glos">
+      {/* Background Image */}
+      {data.backgroundImage && isValidImage(data.backgroundImage) && (
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${safeImageUrl(data.backgroundImage, 1920)})`,
+            opacity: (data.backgroundImageOpacity || 10) / 100,
+          }}
+        />
+      )}
+
+      {/* Decorative Elements */}
+      {data.decorativeElements && data.decorativeElements !== 'none' && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {renderDecorativeElements()}
+        </div>
+      )}
+
+      <div className="container-glos relative z-10">
         {/* Header */}
         {!!(data.eyebrow || data.title || data.subtitle || data.description) && (
           <motion.div

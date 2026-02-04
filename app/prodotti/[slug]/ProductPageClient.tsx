@@ -9,6 +9,7 @@ import { isValidImage, safeImageUrl, getFileUrl } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 import type { Product } from '@/lib/sanity/fetch'
+import ProductBadges from '@/components/products/ProductBadges'
 import {
   ArrowLeft,
   ChevronLeft,
@@ -207,9 +208,19 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
               )}
 
               {/* Title */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-metal-800 mb-6 leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-metal-800 mb-4 leading-tight">
                 {String(productName || '')}
               </h1>
+
+              {/* Badges */}
+              <ProductBadges
+                isNew={product.isNew}
+                isFeatured={product.isFeatured}
+                badges={product.badges}
+                customBadge={product.customBadge}
+                size="md"
+                className="mb-6"
+              />
 
               {/* Short Description */}
               <div className="text-lg text-metal-600 mb-8 leading-relaxed">

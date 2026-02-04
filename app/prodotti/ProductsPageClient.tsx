@@ -9,7 +9,8 @@ import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 import type { Product, Category } from '@/lib/sanity/fetch'
-import { Package, Filter, Grid3X3, LayoutList, Sparkles, Star, ArrowRight } from 'lucide-react'
+import ProductBadges from '@/components/products/ProductBadges'
+import { Package, Filter, Grid3X3, LayoutList, ArrowRight } from 'lucide-react'
 
 interface ProductsPageClientProps {
   products: Product[]
@@ -299,19 +300,14 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
             <div className="absolute inset-0 bg-gradient-to-t from-metal-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
             {/* Badges */}
-            <div className="absolute top-4 left-4 flex gap-2">
-              {product.isNew && (
-                <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xs font-bold rounded-full shadow-lg">
-                  <Sparkles className="w-3 h-3" />
-                  NUOVO
-                </span>
-              )}
-              {product.isFeatured && (
-                <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-metal-900 text-xs font-bold rounded-full shadow-lg">
-                  <Star className="w-3 h-3" />
-                  IN EVIDENZA
-                </span>
-              )}
+            <div className="absolute top-4 left-4">
+              <ProductBadges
+                isNew={product.isNew}
+                isFeatured={product.isFeatured}
+                badges={product.badges}
+                customBadge={product.customBadge}
+                size="sm"
+              />
             </div>
           </div>
 
@@ -380,28 +376,14 @@ function ProductCard({ product, viewMode }: { product: Product; viewMode: 'grid'
           </div>
 
           {/* Badges */}
-          <div className="absolute top-4 left-4 flex flex-col gap-2">
-            {product.isNew && (
-              <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xs font-bold rounded-full shadow-lg"
-              >
-                <Sparkles className="w-3 h-3" />
-                NUOVO
-              </motion.span>
-            )}
-            {product.isFeatured && (
-              <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
-                className="inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-amber-400 to-amber-500 text-metal-900 text-xs font-bold rounded-full shadow-lg"
-              >
-                <Star className="w-3 h-3" />
-                IN EVIDENZA
-              </motion.span>
-            )}
+          <div className="absolute top-4 left-4">
+            <ProductBadges
+              isNew={product.isNew}
+              isFeatured={product.isFeatured}
+              badges={product.badges}
+              customBadge={product.customBadge}
+              size="sm"
+            />
           </div>
         </div>
 

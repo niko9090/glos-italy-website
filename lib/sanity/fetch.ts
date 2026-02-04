@@ -125,6 +125,11 @@ export interface Product {
   isActive?: boolean
   isNew?: boolean
   isFeatured?: boolean
+  badges?: string[]
+  customBadge?: {
+    text?: string
+    color?: string
+  }
   relatedProducts?: Product[]
   seo?: {
     metaTitle?: string

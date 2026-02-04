@@ -39,6 +39,7 @@ const PricingSection = dynamic(() => import('./PricingSection'))
 const SectorsSection = dynamic(() => import('./SectorsSection'))
 const StrengthsSection = dynamic(() => import('./StrengthsSection'))
 const CaseStudiesSection = dynamic(() => import('./CaseStudiesSection'))
+const TrustBadgesSection = dynamic(() => import('./TrustBadgesSection'))
 
 interface SectionRendererProps {
   section: any
@@ -105,6 +106,9 @@ export function SectionRenderer({ section, products }: SectionRendererProps) {
 
     case 'caseStudiesSection':
       return <CaseStudiesSection data={section} />
+
+    case 'trustBadgesSection':
+      return <TrustBadgesSection data={section} />
 
     // === SOCIAL PROOF ===
     case 'testimonialsSection':

@@ -208,7 +208,8 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
         center={center}
         zoom={zoom}
         className="w-full h-96 rounded-2xl z-0"
-        scrollWheelZoom={true}
+        scrollWheelZoom={false}
+        zoomControl={true}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

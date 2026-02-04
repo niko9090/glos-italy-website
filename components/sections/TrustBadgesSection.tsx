@@ -49,6 +49,8 @@ interface TrustBadge {
 }
 
 interface TrustBadgesSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     eyebrow?: unknown
     title?: unknown
@@ -67,7 +69,7 @@ interface TrustBadgesSectionProps {
   }
 }
 
-export default function TrustBadgesSection({ data }: TrustBadgesSectionProps) {
+export default function TrustBadgesSection({ data, documentId, sectionKey }: TrustBadgesSectionProps) {
   const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -337,6 +339,7 @@ export default function TrustBadgesSection({ data }: TrustBadgesSectionProps) {
     <section
       ref={sectionRef}
       className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden relative`}
+      data-sanity-edit-target
     >
       {/* Decorative background elements */}
       {data.showDecorations && (

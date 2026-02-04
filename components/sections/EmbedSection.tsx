@@ -5,6 +5,8 @@ import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface EmbedSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     subtitle?: unknown
@@ -31,7 +33,7 @@ const bgClasses: Record<string, string> = {
   dark: 'bg-gray-900',
 }
 
-export default function EmbedSection({ data }: EmbedSectionProps) {
+export default function EmbedSection({ data, documentId, sectionKey }: EmbedSectionProps) {
   const bgClass = bgClasses[data.backgroundColor || 'white']
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const height = data.height || '450'
@@ -92,7 +94,7 @@ export default function EmbedSection({ data }: EmbedSectionProps) {
   }
 
   return (
-    <section className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`section ${bgClass}`}>
       <div className={isFullWidth ? '' : 'container-glos'}>
         {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${isFullWidth ? 'px-4' : ''} ${textColor}`}>

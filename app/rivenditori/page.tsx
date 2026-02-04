@@ -2,7 +2,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import nextDynamic from 'next/dynamic'
-import { draftMode } from 'next/headers'
 import { getAllDealers, getSiteSettings } from '@/lib/sanity/fetch'
 import { MapPin, Star } from 'lucide-react'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
@@ -43,14 +42,10 @@ export const metadata: Metadata = {
   },
 }
 
-export const dynamic = 'force-dynamic'
-
 export default async function DealersPage() {
-  const { isEnabled: isDraftMode } = await draftMode()
-
   const [dealers, settings] = await Promise.all([
-    getAllDealers(isDraftMode),
-    getSiteSettings(isDraftMode),
+    getAllDealers(),
+    getSiteSettings(),
   ])
 
   // Separa featured e normali, poi per tipo

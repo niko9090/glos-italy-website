@@ -59,6 +59,8 @@ interface StrengthItem {
 }
 
 interface StrengthsSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     eyebrow?: unknown
@@ -92,7 +94,7 @@ interface StrengthsSectionProps {
   }
 }
 
-export default function StrengthsSection({ data }: StrengthsSectionProps) {
+export default function StrengthsSection({ data, documentId, sectionKey }: StrengthsSectionProps) {
   const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -332,6 +334,7 @@ export default function StrengthsSection({ data }: StrengthsSectionProps) {
 
   return (
     <section
+      data-sanity-edit-target
       ref={sectionRef}
       className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden relative`}
     >

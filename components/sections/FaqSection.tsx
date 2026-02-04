@@ -25,6 +25,8 @@ interface FaqCategory {
 
 // Props allineate allo schema Sanity
 interface FaqSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     eyebrow?: unknown
@@ -147,7 +149,7 @@ const plusIconVariants = {
   open: { rotate: 45 },
 }
 
-export default function FaqSection({ data }: FaqSectionProps) {
+export default function FaqSection({ data, documentId, sectionKey }: FaqSectionProps) {
   const [openItems, setOpenItems] = useState<string[]>([])
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
@@ -488,7 +490,7 @@ export default function FaqSection({ data }: FaqSectionProps) {
   const mbClass = marginBottomClasses[data.marginBottom || 'none'] || ''
 
   return (
-    <section className={`${ptClass} ${pbClass} ${mtClass} ${mbClass} ${bgClass}`}>
+    <section data-sanity-edit-target className={`${ptClass} ${pbClass} ${mtClass} ${mbClass} ${bgClass}`}>
       <div className="container-glos">
         {/* Header: Eyebrow, Title, Subtitle */}
         {!!(data.eyebrow || data.title || data.subtitle) && (

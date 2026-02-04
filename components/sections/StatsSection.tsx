@@ -24,6 +24,8 @@ interface StatItem {
 }
 
 interface StatsSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     title?: unknown
@@ -130,7 +132,7 @@ function AnimatedNumber({
   )
 }
 
-export default function StatsSection({ data }: StatsSectionProps) {
+export default function StatsSection({ data, documentId, sectionKey }: StatsSectionProps) {
   const { t } = useLanguage()
 
   // Background classes
@@ -288,7 +290,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
     : null
 
   return (
-    <section className={`relative overflow-hidden ${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor}`}>
+    <section data-sanity-edit-target className={`relative overflow-hidden ${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor}`}>
       {/* Background Image */}
       {backgroundColor?.includes('image') && backgroundUrl && (
         <div className="absolute inset-0 z-0">

@@ -10,6 +10,8 @@ import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface BannerSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     text?: unknown
     buttonText?: unknown
@@ -46,7 +48,7 @@ const sizeClasses: Record<string, string> = {
   large: 'py-6',
 }
 
-export default function BannerSection({ data }: BannerSectionProps) {
+export default function BannerSection({ data, documentId, sectionKey }: BannerSectionProps) {
   const [isDismissed, setIsDismissed] = useState(false)
   const { t } = useLanguage()
 
@@ -109,6 +111,7 @@ export default function BannerSection({ data }: BannerSectionProps) {
 
   const banner = (
     <div
+      data-sanity-edit-target
       className={`${variantClass} ${sizeClass} ${marginClasses} ${
         isFixed
           ? `fixed left-0 right-0 z-50 ${data.position?.includes('fixed-top') ? 'top-0' : 'bottom-0'}`

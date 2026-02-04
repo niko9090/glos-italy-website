@@ -11,6 +11,8 @@ import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface TextImageSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     eyebrow?: unknown
     title?: unknown
@@ -152,7 +154,7 @@ const getAnimationVariants = (animation: string | undefined) => {
   return variants[animation] || variants.fade
 }
 
-export default function TextImageSection({ data }: TextImageSectionProps) {
+export default function TextImageSection({ data, documentId, sectionKey }: TextImageSectionProps) {
   const { t } = useLanguage()
 
   // Get classes from data
@@ -252,7 +254,7 @@ export default function TextImageSection({ data }: TextImageSectionProps) {
   )
 
   return (
-    <section className={`${spacingClass} ${bgClass}`}>
+    <section data-sanity-edit-target className={`${spacingClass} ${bgClass}`}>
       <div className={`container-glos mx-auto ${contentWidth}`}>
         <div className={`flex flex-col lg:flex-row gap-8 lg:gap-12 ${verticalAlign} ${
           imagePosition?.includes('left') ? 'lg:flex-row-reverse' : ''

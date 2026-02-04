@@ -32,6 +32,8 @@ interface CarouselSlide {
 }
 
 interface CarouselSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     title?: unknown
@@ -71,7 +73,7 @@ interface CarouselSectionProps {
   }
 }
 
-export default function CarouselSection({ data }: CarouselSectionProps) {
+export default function CarouselSection({ data, documentId, sectionKey }: CarouselSectionProps) {
   const { t } = useLanguage()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
@@ -274,7 +276,7 @@ export default function CarouselSection({ data }: CarouselSectionProps) {
   const slideVariants = getSlideVariants()
 
   return (
-    <section className={`relative overflow-hidden ${bgClasses[data.backgroundColor || 'transparent']}`}>
+    <section data-sanity-edit-target className={`relative overflow-hidden ${bgClasses[data.backgroundColor || 'transparent']}`}>
       {/* Section Header */}
       {!!(data.title || data.subtitle) && (
         <div className="container-glos py-8 text-center">

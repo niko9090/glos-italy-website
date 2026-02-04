@@ -1,16 +1,12 @@
-// Root Layout
+// Root Layout - v3.0.0 Visual Editing
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { draftMode } from 'next/headers'
-import dynamic from 'next/dynamic'
 import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
+import { SanityLive } from '@/lib/sanity/live'
+import { VisualEditing } from 'next-sanity/visual-editing'
 
-// Dynamic import del componente Visual Editing (client-side only)
-const LiveVisualEditing = dynamic(
-  () => import('@/components/sanity/LiveVisualEditing'),
-  { ssr: false }
-)
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import PageTransition from '@/components/layout/PageTransition'
@@ -71,12 +67,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // CORRETTO: draftMode() e' async in Next.js 14.x App Router
-  const { isEnabled: isDraftMode } = await draftMode()
-
   const [settings, navigation] = await Promise.all([
-    getSiteSettings(isDraftMode),
-    getNavigation(isDraftMode),
+    getSiteSettings(),
+    getNavigation(),
   ])
 
   // Prepare company info for structured data
@@ -104,8 +97,12 @@ export default async function RootLayout({
           phoneNumber={settings?.whatsapp || '39XXXXXXXXXX'}
           message={settings?.whatsappMessage || 'Ciao, vorrei informazioni sui vostri prodotti.'}
         />
-        {/* Visual Editing + Live Updates per Sanity - attivo solo in draft mode */}
-        {isDraftMode && <LiveVisualEditing />}
+        {/* SanityLive - handles live content updates */}
+        <SanityLive />
+        {/* Visual Editing - active only in draft mode */}
+        {(await draftMode()).isEnabled && (
+          <VisualEditing />
+        )}
       </body>
     </html>
   )

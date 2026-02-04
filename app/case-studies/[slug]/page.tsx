@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { draftMode } from 'next/headers'
 import { getCaseStudyBySlug, getCaseStudySlugs, getSiteSettings } from '@/lib/sanity/fetch'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { ArrowLeft, ArrowRight, Building2, Quote, Package, Target, Lightbulb, TrendingUp } from 'lucide-react'
@@ -15,9 +14,6 @@ import { BreadcrumbSchema, OrganizationSchema, WebPageSchema } from '@/component
 interface CaseStudyPageProps {
   params: Promise<{ slug: string }>
 }
-
-// Force dynamic rendering to support draft mode
-export const dynamic = 'force-dynamic'
 
 export async function generateStaticParams() {
   const slugs = await getCaseStudySlugs()
@@ -62,12 +58,11 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
 }
 
 export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
-  const { isEnabled: isDraftMode } = await draftMode()
   const { slug } = await params
 
   const [caseStudy, settings] = await Promise.all([
-    getCaseStudyBySlug(slug, isDraftMode),
-    getSiteSettings(isDraftMode),
+    getCaseStudyBySlug(slug),
+    getSiteSettings(),
   ])
 
   if (!caseStudy) {

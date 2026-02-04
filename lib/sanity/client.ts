@@ -1,4 +1,6 @@
-// Sanity Client Configuration
+// Sanity Client Configuration - v3.0.0
+// Data fetching is now handled by live.ts (defineLive)
+// This file only exports: config values, client instance, and image utilities
 import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
@@ -30,115 +32,18 @@ if (!projectId) {
 // SANITY CLIENT - Base Configuration
 // ===========================================
 
-// Client base - used for all queries
-// Stega is disabled by default, enabled dynamically in draft mode via fetch options
+// Client base - used for image URL builder and draft-mode enable endpoint
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true, // CDN for production, disabled during draft mode
+  useCdn: true,
   perspective: 'published',
-  // Stega configuration - CRITICAL for Visual Editing
   stega: {
-    enabled: false, // Disabled by default, enabled dynamically in draft mode
+    enabled: false,
     studioUrl,
-    // Logger only in development for debugging
-    logger: process.env.NODE_ENV === 'development' ? console : undefined,
   },
 })
-
-// ===========================================
-// SANITY FETCH - Main Data Fetching Function
-// ===========================================
-
-/**
- * Fetch data from Sanity with proper configuration for draft/published mode.
- *
- * In Draft Mode:
- * - Uses 'drafts' perspective to show unpublished content
- * - Disables CDN for fresh data
- * - Enables stega for Visual Editing click-to-edit
- * - Uses token for authenticated access
- *
- * In Production:
- * - Uses 'published' perspective for only published content
- * - DISABLES CDN to ensure fresh data after revalidation
- * - Uses cache tags for granular invalidation via webhook
- * - Disables stega (no visual editing metadata)
- *
- * @param tags - Optional cache tags for granular revalidation (e.g., ['page', 'product'])
- */
-export async function sanityFetch<T>(
-  query: string,
-  params: Record<string, unknown> = {},
-  isDraftMode = false,
-  tags?: string[]
-): Promise<T> {
-  // Debug logging in development
-  if (isDraftMode && process.env.NODE_ENV === 'development') {
-    console.log('[sanityFetch] Draft mode enabled - using drafts perspective with stega')
-  }
-
-  // Validate token is available for draft mode
-  if (isDraftMode && !token) {
-    console.warn(
-      '[sanityFetch] Draft mode requested but SANITY_API_TOKEN is not set. ' +
-        'Draft content may not load correctly.'
-    )
-  }
-
-  if (isDraftMode) {
-    // Draft mode: fetch fresh data every time, no caching
-    return client.withConfig({
-      perspective: 'drafts',
-      useCdn: false,
-      token,
-      stega: {
-        enabled: true,
-        studioUrl,
-      },
-    }).fetch<T>(query, params, {
-      cache: 'no-store',
-      next: { revalidate: 0 },
-    })
-  }
-
-  // Production mode: use caching with tags
-  return client.fetch<T>(query, params, {
-    perspective: 'published',
-    useCdn: false,
-    stega: false,
-    next: {
-      tags: tags || ['sanity'],
-      revalidate: 60,
-    },
-  })
-}
-
-// ===========================================
-// GET CLIENT - Returns configured client instance
-// ===========================================
-
-/**
- * Returns a Sanity client configured for the given mode.
- * Use this when you need a client instance (e.g., for useLiveQuery).
- *
- * Prefer sanityFetch() for most data fetching needs.
- */
-export function getClient(isDraftMode = false) {
-  if (isDraftMode) {
-    return client.withConfig({
-      perspective: 'drafts',
-      useCdn: false,
-      token,
-      stega: {
-        enabled: true,
-        studioUrl,
-      },
-    })
-  }
-  return client
-}
 
 // ===========================================
 // IMAGE URL BUILDER

@@ -23,6 +23,8 @@ interface SectorItem {
 }
 
 interface SectorsSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     eyebrow?: unknown
@@ -56,7 +58,7 @@ interface SectorsSectionProps {
   }
 }
 
-export default function SectorsSection({ data }: SectorsSectionProps) {
+export default function SectorsSection({ data, documentId, sectionKey }: SectorsSectionProps) {
   const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -202,6 +204,7 @@ export default function SectorsSection({ data }: SectorsSectionProps) {
 
   return (
     <section
+      data-sanity-edit-target
       ref={sectionRef}
       className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden`}
     >

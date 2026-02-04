@@ -35,6 +35,8 @@ interface CaseStudyItem {
 }
 
 interface CaseStudiesSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     eyebrow?: unknown
@@ -69,7 +71,7 @@ interface CaseStudiesSectionProps {
   }
 }
 
-export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
+export default function CaseStudiesSection({ data, documentId, sectionKey }: CaseStudiesSectionProps) {
   const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -448,6 +450,7 @@ export default function CaseStudiesSection({ data }: CaseStudiesSectionProps) {
 
   return (
     <section
+      data-sanity-edit-target
       ref={sectionRef}
       className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden`}
     >

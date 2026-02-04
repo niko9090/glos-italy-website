@@ -1,17 +1,15 @@
-// Sections With Dividers - v3.0.0
-// Delegates to SectionsClient for visual editing when documentId is provided
+// SectionsClient - Client component for drag-and-drop with data-sanity attributes
 'use client'
 
-import { SectionsClient } from './SectionsClient'
+import { createDataAttribute, useOptimistic } from '@sanity/visual-editing'
 import { SectionRenderer } from './SectionRenderer'
 import { SectionDivider } from './SectionDivider'
 import type { Product } from '@/lib/sanity/fetch'
 
-interface SectionsWithDividersProps {
-  sections: any[]
-  products?: Product[]
-  documentId?: string
-  documentType?: string
+const DATA_ATTR_CONFIG = {
+  projectId: '97oreljh',
+  dataset: 'production',
+  baseUrl: 'https://glositalystudio.vercel.app',
 }
 
 // Map section types to their typical background colors
@@ -41,33 +39,18 @@ const sectionBgMap: Record<string, 'white' | 'gray' | 'primary' | 'dark' | 'grad
   mapSection: 'gray',
   counterSection: 'primary',
   pricingSection: 'white',
-  // New business sections
   sectorsSection: 'gray',
   strengthsSection: 'white',
   caseStudiesSection: 'gray',
 }
 
-// Divider types based on transition
 type DividerType = 'wave' | 'curve' | 'slant' | 'gradient-fade' | 'dots' | 'none'
 
 function getDividerType(fromBg: string, toBg: string): DividerType {
-  // No divider needed if same background
   if (fromBg === toBg) return 'none'
-
-  // Use curve for transitions involving primary/dark colors
-  if (fromBg === 'primary' || fromBg === 'dark' || fromBg === 'gradient') {
-    return 'curve'
-  }
-
-  if (toBg === 'primary' || toBg === 'dark' || toBg === 'gradient') {
-    return 'curve'
-  }
-
-  // Wave for white <-> gray transitions
-  if ((fromBg === 'white' && toBg === 'gray') || (fromBg === 'gray' && toBg === 'white')) {
-    return 'wave'
-  }
-
+  if (fromBg === 'primary' || fromBg === 'dark' || fromBg === 'gradient') return 'curve'
+  if (toBg === 'primary' || toBg === 'dark' || toBg === 'gradient') return 'curve'
+  if ((fromBg === 'white' && toBg === 'gray') || (fromBg === 'gray' && toBg === 'white')) return 'wave'
   return 'gradient-fade'
 }
 
@@ -79,31 +62,38 @@ function getDividerColors(fromBg: string, toBg: string): { fromColor: string; to
     dark: '#1f2937',
     gradient: '#003380',
   }
-
   return {
     fromColor: colorMap[fromBg] || '#ffffff',
     toColor: colorMap[toBg] || '#ffffff',
   }
 }
 
-export function SectionsWithDividers({ sections, products, documentId, documentType }: SectionsWithDividersProps) {
+interface SectionsClientProps {
+  documentId: string
+  documentType: string
+  sections: any[]
+  products?: Product[]
+}
+
+export function SectionsClient({ documentId, documentType, sections: initial, products }: SectionsClientProps) {
+  const sections = useOptimistic<any[], any>(initial, (current, action) => {
+    if (action.id === documentId && action.document?.sections) {
+      return action.document.sections
+    }
+    return current
+  })
+
   if (!sections || sections.length === 0) return null
 
-  // Use SectionsClient for visual editing when documentId is provided
-  if (documentId && documentType) {
-    return (
-      <SectionsClient
-        documentId={documentId}
-        documentType={documentType}
-        sections={sections}
-        products={products}
-      />
-    )
-  }
+  const containerAttr = createDataAttribute({
+    ...DATA_ATTR_CONFIG,
+    id: documentId,
+    type: documentType,
+    path: 'sections',
+  })
 
-  // Fallback: render without visual editing data attributes
   return (
-    <>
+    <div data-sanity={containerAttr.toString()}>
       {sections.map((section, index) => {
         if (!section || !section._type) return null
 
@@ -115,16 +105,26 @@ export function SectionsWithDividers({ sections, products, documentId, documentT
 
         const dividerType = getDividerType(currentBg, nextBg)
         const { fromColor, toColor } = getDividerColors(currentBg, nextBg)
-
-        // Determine if we need to flip the divider
         const needsFlip = currentBg === 'primary' || currentBg === 'dark' || currentBg === 'gradient'
 
-        return (
-          <div key={section._key || index}>
-            {/* The Section */}
-            <SectionRenderer section={section} products={products} />
+        const sectionAttr = section._key
+          ? createDataAttribute({
+              ...DATA_ATTR_CONFIG,
+              id: documentId,
+              type: documentType,
+              path: `sections[_key=="${section._key}"]`,
+            })
+          : undefined
 
-            {/* Divider after section (except last) */}
+        return (
+          <div key={section._key || index} data-sanity={sectionAttr?.toString()}>
+            <SectionRenderer
+              section={section}
+              products={products}
+              documentId={documentId}
+              sectionKey={section._key}
+            />
+
             {index < sections.length - 1 && dividerType !== 'none' && (
               <SectionDivider
                 type={dividerType}
@@ -137,8 +137,8 @@ export function SectionsWithDividers({ sections, products, documentId, documentT
           </div>
         )
       })}
-    </>
+    </div>
   )
 }
 
-export default SectionsWithDividers
+export default SectionsClient

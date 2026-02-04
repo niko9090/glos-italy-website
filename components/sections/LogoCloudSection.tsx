@@ -14,6 +14,8 @@ import {
 } from '@/lib/animations/config'
 
 interface LogoCloudSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     subtitle?: unknown
@@ -37,7 +39,7 @@ const bgClasses: Record<string, string> = {
   dark: 'bg-gray-900',
 }
 
-export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
+export default function LogoCloudSection({ data, documentId, sectionKey }: LogoCloudSectionProps) {
   const bgClass = bgClasses[data.backgroundColor || 'gray']
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'grid'
@@ -125,7 +127,7 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
   // Marquee layout
   if (layout?.includes('marquee')) {
     return (
-      <section className={`section ${bgClass} overflow-hidden`}>
+      <section data-sanity-edit-target className={`section ${bgClass} overflow-hidden`}>
         <div className="container-glos">
           {(data.title || data.subtitle) ? (
             <motion.div
@@ -177,7 +179,7 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
   // Carousel layout
   if (layout?.includes('carousel')) {
     return (
-      <section className={`section ${bgClass}`}>
+      <section data-sanity-edit-target className={`section ${bgClass}`}>
         <div className="container-glos">
           {(data.title || data.subtitle) ? (
             <motion.div
@@ -214,7 +216,7 @@ export default function LogoCloudSection({ data }: LogoCloudSectionProps) {
 
   // Grid layout (default)
   return (
-    <section className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`section ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <motion.div

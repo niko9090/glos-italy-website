@@ -2,7 +2,6 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { draftMode } from 'next/headers'
 import { getCaseStudies, getSectors, getSiteSettings } from '@/lib/sanity/fetch'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
@@ -31,16 +30,11 @@ export const metadata: Metadata = {
   },
 }
 
-// Force dynamic rendering to support draft mode
-export const dynamic = 'force-dynamic'
-
 export default async function CaseStudiesPage() {
-  const { isEnabled: isDraftMode } = await draftMode()
-
   const [caseStudies, sectors, settings] = await Promise.all([
-    getCaseStudies(isDraftMode),
-    getSectors(isDraftMode),
-    getSiteSettings(isDraftMode),
+    getCaseStudies(),
+    getSectors(),
+    getSiteSettings(),
   ])
 
   // Breadcrumb data

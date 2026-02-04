@@ -46,10 +46,12 @@ interface PricingSectionData {
 }
 
 interface PricingSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: PricingSectionData
 }
 
-export default function PricingSection({ data }: PricingSectionProps) {
+export default function PricingSection({ data, documentId, sectionKey }: PricingSectionProps) {
   const { language } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -311,6 +313,7 @@ export default function PricingSection({ data }: PricingSectionProps) {
 
   return (
     <section
+      data-sanity-edit-target
       ref={sectionRef}
       className={`relative overflow-hidden ${paddingClasses[data.paddingY || 'large']} ${bgClasses[backgroundColor]} ${textColor}`}
     >

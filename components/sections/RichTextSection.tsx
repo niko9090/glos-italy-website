@@ -6,6 +6,8 @@ import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
 
 interface RichTextSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     content?: unknown
@@ -72,7 +74,7 @@ const getDividerClasses = (dividers: string | undefined): string => {
   }
 }
 
-export default function RichTextSection({ data }: RichTextSectionProps) {
+export default function RichTextSection({ data, documentId, sectionKey }: RichTextSectionProps) {
   const bgClass = bgClasses[data.backgroundColor || 'white'] || bgClasses['white']
   const spacingClass = getSpacingClasses(data)
   const textColor = data.backgroundColor === 'black' ? 'text-white' : 'text-gray-900'
@@ -88,7 +90,7 @@ export default function RichTextSection({ data }: RichTextSectionProps) {
   }
 
   return (
-    <section className={`${spacingClass} ${bgClass} ${dividerClass}`}>
+    <section data-sanity-edit-target className={`${spacingClass} ${bgClass} ${dividerClass}`}>
       <div className="container-glos">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

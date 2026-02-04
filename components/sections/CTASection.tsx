@@ -28,6 +28,8 @@ interface Highlight {
 }
 
 interface CTASectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     eyebrow?: unknown
@@ -86,7 +88,7 @@ interface CTASectionProps {
   }
 }
 
-export default function CTASection({ data }: CTASectionProps) {
+export default function CTASection({ data, documentId, sectionKey }: CTASectionProps) {
   const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -324,6 +326,7 @@ export default function CTASection({ data }: CTASectionProps) {
 
   return (
     <section
+      data-sanity-edit-target
       ref={sectionRef}
       className={`relative overflow-hidden ${
         data.fullWidth !== false ? '' : 'container-glos my-8'

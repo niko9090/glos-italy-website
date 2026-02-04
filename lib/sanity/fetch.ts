@@ -1,7 +1,7 @@
-// Data Fetching Functions
-// These functions wrap sanityFetch with proper cache tags for on-demand revalidation
-// Cache tags align with Sanity document types for accurate invalidation via webhook
-import { sanityFetch } from './client'
+// Data Fetching Functions - v3.0.0
+// Uses sanityFetch from live.ts (defineLive) - no more manual preview parameter
+// Live mode and stega are handled automatically by next-sanity v12
+import { sanityFetch } from './live'
 import {
   siteSettingsQuery,
   navigationQuery,
@@ -263,302 +263,166 @@ export interface CaseStudy {
 
 // ===========================================
 // SETTINGS & NAVIGATION
-// Cache tags: 'settings', 'navigation' - invalidated on global changes
 // ===========================================
 
-export async function getSiteSettings(
-  preview = false
-): Promise<SiteSettings | null> {
-  return sanityFetch<SiteSettings | null>(
-    siteSettingsQuery,
-    {},
-    preview,
-    ['settings']
-  )
+export async function getSiteSettings(): Promise<SiteSettings | null> {
+  const { data } = await sanityFetch({ query: siteSettingsQuery })
+  return data
 }
 
-export async function getNavigation(
-  preview = false
-): Promise<Navigation | null> {
-  return sanityFetch<Navigation | null>(
-    navigationQuery,
-    {},
-    preview,
-    ['navigation']
-  )
+export async function getNavigation(): Promise<Navigation | null> {
+  const { data } = await sanityFetch({ query: navigationQuery })
+  return data
 }
 
 // ===========================================
 // PAGES
-// Cache tags: 'pages', 'page-{slug}' - invalidated on page changes
 // ===========================================
 
-export async function getPageBySlug(
-  slug: string,
-  preview = false
-): Promise<Page | null> {
-  return sanityFetch<Page | null>(
-    pageBySlugQuery,
-    { slug },
-    preview,
-    ['pages', `page-${slug}`]
-  )
+export async function getPageBySlug(slug: string): Promise<Page | null> {
+  const { data } = await sanityFetch({ query: pageBySlugQuery, params: { slug } })
+  return data
 }
 
-export async function getAllPages(preview = false): Promise<Page[]> {
-  const result = await sanityFetch<Page[]>(allPagesQuery, {}, preview, ['pages'])
-  return result || []
+export async function getAllPages(): Promise<Page[]> {
+  const { data } = await sanityFetch({ query: allPagesQuery })
+  return data || []
 }
 
 export async function getPageSlugs(): Promise<string[]> {
-  const result = await sanityFetch<string[]>(pageSlugsQuery, {}, false, ['pages'])
-  return result || []
+  const { data } = await sanityFetch({ query: pageSlugsQuery })
+  return data || []
 }
 
 // ===========================================
 // PRODUCTS
-// Cache tags: 'products', 'product-{slug}' - invalidated on product changes
 // ===========================================
 
-export async function getAllProducts(preview = false): Promise<Product[]> {
-  const result = await sanityFetch<Product[]>(
-    allProductsQuery,
-    {},
-    preview,
-    ['products']
-  )
-  return result || []
+export async function getAllProducts(): Promise<Product[]> {
+  const { data } = await sanityFetch({ query: allProductsQuery })
+  return data || []
 }
 
-export async function getProductBySlug(
-  slug: string,
-  preview = false
-): Promise<Product | null> {
-  return sanityFetch<Product | null>(
-    productBySlugQuery,
-    { slug },
-    preview,
-    ['products', `product-${slug}`]
-  )
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  const { data } = await sanityFetch({ query: productBySlugQuery, params: { slug } })
+  return data
 }
 
-export async function getFeaturedProducts(preview = false): Promise<Product[]> {
-  const result = await sanityFetch<Product[]>(
-    featuredProductsQuery,
-    {},
-    preview,
-    ['products']
-  )
-  return result || []
+export async function getFeaturedProducts(): Promise<Product[]> {
+  const { data } = await sanityFetch({ query: featuredProductsQuery })
+  return data || []
 }
 
-export async function getProductsByCategory(
-  categoryId: string,
-  preview = false
-): Promise<Product[]> {
-  const result = await sanityFetch<Product[]>(
-    productsByCategoryQuery,
-    { categoryId },
-    preview,
-    ['products', 'categories']
-  )
-  return result || []
+export async function getProductsByCategory(categoryId: string): Promise<Product[]> {
+  const { data } = await sanityFetch({ query: productsByCategoryQuery, params: { categoryId } })
+  return data || []
 }
 
 export async function getProductSlugs(): Promise<string[]> {
-  const result = await sanityFetch<string[]>(productSlugsQuery, {}, false, [
-    'products',
-  ])
-  return result || []
+  const { data } = await sanityFetch({ query: productSlugsQuery })
+  return data || []
 }
 
 // ===========================================
 // CATEGORIES
-// Cache tags: 'categories', 'category-{slug}' - invalidated on category changes
 // ===========================================
 
-export async function getAllCategories(preview = false): Promise<Category[]> {
-  const result = await sanityFetch<Category[]>(
-    allCategoriesQuery,
-    {},
-    preview,
-    ['categories']
-  )
-  return result || []
+export async function getAllCategories(): Promise<Category[]> {
+  const { data } = await sanityFetch({ query: allCategoriesQuery })
+  return data || []
 }
 
-export async function getCategoryBySlug(
-  slug: string,
-  preview = false
-): Promise<Category | null> {
-  return sanityFetch<Category | null>(
-    categoryBySlugQuery,
-    { slug },
-    preview,
-    ['categories', `category-${slug}`]
-  )
+export async function getCategoryBySlug(slug: string): Promise<Category | null> {
+  const { data } = await sanityFetch({ query: categoryBySlugQuery, params: { slug } })
+  return data
 }
 
 // ===========================================
 // DEALERS
-// Cache tags: 'dealers' - invalidated on dealer changes
 // ===========================================
 
-export async function getAllDealers(preview = false): Promise<Dealer[]> {
-  const result = await sanityFetch<Dealer[]>(allDealersQuery, {}, preview, [
-    'dealers',
-  ])
-  return result || []
+export async function getAllDealers(): Promise<Dealer[]> {
+  const { data } = await sanityFetch({ query: allDealersQuery })
+  return data || []
 }
 
-export async function getDealersByCity(
-  city: string,
-  preview = false
-): Promise<Dealer[]> {
-  const result = await sanityFetch<Dealer[]>(
-    dealersByCityQuery,
-    { city },
-    preview,
-    ['dealers']
-  )
-  return result || []
+export async function getDealersByCity(city: string): Promise<Dealer[]> {
+  const { data } = await sanityFetch({ query: dealersByCityQuery, params: { city } })
+  return data || []
 }
 
 // ===========================================
 // TESTIMONIALS
-// Cache tags: 'testimonials' - invalidated on testimonial changes
 // ===========================================
 
-export async function getAllTestimonials(
-  preview = false
-): Promise<Testimonial[]> {
-  const result = await sanityFetch<Testimonial[]>(
-    allTestimonialsQuery,
-    {},
-    preview,
-    ['testimonials']
-  )
-  return result || []
+export async function getAllTestimonials(): Promise<Testimonial[]> {
+  const { data } = await sanityFetch({ query: allTestimonialsQuery })
+  return data || []
 }
 
-export async function getFeaturedTestimonials(
-  preview = false
-): Promise<Testimonial[]> {
-  const result = await sanityFetch<Testimonial[]>(
-    featuredTestimonialsQuery,
-    {},
-    preview,
-    ['testimonials']
-  )
-  return result || []
+export async function getFeaturedTestimonials(): Promise<Testimonial[]> {
+  const { data } = await sanityFetch({ query: featuredTestimonialsQuery })
+  return data || []
 }
 
 // ===========================================
 // FAQS
-// Cache tags: 'faqs' - invalidated on FAQ changes
 // ===========================================
 
-export async function getAllFaqs(preview = false): Promise<FAQ[]> {
-  const result = await sanityFetch<FAQ[]>(allFaqsQuery, {}, preview, ['faqs'])
-  return result || []
+export async function getAllFaqs(): Promise<FAQ[]> {
+  const { data } = await sanityFetch({ query: allFaqsQuery })
+  return data || []
 }
 
-export async function getFaqsByCategory(
-  category: string,
-  preview = false
-): Promise<FAQ[]> {
-  const result = await sanityFetch<FAQ[]>(
-    faqsByCategoryQuery,
-    { category },
-    preview,
-    ['faqs']
-  )
-  return result || []
+export async function getFaqsByCategory(category: string): Promise<FAQ[]> {
+  const { data } = await sanityFetch({ query: faqsByCategoryQuery, params: { category } })
+  return data || []
 }
 
 // ===========================================
 // SECTORS
-// Cache tags: 'sectors', 'sector-{slug}' - invalidated on sector changes
 // ===========================================
 
-export async function getSectors(preview = false): Promise<Sector[]> {
-  const result = await sanityFetch<Sector[]>(allSectorsQuery, {}, preview, [
-    'sectors',
-  ])
-  return result || []
+export async function getSectors(): Promise<Sector[]> {
+  const { data } = await sanityFetch({ query: allSectorsQuery })
+  return data || []
 }
 
-export async function getSectorBySlug(
-  slug: string,
-  preview = false
-): Promise<Sector | null> {
-  return sanityFetch<Sector | null>(
-    sectorBySlugQuery,
-    { slug },
-    preview,
-    ['sectors', `sector-${slug}`]
-  )
+export async function getSectorBySlug(slug: string): Promise<Sector | null> {
+  const { data } = await sanityFetch({ query: sectorBySlugQuery, params: { slug } })
+  return data
 }
 
 export async function getSectorSlugs(): Promise<string[]> {
-  const result = await sanityFetch<string[]>(sectorSlugsQuery, {}, false, [
-    'sectors',
-  ])
-  return result || []
+  const { data } = await sanityFetch({ query: sectorSlugsQuery })
+  return data || []
 }
 
-export async function getProductsBySector(
-  sectorId: string,
-  preview = false
-): Promise<Product[]> {
-  const result = await sanityFetch<Product[]>(
-    productsBySectorQuery,
-    { sectorId },
-    preview,
-    ['products', 'sectors']
-  )
-  return result || []
+export async function getProductsBySector(sectorId: string): Promise<Product[]> {
+  const { data } = await sanityFetch({ query: productsBySectorQuery, params: { sectorId } })
+  return data || []
 }
 
 // ===========================================
 // CASE STUDIES
-// Cache tags: 'caseStudies', 'caseStudy-{slug}' - invalidated on case study changes
 // ===========================================
 
-export async function getCaseStudies(preview = false): Promise<CaseStudy[]> {
-  const result = await sanityFetch<CaseStudy[]>(allCaseStudiesQuery, {}, preview, [
-    'caseStudies',
-  ])
-  return result || []
+export async function getCaseStudies(): Promise<CaseStudy[]> {
+  const { data } = await sanityFetch({ query: allCaseStudiesQuery })
+  return data || []
 }
 
-export async function getCaseStudyBySlug(
-  slug: string,
-  preview = false
-): Promise<CaseStudy | null> {
-  return sanityFetch<CaseStudy | null>(
-    caseStudyBySlugQuery,
-    { slug },
-    preview,
-    ['caseStudies', `caseStudy-${slug}`]
-  )
+export async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null> {
+  const { data } = await sanityFetch({ query: caseStudyBySlugQuery, params: { slug } })
+  return data
 }
 
 export async function getCaseStudySlugs(): Promise<string[]> {
-  const result = await sanityFetch<string[]>(caseStudySlugsQuery, {}, false, [
-    'caseStudies',
-  ])
-  return result || []
+  const { data } = await sanityFetch({ query: caseStudySlugsQuery })
+  return data || []
 }
 
-export async function getFeaturedCaseStudies(
-  preview = false
-): Promise<CaseStudy[]> {
-  const result = await sanityFetch<CaseStudy[]>(
-    featuredCaseStudiesQuery,
-    {},
-    preview,
-    ['caseStudies']
-  )
-  return result || []
+export async function getFeaturedCaseStudies(): Promise<CaseStudy[]> {
+  const { data } = await sanityFetch({ query: featuredCaseStudiesQuery })
+  return data || []
 }

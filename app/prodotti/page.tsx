@@ -1,6 +1,5 @@
 // Products List Page - Modernized with Metallic Design
 import { Metadata } from 'next'
-import { draftMode } from 'next/headers'
 import { getAllProducts, getAllCategories, getSiteSettings } from '@/lib/sanity/fetch'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { OrganizationSchema, BreadcrumbSchema, WebPageSchema } from '@/components/seo/JsonLd'
@@ -27,16 +26,11 @@ export const metadata: Metadata = {
   },
 }
 
-// Force dynamic rendering to support draft mode
-export const dynamic = 'force-dynamic'
-
 export default async function ProductsPage() {
-  const { isEnabled: isDraftMode } = await draftMode()
-
   const [products, categories, settings] = await Promise.all([
-    getAllProducts(isDraftMode),
-    getAllCategories(isDraftMode),
-    getSiteSettings(isDraftMode),
+    getAllProducts(),
+    getAllCategories(),
+    getSiteSettings(),
   ])
 
   // Breadcrumb data

@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { draftMode } from 'next/headers'
 import { getSectorBySlug, getSectorSlugs, getSiteSettings, getProductsBySector } from '@/lib/sanity/fetch'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { ArrowLeft, ArrowRight, Package } from 'lucide-react'
@@ -15,9 +14,6 @@ import { BreadcrumbSchema, OrganizationSchema, WebPageSchema } from '@/component
 interface SectorPageProps {
   params: Promise<{ slug: string }>
 }
-
-// Force dynamic rendering to support draft mode
-export const dynamic = 'force-dynamic'
 
 export async function generateStaticParams() {
   const slugs = await getSectorSlugs()
@@ -61,12 +57,11 @@ export async function generateMetadata({ params }: SectorPageProps): Promise<Met
 }
 
 export default async function SectorPage({ params }: SectorPageProps) {
-  const { isEnabled: isDraftMode } = await draftMode()
   const { slug } = await params
 
   const [sector, settings] = await Promise.all([
-    getSectorBySlug(slug, isDraftMode),
-    getSiteSettings(isDraftMode),
+    getSectorBySlug(slug),
+    getSiteSettings(),
   ])
 
   if (!sector) {
@@ -74,7 +69,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
   }
 
   // Fetch related products for this sector
-  const relatedProducts = await getProductsBySector(sector._id, isDraftMode)
+  const relatedProducts = await getProductsBySector(sector._id)
 
   // Extract safe values
   const sectorName = getTextValue(sector.name)

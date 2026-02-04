@@ -1,14 +1,10 @@
-// Homepage
+// Homepage - v3.0.0
 import { Metadata } from 'next'
-import { draftMode } from 'next/headers'
 import { getPageBySlug, getFeaturedProducts, getSiteSettings } from '@/lib/sanity/fetch'
 import { SectionsWithDividers } from '@/components/sections/SectionsWithDividers'
 import { generateSiteMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import { OrganizationSchema, WebsiteSchema, WebPageSchema } from '@/components/seo/JsonLd'
-
-// Force dynamic rendering to support draft mode
-export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
@@ -44,13 +40,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  // CORRETTO: draftMode() e' async in Next.js 14.x App Router
-  const { isEnabled: isDraftMode } = await draftMode()
-
   const [page, products, settings] = await Promise.all([
-    getPageBySlug('home', isDraftMode),
-    getFeaturedProducts(isDraftMode),
-    getSiteSettings(isDraftMode),
+    getPageBySlug('home'),
+    getFeaturedProducts(),
+    getSiteSettings(),
   ])
 
   // Prepare company info for structured data
@@ -86,7 +79,12 @@ export default async function HomePage() {
       />
 
       {/* Page Content with Dividers */}
-      <SectionsWithDividers sections={page.sections || []} products={products} />
+      <SectionsWithDividers
+        sections={page.sections || []}
+        products={products}
+        documentId={page._id}
+        documentType={page._type || 'page'}
+      />
     </>
   )
 }

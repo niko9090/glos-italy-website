@@ -14,6 +14,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 type LayoutType = 'grid' | 'list' | 'carousel'
 
 interface ProductsSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: string
     subtitle?: string
@@ -63,13 +65,13 @@ function ImagePlaceholder() {
   )
 }
 
-export default function ProductsSection({ data, products }: ProductsSectionProps) {
+export default function ProductsSection({ data, products, documentId, sectionKey }: ProductsSectionProps) {
   const { t } = useLanguage()
   const displayProducts = products?.slice(0, data.limit || 6) || []
   const layout = data.layout || 'grid'
 
   return (
-    <section className="section bg-white">
+    <section data-sanity-edit-target className="section bg-white">
       <div className="container-glos">
         {/* Header */}
         <div className="text-center mb-12">

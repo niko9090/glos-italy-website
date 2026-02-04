@@ -23,6 +23,8 @@ interface FeatureItem {
 }
 
 interface FeaturesSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     eyebrow?: unknown
@@ -68,7 +70,7 @@ interface FeaturesSectionProps {
   }
 }
 
-export default function FeaturesSection({ data }: FeaturesSectionProps) {
+export default function FeaturesSection({ data, documentId, sectionKey }: FeaturesSectionProps) {
   const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -283,6 +285,7 @@ export default function FeaturesSection({ data }: FeaturesSectionProps) {
 
   return (
     <section
+      data-sanity-edit-target
       ref={sectionRef}
       className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden`}
     >

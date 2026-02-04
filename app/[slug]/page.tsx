@@ -1,15 +1,11 @@
-// Dynamic Page
+// Dynamic Page - v3.0.0
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-import { draftMode } from 'next/headers'
 import { getPageBySlug, getPageSlugs, getFeaturedProducts, getSiteSettings } from '@/lib/sanity/fetch'
 import { SectionsWithDividers } from '@/components/sections/SectionsWithDividers'
 import { generatePageMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import { OrganizationSchema, BreadcrumbSchema, WebPageSchema } from '@/components/seo/JsonLd'
-
-// Force dynamic rendering to support draft mode
-export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -54,14 +50,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function DynamicPage({ params }: PageProps) {
-  // CORRETTO: draftMode() e' async in Next.js 14.x App Router
-  const { isEnabled: isDraftMode } = await draftMode()
   const { slug } = await params
 
   const [page, products, settings] = await Promise.all([
-    getPageBySlug(slug, isDraftMode),
-    getFeaturedProducts(isDraftMode),
-    getSiteSettings(isDraftMode),
+    getPageBySlug(slug),
+    getFeaturedProducts(),
+    getSiteSettings(),
   ])
 
   if (!page) {
@@ -87,7 +81,12 @@ export default async function DynamicPage({ params }: PageProps) {
       />
 
       {/* Page Content with Dividers */}
-      <SectionsWithDividers sections={page.sections || []} products={products} />
+      <SectionsWithDividers
+        sections={page.sections || []}
+        products={products}
+        documentId={page._id}
+        documentType={page._type || 'page'}
+      />
     </>
   )
 }

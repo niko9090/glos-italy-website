@@ -17,6 +17,8 @@ import {
 } from '@/lib/animations/config'
 
 interface TeamSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     subtitle?: unknown
@@ -94,7 +96,7 @@ const socialIconVariants = {
   tap: { scale: 0.9 },
 }
 
-export default function TeamSection({ data }: TeamSectionProps) {
+export default function TeamSection({ data, documentId, sectionKey }: TeamSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'gray']
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
@@ -111,7 +113,7 @@ export default function TeamSection({ data }: TeamSectionProps) {
   }
 
   return (
-    <section className={`${getSpacingClasses(data)} ${bgClass}`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <motion.div

@@ -12,6 +12,8 @@ import {
 } from '@/lib/animations/config'
 
 interface IconBoxesSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     subtitle?: unknown
@@ -105,7 +107,7 @@ const boxVariants = {
   tap: tapScale,
 }
 
-export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
+export default function IconBoxesSection({ data, documentId, sectionKey }: IconBoxesSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'white']
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
@@ -157,7 +159,7 @@ export default function IconBoxesSection({ data }: IconBoxesSectionProps) {
   }
 
   return (
-    <section className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`section ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <motion.div

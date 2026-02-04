@@ -10,6 +10,8 @@ import RichText from '@/components/RichText'
 import { fadeInUp, scaleIn, MOTION } from '@/lib/animations/config'
 
 interface BeforeAfterSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     subtitle?: unknown
@@ -170,7 +172,7 @@ function ComparisonSlider({
   )
 }
 
-export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
+export default function BeforeAfterSection({ data, documentId, sectionKey }: BeforeAfterSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'gray']
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
@@ -184,7 +186,7 @@ export default function BeforeAfterSection({ data }: BeforeAfterSectionProps) {
   if (validComparisons.length === 0) return null
 
   return (
-    <section className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`section ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <motion.div

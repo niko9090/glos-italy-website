@@ -1,11 +1,11 @@
-// GROQ Queries per Sanity
-import { groq } from 'next-sanity'
+// GROQ Queries per Sanity - v3.0.0 con defineQuery
+import { defineQuery } from 'next-sanity'
 
 // ============================================
 // IMPOSTAZIONI SITO
 // ============================================
 
-export const siteSettingsQuery = groq`
+export const siteSettingsQuery = defineQuery(`
   *[_type == "siteSettings"][0] {
     companyName,
     slogan,
@@ -40,13 +40,13 @@ export const siteSettingsQuery = groq`
     footerCopyrightText,
     footerBottomLinks
   }
-`
+`)
 
 // ============================================
 // NAVIGAZIONE
 // ============================================
 
-export const navigationQuery = groq`
+export const navigationQuery = defineQuery(`
   *[_type == "navigation"][0] {
     "items": items[] {
       _key,
@@ -54,7 +54,7 @@ export const navigationQuery = groq`
       href
     }
   }
-`
+`)
 
 // ============================================
 // PAGINE
@@ -62,7 +62,7 @@ export const navigationQuery = groq`
 
 // NOTA: La condizione isPublished != false viene gestita dalla perspective del client
 // In draft mode (perspective: 'previewDrafts') verranno mostrate anche le bozze
-export const pageBySlugQuery = groq`
+export const pageBySlugQuery = defineQuery(`
   *[_type == "page" && slug.current == $slug][0] {
     _id,
     _type,
@@ -77,25 +77,25 @@ export const pageBySlugQuery = groq`
       ...
     }
   }
-`
+`)
 
-export const allPagesQuery = groq`
+export const allPagesQuery = defineQuery(`
   *[_type == "page" && isPublished != false] | order(title asc) {
     _id,
     title,
     slug
   }
-`
+`)
 
-export const pageSlugsQuery = groq`
+export const pageSlugsQuery = defineQuery(`
   *[_type == "page" && defined(slug.current) && isPublished != false].slug.current
-`
+`)
 
 // ============================================
 // PRODOTTI
 // ============================================
 
-export const allProductsQuery = groq`
+export const allProductsQuery = defineQuery(`
   *[_type == "product" && isActive == true] | order(sortOrder asc) {
     _id,
     name,
@@ -111,9 +111,9 @@ export const allProductsQuery = groq`
     isNew,
     isFeatured
   }
-`
+`)
 
-export const productBySlugQuery = groq`
+export const productBySlugQuery = defineQuery(`
   *[_type == "product" && slug.current == $slug][0] {
     _id,
     name,
@@ -168,9 +168,9 @@ export const productBySlugQuery = groq`
     },
     seo
   }
-`
+`)
 
-export const featuredProductsQuery = groq`
+export const featuredProductsQuery = defineQuery(`
   *[_type == "product" && isActive == true && isFeatured == true] | order(sortOrder asc)[0...6] {
     _id,
     name,
@@ -182,9 +182,9 @@ export const featuredProductsQuery = groq`
     },
     isNew
   }
-`
+`)
 
-export const productsByCategoryQuery = groq`
+export const productsByCategoryQuery = defineQuery(`
   *[_type == "product" && isActive == true && category._ref == $categoryId] | order(sortOrder asc) {
     _id,
     name,
@@ -194,17 +194,17 @@ export const productsByCategoryQuery = groq`
     price,
     isNew
   }
-`
+`)
 
-export const productSlugsQuery = groq`
+export const productSlugsQuery = defineQuery(`
   *[_type == "product" && defined(slug.current)].slug.current
-`
+`)
 
 // ============================================
 // CATEGORIE
 // ============================================
 
-export const allCategoriesQuery = groq`
+export const allCategoriesQuery = defineQuery(`
   *[_type == "productCategory" && isActive == true] | order(name asc) {
     _id,
     name,
@@ -213,9 +213,9 @@ export const allCategoriesQuery = groq`
     image,
     "productCount": count(*[_type == "product" && references(^._id)])
   }
-`
+`)
 
-export const categoryBySlugQuery = groq`
+export const categoryBySlugQuery = defineQuery(`
   *[_type == "productCategory" && slug.current == $slug][0] {
     _id,
     name,
@@ -224,13 +224,13 @@ export const categoryBySlugQuery = groq`
     image,
     seo
   }
-`
+`)
 
 // ============================================
 // RIVENDITORI
 // ============================================
 
-export const allDealersQuery = groq`
+export const allDealersQuery = defineQuery(`
   *[_type == "dealer" && isActive != false] | order(isFeatured desc, name asc) {
     _id,
     name,
@@ -252,9 +252,9 @@ export const allDealersQuery = groq`
     isActive,
     isFeatured
   }
-`
+`)
 
-export const dealersByCityQuery = groq`
+export const dealersByCityQuery = defineQuery(`
   *[_type == "dealer" && isActive != false && city == $city] | order(isFeatured desc, name asc) {
     _id,
     name,
@@ -275,13 +275,13 @@ export const dealersByCityQuery = groq`
     gallery,
     isFeatured
   }
-`
+`)
 
 // ============================================
 // TESTIMONIANZE
 // ============================================
 
-export const allTestimonialsQuery = groq`
+export const allTestimonialsQuery = defineQuery(`
   *[_type == "testimonial" && isActive == true] | order(_createdAt desc) {
     _id,
     author,
@@ -291,9 +291,9 @@ export const allTestimonialsQuery = groq`
     quote,
     rating
   }
-`
+`)
 
-export const featuredTestimonialsQuery = groq`
+export const featuredTestimonialsQuery = defineQuery(`
   *[_type == "testimonial" && isActive == true] | order(_createdAt desc)[0...3] {
     _id,
     author,
@@ -303,34 +303,34 @@ export const featuredTestimonialsQuery = groq`
     quote,
     rating
   }
-`
+`)
 
 // ============================================
 // FAQ
 // ============================================
 
-export const allFaqsQuery = groq`
+export const allFaqsQuery = defineQuery(`
   *[_type == "faq" && isActive == true] | order(sortOrder asc) {
     _id,
     question,
     answer,
     category
   }
-`
+`)
 
-export const faqsByCategoryQuery = groq`
+export const faqsByCategoryQuery = defineQuery(`
   *[_type == "faq" && isActive == true && category == $category] | order(sortOrder asc) {
     _id,
     question,
     answer
   }
-`
+`)
 
 // ============================================
 // SETTORI (SECTORS)
 // ============================================
 
-export const allSectorsQuery = groq`
+export const allSectorsQuery = defineQuery(`
   *[_type == "sector"] | order(order asc, name asc) {
     _id,
     name,
@@ -341,9 +341,9 @@ export const allSectorsQuery = groq`
     color,
     "productCount": count(*[_type == "product" && references(^._id)])
   }
-`
+`)
 
-export const sectorBySlugQuery = groq`
+export const sectorBySlugQuery = defineQuery(`
   *[_type == "sector" && slug.current == $slug][0] {
     _id,
     name,
@@ -362,13 +362,13 @@ export const sectorBySlugQuery = groq`
       mainImage
     }
   }
-`
+`)
 
-export const sectorSlugsQuery = groq`
+export const sectorSlugsQuery = defineQuery(`
   *[_type == "sector" && defined(slug.current)].slug.current
-`
+`)
 
-export const productsBySectorQuery = groq`
+export const productsBySectorQuery = defineQuery(`
   *[_type == "product" && isActive == true && references($sectorId)] | order(sortOrder asc) {
     _id,
     name,
@@ -378,13 +378,13 @@ export const productsBySectorQuery = groq`
     isNew,
     isFeatured
   }
-`
+`)
 
 // ============================================
 // CASE STUDIES
 // ============================================
 
-export const allCaseStudiesQuery = groq`
+export const allCaseStudiesQuery = defineQuery(`
   *[_type == "caseStudy"] | order(featured desc, publishedAt desc) {
     _id,
     title,
@@ -405,9 +405,9 @@ export const allCaseStudiesQuery = groq`
       label
     }
   }
-`
+`)
 
-export const caseStudyBySlugQuery = groq`
+export const caseStudyBySlugQuery = defineQuery(`
   *[_type == "caseStudy" && slug.current == $slug][0] {
     _id,
     title,
@@ -439,13 +439,13 @@ export const caseStudyBySlugQuery = groq`
       shortDescription
     }
   }
-`
+`)
 
-export const caseStudySlugsQuery = groq`
+export const caseStudySlugsQuery = defineQuery(`
   *[_type == "caseStudy" && defined(slug.current)].slug.current
-`
+`)
 
-export const featuredCaseStudiesQuery = groq`
+export const featuredCaseStudiesQuery = defineQuery(`
   *[_type == "caseStudy" && featured == true] | order(publishedAt desc)[0...6] {
     _id,
     title,
@@ -458,4 +458,4 @@ export const featuredCaseStudiesQuery = groq`
     results,
     gallery
   }
-`
+`)

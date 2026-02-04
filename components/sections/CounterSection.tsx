@@ -45,6 +45,8 @@ interface CounterSectionData {
 }
 
 interface CounterSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: CounterSectionData
 }
 
@@ -229,7 +231,7 @@ function CounterItemComponent({
 // Main Component
 // ============================================================================
 
-export default function CounterSection({ data }: CounterSectionProps) {
+export default function CounterSection({ data, documentId, sectionKey }: CounterSectionProps) {
   const { language } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' })
@@ -308,6 +310,7 @@ export default function CounterSection({ data }: CounterSectionProps) {
 
   return (
     <section
+      data-sanity-edit-target
       ref={sectionRef}
       className={`relative overflow-hidden ${paddingClass} ${bgClass}`}
     >

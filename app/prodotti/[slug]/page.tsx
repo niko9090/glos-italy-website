@@ -1,7 +1,6 @@
 // Single Product Page - Modern Design with Gallery Lightbox
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-import { draftMode } from 'next/headers'
 import { getProductBySlug, getProductSlugs, getSiteSettings, getAllProducts } from '@/lib/sanity/fetch'
 import { generateProductMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { ProductSchema, BreadcrumbSchema, OrganizationSchema } from '@/components/seo/JsonLd'
@@ -11,9 +10,6 @@ import ProductPageClient from './ProductPageClient'
 interface ProductPageProps {
   params: Promise<{ slug: string }>
 }
-
-// Force dynamic rendering to support draft mode
-export const dynamic = 'force-dynamic'
 
 export async function generateStaticParams() {
   const slugs = await getProductSlugs()
@@ -42,13 +38,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { isEnabled: isDraftMode } = await draftMode()
   const { slug } = await params
 
   const [product, settings, allProducts] = await Promise.all([
-    getProductBySlug(slug, isDraftMode),
-    getSiteSettings(isDraftMode),
-    getAllProducts(isDraftMode),
+    getProductBySlug(slug),
+    getSiteSettings(),
+    getAllProducts(),
   ])
 
   if (!product) {

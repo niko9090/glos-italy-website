@@ -22,6 +22,8 @@ interface GalleryImage {
 }
 
 interface GallerySectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     title?: unknown
@@ -60,7 +62,7 @@ interface GallerySectionProps {
   }
 }
 
-export default function GallerySection({ data }: GallerySectionProps) {
+export default function GallerySection({ data, documentId, sectionKey }: GallerySectionProps) {
   const { t } = useLanguage()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [[page, direction], setPage] = useState([0, 0])
@@ -309,7 +311,7 @@ export default function GallerySection({ data }: GallerySectionProps) {
   const darkBg = ['black', 'primary'].includes(backgroundColor)
 
   return (
-    <section className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} overflow-hidden`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} overflow-hidden`}>
       <div className="container-glos">
         {/* Header */}
         <motion.div

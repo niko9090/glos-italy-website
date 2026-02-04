@@ -41,6 +41,8 @@ interface FloatingElement {
 }
 
 interface HeroSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     eyebrow?: unknown
@@ -81,7 +83,7 @@ interface HeroSectionProps {
   }
 }
 
-export default function HeroSection({ data }: HeroSectionProps) {
+export default function HeroSection({ data, documentId, sectionKey }: HeroSectionProps) {
   const { t } = useLanguage()
   const containerRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
@@ -424,6 +426,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
 
   return (
     <section
+      data-sanity-edit-target
       ref={containerRef}
       className={`relative flex overflow-hidden ${heightClasses[height]} ${positionClasses[position]}`}
       style={height === 'custom' && data.customHeight ? { minHeight: `${data.customHeight}px` } : undefined}

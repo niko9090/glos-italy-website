@@ -102,6 +102,8 @@ const horizontalItemVariants = {
 }
 
 interface TimelineSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     subtitle?: unknown
@@ -140,7 +142,7 @@ const lineColorClasses: Record<string, string> = {
   gradient: 'bg-gradient-to-b from-primary via-secondary to-accent',
 }
 
-export default function TimelineSection({ data }: TimelineSectionProps) {
+export default function TimelineSection({ data, documentId, sectionKey }: TimelineSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'white']
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
@@ -152,7 +154,7 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
   // Horizontal layout
   if (layout?.includes('horizontal')) {
     return (
-      <section className={`${getSpacingClasses(data)} ${bgClass} overflow-hidden`}>
+      <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass} overflow-hidden`}>
         <div className="container-glos">
           {/* Animated Title */}
           {(data.title || data.subtitle) ? (
@@ -236,7 +238,7 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
   const isLeft = layout?.includes('vertical-left')
 
   return (
-    <section className={`${getSpacingClasses(data)} ${bgClass}`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className="container-glos">
         {/* Animated Title */}
         {(data.title || data.subtitle) ? (

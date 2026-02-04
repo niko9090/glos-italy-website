@@ -181,6 +181,8 @@ interface Dealer {
 }
 
 interface MapSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     _type: 'mapSection'
     title?: LocalizedString
@@ -205,7 +207,7 @@ function getYouTubeId(url: string): string | null {
   return match ? match[1] : null
 }
 
-export default function MapSection({ data, dealers = [] }: MapSectionProps) {
+export default function MapSection({ data, dealers = [], documentId, sectionKey }: MapSectionProps) {
   const { language, t } = useLanguage()
   const [isMounted, setIsMounted] = useState(false)
 
@@ -430,6 +432,7 @@ export default function MapSection({ data, dealers = [] }: MapSectionProps) {
 
   return (
     <section
+      data-sanity-edit-target
       className={`${paddingClasses[data.paddingY || 'medium']} relative overflow-hidden`}
       style={bgStyle}
     >

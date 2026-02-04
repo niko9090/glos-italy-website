@@ -11,6 +11,8 @@ import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface TabsSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     subtitle?: unknown
@@ -41,7 +43,7 @@ const bgClasses: Record<string, string> = {
   dark: 'bg-gray-900',
 }
 
-export default function TabsSection({ data }: TabsSectionProps) {
+export default function TabsSection({ data, documentId, sectionKey }: TabsSectionProps) {
   const [activeTab, setActiveTab] = useState(0)
   const { t } = useLanguage()
 
@@ -96,7 +98,7 @@ export default function TabsSection({ data }: TabsSectionProps) {
   const currentStyle = tabClasses[tabStyle as keyof typeof tabClasses] || tabClasses.pills
 
   return (
-    <section className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`section ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${textColor}`}>

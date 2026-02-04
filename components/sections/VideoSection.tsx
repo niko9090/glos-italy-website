@@ -16,6 +16,8 @@ import {
 } from '@/lib/animations/config'
 
 interface VideoSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     subtitle?: unknown
@@ -120,7 +122,7 @@ const playButtonStyles = {
   glass: 'bg-white/20 backdrop-blur-md text-white border border-white/30',
 }
 
-export default function VideoSection({ data }: VideoSectionProps) {
+export default function VideoSection({ data, documentId, sectionKey }: VideoSectionProps) {
   const [isPlaying, setIsPlaying] = useState(data.autoplay || false)
   const [isMuted, setIsMuted] = useState(data.muted || data.autoplay || false)
   const [showControls, setShowControls] = useState(false)
@@ -405,7 +407,7 @@ export default function VideoSection({ data }: VideoSectionProps) {
 
   if (data.layout?.includes('side-text')) {
     return (
-      <section className={`section ${bgClass}`}>
+      <section data-sanity-edit-target className={`section ${bgClass}`}>
         <div className="container-glos">
           <div className={`grid lg:grid-cols-2 gap-12 items-center ${data.textPosition?.includes('right') ? '' : 'lg:grid-flow-dense'}`}>
             <motion.div
@@ -428,7 +430,7 @@ export default function VideoSection({ data }: VideoSectionProps) {
   }
 
   return (
-    <section className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`section ${bgClass}`}>
       <div className={data.layout?.includes('full-width') ? '' : 'container-glos'}>
         {textContent && (
           <motion.div

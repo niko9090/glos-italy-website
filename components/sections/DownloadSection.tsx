@@ -9,6 +9,8 @@ import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
 interface DownloadSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     title?: unknown
     subtitle?: unknown
@@ -61,7 +63,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 },
 }
 
-export default function DownloadSection({ data }: DownloadSectionProps) {
+export default function DownloadSection({ data, documentId, sectionKey }: DownloadSectionProps) {
   const { t } = useLanguage()
   const bgClass = bgClasses[data.backgroundColor || 'gray']
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
@@ -155,7 +157,7 @@ export default function DownloadSection({ data }: DownloadSectionProps) {
   }
 
   return (
-    <section className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`section ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${textColor}`}>

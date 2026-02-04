@@ -54,6 +54,8 @@ interface RequestType {
 }
 
 interface ContactSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     eyebrow?: unknown
@@ -126,7 +128,7 @@ interface ContactSectionProps {
   }
 }
 
-export default function ContactSection({ data }: ContactSectionProps) {
+export default function ContactSection({ data, documentId, sectionKey }: ContactSectionProps) {
   const { t } = useLanguage()
   const [formData, setFormData] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -485,7 +487,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
     : 'container-glos'
 
   return (
-    <section className={`${getSpacingClasses()} ${bgClasses[backgroundColor]} ${textColor} relative overflow-hidden`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses()} ${bgClasses[backgroundColor]} ${textColor} relative overflow-hidden`}>
       {/* Decorations */}
       {data.showDecorations && (
         <>

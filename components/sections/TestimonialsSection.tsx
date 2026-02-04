@@ -28,6 +28,8 @@ interface TestimonialItem {
 }
 
 interface TestimonialsSectionProps {
+  documentId?: string
+  sectionKey?: string
   data: {
     // Content
     eyebrow?: unknown
@@ -125,7 +127,7 @@ function RatingDisplay({ rating, style = 'yellow' }: { rating: number; style?: s
   )
 }
 
-export default function TestimonialsSection({ data }: TestimonialsSectionProps) {
+export default function TestimonialsSection({ data, documentId, sectionKey }: TestimonialsSectionProps) {
   const { t } = useLanguage()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(data.autoplay !== false)
@@ -737,6 +739,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
   return (
     <section
+      data-sanity-edit-target
       ref={containerRef}
       className={`relative overflow-hidden ${getSpacingClasses(data)} ${bgClasses[data.backgroundColor || 'gray-light']} ${textColor}`}
     >

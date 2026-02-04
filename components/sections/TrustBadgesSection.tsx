@@ -158,7 +158,7 @@ export default function TrustBadgesSection({ data }: TrustBadgesSectionProps) {
             </div>
             <div>
               <p className="font-semibold text-sm">{String(t(badge.title) || '')}</p>
-              {badge.subtitle && (
+              {!!badge.subtitle && (
                 <p className={`text-xs ${isDarkBg ? 'text-white/60' : 'text-gray-500'}`}>
                   {String(t(badge.subtitle) || '')}
                 </p>
@@ -199,7 +199,7 @@ export default function TrustBadgesSection({ data }: TrustBadgesSectionProps) {
               {renderIcon(badge, 'w-10 h-10')}
             </div>
             <p className="font-bold text-sm mb-1">{String(t(badge.title) || '')}</p>
-            {badge.subtitle && (
+            {!!badge.subtitle && (
               <p className={`text-xs ${isDarkBg ? 'text-white/60' : 'text-gray-500'}`}>
                 {String(t(badge.subtitle) || '')}
               </p>
@@ -259,7 +259,7 @@ export default function TrustBadgesSection({ data }: TrustBadgesSectionProps) {
                 </div>
 
                 <h3 className="font-bold text-base mb-1">{String(t(badge.title) || '')}</h3>
-                {badge.subtitle && (
+                {!!badge.subtitle && (
                   <p className={`text-sm ${isDarkBg ? 'text-white/60' : 'text-metal-500'}`}>
                     {String(t(badge.subtitle) || '')}
                   </p>
@@ -322,7 +322,7 @@ export default function TrustBadgesSection({ data }: TrustBadgesSectionProps) {
             <h3 className={`font-bold text-sm mb-1 ${isDarkBg ? 'text-yellow-400' : 'text-gray-900'}`}>
               {String(t(badge.title) || '')}
             </h3>
-            {badge.subtitle && (
+            {!!badge.subtitle && (
               <p className={`text-xs ${isDarkBg ? 'text-white/50' : 'text-gray-500'}`}>
                 {String(t(badge.subtitle) || '')}
               </p>

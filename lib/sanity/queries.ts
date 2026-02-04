@@ -10,6 +10,7 @@ export const siteSettingsQuery = groq`
     companyName,
     slogan,
     logo,
+    logoWhite,
     email,
     phone,
     address,
@@ -17,7 +18,27 @@ export const siteSettingsQuery = groq`
     instagram,
     linkedin,
     whatsapp,
-    whatsappMessage
+    whatsappMessage,
+    // Header settings
+    headerLogoSize,
+    headerHeight,
+    headerStyle,
+    headerCtaText,
+    headerCtaLink,
+    headerShowLanguageSelector,
+    headerNavGap,
+    // Footer settings
+    footerLogoSize,
+    footerStyle,
+    footerColumns,
+    footerShowSocial,
+    footerShowQuickLinks,
+    footerShowProducts,
+    footerShowContacts,
+    footerPadding,
+    footerColumnsGap,
+    footerCopyrightText,
+    footerBottomLinks
   }
 `
 

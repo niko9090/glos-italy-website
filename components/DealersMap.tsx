@@ -31,45 +31,97 @@ function cleanText(text: string): string {
     .trim()
 }
 
-// Funzione per geocodificare un indirizzo usando OpenStreetMap Nominatim (gratuito, no CORS)
+// Helper per fare una singola richiesta geocoding
+async function fetchGeocode(query: string): Promise<{ lat: number; lng: number } | null> {
+  try {
+    const encoded = encodeURIComponent(query)
+    console.log('[Geocoding] Tentativo con query:', query)
+
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encoded}&limit=1&addressdetails=1`,
+      {
+        headers: {
+          'User-Agent': 'GLOSItaly/1.0 (https://glositaly.vercel.app)',
+          'Accept-Language': 'it'
+        }
+      }
+    )
+
+    if (!response.ok) {
+      console.warn('[Geocoding] Risposta non OK:', response.status)
+      return null
+    }
+
+    const data = await response.json()
+    console.log('[Geocoding] Risposta per', query, ':', data.length > 0 ? 'TROVATO' : 'NON TROVATO')
+
+    if (data && data.length > 0 && data[0].lat && data[0].lon) {
+      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) }
+    }
+    return null
+  } catch (error) {
+    console.error('[Geocoding] Errore fetch:', error)
+    return null
+  }
+}
+
+// Funzione per geocodificare un indirizzo usando OpenStreetMap Nominatim
+// Prova multiple strategie: indirizzo completo, solo città+paese, solo città
 async function geocodeAddress(address: string, city: string, country?: string): Promise<{ lat: number; lng: number } | null> {
   // Pulisci i testi da caratteri invisibili
   const cleanAddress = cleanText(address || '')
   const cleanCity = cleanText(city || '')
   const cleanCountry = cleanText(country || 'Italia')
 
-  const fullAddress = [cleanAddress, cleanCity, cleanCountry].filter(Boolean).join(', ')
+  // Genera una chiave cache unica
+  const cacheKey = `${cleanAddress}|${cleanCity}|${cleanCountry}`
 
   // Controlla cache
-  if (geocodeCache[fullAddress] !== undefined) {
-    return geocodeCache[fullAddress]
+  if (geocodeCache[cacheKey] !== undefined) {
+    console.log('[Geocoding] Cache hit per:', cacheKey)
+    return geocodeCache[cacheKey]
   }
 
-  try {
-    const encoded = encodeURIComponent(fullAddress)
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?format=json&q=${encoded}&limit=1`,
-      {
-        headers: {
-          'User-Agent': 'GLOSItaly/1.0 (https://glositaly.vercel.app)'
-        }
-      }
-    )
-    const data = await response.json()
+  console.log('[Geocoding] Geocodifica per:', { address: cleanAddress, city: cleanCity, country: cleanCountry })
 
-    if (data && data.length > 0 && data[0].lat && data[0].lon) {
-      const result = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) }
-      geocodeCache[fullAddress] = result
+  // Strategia 1: Indirizzo completo (address, city, country)
+  if (cleanAddress && cleanCity) {
+    const fullQuery = [cleanAddress, cleanCity, cleanCountry].filter(Boolean).join(', ')
+    const result = await fetchGeocode(fullQuery)
+    if (result) {
+      console.log('[Geocoding] SUCCESSO con indirizzo completo')
+      geocodeCache[cacheKey] = result
       return result
     }
-
-    geocodeCache[fullAddress] = null
-    return null
-  } catch (error) {
-    console.error('Geocoding error:', error)
-    geocodeCache[fullAddress] = null
-    return null
+    // Piccolo delay per rispettare rate limits di Nominatim
+    await new Promise(r => setTimeout(r, 300))
   }
+
+  // Strategia 2: Solo città + paese
+  if (cleanCity) {
+    const cityQuery = [cleanCity, cleanCountry].filter(Boolean).join(', ')
+    const result = await fetchGeocode(cityQuery)
+    if (result) {
+      console.log('[Geocoding] SUCCESSO con solo città + paese')
+      geocodeCache[cacheKey] = result
+      return result
+    }
+    await new Promise(r => setTimeout(r, 300))
+  }
+
+  // Strategia 3: Solo città (ultimo tentativo)
+  if (cleanCity) {
+    const result = await fetchGeocode(cleanCity)
+    if (result) {
+      console.log('[Geocoding] SUCCESSO con solo città')
+      geocodeCache[cacheKey] = result
+      return result
+    }
+  }
+
+  console.warn('[Geocoding] FALLITO per:', { address: cleanAddress, city: cleanCity, country: cleanCountry })
+  geocodeCache[cacheKey] = null
+  return null
 }
 
 interface Dealer {
@@ -109,6 +161,7 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
   const { t } = useLanguage()
   const [isMounted, setIsMounted] = useState(false)
   const [geocodedDealers, setGeocodedDealers] = useState<Record<string, { lat: number; lng: number }>>({})
+  const [failedGeocode, setFailedGeocode] = useState<string[]>([]) // IDs dei dealer non geocodificati
   const [isGeocoding, setIsGeocoding] = useState(false)
   const [modalDealer, setModalDealer] = useState<Dealer | null>(null)
 
@@ -134,25 +187,52 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
     if (dealersNeedingGeocode.length === 0) return
 
     setIsGeocoding(true)
+    setFailedGeocode([])
+
+    console.log('[DealersMap] Dealer da geocodificare:', dealersNeedingGeocode.map(d => ({
+      name: d.name,
+      city: d.city,
+      address: d.address,
+      country: d.country
+    })))
 
     const geocodeAll = async () => {
       const results: Record<string, { lat: number; lng: number }> = {}
+      const failed: string[] = []
 
       for (const dealer of dealersNeedingGeocode) {
         const address = dealer.address || ''
         const city = dealer.city || ''
         const country = dealer.country
 
+        console.log(`[DealersMap] Geocoding "${dealer.name}"...`)
+
         if (city) {
           const coords = await geocodeAddress(address, city, country)
           if (coords) {
+            console.log(`[DealersMap] "${dealer.name}" geocodificato:`, coords)
             results[dealer._id] = coords
+          } else {
+            console.warn(`[DealersMap] "${dealer.name}" NON geocodificato!`)
+            failed.push(dealer._id)
           }
+        } else {
+          console.warn(`[DealersMap] "${dealer.name}" - manca la città!`)
+          failed.push(dealer._id)
         }
+
+        // Delay tra le richieste per rispettare rate limits
+        await new Promise(r => setTimeout(r, 500))
       }
 
       setGeocodedDealers(results)
+      setFailedGeocode(failed)
       setIsGeocoding(false)
+
+      console.log('[DealersMap] Geocoding completato:', {
+        successi: Object.keys(results).length,
+        falliti: failed.length
+      })
     }
 
     geocodeAll()
@@ -218,8 +298,41 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
 
   const youtubeId = modalDealer?.youtubeVideo ? getYouTubeId(modalDealer.youtubeVideo) : null
 
+  // Trova i nomi dei dealer non geocodificati per mostrarli
+  const failedDealerNames = dealers
+    .filter(d => failedGeocode.includes(d._id))
+    .map(d => d.name || 'Sconosciuto')
+
   return (
     <>
+      {/* Indicatore caricamento geocoding */}
+      {isGeocoding && (
+        <div className="mb-2 p-2 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700 flex items-center gap-2">
+          <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+          Localizzazione rivenditori in corso...
+        </div>
+      )}
+
+      {/* Avviso dealer non trovati sulla mappa */}
+      {!isGeocoding && failedDealerNames.length > 0 && (
+        <div className="mb-2 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">
+          <div className="flex items-start gap-2">
+            <MapPin className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-amber-800 font-medium">
+                {failedDealerNames.length === 1
+                  ? 'Un rivenditore non appare sulla mappa'
+                  : `${failedDealerNames.length} rivenditori non appaiono sulla mappa`}
+              </p>
+              <p className="text-amber-600 text-xs mt-1">
+                Non è stato possibile localizzare: {failedDealerNames.join(', ')}.
+                Verificare l'indirizzo o inserire le coordinate manuali in Sanity.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <MapContainer
         center={center}
         zoom={zoom}

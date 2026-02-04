@@ -1,4 +1,4 @@
-// Header Component
+// Header Component - v2.0 con personalizzazione da Sanity
 'use client'
 
 import { useState } from 'react'
@@ -24,6 +24,38 @@ const defaultNavItems = [
   { _key: 'rivenditori', label: 'Rivenditori', href: '/rivenditori' },
 ]
 
+// Logo size classes
+const logoSizeClasses: Record<string, { height: string; width: number }> = {
+  sm: { height: 'h-8', width: 100 },
+  md: { height: 'h-10', width: 125 },
+  lg: { height: 'h-12', width: 150 },
+  xl: { height: 'h-14', width: 175 },
+  '2xl': { height: 'h-16', width: 200 },
+}
+
+// Header height classes
+const headerHeightClasses: Record<string, string> = {
+  sm: 'h-16',
+  md: 'h-20',
+  lg: 'h-24',
+}
+
+// Header style classes
+const headerStyleClasses: Record<string, string> = {
+  metal: 'header-metal',
+  white: 'bg-white shadow-sm',
+  transparent: 'bg-transparent',
+  dark: 'bg-gray-900 text-white',
+}
+
+// Nav gap classes
+const navGapClasses: Record<string, string> = {
+  '4': 'gap-4',
+  '6': 'gap-6',
+  '8': 'gap-8',
+  '10': 'gap-10',
+}
+
 export default function Header({ settings, navigation }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { t } = useLanguage()
@@ -36,19 +68,28 @@ export default function Header({ settings, navigation }: HeaderProps) {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
 
+  // Get customization settings with defaults
+  const logoSize = logoSizeClasses[settings?.headerLogoSize || 'lg'] || logoSizeClasses.lg
+  const headerHeight = headerHeightClasses[settings?.headerHeight || 'md'] || headerHeightClasses.md
+  const headerStyle = headerStyleClasses[settings?.headerStyle || 'metal'] || headerStyleClasses.metal
+  const navGap = navGapClasses[settings?.headerNavGap || '8'] || navGapClasses['8']
+  const showLanguageSelector = settings?.headerShowLanguageSelector !== false
+  const ctaText = t(settings?.headerCtaText) || 'Contattaci'
+  const ctaLink = settings?.headerCtaLink || '/contatti'
+
   return (
-    <header className="sticky top-0 z-50 header-metal">
+    <header className={`sticky top-0 z-50 ${headerStyle}`}>
       <div className="container-glos">
-        <div className="flex items-center justify-between h-20">
+        <div className={`flex items-center justify-between ${headerHeight}`}>
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            {isValidImage(settings?.logo) && safeImageUrl(settings.logo, 200) ? (
+            {isValidImage(settings?.logo) && safeImageUrl(settings.logo, logoSize.width) ? (
               <Image
-                src={safeImageUrl(settings.logo, 200)!}
+                src={safeImageUrl(settings.logo, logoSize.width)!}
                 alt={companyName}
-                width={150}
-                height={50}
-                className="h-12 w-auto"
+                width={logoSize.width}
+                height={60}
+                className={`${logoSize.height} w-auto object-contain`}
               />
             ) : (
               <span className="text-2xl font-bold text-primary">
@@ -58,7 +99,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className={`hidden lg:flex items-center ${navGap}`}>
             {navItems.map((item) => (
               <Link
                 key={item._key}
@@ -73,13 +114,15 @@ export default function Header({ settings, navigation }: HeaderProps) {
           {/* Right Section */}
           <div className="flex items-center gap-4">
             {/* Language Selector (Desktop) */}
-            <div className="hidden lg:block">
-              <LanguageSelector variant="compact" />
-            </div>
+            {showLanguageSelector && (
+              <div className="hidden lg:block">
+                <LanguageSelector variant="compact" />
+              </div>
+            )}
 
             {/* CTA Button (Desktop) */}
-            <Link href="/contatti" className="hidden lg:block btn-primary">
-              Contattaci
+            <Link href={ctaLink} className="hidden lg:block btn-primary">
+              {ctaText}
             </Link>
 
             {/* Mobile Menu Button */}
@@ -122,17 +165,19 @@ export default function Header({ settings, navigation }: HeaderProps) {
                 ))}
 
                 {/* Language Selector (Mobile) */}
-                <div className="py-3 border-t border-gray-100 mt-2">
-                  <LanguageSelector variant="flags-only" />
-                </div>
+                {showLanguageSelector && (
+                  <div className="py-3 border-t border-gray-100 mt-2">
+                    <LanguageSelector variant="flags-only" />
+                  </div>
+                )}
 
                 {/* CTA Button (Mobile) */}
                 <Link
-                  href="/contatti"
+                  href={ctaLink}
                   onClick={toggleMobileMenu}
                   className="btn-primary text-center mt-4"
                 >
-                  Contattaci
+                  {ctaText}
                 </Link>
               </nav>
             </div>

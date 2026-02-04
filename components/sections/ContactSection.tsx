@@ -105,6 +105,15 @@ interface ContactSectionProps {
     marginTop?: string
     marginBottom?: string
     containerMaxWidth?: string
+    // Spacing (spaziature interne)
+    headerMarginBottom?: string
+    columnsGap?: string
+    formPadding?: string
+    formFieldsGap?: string
+    infoPadding?: string
+    infoItemsGap?: string
+    infoSectionsGap?: string
+    mapMarginTop?: string
     // Style
     backgroundColor?: 'white' | 'gray-light' | 'gray' | 'primary' | 'primary-light' | 'black' | 'gradient'
     textColor?: 'auto' | 'dark' | 'light'
@@ -198,6 +207,80 @@ export default function ContactSection({ data }: ContactSectionProps) {
     wide: 'max-w-7xl',
     full: 'max-w-none',
   }
+
+  // === SPACING CLASSES (Spaziature Interne) ===
+
+  // Header margin bottom (distanza header → contenuto)
+  const headerMarginBottomClasses: Record<string, string> = {
+    '0': 'mb-0',
+    '2': 'mb-2',
+    '4': 'mb-4',
+    '6': 'mb-6',
+    '8': 'mb-8',
+    '12': 'mb-12',
+    '16': 'mb-16',
+  }
+
+  // Columns gap (distanza tra colonne form/info)
+  const columnsGapClasses: Record<string, string> = {
+    '0': 'gap-0',
+    '4': 'gap-4',
+    '6': 'gap-6',
+    '8': 'gap-8',
+    '12': 'gap-12',
+    '16': 'gap-16',
+  }
+
+  // Form/Info padding (spaziatura interna box)
+  const boxPaddingClasses: Record<string, string> = {
+    sm: 'p-4 md:p-5',
+    md: 'p-5 md:p-6',
+    lg: 'p-6 md:p-8',
+    xl: 'p-8 md:p-10',
+  }
+
+  // Form fields gap (distanza tra campi)
+  const formFieldsGapClasses: Record<string, string> = {
+    '3': 'space-y-3',
+    '4': 'space-y-4',
+    '5': 'space-y-5',
+    '6': 'space-y-6',
+  }
+
+  // Info items gap (distanza tra singoli elementi info)
+  const infoItemsGapClasses: Record<string, string> = {
+    '2': 'space-y-2',
+    '3': 'space-y-3',
+    '4': 'space-y-4',
+    '6': 'space-y-6',
+  }
+
+  // Info sections gap (distanza tra blocchi info)
+  const infoSectionsGapClasses: Record<string, string> = {
+    '4': 'gap-4',
+    '6': 'gap-6',
+    '8': 'gap-8',
+    '12': 'gap-12',
+  }
+
+  // Map margin top (distanza mappa da info)
+  const mapMarginTopClasses: Record<string, string> = {
+    '0': 'mt-0',
+    '4': 'mt-4',
+    '6': 'mt-6',
+    '8': 'mt-8',
+    '12': 'mt-12',
+  }
+
+  // Get spacing values with defaults
+  const getHeaderMarginBottom = () => headerMarginBottomClasses[data.headerMarginBottom || '12'] || 'mb-12'
+  const getColumnsGap = () => columnsGapClasses[data.columnsGap || '8'] || 'gap-8'
+  const getFormPadding = () => boxPaddingClasses[data.formPadding || 'lg'] || 'p-6 md:p-8'
+  const getFormFieldsGap = () => formFieldsGapClasses[data.formFieldsGap || '5'] || 'space-y-5'
+  const getInfoPadding = () => boxPaddingClasses[data.infoPadding || 'lg'] || 'p-6 md:p-8'
+  const getInfoItemsGap = () => infoItemsGapClasses[data.infoItemsGap || '4'] || 'space-y-4'
+  const getInfoSectionsGap = () => infoSectionsGapClasses[data.infoSectionsGap || '8'] || 'gap-8'
+  const getMapMarginTop = () => mapMarginTopClasses[data.mapMarginTop || '8'] || 'mt-8'
 
   // Compute spacing classes
   const getSpacingClasses = () => {
@@ -374,18 +457,19 @@ export default function ContactSection({ data }: ContactSectionProps) {
   const darkBg = ['primary', 'black', 'gradient'].includes(backgroundColor)
   const animationVariants = getAnimationVariants()
 
-  // Layout classes - AGGIORNATI per bilanciamento altezze
+  // Layout classes - AGGIORNATI per bilanciamento altezze + spacing dinamico
   const getLayoutClasses = () => {
     const layout = data.layout || 'form-left'
-    if (layout?.includes('form-left')) return 'grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch'
-    if (layout?.includes('form-right')) return 'grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch'
-    if (layout?.includes('stacked')) return 'flex flex-col gap-12'
-    if (layout?.includes('map-first')) return 'flex flex-col-reverse gap-12'
+    const gap = getColumnsGap()
+    if (layout?.includes('form-left')) return `grid lg:grid-cols-2 ${gap} lg:${gap} items-stretch`
+    if (layout?.includes('form-right')) return `grid lg:grid-cols-2 ${gap} lg:${gap} items-stretch`
+    if (layout?.includes('stacked')) return `flex flex-col ${gap}`
+    if (layout?.includes('map-first')) return `flex flex-col-reverse ${gap}`
     if (layout?.includes('form-only')) return 'max-w-2xl mx-auto'
     if (layout?.includes('info-only')) return 'max-w-4xl mx-auto'
-    if (layout?.includes('grid')) return 'grid md:grid-cols-3 gap-8 items-stretch'
+    if (layout?.includes('grid')) return `grid md:grid-cols-3 ${gap} items-stretch`
     if (layout?.includes('map-overlay')) return 'relative'
-    return 'grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch'
+    return `grid lg:grid-cols-2 ${gap} lg:${gap} items-stretch`
   }
 
   // Use default fields if no custom fields defined
@@ -418,7 +502,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className={`text-center ${getHeaderMarginBottom()}`}
         >
           {!!data.eyebrow && (
             <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${darkBg ? 'opacity-80' : 'text-primary'}`}>
@@ -452,7 +536,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
               className={`
-                bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8
+                bg-white/80 backdrop-blur-lg rounded-2xl ${getFormPadding()}
                 border border-white/30 shadow-2xl
                 ${data.layout?.includes('form-right') ? 'lg:order-2' : ''}
               `}
@@ -487,7 +571,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                   </button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className={getFormFieldsGap()}>
                   {/* Request Type Dropdown */}
                   {data.showRequestType !== false && data.requestTypes && data.requestTypes.length > 0 && (
                     <div>
@@ -649,19 +733,19 @@ export default function ContactSection({ data }: ContactSectionProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
             className={`
-              flex flex-col gap-6
+              flex flex-col ${getInfoSectionsGap()}
               ${data.layout?.includes('form-right') ? 'lg:order-1' : ''}
             `}
           >
             {/* Contact Items */}
             {data.showContactInfo !== false && data.contactItems && data.contactItems.length > 0 && (
-              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl">
+              <div className={`bg-white/80 backdrop-blur-lg rounded-2xl ${getInfoPadding()} border border-white/30 shadow-xl`}>
                 {!!data.contactInfoTitle && (
                   <h3 className="text-xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                     {String(t(data.contactInfoTitle) || '')}
                   </h3>
                 )}
-                <div className="space-y-5">
+                <div className={getInfoItemsGap()}>
                   {data.contactItems.map((item) => (
                     <motion.div
                       key={item._key}
@@ -697,7 +781,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
             {/* Opening Hours */}
             {data.showOpeningHours && data.openingHours && data.openingHours.length > 0 && (
-              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl">
+              <div className={`bg-white/80 backdrop-blur-lg rounded-2xl ${getInfoPadding()} border border-white/30 shadow-xl`}>
                 <div className="flex items-center gap-3 mb-5">
                   <div className={getIconStyleClasses()}>
                     <Clock className="w-5 h-5" />
@@ -717,7 +801,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
             {/* Social Links */}
             {data.showSocialLinks && data.socialLinks && data.socialLinks.length > 0 && (
-              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl">
+              <div className={`bg-white/80 backdrop-blur-lg rounded-2xl ${getInfoPadding()} border border-white/30 shadow-xl`}>
                 {!!data.socialTitle && (
                   <h3 className="text-lg font-bold text-gray-900 mb-4">{String(t(data.socialTitle) || '')}</h3>
                 )}
@@ -742,7 +826,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
 
             {/* Map */}
             {data.showMap !== false && (
-              <div className={`${mapHeightClasses[data.mapHeight || 'md']} rounded-2xl overflow-hidden shadow-xl border border-white/30`}>
+              <div className={`${mapHeightClasses[data.mapHeight || 'md']} ${getMapMarginTop()} rounded-2xl overflow-hidden shadow-xl border border-white/30`}>
                 {data.mapType?.includes('google') && data.mapEmbedUrl ? (
                   <iframe
                     src={data.mapEmbedUrl}

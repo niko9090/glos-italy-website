@@ -1,6 +1,6 @@
 // Live Data Layer - next-sanity v12
 // Uses defineLive for automatic live updates and stega encoding
-import { defineLive } from 'next-sanity'
+import { defineLive } from 'next-sanity/live'
 import { createClient } from 'next-sanity'
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!

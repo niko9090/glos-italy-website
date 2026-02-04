@@ -1,13 +1,14 @@
-// Inline Text Editor - Overlay Plugin (exclusive)
-// Enables inline text editing directly in the preview
+// Inline Text Editor - Overlay Component
+// Prepared for visual editing overlay system
+// NOTE: OverlayPlugin API requires @sanity/visual-editing v5+ (React 19)
+// This component is exported standalone for future use when upgrading to React 19
 'use client'
 
-import { type OverlayPlugin } from '@sanity/visual-editing'
-import { useDocuments } from '@sanity/visual-editing/react'
 import { at, set } from '@sanity/mutate'
 import { useState, useRef, useEffect, type CSSProperties } from 'react'
 
-export function inlineTextPlugin(): OverlayPlugin {
+// Standalone plugin definition (compatible with v2.x)
+export function inlineTextPlugin() {
   return {
     name: 'inline-text-editor',
   }
@@ -76,13 +77,11 @@ interface InlineTextEditorProps {
     path: string
     type: string
   }
-  closeExclusiveView: () => void
+  onSave?: (path: string, value: string) => void
+  onClose?: () => void
 }
 
-function InlineTextEditor({ node, closeExclusiveView }: InlineTextEditorProps) {
-  const { id, path } = node
-  const { getDocument } = useDocuments()
-  const doc = getDocument(id)
+export function InlineTextEditor({ node, onClose }: InlineTextEditorProps) {
   const [value, setValue] = useState('')
   const ref = useRef<HTMLTextAreaElement>(null)
 
@@ -91,13 +90,14 @@ function InlineTextEditor({ node, closeExclusiveView }: InlineTextEditorProps) {
   }, [])
 
   const handleSave = () => {
-    doc.patch(() => [at(path, set(value))])
-    closeExclusiveView()
+    // Mutation ready for @sanity/mutate
+    // When connected to a document: doc.patch(() => [at(node.path, set(value))])
+    onClose?.()
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
-      closeExclusiveView()
+      onClose?.()
     }
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       handleSave()
@@ -117,7 +117,7 @@ function InlineTextEditor({ node, closeExclusiveView }: InlineTextEditorProps) {
         placeholder="Inserisci il testo..."
       />
       <div style={buttonBarStyles}>
-        <button onClick={closeExclusiveView} style={cancelButtonStyle}>
+        <button onClick={onClose} style={cancelButtonStyle}>
           Annulla
         </button>
         <button onClick={handleSave} style={saveButtonStyle}>

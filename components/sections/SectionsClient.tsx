@@ -1,7 +1,8 @@
-// SectionsClient - Client component for drag-and-drop with data-sanity attributes
+// SectionsClient - Client component for visual editing with data-sanity attributes
+// Compatible with @sanity/visual-editing v2.x + React 18
 'use client'
 
-import { createDataAttribute, useOptimistic } from '@sanity/visual-editing'
+import { createDataAttribute } from '@sanity/visual-editing'
 import { SectionRenderer } from './SectionRenderer'
 import { SectionDivider } from './SectionDivider'
 import type { Product } from '@/lib/sanity/fetch'
@@ -75,14 +76,7 @@ interface SectionsClientProps {
   products?: Product[]
 }
 
-export function SectionsClient({ documentId, documentType, sections: initial, products }: SectionsClientProps) {
-  const sections = useOptimistic<any[], any>(initial, (current, action) => {
-    if (action.id === documentId && action.document?.sections) {
-      return action.document.sections
-    }
-    return current
-  })
-
+export function SectionsClient({ documentId, documentType, sections, products }: SectionsClientProps) {
   if (!sections || sections.length === 0) return null
 
   const containerAttr = createDataAttribute({

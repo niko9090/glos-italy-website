@@ -5,7 +5,7 @@ import { draftMode } from 'next/headers'
 import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
 import { SanityLive } from '@/lib/sanity/live'
-import { VisualEditing } from 'next-sanity/visual-editing'
+import { VisualEditing } from 'next-sanity'
 
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'

@@ -1,13 +1,13 @@
-// Section Manager - Overlay Plugin (HUD)
-// Shows move up/down and delete buttons on sections when hovering in visual editing
+// Section Manager - Overlay HUD Component
+// Shows move up/down and delete buttons on sections
+// NOTE: OverlayPlugin/useDocuments API requires @sanity/visual-editing v5+ (React 19)
+// This component is exported standalone for future use when upgrading to React 19
 'use client'
 
-import { type OverlayPlugin } from '@sanity/visual-editing'
-import { useDocuments } from '@sanity/visual-editing/react'
-import { at, unset, insert } from '@sanity/mutate'
 import { type CSSProperties } from 'react'
 
-export function sectionManagerPlugin(): OverlayPlugin {
+// Standalone plugin definition (compatible with v2.x)
+export function sectionManagerPlugin() {
   return {
     name: 'section-manager',
   }
@@ -58,58 +58,21 @@ interface SectionManagerHUDProps {
     id: string
     path: string
   }
+  onMoveUp?: () => void
+  onMoveDown?: () => void
+  onDelete?: () => void
 }
 
-function SectionManagerHUD({ node }: SectionManagerHUDProps) {
-  const { id, path } = node
-  const { getDocument } = useDocuments()
-  const doc = getDocument(id)
-
+export function SectionManagerHUD({ node, onMoveUp, onMoveDown, onDelete }: SectionManagerHUDProps) {
   const handleDelete = () => {
     if (!confirm('Eliminare questa sezione?')) return
-    doc.patch(() => [at(path, unset())])
-  }
-
-  const handleMoveUp = () => {
-    doc.patch(async ({ getSnapshot }) => {
-      const snapshot = await getSnapshot()
-      const sections = (snapshot as any)?.sections || []
-      const key = extractKeyFromPath(path)
-      if (!key) return []
-
-      const idx = sections.findIndex((s: any) => s._key === key)
-      if (idx <= 0) return []
-
-      const item = sections[idx]
-      return [
-        at(`sections[_key=="${key}"]`, unset()),
-        at('sections', insert(item, 'before', sections[idx - 1]._key)),
-      ]
-    })
-  }
-
-  const handleMoveDown = () => {
-    doc.patch(async ({ getSnapshot }) => {
-      const snapshot = await getSnapshot()
-      const sections = (snapshot as any)?.sections || []
-      const key = extractKeyFromPath(path)
-      if (!key) return []
-
-      const idx = sections.findIndex((s: any) => s._key === key)
-      if (idx < 0 || idx >= sections.length - 1) return []
-
-      const item = sections[idx]
-      return [
-        at(`sections[_key=="${key}"]`, unset()),
-        at('sections', insert(item, 'after', sections[idx + 1]._key)),
-      ]
-    })
+    onDelete?.()
   }
 
   return (
     <div style={hudStyles}>
       <button
-        onClick={handleMoveUp}
+        onClick={onMoveUp}
         style={buttonStyle}
         title="Sposta su"
         onMouseEnter={(e) => { (e.target as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.1)' }}
@@ -118,7 +81,7 @@ function SectionManagerHUD({ node }: SectionManagerHUDProps) {
         &#x25B2;
       </button>
       <button
-        onClick={handleMoveDown}
+        onClick={onMoveDown}
         style={buttonStyle}
         title="Sposta giu"
         onMouseEnter={(e) => { (e.target as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.1)' }}

@@ -1,7 +1,6 @@
-// Live Data Layer - next-sanity v12
+// Live Data Layer - next-sanity v9.x (React 18 compatible)
 // Uses defineLive for automatic live updates and stega encoding
-import { defineLive } from 'next-sanity/live'
-import { createClient } from 'next-sanity'
+import { defineLive, createClient } from 'next-sanity'
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'

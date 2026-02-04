@@ -454,7 +454,6 @@ export default function ContactSection({ data }: ContactSectionProps) {
               className={`
                 bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8
                 border border-white/30 shadow-2xl
-                flex flex-col min-h-full
                 ${data.layout?.includes('form-right') ? 'lg:order-2' : ''}
               `}
             >
@@ -471,7 +470,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-12 flex-1 flex flex-col items-center justify-center"
+                  className="text-center py-12"
                 >
                   <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl">
                     <CheckCircle2 className="w-10 h-10" />
@@ -488,7 +487,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                   </button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5 flex-1 flex flex-col">
+                <form onSubmit={handleSubmit} className="space-y-5">
                   {/* Request Type Dropdown */}
                   {data.showRequestType !== false && data.requestTypes && data.requestTypes.length > 0 && (
                     <div>
@@ -514,14 +513,14 @@ export default function ContactSection({ data }: ContactSectionProps) {
                     </div>
                   )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 flex-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {formFields.map((field) => (
                       <div
                         key={field._key}
-                        className={`${field.width === 'half' ? '' : 'md:col-span-2'} ${field.type === 'textarea' ? 'flex flex-col flex-1' : ''}`}
+                        className={`${field.width === 'half' ? '' : 'md:col-span-2'}`}
                       >
                         {field.type === 'textarea' ? (
-                          <div className="relative flex flex-col flex-1">
+                          <div className="relative">
                             <label className="text-sm font-semibold text-gray-700 mb-2 block">
                               {String(t(field.label) || '')} {field.required && <span className="text-red-500">*</span>}
                             </label>
@@ -530,7 +529,7 @@ export default function ContactSection({ data }: ContactSectionProps) {
                               placeholder={t(field.placeholder) || ''}
                               required={field.required}
                               rows={5}
-                              className={`${getInputClasses(field.name)} flex-1 min-h-[140px] resize-none`}
+                              className={`${getInputClasses(field.name)} min-h-[140px] resize-none`}
                               value={formData[field.name || ''] || ''}
                               onFocus={() => setFocusedField(field.name || null)}
                               onBlur={() => setFocusedField(null)}
@@ -643,20 +642,20 @@ export default function ContactSection({ data }: ContactSectionProps) {
             </motion.div>
           )}
 
-          {/* Contact Info & Map - CON STILE UNIFORME per bilanciamento */}
+          {/* Contact Info & Map */}
           <motion.div
             initial={{ opacity: 0, x: data.layout?.includes('form-right') ? -50 : 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
             className={`
-              flex flex-col gap-6 min-h-full
+              flex flex-col gap-6
               ${data.layout?.includes('form-right') ? 'lg:order-1' : ''}
             `}
           >
             {/* Contact Items */}
             {data.showContactInfo !== false && data.contactItems && data.contactItems.length > 0 && (
-              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl flex-1">
+              <div className="bg-white/80 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/30 shadow-xl">
                 {!!data.contactInfoTitle && (
                   <h3 className="text-xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                     {String(t(data.contactInfoTitle) || '')}

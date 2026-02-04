@@ -105,10 +105,10 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
               <ArrowLeft className="w-4 h-4" />
               Torna ai Prodotti
             </Link>
-            {categoryName && (
+            {!!categoryName && (
               <>
                 <span className="text-metal-300">/</span>
-                <span className="text-metal-600">{categoryName}</span>
+                <span className="text-metal-600">{String(categoryName)}</span>
               </>
             )}
           </nav>
@@ -200,15 +200,15 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               {/* Category */}
-              {categoryName && (
+              {!!categoryName && (
                 <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full mb-4">
-                  {categoryName}
+                  {String(categoryName)}
                 </span>
               )}
 
               {/* Title */}
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-metal-800 mb-6 leading-tight">
-                {productName}
+                {String(productName || '')}
               </h1>
 
               {/* Short Description */}
@@ -395,7 +395,7 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Interessato a {productName}?
+              Interessato a {String(productName || 'questo prodotto')}?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
               Contattaci per ricevere maggiori informazioni, un preventivo personalizzato o per prenotare una dimostrazione.
@@ -538,10 +538,10 @@ function RelatedProductCard({ product }: { product: Product }) {
       </div>
       <div className="p-4">
         <h3 className="font-semibold text-metal-800 group-hover:text-primary transition-colors line-clamp-1">
-          {getTextValue(product.name)}
+          {String(getTextValue(product.name) || '')}
         </h3>
         <p className="text-sm text-metal-500 mt-1 line-clamp-2">
-          {getTextValue(product.shortDescription)}
+          {String(getTextValue(product.shortDescription) || '')}
         </p>
       </div>
     </Link>

@@ -1,7 +1,6 @@
 // Root Layout - v3.0.0 Visual Editing
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { draftMode } from 'next/headers'
 import './globals.css'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
 import { SanityLive } from '@/lib/sanity/live'
@@ -72,6 +71,16 @@ export default async function RootLayout({
     getNavigation(),
   ])
 
+  // Safe draftMode check - returns false during build/static generation
+  let isDraft = false
+  try {
+    const { draftMode } = await import('next/headers')
+    const dm = await draftMode()
+    isDraft = dm.isEnabled
+  } catch {
+    isDraft = false
+  }
+
   // Prepare company info for structured data
   const companyName = getTextValue(settings?.companyName) || SITE_NAME
   const slogan = getTextValue(settings?.slogan) || 'Prodotti di qualita Made in Italy'
@@ -100,9 +109,7 @@ export default async function RootLayout({
         {/* SanityLive - handles live content updates */}
         <SanityLive />
         {/* Visual Editing - active only in draft mode */}
-        {(await draftMode()).isEnabled && (
-          <VisualEditing />
-        )}
+        {isDraft && <VisualEditing />}
       </body>
     </html>
   )

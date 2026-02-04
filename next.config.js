@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Webpack alias: react-compiler-runtime polyfill per React 18
+  // @sanity/visual-editing v5 e precompilato con React Compiler che richiede react/compiler-runtime (React 19)
+  // Questo alias redirige l'import al polyfill compatibile con React 18
+  webpack: (config) => {
+    config.resolve.alias['react/compiler-runtime'] = require.resolve('react-compiler-runtime')
+    return config
+  },
+
   images: {
     remotePatterns: [
       {

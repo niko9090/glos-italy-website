@@ -13,6 +13,7 @@
     "@sanity/image-url": "^1.1.0",
     "@sanity/mutate": "^0.11.0",
     "@sanity/visual-editing": "^5.1.0",
+    "react-compiler-runtime": "1.0.0",
     "framer-motion": "^11.0.8",
     "leaflet": "^1.9.4",
     "next": "14.2.21",

@@ -183,6 +183,22 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
     return false
   })
 
+  // Log rivenditori senza coordinate per debug
+  const dealersWithoutLocation = dealers.filter((d) => {
+    if (d.location?.lat && d.location?.lng) return false
+    if (geocodedDealers[d._id]) return false
+    return true
+  })
+
+  if (!isGeocoding && dealersWithoutLocation.length > 0) {
+    console.warn('Rivenditori senza coordinate sulla mappa:', dealersWithoutLocation.map(d => ({
+      name: d.name,
+      city: d.city,
+      address: d.address,
+      hasLocation: !!d.location,
+    })))
+  }
+
   // Se c'e un dealer selezionato con coordinate, centra su di esso
   const getSelectedDealerCoords = () => {
     if (selectedDealer?.location?.lat && selectedDealer?.location?.lng) {

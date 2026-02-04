@@ -210,7 +210,7 @@ export const categoryBySlugQuery = groq`
 // ============================================
 
 export const allDealersQuery = groq`
-  *[_type == "dealer" && isActive == true] | order(isFeatured desc, name asc) {
+  *[_type == "dealer" && isActive != false] | order(isFeatured desc, name asc) {
     _id,
     name,
     type,
@@ -234,7 +234,7 @@ export const allDealersQuery = groq`
 `
 
 export const dealersByCityQuery = groq`
-  *[_type == "dealer" && isActive == true && city == $city] | order(isFeatured desc, name asc) {
+  *[_type == "dealer" && isActive != false && city == $city] | order(isFeatured desc, name asc) {
     _id,
     name,
     type,

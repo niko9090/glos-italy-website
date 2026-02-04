@@ -41,6 +41,7 @@ export interface SiteSettings {
   companyName?: string
   slogan?: string
   logo?: unknown
+  logoWhite?: unknown
   email?: string
   phone?: string
   address?: string
@@ -49,6 +50,29 @@ export interface SiteSettings {
   linkedin?: string
   whatsapp?: string
   whatsappMessage?: string
+  // Header settings
+  headerLogoSize?: string
+  headerHeight?: string
+  headerStyle?: string
+  headerCtaText?: unknown
+  headerCtaLink?: string
+  headerShowLanguageSelector?: boolean
+  headerNavGap?: string
+  // Footer settings
+  footerLogoSize?: string
+  footerStyle?: string
+  footerColumns?: string
+  footerShowSocial?: boolean
+  footerShowQuickLinks?: boolean
+  footerShowProducts?: boolean
+  footerShowContacts?: boolean
+  footerPadding?: string
+  footerColumnsGap?: string
+  footerCopyrightText?: string
+  footerBottomLinks?: Array<{
+    label?: string
+    href?: string
+  }>
 }
 
 export interface Navigation {

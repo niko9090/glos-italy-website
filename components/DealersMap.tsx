@@ -255,14 +255,15 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
         })}
       </MapContainer>
 
-      {/* Modal Rivenditore */}
+      {/* Modal Rivenditore - Centrato nel viewport */}
       {modalDealer && (
         <div
-          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center p-4"
           onClick={() => setModalDealer(null)}
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
         >
           <div
-            className="bg-white rounded-xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl"
+            className="bg-white rounded-xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl relative"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header compatto */}

@@ -221,6 +221,11 @@ export default function Footer({ settings, navigation }: FooterProps) {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/listino-prezzi" className="text-gray-400 hover:text-white transition-colors">
+                    Listino Prezzi
+                  </Link>
+                </li>
+                <li>
                   <Link href="/rivenditori" className="text-gray-400 hover:text-white transition-colors">
                     Trova Rivenditore
                   </Link>

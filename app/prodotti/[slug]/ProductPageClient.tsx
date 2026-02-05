@@ -237,11 +237,11 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                   Richiedi Informazioni
                 </Link>
                 <Link
-                  href="/rivenditori"
+                  href="/listino-prezzi"
                   className="btn-secondary flex items-center gap-2"
                 >
-                  <MapPin className="w-5 h-5" />
-                  Trova Rivenditore
+                  <FileText className="w-5 h-5" />
+                  Listino Prezzi
                 </Link>
               </div>
 
@@ -420,11 +420,11 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                 Richiedi Preventivo
               </Link>
               <Link
-                href="tel:+390000000000"
+                href="/listino-prezzi"
                 className="btn bg-white/10 text-white border border-white/30 hover:bg-white/20 flex items-center gap-2"
               >
-                <Phone className="w-5 h-5" />
-                Chiama Ora
+                <FileText className="w-5 h-5" />
+                Vedi Listino Prezzi
               </Link>
             </div>
           </motion.div>

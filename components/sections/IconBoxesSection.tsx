@@ -10,6 +10,7 @@ import {
   staggerContainer,
   tapScale,
 } from '@/lib/animations/config'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 
 interface IconBoxesSectionProps {
   documentId?: string
@@ -32,6 +33,11 @@ interface IconBoxesSectionProps {
     textAlign?: string
     hoverEffect?: string
     backgroundColor?: string
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string
+    marginTop?: string
+    marginBottom?: string
   }
 }
 
@@ -159,7 +165,7 @@ export default function IconBoxesSection({ data, documentId, sectionKey }: IconB
   }
 
   return (
-    <section data-sanity-edit-target className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <motion.div

@@ -8,6 +8,7 @@ import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 import { fadeInUp, scaleIn, MOTION } from '@/lib/animations/config'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 
 interface BeforeAfterSectionProps {
   documentId?: string
@@ -30,6 +31,11 @@ interface BeforeAfterSectionProps {
     aspectRatio?: string
     rounded?: boolean
     backgroundColor?: string
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string
+    marginTop?: string
+    marginBottom?: string
   }
 }
 
@@ -186,7 +192,7 @@ export default function BeforeAfterSection({ data, documentId, sectionKey }: Bef
   if (validComparisons.length === 0) return null
 
   return (
-    <section data-sanity-edit-target className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <motion.div

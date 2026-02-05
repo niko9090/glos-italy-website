@@ -49,6 +49,9 @@ export interface SiteSettings {
   facebook?: string
   instagram?: string
   linkedin?: string
+  youtube?: string
+  twitter?: string
+  tiktok?: string
   whatsapp?: string
   whatsappMessage?: string
   // Header settings

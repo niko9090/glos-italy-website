@@ -9,6 +9,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 
 interface CarouselSlide {
   _key: string
@@ -70,6 +71,11 @@ interface CarouselSectionProps {
     hoverEffect?: 'none' | 'zoom' | 'brightness' | 'overlay' | 'lift'
     parallax?: boolean
     kenBurns?: boolean
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string
+    marginTop?: string
+    marginBottom?: string
   }
 }
 
@@ -276,7 +282,7 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
   const slideVariants = getSlideVariants()
 
   return (
-    <section data-sanity-edit-target className={`relative overflow-hidden ${bgClasses[data.backgroundColor || 'transparent']}`}>
+    <section data-sanity-edit-target className={`relative overflow-hidden ${getSpacingClasses(data)} ${bgClasses[data.backgroundColor || 'transparent']}`}>
       {/* Section Header */}
       {!!(data.title || data.subtitle) && (
         <div className="container-glos py-8 text-center">

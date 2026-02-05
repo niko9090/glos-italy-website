@@ -21,9 +21,9 @@ interface LogoCloudSectionProps {
     subtitle?: unknown
     logos?: Array<{
       _key: string
-      logo: any
+      image: any
       name?: string
-      url?: string
+      link?: string
     }>
     layout?: string
     columns?: number
@@ -35,7 +35,9 @@ interface LogoCloudSectionProps {
 
 const bgClasses: Record<string, string> = {
   white: 'bg-white',
+  'gray-light': 'bg-gray-50',
   gray: 'bg-gray-50',
+  transparent: 'bg-transparent',
   dark: 'bg-gray-900',
 }
 
@@ -45,7 +47,7 @@ export default function LogoCloudSection({ data, documentId, sectionKey }: LogoC
   const layout = data.layout || 'grid'
   const columns = data.columns || 5
 
-  const validLogos = data.logos?.filter((logo) => isValidImage(logo.logo)) || []
+  const validLogos = data.logos?.filter((logo) => isValidImage(logo.image)) || []
 
   if (validLogos.length === 0) return null
 
@@ -88,7 +90,7 @@ export default function LogoCloudSection({ data, documentId, sectionKey }: LogoC
         } transition-all duration-300 cursor-pointer`}
       >
         <Image
-          src={safeImageUrl(logo.logo, 200, 100)!}
+          src={safeImageUrl(logo.image, 200, 100)!}
           alt={logo.name || ''}
           width={120}
           height={60}
@@ -97,11 +99,11 @@ export default function LogoCloudSection({ data, documentId, sectionKey }: LogoC
       </motion.div>
     )
 
-    if (logo.url) {
+    if (logo.link) {
       return (
         <a
           key={logo._key}
-          href={logo.url}
+          href={logo.link}
           target="_blank"
           rel="noopener noreferrer"
           className="block"
@@ -162,7 +164,7 @@ export default function LogoCloudSection({ data, documentId, sectionKey }: LogoC
                 } transition-all duration-300`}
               >
                 <Image
-                  src={safeImageUrl(logo.logo, 200, 100)!}
+                  src={safeImageUrl(logo.image, 200, 100)!}
                   alt={logo.name || ''}
                   width={120}
                   height={60}

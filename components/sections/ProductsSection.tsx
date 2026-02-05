@@ -10,6 +10,7 @@ import type { Product } from '@/lib/sanity/fetch'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 
 type LayoutType = 'grid' | 'list' | 'carousel'
 
@@ -24,6 +25,11 @@ interface ProductsSectionProps {
     layout?: LayoutType
     buttonText?: string
     buttonLink?: string
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string
+    marginTop?: string
+    marginBottom?: string
   }
   products?: Product[]
 }
@@ -71,7 +77,7 @@ export default function ProductsSection({ data, products, documentId, sectionKey
   const layout = data.layout || 'grid'
 
   return (
-    <section data-sanity-edit-target className="section bg-white">
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} bg-white`}>
       <div className="container-glos">
         {/* Header */}
         <div className="text-center mb-12">

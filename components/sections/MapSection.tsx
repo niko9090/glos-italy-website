@@ -10,6 +10,7 @@ import { useLanguage } from '@/lib/context/LanguageContext'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { MOTION, fadeInUp, staggerContainer, staggerItem } from '@/lib/animations/config'
 import RichText from '@/components/RichText'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 
 // Dynamic import for Leaflet (no SSR)
 const DealersMap = nextDynamic(() => import('@/components/DealersMap'), {
@@ -196,6 +197,10 @@ interface MapSectionProps {
     showDealersList?: boolean
     backgroundColor?: string
     paddingY?: 'none' | 'small' | 'medium' | 'large'
+    paddingTop?: string
+    paddingBottom?: string
+    marginTop?: string
+    marginBottom?: string
   }
   dealers?: Dealer[]
 }
@@ -229,18 +234,15 @@ export default function MapSection({ data, dealers = [], documentId, sectionKey 
     full: 'h-screen',
   }
 
-  // Padding classes
-  const paddingClasses: Record<string, string> = {
-    none: 'py-0',
-    small: 'py-8 md:py-12',
-    medium: 'py-12 md:py-16',
-    large: 'py-16 md:py-24',
+  // Background classes (fixed: use CSS classes instead of inline style with symbolic names)
+  const bgClasses: Record<string, string> = {
+    white: 'bg-white',
+    'gray-light': 'bg-gray-50',
+    gray: 'bg-gray-100',
+    primary: 'bg-primary',
+    black: 'bg-gray-900',
   }
-
-  // Background handling
-  const bgStyle: React.CSSProperties = data.backgroundColor
-    ? { backgroundColor: data.backgroundColor }
-    : {}
+  const bgClass = bgClasses[data.backgroundColor || 'white'] || 'bg-white'
 
   // Default center (Italy)
   const defaultCenter: [number, number] = [42.5, 12.5]
@@ -433,8 +435,7 @@ export default function MapSection({ data, dealers = [], documentId, sectionKey 
   return (
     <section
       data-sanity-edit-target
-      className={`${paddingClasses[data.paddingY || 'medium']} relative overflow-hidden`}
-      style={bgStyle}
+      className={`${getSpacingClasses(data)} ${bgClass} relative overflow-hidden`}
     >
       <div className="container-glos">
         {/* Header */}

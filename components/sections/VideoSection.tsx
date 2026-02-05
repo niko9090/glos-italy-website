@@ -14,6 +14,7 @@ import {
   staggerContainer,
   staggerItem
 } from '@/lib/animations/config'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 
 interface VideoSectionProps {
   documentId?: string
@@ -42,6 +43,11 @@ interface VideoSectionProps {
     playButtonStyle?: 'solid' | 'outline' | 'glass'
     overlayColor?: string
     overlayOpacity?: number
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string
+    marginTop?: string
+    marginBottom?: string
   }
 }
 
@@ -407,7 +413,7 @@ export default function VideoSection({ data, documentId, sectionKey }: VideoSect
 
   if (data.layout?.includes('side-text')) {
     return (
-      <section data-sanity-edit-target className={`section ${bgClass}`}>
+      <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>
         <div className="container-glos">
           <div className={`grid lg:grid-cols-2 gap-12 items-center ${data.textPosition?.includes('right') ? '' : 'lg:grid-flow-dense'}`}>
             <motion.div
@@ -430,7 +436,7 @@ export default function VideoSection({ data, documentId, sectionKey }: VideoSect
   }
 
   return (
-    <section data-sanity-edit-target className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className={data.layout?.includes('full-width') ? '' : 'container-glos'}>
         {textContent && (
           <motion.div

@@ -245,8 +245,10 @@ export default function CounterSection({ data, documentId, sectionKey }: Counter
   const title = getLocalizedText(data.title)
   const subtitle = getLocalizedText(data.subtitle)
 
-  // Animation duration (default 2000ms)
-  const animationDuration = data.animationDuration || 2000
+  // Animation duration - schema stores seconds (e.g. 2), convert to ms
+  const animationDuration = data.animationDuration
+    ? data.animationDuration <= 10 ? data.animationDuration * 1000 : data.animationDuration
+    : 2000
 
   // Background classes
   const bgClasses: Record<string, string> = {

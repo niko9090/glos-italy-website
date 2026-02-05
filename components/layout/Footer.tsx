@@ -3,7 +3,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { Facebook, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
+import { Facebook, Instagram, Linkedin, Youtube, Twitter, Mail, Phone, MapPin } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
@@ -146,6 +146,44 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     role="listitem"
                   >
                     <Linkedin className="w-5 h-5" aria-hidden="true" />
+                  </a>
+                )}
+                {settings?.youtube && (
+                  <a
+                    href={settings.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                    aria-label="Seguici su YouTube (si apre in una nuova finestra)"
+                    role="listitem"
+                  >
+                    <Youtube className="w-5 h-5" aria-hidden="true" />
+                  </a>
+                )}
+                {settings?.twitter && (
+                  <a
+                    href={settings.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                    aria-label="Seguici su Twitter/X (si apre in una nuova finestra)"
+                    role="listitem"
+                  >
+                    <Twitter className="w-5 h-5" aria-hidden="true" />
+                  </a>
+                )}
+                {settings?.tiktok && (
+                  <a
+                    href={settings.tiktok}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                    aria-label="Seguici su TikTok (si apre in una nuova finestra)"
+                    role="listitem"
+                  >
+                    <svg className="w-5 h-5" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.1a8.16 8.16 0 0 0 4.76 1.52v-3.4c-.87 0-1.7-.2-2.44-.53h-.01z"/>
+                    </svg>
                   </a>
                 )}
               </div>

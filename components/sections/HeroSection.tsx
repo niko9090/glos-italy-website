@@ -73,6 +73,11 @@ interface HeroSectionProps {
     parallax?: boolean
     parallaxIntensity?: 'subtle' | 'normal' | 'strong'
     // Advanced
+    showFloatingParticles?: boolean
+    particleCount?: number
+    showGlowLines?: boolean
+    buttonGlowOnHover?: boolean
+    titleTextShadow?: boolean
     showScrollIndicator?: boolean
     scrollIndicatorText?: unknown
     badge?: {
@@ -603,9 +608,9 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
           <motion.h1
             variants={heroItemVariants}
             className={`font-bold mb-6 ${titleSizeClasses[titleSize]}`}
-            style={{
+            style={data.titleTextShadow !== false ? {
               textShadow: '0 4px 20px rgba(0, 0, 0, 0.3), 0 2px 10px rgba(0, 71, 171, 0.2)'
-            }}
+            } : undefined}
           >
             <RichText value={data.title} />
           </motion.h1>
@@ -635,9 +640,11 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
                   key={button._key}
                   whileHover={{
                     scale: 1.08,
-                    boxShadow: index === 0
-                      ? '0 0 40px rgba(255, 255, 255, 0.4), 0 0 80px rgba(0, 71, 171, 0.3)'
-                      : '0 0 30px rgba(255, 255, 255, 0.2)'
+                    ...(data.buttonGlowOnHover !== false ? {
+                      boxShadow: index === 0
+                        ? '0 0 40px rgba(255, 255, 255, 0.4), 0 0 80px rgba(0, 71, 171, 0.3)'
+                        : '0 0 30px rgba(255, 255, 255, 0.2)'
+                    } : {})
                   }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.3, ease: 'easeOut' }}
@@ -662,9 +669,10 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
         </motion.div>
       </motion.div>
 
-      {/* SEMPRE VISIBILE: Particelle fluttuanti animate */}
+      {/* Particelle fluttuanti animate (controllate da CMS) */}
+      {data.showFloatingParticles !== false && (
       <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+        {[...Array(data.particleCount || 6)].map((_, i) => (
           <motion.div
             key={`particle-${i}`}
             className="absolute rounded-full bg-white/10"
@@ -689,13 +697,16 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
           />
         ))}
       </div>
+      )}
 
-      {/* SEMPRE VISIBILE: Linee decorative animate */}
+      {/* Linee decorative animate (controllate da CMS) */}
+      {data.showGlowLines !== false && (
       <motion.div
         className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/30 to-transparent z-[3]"
         animate={{ scaleX: [0, 1, 0], x: ['-100%', '0%', '100%'] }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
+      )}
 
       {/* Scroll indicator */}
       {showScroll && (

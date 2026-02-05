@@ -3,6 +3,7 @@
 
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 
 interface EmbedSectionProps {
   documentId?: string
@@ -24,6 +25,11 @@ interface EmbedSectionProps {
     rounded?: boolean
     shadow?: boolean
     backgroundColor?: string
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string
+    marginTop?: string
+    marginBottom?: string
   }
 }
 
@@ -94,7 +100,7 @@ export default function EmbedSection({ data, documentId, sectionKey }: EmbedSect
   }
 
   return (
-    <section data-sanity-edit-target className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className={isFullWidth ? '' : 'container-glos'}>
         {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${isFullWidth ? 'px-4' : ''} ${textColor}`}>

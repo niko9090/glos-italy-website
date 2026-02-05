@@ -118,6 +118,9 @@ function AnimatedNumber({
     requestAnimationFrame(animateCount)
   }, [isInView, targetNumber, animate, duration, onComplete])
 
+  // Format number with locale separators (e.g., 18000 → 18.000)
+  const formattedValue = displayValue.toLocaleString('it-IT')
+
   return (
     <motion.span
       ref={ref}
@@ -126,7 +129,7 @@ function AnimatedNumber({
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       {prefix}
-      {displayValue}
+      {formattedValue}
       {suffix || originalSuffix}
     </motion.span>
   )
@@ -199,21 +202,21 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
     const colClasses: Record<number, string> = {
       2: 'grid-cols-1 md:grid-cols-2',
       3: 'grid-cols-1 md:grid-cols-3',
-      4: 'grid-cols-2 md:grid-cols-4',
+      4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
       5: 'grid-cols-2 md:grid-cols-5',
-      0: 'grid-cols-2 md:grid-cols-4', // Auto
+      0: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4', // Auto
     }
-    return `grid ${colClasses[cols] || colClasses[4]} gap-8 md:gap-12`
+    return `grid ${colClasses[cols] || colClasses[4]} gap-5 md:gap-6`
   }
 
-  // Card style classes
+  // Card style classes (padding/rounding handled by container)
   const cardStyleClasses: Record<string, string> = {
     none: '',
-    elevated: 'bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-lg',
-    bordered: 'border-2 border-current/20 rounded-2xl p-6',
-    glass: 'bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10',
-    gradient: 'bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-6',
-    metal: 'card-metal rounded-2xl p-6',
+    elevated: 'bg-white/10 backdrop-blur-sm shadow-lg',
+    bordered: 'border-2 border-current/20',
+    glass: 'bg-white/5 backdrop-blur-md border border-white/10',
+    gradient: 'bg-gradient-to-br from-white/10 to-white/5',
+    metal: 'card-metal',
   }
 
   // Color accent classes
@@ -307,48 +310,47 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
         </div>
       )}
 
-      {/* Decorazioni SEMPRE VISIBILI - particelle animate */}
+      {/* Decorazioni sottili */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-20 left-[10%] w-32 h-32 rounded-full bg-white/5"
-          animate={{ y: [0, -20, 0], scale: [1, 1.1, 1] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-[15%] w-24 h-24 rounded-full bg-white/5"
-          animate={{ y: [0, 20, 0], scale: [1, 0.9, 1] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-        />
-        <motion.div
-          className="absolute top-1/2 right-[5%] w-16 h-16 rounded-full bg-primary/10"
-          animate={{ x: [0, 15, 0], rotate: [0, 180, 360] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-        />
-        {/* Linea decorativa animata */}
-        <motion.div
-          className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
-          animate={{ scaleX: [0.5, 1, 0.5], opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        {/* Top gradient line */}
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+        {/* Bottom gradient line */}
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+        {/* Large ambient glow */}
+        <div className="absolute -top-1/2 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-white/[0.02] blur-3xl" />
       </div>
 
-      {/* Decorations originali */}
+      {/* Extra decorations when enabled */}
       {data.showDecorations && (
-        <>
-          <div className="absolute top-0 left-0 w-64 h-64 bg-current opacity-5 rounded-full -translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-current opacity-5 rounded-full translate-x-1/2 translate-y-1/2" />
-        </>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            className="absolute top-10 left-[8%] w-40 h-40 rounded-full bg-white/[0.03]"
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute bottom-10 right-[10%] w-28 h-28 rounded-full bg-white/[0.03]"
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+          />
+        </div>
       )}
 
       <div className="container-glos relative z-10">
         {/* Header */}
         {!!(data.title || data.subtitle || data.description) && (
-          <div className={`mb-12 ${data.alignment?.includes('left') ? 'text-left' : data.alignment?.includes('right') ? 'text-right' : 'text-center'}`}>
+          <div className={`mb-16 ${data.alignment?.includes('left') ? 'text-left' : data.alignment?.includes('right') ? 'text-right' : 'text-center'}`}>
             {!!data.title && (
-              <h2 className="section-title mb-4">
+              <h2 className="section-title mb-3">
                 <RichText value={data.title} />
               </h2>
             )}
+            {/* Decorative accent line under title */}
+            <div className="flex items-center justify-center gap-2 mb-5">
+              <div className="w-8 h-px bg-current opacity-30" />
+              <div className="w-2 h-2 rounded-full bg-current opacity-40" />
+              <div className="w-8 h-px bg-current opacity-30" />
+            </div>
             {!!data.subtitle && (
               <div className="text-xl opacity-80 mb-4">
                 <RichText value={data.subtitle} />
@@ -375,11 +377,11 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
               <>
                 {/* Icon */}
                 {!data.iconPosition?.includes('hidden') && (stat.icon || stat.iconImage) && (
-                  <div className={`mb-3 ${
+                  <div className={`mb-4 ${
                     data.iconPosition?.includes('left') ? 'inline-block mr-4 align-middle' :
                     data.iconPosition?.includes('right') ? 'inline-block ml-4 align-middle float-right' :
                     data.iconPosition?.includes('background') ? 'absolute inset-0 flex items-center justify-center opacity-10 text-8xl' :
-                    'block text-center'
+                    'flex justify-center'
                   }`}>
                     {stat.iconImage && isValidImage(stat.iconImage) ? (
                       <Image
@@ -390,14 +392,19 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
                         className="inline-block"
                       />
                     ) : stat.icon ? (
-                      <span className="text-4xl">{stat.icon}</span>
+                      <span className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-3xl shadow-lg group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300">
+                        {stat.icon}
+                      </span>
                     ) : null}
                   </div>
                 )}
 
                 {/* Number */}
-                <div className={`relative ${colorClasses[stat.color || 'default']}`}>
-                  <div className={`${numberSizeClasses[data.numberSize || 'xl']} ${numberWeightClasses[data.numberWeight || 'bold']} mb-3`}>
+                <div className="relative mb-3">
+                  <div
+                    className={`${numberSizeClasses[data.numberSize || 'xl']} ${numberWeightClasses[data.numberWeight || 'bold']} leading-none`}
+                    style={{ textShadow: '0 2px 20px rgba(255,255,255,0.15)' }}
+                  >
                     <AnimatedNumber
                       value={stat.number || '0'}
                       prefix={stat.prefix}
@@ -406,26 +413,21 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
                       duration={data.countDuration || 2000}
                     />
                   </div>
-                  {/* Subtle glow on hover */}
-                  <div className="absolute inset-0 bg-current opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500" />
                 </div>
 
                 {/* Label */}
                 {!!stat.label && (
-                  <div className="text-lg md:text-xl font-semibold mb-1 opacity-90">
+                  <div className="text-sm md:text-base font-medium opacity-75 leading-snug max-w-[200px] mx-auto">
                     <RichText value={stat.label} />
                   </div>
                 )}
 
                 {/* Description */}
                 {!!stat.description && (
-                  <div className="text-sm opacity-70 mt-2">
+                  <div className="text-xs opacity-50 mt-2 leading-relaxed">
                     {String(t(stat.description) || '')}
                   </div>
                 )}
-
-                {/* Decorative underline */}
-                <div className="mt-4 mx-auto w-12 h-1 bg-current opacity-30 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
               </>
             )
 
@@ -434,28 +436,16 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
                 key={stat._key}
                 variants={getItemVariants()}
                 whileHover={{
-                  scale: 1.08,
-                  y: -10,
+                  scale: 1.05,
+                  y: -8,
                   transition: { type: 'spring', stiffness: 300, damping: 20 }
                 }}
-                className={`group ${data.alignment || 'center'} ${cardStyleClasses[data.cardStyle || 'glass']} ${hoverClasses[data.hoverAnimation || 'none']} cursor-pointer relative`}
-                style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  backdropFilter: 'blur(10px)',
-                  borderRadius: '1rem',
-                  padding: '2rem',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                }}
+                className={`group text-center ${cardStyleClasses[data.cardStyle || 'glass']} cursor-pointer relative overflow-hidden rounded-2xl p-8`}
               >
-                {/* Glow effect on hover */}
-                <motion.div
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: 'radial-gradient(circle at center, rgba(0,71,171,0.3) 0%, transparent 70%)',
-                    filter: 'blur(20px)',
-                    zIndex: -1,
-                  }}
-                />
+                {/* Gradient border glow on hover */}
+                <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-white/10 via-transparent to-white/5" />
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-transparent via-white/60 to-transparent group-hover:w-3/4 transition-all duration-500 rounded-full" />
                 {stat.link ? (
                   <Link href={stat.link} className="block relative z-10">
                     {statContent}

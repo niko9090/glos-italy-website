@@ -7,6 +7,7 @@ import { Download, FileText, FileSpreadsheet, FileImage, Film, Archive, File } f
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 
 interface DownloadSectionProps {
   documentId?: string
@@ -31,6 +32,11 @@ interface DownloadSectionProps {
     showFileSize?: boolean
     groupByCategory?: boolean
     backgroundColor?: string
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string
+    marginTop?: string
+    marginBottom?: string
   }
 }
 
@@ -157,7 +163,7 @@ export default function DownloadSection({ data, documentId, sectionKey }: Downlo
   }
 
   return (
-    <section data-sanity-edit-target className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${textColor}`}>

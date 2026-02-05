@@ -9,6 +9,7 @@ import { Check } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import { getSpacingClasses } from '@/lib/utils/spacing'
 
 interface TabsSectionProps {
   documentId?: string
@@ -34,6 +35,11 @@ interface TabsSectionProps {
     contentLayout?: string
     animated?: boolean
     backgroundColor?: string
+    paddingTop?: string
+    paddingBottom?: string
+    paddingY?: string
+    marginTop?: string
+    marginBottom?: string
   }
 }
 
@@ -98,7 +104,7 @@ export default function TabsSection({ data, documentId, sectionKey }: TabsSectio
   const currentStyle = tabClasses[tabStyle as keyof typeof tabClasses] || tabClasses.pills
 
   return (
-    <section data-sanity-edit-target className={`section ${bgClass}`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>
       <div className="container-glos">
         {(data.title || data.subtitle) ? (
           <div className={`text-center mb-12 ${textColor}`}>

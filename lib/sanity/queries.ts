@@ -17,6 +17,9 @@ export const siteSettingsQuery = defineQuery(`
     facebook,
     instagram,
     linkedin,
+    youtube,
+    twitter,
+    tiktok,
     whatsapp,
     whatsappMessage,
     // Header settings
@@ -48,7 +51,7 @@ export const siteSettingsQuery = defineQuery(`
 
 export const navigationQuery = defineQuery(`
   *[_type == "navigation"][0] {
-    "items": items[] {
+    "items": items[isActive != false] {
       _key,
       label,
       href

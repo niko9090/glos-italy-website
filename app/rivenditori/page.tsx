@@ -1,25 +1,12 @@
 // Dealers Page - v1.5.0 - Video modal centered
 import { Metadata } from 'next'
 import Link from 'next/link'
-import nextDynamic from 'next/dynamic'
 import { getAllDealers, getSiteSettings } from '@/lib/sanity/fetch'
 import { MapPin, Star } from 'lucide-react'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { OrganizationSchema, BreadcrumbSchema, WebPageSchema, LocalBusinessSchema } from '@/components/seo/JsonLd'
 import DealerCard from '@/components/DealerCard'
-
-// Import dinamico per Leaflet (non supporta SSR)
-const DealersMap = nextDynamic(() => import('@/components/DealersMap'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-96 bg-gray-100 rounded-2xl flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-2"></div>
-        <p className="text-gray-500">Caricamento mappa...</p>
-      </div>
-    </div>
-  ),
-})
+import DealersMap from '@/components/DealersMapWrapper'
 
 export const metadata: Metadata = {
   title: 'Rivenditori',

@@ -14,7 +14,7 @@
     "@sanity/visual-editing": "^2.10.0",
     "framer-motion": "^11.0.8",
     "leaflet": "^1.9.4",
-    "next": "15.3.3",
+    "next": "15.3.6",
     "next-sanity": "^9.8.36",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -30,7 +30,7 @@
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
-    "eslint-config-next": "15.3.3",
+    "eslint-config-next": "15.3.6",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.7.0"

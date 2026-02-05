@@ -99,13 +99,9 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
   // Parallax effect - subtle by default (10-20% slower than scroll)
   const shouldParallax = data.parallax !== false
 
-  // Parallax intensity mapping - subtle is 10-15%, normal is 15-20%, strong is 25-30%
-  const parallaxIntensityMap = {
-    subtle: '15%',
-    normal: '20%',
-    strong: '30%',
-  }
-  const parallaxAmount = parallaxIntensityMap[data.parallaxIntensity || 'subtle']
+  // Parallax intensity - usa includes() per gestire caratteri stega
+  const intensity = data.parallaxIntensity || ''
+  const parallaxAmount = intensity.includes('strong') ? '30%' : intensity.includes('normal') ? '20%' : '15%'
 
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', shouldParallax ? parallaxAmount : '0%'])
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, shouldParallax ? 0 : 1])

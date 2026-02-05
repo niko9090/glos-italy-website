@@ -102,8 +102,9 @@ export default async function RootLayout({
         </LanguageProvider>
         {/* WhatsApp Floating Button */}
         <WhatsAppButton
-          phoneNumber={settings?.whatsapp || '39XXXXXXXXXX'}
+          phoneNumber={settings?.whatsapp}
           message={settings?.whatsappMessage || 'Ciao, vorrei informazioni sui vostri prodotti.'}
+          companyName={getTextValue(settings?.companyName) || 'GLOS Italy'}
         />
         {/* SanityLive - handles live content updates in real-time */}
         <SanityLive />

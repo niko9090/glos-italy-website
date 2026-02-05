@@ -2,6 +2,7 @@
 // Uses sanityFetch from live.ts (defineLive) - no more manual preview parameter
 // Live mode and stega are handled automatically by next-sanity v12
 import { sanityFetch } from './live'
+import { client } from './client'
 import {
   siteSettingsQuery,
   navigationQuery,
@@ -289,9 +290,9 @@ export async function getAllPages(): Promise<Page[]> {
   return data || []
 }
 
+// Uses direct client to avoid draftMode() call in generateStaticParams
 export async function getPageSlugs(): Promise<string[]> {
-  const { data } = await sanityFetch({ query: pageSlugsQuery })
-  return data || []
+  return await client.fetch(pageSlugsQuery) || []
 }
 
 // ===========================================
@@ -318,9 +319,9 @@ export async function getProductsByCategory(categoryId: string): Promise<Product
   return data || []
 }
 
+// Uses direct client to avoid draftMode() call in generateStaticParams
 export async function getProductSlugs(): Promise<string[]> {
-  const { data } = await sanityFetch({ query: productSlugsQuery })
-  return data || []
+  return await client.fetch(productSlugsQuery) || []
 }
 
 // ===========================================
@@ -393,9 +394,9 @@ export async function getSectorBySlug(slug: string): Promise<Sector | null> {
   return data
 }
 
+// Uses direct client to avoid draftMode() call in generateStaticParams
 export async function getSectorSlugs(): Promise<string[]> {
-  const { data } = await sanityFetch({ query: sectorSlugsQuery })
-  return data || []
+  return await client.fetch(sectorSlugsQuery) || []
 }
 
 export async function getProductsBySector(sectorId: string): Promise<Product[]> {
@@ -417,9 +418,9 @@ export async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null
   return data
 }
 
+// Uses direct client to avoid draftMode() call in generateStaticParams
 export async function getCaseStudySlugs(): Promise<string[]> {
-  const { data } = await sanityFetch({ query: caseStudySlugsQuery })
-  return data || []
+  return await client.fetch(caseStudySlugsQuery) || []
 }
 
 export async function getFeaturedCaseStudies(): Promise<CaseStudy[]> {

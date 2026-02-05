@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import Link from 'next/link'
 import { MOTION, fadeInUp } from '@/lib/animations/config'
 
@@ -515,7 +516,11 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: MOTION.DURATION.NORMAL } },
 }
 
-export default function ListinoPrezziClient() {
+interface ListinoPrezziProps {
+  categoryImages?: Record<string, string>
+}
+
+export default function ListinoPrezziClient({ categoryImages = {} }: ListinoPrezziProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
   const filteredCategories = activeCategory
@@ -657,17 +662,32 @@ export default function ListinoPrezziClient() {
                 >
                   {/* Category Header */}
                   <div className="mb-6">
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
-                      {category.name}
-                    </h2>
-                    <p className="text-gray-500 text-sm">
-                      {category.subtitle}
-                    </p>
-                    {category.note && (
-                      <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-700">
-                        {category.note}
+                    <div className={`flex items-center gap-5 ${categoryImages[category.id] ? 'mb-2' : ''}`}>
+                      {categoryImages[category.id] && (
+                        <div className="flex-shrink-0 w-20 h-20 md:w-24 md:h-24 relative rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
+                          <Image
+                            src={categoryImages[category.id]}
+                            alt={category.name}
+                            fill
+                            className="object-contain p-1.5"
+                            sizes="96px"
+                          />
+                        </div>
+                      )}
+                      <div>
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+                          {category.name}
+                        </h2>
+                        <p className="text-gray-500 text-sm">
+                          {category.subtitle}
+                        </p>
+                        {category.note && (
+                          <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-700">
+                            {category.note}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
 
                   {/* Products Grid */}

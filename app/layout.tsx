@@ -9,6 +9,7 @@ import { VisualEditing } from 'next-sanity'
 
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import DraftBanner from '@/components/layout/DraftBanner'
 import PageTransition from '@/components/layout/PageTransition'
 import SkipLink from '@/components/accessibility/SkipLink'
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
@@ -89,8 +90,9 @@ export default async function RootLayout({
         <OrganizationSchema data={settings || {}} />
         <WebsiteSchema name={companyName} description={slogan} />
       </head>
-      <body className="min-h-screen flex flex-col bg-white text-gray-900 antialiased">
+      <body className={`min-h-screen flex flex-col bg-white text-gray-900 antialiased ${isDraft ? 'pt-10' : ''}`}>
         <LanguageProvider>
+          {isDraft && <DraftBanner />}
           <SkipLink />
           <Header settings={settings} navigation={navigation} />
           <main id="main-content" className="flex-grow" tabIndex={-1}>

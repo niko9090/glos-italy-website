@@ -1,5 +1,6 @@
 // Spacing Utility Classes - Shared across all section components
 // Maps Sanity spacing options to Tailwind CSS classes
+import { sl } from '@/lib/utils/stegaSafe'
 
 export const paddingTopClasses: Record<string, string> = {
   none: 'pt-0',
@@ -55,10 +56,7 @@ export const containerWidthClasses: Record<string, string> = {
 /**
  * Get spacing classes for a section based on its data props.
  * Supports both new granular padding (paddingTop/Bottom) and legacy paddingY.
- *
- * @param data - Section data object with spacing properties
- * @param defaultPadding - Default padding value if none specified (default: 'lg')
- * @returns Combined CSS class string for spacing
+ * Stega-safe: uses sl() for all Record lookups.
  */
 export function getSpacingClasses(
   data: {
@@ -74,27 +72,27 @@ export function getSpacingClasses(
 
   // Use paddingTop/Bottom if specified, otherwise fallback to paddingY
   if (data.paddingTop) {
-    classes.push(paddingTopClasses[data.paddingTop] || '')
+    classes.push(sl(paddingTopClasses, data.paddingTop, defaultPadding))
   } else if (data.paddingY) {
-    classes.push(paddingTopClasses[data.paddingY] || paddingTopClasses[defaultPadding])
+    classes.push(sl(paddingTopClasses, data.paddingY, defaultPadding))
   } else {
     classes.push(paddingTopClasses[defaultPadding])
   }
 
   if (data.paddingBottom) {
-    classes.push(paddingBottomClasses[data.paddingBottom] || '')
+    classes.push(sl(paddingBottomClasses, data.paddingBottom, defaultPadding))
   } else if (data.paddingY) {
-    classes.push(paddingBottomClasses[data.paddingY] || paddingBottomClasses[defaultPadding])
+    classes.push(sl(paddingBottomClasses, data.paddingY, defaultPadding))
   } else {
     classes.push(paddingBottomClasses[defaultPadding])
   }
 
   // Margins
   if (data.marginTop && data.marginTop !== 'none') {
-    classes.push(marginTopClasses[data.marginTop] || '')
+    classes.push(sl(marginTopClasses, data.marginTop, 'none'))
   }
   if (data.marginBottom && data.marginBottom !== 'none') {
-    classes.push(marginBottomClasses[data.marginBottom] || '')
+    classes.push(sl(marginBottomClasses, data.marginBottom, 'none'))
   }
 
   return classes.filter(Boolean).join(' ')
@@ -102,13 +100,11 @@ export function getSpacingClasses(
 
 /**
  * Get container width class based on section data.
- *
- * @param containerWidth - Container width option
- * @returns CSS class string for container width
+ * Stega-safe: uses sl() for Record lookup.
  */
 export function getContainerClass(containerWidth?: string): string {
   if (!containerWidth || containerWidth === 'normal') {
     return 'container-glos'
   }
-  return `${containerWidthClasses[containerWidth] || ''} mx-auto px-4 md:px-6`
+  return `${sl(containerWidthClasses, containerWidth, 'normal')} mx-auto px-4 md:px-6`
 }

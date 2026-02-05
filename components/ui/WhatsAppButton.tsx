@@ -2,43 +2,68 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send } from 'lucide-react'
+import { X, Send, Check, Loader2, MessageCircle } from 'lucide-react'
 
-interface WhatsAppButtonProps {
-  phoneNumber?: string
-  message?: string
+interface ChatButtonProps {
+  defaultMessage?: string
   companyName?: string
 }
 
+type SendStatus = 'idle' | 'sending' | 'success' | 'error'
+
 export function WhatsAppButton({
-  phoneNumber,
-  message = 'Ciao, vorrei informazioni sui vostri prodotti.',
+  defaultMessage = 'Ciao, vorrei informazioni sui vostri prodotti.',
   companyName = 'GLOS Italy'
-}: WhatsAppButtonProps) {
+}: ChatButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [userMessage, setUserMessage] = useState(message)
+  const [message, setMessage] = useState(defaultMessage)
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [status, setStatus] = useState<SendStatus>('idle')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  // Verifica se il numero e' configurato correttamente
-  const isConfigured = phoneNumber &&
-    phoneNumber !== '39XXXXXXXXXX' &&
-    phoneNumber.replace(/\D/g, '').length >= 10
-
-  // Reset message when popup opens
+  // Reset form when popup opens
   useEffect(() => {
     if (isOpen) {
-      setUserMessage(message)
+      setMessage(defaultMessage)
+      setName('')
+      setPhone('')
+      setStatus('idle')
       setTimeout(() => textareaRef.current?.focus(), 100)
     }
-  }, [isOpen, message])
+  }, [isOpen, defaultMessage])
 
-  const handleSend = () => {
-    if (!isConfigured || !userMessage.trim()) return
+  const handleSend = async () => {
+    if (!message.trim() || status === 'sending') return
 
-    const cleanNumber = phoneNumber!.replace(/\D/g, '')
-    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(userMessage.trim())}`
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
-    setIsOpen(false)
+    setStatus('sending')
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: message.trim(),
+          name: name.trim() || undefined,
+          phone: phone.trim() || undefined,
+        }),
+      })
+
+      if (response.ok) {
+        setStatus('success')
+        // Chiudi dopo 2 secondi
+        setTimeout(() => {
+          setIsOpen(false)
+          setStatus('idle')
+        }, 2000)
+      } else {
+        setStatus('error')
+        setTimeout(() => setStatus('idle'), 3000)
+      }
+    } catch {
+      setStatus('error')
+      setTimeout(() => setStatus('idle'), 3000)
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -47,8 +72,6 @@ export function WhatsAppButton({
       handleSend()
     }
   }
-
-  if (!isConfigured) return null
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -63,15 +86,13 @@ export function WhatsAppButton({
             className="absolute bottom-20 right-0 w-80 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100"
           >
             {/* Header */}
-            <div className="bg-[#075E54] px-4 py-3 flex items-center gap-3">
+            <div className="bg-[#0047AB] px-4 py-3 flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
+                <MessageCircle className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
                 <p className="text-white font-semibold text-sm">{companyName}</p>
-                <p className="text-white/70 text-xs">Solitamente risponde in pochi minuti</p>
+                <p className="text-white/70 text-xs">Rispondiamo in pochi minuti</p>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
@@ -82,44 +103,90 @@ export function WhatsAppButton({
               </button>
             </div>
 
-            {/* Chat Area */}
-            <div className="bg-[#E5DDD5] p-4 min-h-[120px]">
-              {/* Bubble messaggio azienda */}
-              <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm max-w-[85%]">
-                <p className="text-gray-800 text-sm">
-                  Ciao! Come possiamo aiutarti?
-                </p>
-                <p className="text-[10px] text-gray-400 text-right mt-1">
-                  {new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
+            {/* Success State */}
+            {status === 'success' ? (
+              <div className="p-8 text-center">
+                <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                  <Check className="w-8 h-8 text-green-600" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                  Messaggio inviato!
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Ti risponderemo al più presto
                 </p>
               </div>
-            </div>
+            ) : (
+              <>
+                {/* Chat Area */}
+                <div className="bg-gray-50 p-4">
+                  {/* Bubble messaggio azienda */}
+                  <div className="bg-white rounded-lg rounded-tl-none p-3 shadow-sm max-w-[85%] border border-gray-100">
+                    <p className="text-gray-800 text-sm">
+                      Ciao! Come possiamo aiutarti? Scrivi il tuo messaggio e ti risponderemo subito.
+                    </p>
+                  </div>
+                </div>
 
-            {/* Input Area */}
-            <div className="p-3 bg-[#F0F0F0] border-t border-gray-200">
-              <div className="flex items-end gap-2">
-                <textarea
-                  ref={textareaRef}
-                  value={userMessage}
-                  onChange={(e) => setUserMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Scrivi un messaggio..."
-                  rows={2}
-                  className="flex-1 resize-none rounded-2xl border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#25D366] focus:ring-1 focus:ring-[#25D366]"
-                />
-                <button
-                  onClick={handleSend}
-                  disabled={!userMessage.trim()}
-                  className="flex-shrink-0 w-10 h-10 bg-[#25D366] hover:bg-[#128C7E] disabled:bg-gray-300 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-colors"
-                  aria-label="Invia messaggio"
-                >
-                  <Send className="w-5 h-5 text-white" />
-                </button>
-              </div>
-              <p className="text-[10px] text-gray-400 text-center mt-2">
-                Premi Invio per inviare
-              </p>
-            </div>
+                {/* Form Area */}
+                <div className="p-4 space-y-3 border-t border-gray-100">
+                  {/* Nome e Telefono */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Nome (opzionale)"
+                      className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0047AB] focus:ring-1 focus:ring-[#0047AB]"
+                    />
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Telefono (opz.)"
+                      className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0047AB] focus:ring-1 focus:ring-[#0047AB]"
+                    />
+                  </div>
+
+                  {/* Messaggio */}
+                  <div className="flex items-end gap-2">
+                    <textarea
+                      ref={textareaRef}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Scrivi un messaggio..."
+                      rows={2}
+                      disabled={status === 'sending'}
+                      className="flex-1 resize-none rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0047AB] focus:ring-1 focus:ring-[#0047AB] disabled:opacity-50"
+                    />
+                    <button
+                      onClick={handleSend}
+                      disabled={!message.trim() || status === 'sending'}
+                      className="flex-shrink-0 w-10 h-10 bg-[#0047AB] hover:bg-[#003580] disabled:bg-gray-300 disabled:cursor-not-allowed rounded-full flex items-center justify-center transition-colors"
+                      aria-label="Invia messaggio"
+                    >
+                      {status === 'sending' ? (
+                        <Loader2 className="w-5 h-5 text-white animate-spin" />
+                      ) : (
+                        <Send className="w-5 h-5 text-white" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Error message */}
+                  {status === 'error' && (
+                    <p className="text-xs text-red-500 text-center">
+                      Errore nell'invio. Riprova.
+                    </p>
+                  )}
+
+                  <p className="text-[10px] text-gray-400 text-center">
+                    Premi Invio per inviare
+                  </p>
+                </div>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -127,12 +194,12 @@ export function WhatsAppButton({
       {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+        className="flex items-center justify-center w-14 h-14 bg-[#0047AB] rounded-full shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        aria-label={isOpen ? 'Chiudi chat WhatsApp' : 'Apri chat WhatsApp'}
+        aria-label={isOpen ? 'Chiudi chat' : 'Apri chat'}
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
@@ -147,22 +214,20 @@ export function WhatsAppButton({
             </motion.div>
           ) : (
             <motion.div
-              key="whatsapp"
+              key="chat"
               initial={{ rotate: 90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               exit={{ rotate: -90, opacity: 0 }}
               transition={{ duration: 0.15 }}
             >
-              <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-              </svg>
+              <MessageCircle className="w-7 h-7 text-white" />
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Pulse animation - only when closed */}
         {!isOpen && (
-          <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-25" />
+          <span className="absolute inset-0 rounded-full bg-[#0047AB] animate-ping opacity-25" />
         )}
       </motion.button>
     </div>

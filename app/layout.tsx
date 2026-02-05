@@ -100,10 +100,9 @@ export default async function RootLayout({
           </main>
           <Footer settings={settings} navigation={navigation} />
         </LanguageProvider>
-        {/* WhatsApp Floating Button */}
+        {/* Chat Floating Button */}
         <WhatsAppButton
-          phoneNumber={settings?.whatsapp}
-          message={settings?.whatsappMessage || 'Ciao, vorrei informazioni sui vostri prodotti.'}
+          defaultMessage={settings?.whatsappMessage || 'Ciao, vorrei informazioni sui vostri prodotti.'}
           companyName={getTextValue(settings?.companyName) || 'GLOS Italy'}
         />
         {/* SanityLive - handles live content updates in real-time */}

@@ -22,7 +22,6 @@ interface Category {
   id: string
   name: string
   subtitle: string
-  icon: string
   products: Product[]
   note?: string
 }
@@ -32,7 +31,6 @@ const categories: Category[] = [
     id: 'twin',
     name: 'Policut Twin',
     subtitle: 'Serie Gamma - Taglierine autoportanti professionali',
-    icon: '🔷',
     products: [
       {
         code: 'TWIN 120-20',
@@ -66,7 +64,6 @@ const categories: Category[] = [
     id: 'easy',
     name: 'Policut Easy',
     subtitle: 'Serie Gamma - Taglierine da ponteggio professionali',
-    icon: '🔶',
     products: [
       {
         code: 'EASY 120-20',
@@ -136,7 +133,6 @@ const categories: Category[] = [
     id: 'basic',
     name: 'Policut Basic',
     subtitle: 'Serie Basic - Taglierine autoportanti con trasformatore a bordo',
-    icon: '🔵',
     products: [
       {
         code: 'TWINBASIC 120SCC',
@@ -226,7 +222,6 @@ const categories: Category[] = [
     id: 'manuali',
     name: 'Taglierine Manuali',
     subtitle: 'Minicut e Hot Knife - Per tagli di precisione e lavori speciali',
-    icon: '✂️',
     products: [
       {
         code: 'MINICUT',
@@ -261,7 +256,6 @@ const categories: Category[] = [
     id: 'fibercut',
     name: 'Fiber Cut',
     subtitle: 'Taglierina professionale per fibre minerali e lane di vetro',
-    icon: '🧱',
     products: [
       {
         code: 'FIBERCUT 120-20',
@@ -282,7 +276,6 @@ const categories: Category[] = [
     id: 'termolight',
     name: 'Termolight',
     subtitle: 'Termoventilatore professionale per imbianchini e decoratori',
-    icon: '🔥',
     products: [
       {
         code: 'TMLIGHT',
@@ -309,7 +302,6 @@ const categories: Category[] = [
     id: 'blender',
     name: 'Blender GLOS',
     subtitle: 'Miscelatore professionale brevettato per vernici ad acqua',
-    icon: '🔄',
     note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato',
     products: [
       {
@@ -335,7 +327,6 @@ const categories: Category[] = [
     id: 'washstation',
     name: 'Wash Station',
     subtitle: 'Stazione di lavaggio eco-compatibile per materiali ad acqua',
-    icon: '💧',
     note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato',
     products: [
       {
@@ -358,7 +349,6 @@ const categories: Category[] = [
     id: 'accessori',
     name: 'Accessori e Ricambi',
     subtitle: 'Componenti, ricambi e accessori per tutti i prodotti GLOS',
-    icon: '🔧',
     products: [
       {
         code: 'TRASFORMATORE',
@@ -450,7 +440,6 @@ const categories: Category[] = [
     id: 'filo',
     name: 'Filo di Ricambio',
     subtitle: 'Filo di ricambio per tutte le taglierine Policut',
-    icon: '🪡',
     products: [
       {
         code: 'FILO 1200 / FILO 1000',
@@ -493,7 +482,6 @@ const categories: Category[] = [
 const navItems = categories.map((cat) => ({
   id: cat.id,
   label: cat.name,
-  icon: cat.icon,
   count: cat.products.length,
 }))
 
@@ -583,7 +571,7 @@ export default function ListinoPrezziClient() {
       </section>
 
       {/* NAVIGATION BAR */}
-      <div className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+      <div className="sticky top-20 z-40 bg-white border-b border-gray-200 shadow-sm">
         <div className="container-glos">
           <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
             <button
@@ -610,9 +598,7 @@ export default function ListinoPrezziClient() {
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
-                <span className="mr-1.5">{item.icon}</span>
                 {item.label}
-                <span className="ml-1.5 text-xs opacity-70">({item.count})</span>
               </button>
             ))}
           </div>
@@ -635,10 +621,7 @@ export default function ListinoPrezziClient() {
                     onClick={() => scrollToCategory(item.id)}
                     className="w-full text-left flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-blue-50 hover:text-[#0047AB] transition-colors group"
                   >
-                    <span className="flex items-center gap-2">
-                      <span>{item.icon}</span>
-                      <span className="font-medium">{item.label}</span>
-                    </span>
+                    <span className="font-medium">{item.label}</span>
                     <span className="text-xs text-gray-400 group-hover:text-[#0047AB]">
                       {item.count}
                     </span>
@@ -674,17 +657,14 @@ export default function ListinoPrezziClient() {
                 >
                   {/* Category Header */}
                   <div className="mb-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-2xl">{category.icon}</span>
-                      <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-                        {category.name}
-                      </h2>
-                    </div>
-                    <p className="text-gray-500 text-sm ml-10">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+                      {category.name}
+                    </h2>
+                    <p className="text-gray-500 text-sm">
                       {category.subtitle}
                     </p>
                     {category.note && (
-                      <div className="ml-10 mt-2 inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-700">
+                      <div className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-700">
                         {category.note}
                       </div>
                     )}

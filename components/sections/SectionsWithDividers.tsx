@@ -45,6 +45,7 @@ const sectionBgMap: Record<string, 'white' | 'gray' | 'primary' | 'dark' | 'grad
   sectorsSection: 'gray',
   strengthsSection: 'white',
   caseStudiesSection: 'gray',
+  trustBadgesSection: 'gray',
 }
 
 // Divider types based on transition

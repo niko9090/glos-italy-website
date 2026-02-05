@@ -43,6 +43,7 @@ const sectionBgMap: Record<string, 'white' | 'gray' | 'primary' | 'dark' | 'grad
   sectorsSection: 'gray',
   strengthsSection: 'white',
   caseStudiesSection: 'gray',
+  trustBadgesSection: 'gray',
 }
 
 type DividerType = 'wave' | 'curve' | 'slant' | 'gradient-fade' | 'dots' | 'none'

@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Phone, Mail, ArrowRight, MessageCircle, Check } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
@@ -116,7 +117,7 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
         purple: 'bg-purple-600',
         orange: 'bg-orange-600',
       }
-      return solidColors[data.backgroundColor || 'primary'] || 'bg-primary'
+      return sl(solidColors, data.backgroundColor, 'primary')
     }
 
     if (bgType?.includes('gradient')) {
@@ -137,7 +138,7 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
         'animated-purple': 'gradient-animated bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600',
       }
       const direction = data.gradientDirection || 'to-r'
-      let gradientClass = gradients[data.gradient || 'blue-dark'] || gradients['blue-dark']
+      let gradientClass = sl(gradients, data.gradient, 'blue-dark')
       if (direction !== 'to-r' && !gradientClass.includes('radial') && !gradientClass.includes('animated')) {
         gradientClass = gradientClass.replace('to-r', direction)
       }
@@ -213,7 +214,7 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
 
   // Animation variants
   const getAnimationVariants = () => {
-    switch (data.animation) {
+    switch (cs(data.animation)) {
       case 'none':
         return { initial: {}, animate: {} }
       case 'fade':
@@ -282,7 +283,7 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
 
   // Icon mapping
   const getIcon = (iconName?: string): ReactNode => {
-    switch (iconName) {
+    switch (cs(iconName)) {
       case 'arrow-right':
       case '→':
         return <ArrowRight className="w-5 h-5" />
@@ -330,9 +331,9 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
       ref={sectionRef}
       className={`relative overflow-hidden ${
         data.fullWidth !== false ? '' : 'container-glos my-8'
-      } ${data.size ? sizeClasses[data.size] : getSpacingClasses(data)} ${
+      } ${data.size ? sl(sizeClasses, data.size, 'md') : getSpacingClasses(data)} ${
         data.fullWidth !== false ? getBackgroundClasses() : ''
-      } ${textColor} ${borderRadiusClasses[data.borderRadius || 'none']} ${shadowClasses[data.shadow || 'none']}`}
+      } ${textColor} ${sl(borderRadiusClasses, data.borderRadius, 'none')} ${sl(shadowClasses, data.shadow, 'none')}`}
     >
       {/* Background Image/Video */}
       {data.backgroundType?.includes('image') && backgroundUrl && (
@@ -355,7 +356,7 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
 
       {/* Gradient Background (when not full width) */}
       {data.fullWidth === false && (
-        <div className={`absolute inset-0 ${getBackgroundClasses()} ${borderRadiusClasses[data.borderRadius || 'none']}`} />
+        <div className={`absolute inset-0 ${getBackgroundClasses()} ${sl(borderRadiusClasses, data.borderRadius, 'none')}`} />
       )}
 
       {/* SEMPRE VISIBILE: Particelle animate */}
@@ -414,7 +415,7 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
-          className={`flex flex-col ${getLayoutClasses()} ${!layout?.includes('split') ? contentWidthClasses[data.contentWidth || 'normal'] : ''} ${layout?.includes('centered') || layout?.includes('minimal') ? 'mx-auto' : ''}`}
+          className={`flex flex-col ${getLayoutClasses()} ${!layout?.includes('split') ? sl(contentWidthClasses, data.contentWidth, 'normal') : ''} ${layout?.includes('centered') || layout?.includes('minimal') ? 'mx-auto' : ''}`}
         >
           {/* Badge */}
           {!!data.badge?.text && (
@@ -423,7 +424,7 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               className={`inline-block px-4 py-1 rounded-full text-white text-sm font-semibold mb-4 ${
-                badgeColorClasses[data.badge.color || 'blue']
+                sl(badgeColorClasses, data.badge.color, 'blue')
               }`}
             >
               {String(t(data.badge.text) || '')}
@@ -438,7 +439,7 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
           )}
 
           {/* Title */}
-          <h2 className={`font-bold mb-4 ${titleSizeClasses[data.titleSize || 'large']}`}>
+          <h2 className={`font-bold mb-4 ${sl(titleSizeClasses, data.titleSize, 'large')}`}>
             <RichText value={data.title} />
           </h2>
 
@@ -487,9 +488,9 @@ export default function CTASection({ data, documentId, sectionKey }: CTASectionP
                   <Link
                     href={button.link || '#'}
                     className={`inline-flex items-center gap-2 rounded-lg font-semibold transition-all duration-300 ${
-                      buttonVariantClasses[button.variant || 'primary']
-                    } ${buttonSizeClasses[button.size || 'lg']} ${
-                      index === 0 ? `${buttonAnimationClasses[data.buttonAnimation || 'none']} shadow-lg shadow-white/30` : ''
+                      sl(buttonVariantClasses, button.variant, 'primary')
+                    } ${sl(buttonSizeClasses, button.size, 'lg')} ${
+                      index === 0 ? `${sl(buttonAnimationClasses, data.buttonAnimation, 'none')} shadow-lg shadow-white/30` : ''
                     }`}
                   >
                     {button.iconPosition === 'left' && button.icon ? getIcon(button.icon) : null}

@@ -10,6 +10,7 @@ import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 
 interface TabsSectionProps {
   documentId?: string
@@ -53,7 +54,7 @@ export default function TabsSection({ data, documentId, sectionKey }: TabsSectio
   const [activeTab, setActiveTab] = useState(0)
   const { t } = useLanguage()
 
-  const bgClass = bgClasses[data.backgroundColor || 'white']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const tabStyle = data.tabStyle || 'pills'
   const contentLayout = data.contentLayout || 'text-image'
@@ -101,7 +102,7 @@ export default function TabsSection({ data, documentId, sectionKey }: TabsSectio
     },
   }
 
-  const currentStyle = tabClasses[tabStyle as keyof typeof tabClasses] || tabClasses.pills
+  const currentStyle = tabClasses[cs(tabStyle) as keyof typeof tabClasses] || tabClasses.pills
 
   return (
     <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClass}`}>

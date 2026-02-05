@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 
 interface BannerSectionProps {
@@ -54,8 +55,8 @@ export default function BannerSection({ data, documentId, sectionKey }: BannerSe
 
   if (isDismissed) return null
 
-  const variantClass = variantClasses[data.variant || 'primary']
-  const sizeClass = sizeClasses[data.size || 'normal']
+  const variantClass = sl(variantClasses, data.variant, 'primary')
+  const sizeClass = sl(sizeClasses, data.size, 'normal')
   const isFixed = data.position?.startsWith('fixed')
 
   // Marquee content (repeated for seamless loop)

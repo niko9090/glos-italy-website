@@ -21,6 +21,7 @@ import {
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 
 // Icon mapping
 const lucideIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -124,7 +125,7 @@ export default function TrustBadgesSection({ data, documentId, sectionKey }: Tru
     const style = data.style || 'industrial'
     const layout = data.layout || 'horizontal'
 
-    switch (style) {
+    switch (cs(style)) {
       case 'minimal':
         return renderMinimalStyle(layout)
       case 'cards':
@@ -338,7 +339,7 @@ export default function TrustBadgesSection({ data, documentId, sectionKey }: Tru
   return (
     <section
       ref={sectionRef}
-      className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden relative`}
+      className={`${getSpacingClasses(data)} ${sl(bgClasses, backgroundColor, 'white')} ${textColor} overflow-hidden relative`}
       data-sanity-edit-target
     >
       {/* Decorative background elements */}

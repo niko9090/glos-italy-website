@@ -8,6 +8,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { isValidImage, safeImageUrl, getFileUrl } from '@/lib/sanity/client'
 import { ArrowRight, ChevronDown, Play, Download, Phone, Mail } from 'lucide-react'
 import { useLanguage } from '@/lib/context/LanguageContext'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 import {
   MOTION,
@@ -220,7 +221,7 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
 
   // Animation variants
   const getAnimationVariants = () => {
-    switch (data.animation) {
+    switch (cs(data.animation)) {
       case 'none':
         return { initial: {}, animate: {} }
       case 'fade':
@@ -409,11 +410,6 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
     ? safeImageUrl(data.backgroundImage, 1920)
     : null
 
-  const height = data.height || 'large'
-  const position = data.contentPosition || 'left'
-  const width = data.contentWidth || 'medium'
-  const titleSize = data.titleSize || 'large'
-  const textColor = data.textColor || 'white'
   const showScroll = data.showScrollIndicator !== false
   const backgroundType = data.backgroundType || 'image'
   const animationVariants = getAnimationVariants()
@@ -429,8 +425,8 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
     <section
       data-sanity-edit-target
       ref={containerRef}
-      className={`relative flex overflow-hidden ${heightClasses[height]} ${positionClasses[position]}`}
-      style={height === 'custom' && data.customHeight ? { minHeight: `${data.customHeight}px` } : undefined}
+      className={`relative flex overflow-hidden ${sl(heightClasses, data.height, 'large')} ${sl(positionClasses, data.contentPosition, 'left')}`}
+      style={data.height === 'custom' && data.customHeight ? { minHeight: `${data.customHeight}px` } : undefined}
     >
       {/* Background based on type - usa includes() per caratteri stega */}
       {backgroundType?.includes('image') && backgroundUrl && (
@@ -566,8 +562,8 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
       {/* Content */}
       <motion.div
         className={`container-glos relative z-10 py-20 flex flex-col ${
-          position.includes('center') ? 'items-center' :
-          position.includes('right') ? 'items-end' :
+          (data.contentPosition || '').includes('center') ? 'items-center' :
+          (data.contentPosition || '').includes('right') ? 'items-end' :
           'items-start'
         }`}
         style={{ opacity: contentOpacity }}
@@ -576,14 +572,14 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
           variants={heroContainerVariants}
           initial="hidden"
           animate="visible"
-          className={`${widthClasses[width]} ${textColorClasses[textColor]}`}
+          className={`${sl(widthClasses, data.contentWidth, 'medium')} ${sl(textColorClasses, data.textColor, 'white')}`}
         >
           {/* Badge */}
           {!!data.badge?.text && (
             <motion.div
               variants={heroItemVariants}
               className={`inline-block px-4 py-1 rounded-full text-white text-sm font-semibold mb-4 ${
-                badgeColorClasses[data.badge.color || 'blue']
+                sl(badgeColorClasses, data.badge?.color, 'blue')
               }`}
             >
               {String(t(data.badge.text) || '')}
@@ -603,7 +599,7 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
           {/* Title - con text shadow e animazione */}
           <motion.h1
             variants={heroItemVariants}
-            className={`font-bold mb-6 ${titleSizeClasses[titleSize]}`}
+            className={`font-bold mb-6 ${sl(titleSizeClasses, data.titleSize, 'large')}`}
             style={data.titleTextShadow !== false ? {
               textShadow: '0 4px 20px rgba(0, 0, 0, 0.3), 0 2px 10px rgba(0, 71, 171, 0.2)'
             } : undefined}
@@ -626,8 +622,8 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
             <motion.div
               variants={heroItemVariants}
               className={`flex flex-wrap gap-4 ${
-                position.includes('center') ? 'justify-center' :
-                position.includes('right') ? 'justify-end' :
+                (data.contentPosition || '').includes('center') ? 'justify-center' :
+                (data.contentPosition || '').includes('right') ? 'justify-end' :
                 'justify-start'
               }`}
             >
@@ -649,7 +645,7 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
                   <Link
                     href={button.link || '#'}
                     className={`inline-flex items-center gap-2 ${
-                      buttonVariantClasses[button.variant || 'primary']
+                      sl(buttonVariantClasses, button.variant, 'primary')
                     } ${index === 0 ? 'shadow-lg shadow-white/20' : ''}`}
                   >
                     {button.iconPosition === 'left' && button.icon && getIcon(button.icon)}
@@ -717,14 +713,14 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
           }}
         >
           {!!data.scrollIndicatorText && (
-            <p className={`text-sm mb-2 opacity-60 ${textColorClasses[textColor]}`}>
+            <p className={`text-sm mb-2 opacity-60 ${sl(textColorClasses, data.textColor, 'white')}`}>
               {String(t(data.scrollIndicatorText) || '')}
             </p>
           )}
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className={`opacity-60 ${textColorClasses[textColor]}`}
+            className={`opacity-60 ${sl(textColorClasses, data.textColor, 'white')}`}
           >
             <ChevronDown className="w-8 h-8" />
           </motion.div>

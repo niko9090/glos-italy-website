@@ -11,6 +11,7 @@ import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { MOTION, fadeInUp, staggerContainer, staggerItem } from '@/lib/animations/config'
 import RichText from '@/components/RichText'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 
 // Dynamic import for Leaflet (no SSR)
 const DealersMap = nextDynamic(() => import('@/components/DealersMap'), {
@@ -242,7 +243,7 @@ export default function MapSection({ data, dealers = [], documentId, sectionKey 
     primary: 'bg-primary',
     black: 'bg-gray-900',
   }
-  const bgClass = bgClasses[data.backgroundColor || 'white'] || 'bg-white'
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
 
   // Default center (Italy)
   const defaultCenter: [number, number] = [42.5, 12.5]
@@ -252,7 +253,7 @@ export default function MapSection({ data, dealers = [], documentId, sectionKey 
   ]
   const zoom = data.zoom ?? 6
 
-  const mapHeight = heightClasses[data.height || 'medium']
+  const mapHeight = sl(heightClasses, data.height, 'medium')
 
   // Filter dealers with location data
   const dealersWithLocation = dealers.filter(

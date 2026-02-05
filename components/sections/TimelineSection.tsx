@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 import {
   MOTION,
@@ -144,9 +145,9 @@ const lineColorClasses: Record<string, string> = {
 
 export default function TimelineSection({ data, documentId, sectionKey }: TimelineSectionProps) {
   const { t } = useLanguage()
-  const bgClass = bgClasses[data.backgroundColor || 'white']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
-  const lineColor = lineColorClasses[data.lineColor || 'primary']
+  const lineColor = sl(lineColorClasses, data.lineColor, 'primary')
   const layout = data.layout || 'vertical-alternate'
 
   if (!data.items || data.items.length === 0) return null

@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { sl } from '@/lib/utils/stegaSafe'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import LanguageSelector from '@/components/LanguageSelector'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
@@ -69,10 +70,10 @@ export default function Header({ settings, navigation }: HeaderProps) {
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
 
   // Get customization settings with defaults
-  const logoSize = logoSizeClasses[settings?.headerLogoSize || 'lg'] || logoSizeClasses.lg
-  const headerHeight = headerHeightClasses[settings?.headerHeight || 'md'] || headerHeightClasses.md
-  const headerStyle = headerStyleClasses[settings?.headerStyle || 'metal'] || headerStyleClasses.metal
-  const navGap = navGapClasses[settings?.headerNavGap || '8'] || navGapClasses['8']
+  const logoSize = sl(logoSizeClasses, settings?.headerLogoSize, 'lg')
+  const headerHeight = sl(headerHeightClasses, settings?.headerHeight, 'md')
+  const headerStyle = sl(headerStyleClasses, settings?.headerStyle, 'metal')
+  const navGap = sl(navGapClasses, settings?.headerNavGap, '8')
   const showLanguageSelector = settings?.headerShowLanguageSelector !== false
   const ctaText = t(settings?.headerCtaText) || 'Contattaci'
   const ctaLink = settings?.headerCtaLink || '/contatti'

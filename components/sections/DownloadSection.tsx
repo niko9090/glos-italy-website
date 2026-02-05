@@ -8,6 +8,7 @@ import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 
 interface DownloadSectionProps {
   documentId?: string
@@ -71,7 +72,7 @@ const itemVariants = {
 
 export default function DownloadSection({ data, documentId, sectionKey }: DownloadSectionProps) {
   const { t } = useLanguage()
-  const bgClass = bgClasses[data.backgroundColor || 'gray']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'gray')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'grid'
   const columns = data.columns || 3

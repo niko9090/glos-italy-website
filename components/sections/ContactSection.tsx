@@ -9,6 +9,7 @@ import {
   Facebook, Instagram, Linkedin, Twitter, Youtube, CheckCircle2, AlertCircle
 } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 
@@ -275,14 +276,14 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
   }
 
   // Get spacing values with defaults
-  const getHeaderMarginBottom = () => headerMarginBottomClasses[data.headerMarginBottom || '12'] || 'mb-12'
-  const getColumnsGap = () => columnsGapClasses[data.columnsGap || '8'] || 'gap-8'
-  const getFormPadding = () => boxPaddingClasses[data.formPadding || 'lg'] || 'p-6 md:p-8'
-  const getFormFieldsGap = () => formFieldsGapClasses[data.formFieldsGap || '5'] || 'space-y-5'
-  const getInfoPadding = () => boxPaddingClasses[data.infoPadding || 'lg'] || 'p-6 md:p-8'
-  const getInfoItemsGap = () => infoItemsGapClasses[data.infoItemsGap || '4'] || 'space-y-4'
-  const getInfoSectionsGap = () => infoSectionsGapClasses[data.infoSectionsGap || '8'] || 'gap-8'
-  const getMapMarginTop = () => mapMarginTopClasses[data.mapMarginTop || '8'] || 'mt-8'
+  const getHeaderMarginBottom = () => sl(headerMarginBottomClasses, data.headerMarginBottom, '12')
+  const getColumnsGap = () => sl(columnsGapClasses, data.columnsGap, '8')
+  const getFormPadding = () => sl(boxPaddingClasses, data.formPadding, 'lg')
+  const getFormFieldsGap = () => sl(formFieldsGapClasses, data.formFieldsGap, '5')
+  const getInfoPadding = () => sl(boxPaddingClasses, data.infoPadding, 'lg')
+  const getInfoItemsGap = () => sl(infoItemsGapClasses, data.infoItemsGap, '4')
+  const getInfoSectionsGap = () => sl(infoSectionsGapClasses, data.infoSectionsGap, '8')
+  const getMapMarginTop = () => sl(mapMarginTopClasses, data.mapMarginTop, '8')
 
   // Compute spacing classes
   const getSpacingClasses = () => {
@@ -290,22 +291,22 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
 
     // Use paddingTop/Bottom if specified, otherwise fallback to paddingY
     if (data.paddingTop) {
-      classes.push(paddingTopClasses[data.paddingTop] || '')
+      classes.push(sl(paddingTopClasses, data.paddingTop, 'none'))
     }
     if (data.paddingBottom) {
-      classes.push(paddingBottomClasses[data.paddingBottom] || '')
+      classes.push(sl(paddingBottomClasses, data.paddingBottom, 'none'))
     }
     // If neither paddingTop nor paddingBottom, use legacy paddingY
     if (!data.paddingTop && !data.paddingBottom) {
-      classes.push(paddingYClasses[data.paddingY || 'lg'] || paddingYClasses.lg)
+      classes.push(sl(paddingYClasses, data.paddingY, 'lg'))
     }
 
     // Margins
     if (data.marginTop) {
-      classes.push(marginTopClasses[data.marginTop] || '')
+      classes.push(sl(marginTopClasses, data.marginTop, 'none'))
     }
     if (data.marginBottom) {
-      classes.push(marginBottomClasses[data.marginBottom] || '')
+      classes.push(sl(marginBottomClasses, data.marginBottom, 'none'))
     }
 
     return classes.filter(Boolean).join(' ')
@@ -330,7 +331,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
 
   // Icon style classes
   const getIconStyleClasses = () => {
-    switch (data.iconStyle) {
+    switch (cs(data.iconStyle)) {
       case 'simple':
         return 'text-primary'
       case 'circle-filled':
@@ -358,7 +359,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
 
   // Animation variants
   const getAnimationVariants = () => {
-    switch (data.animation) {
+    switch (cs(data.animation)) {
       case 'none':
         return { initial: {}, animate: {} }
       case 'fade':
@@ -483,11 +484,11 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
 
   // Get container class
   const containerClass = data.containerMaxWidth
-    ? `${containerMaxWidthClasses[data.containerMaxWidth] || ''} mx-auto px-4 md:px-6`
+    ? `${sl(containerMaxWidthClasses, data.containerMaxWidth, 'normal')} mx-auto px-4 md:px-6`
     : 'container-glos'
 
   return (
-    <section data-sanity-edit-target className={`${getSpacingClasses()} ${bgClasses[backgroundColor]} ${textColor} relative overflow-hidden`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses()} ${sl(bgClasses, data.backgroundColor, 'gray-light')} ${textColor} relative overflow-hidden`}>
       {/* Decorations */}
       {data.showDecorations && (
         <>
@@ -828,7 +829,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
 
             {/* Map */}
             {data.showMap !== false && (
-              <div className={`${mapHeightClasses[data.mapHeight || 'md']} ${getMapMarginTop()} rounded-2xl overflow-hidden shadow-xl border border-white/30`}>
+              <div className={`${sl(mapHeightClasses, data.mapHeight, 'md')} ${getMapMarginTop()} rounded-2xl overflow-hidden shadow-xl border border-white/30`}>
                 {data.mapType?.includes('google') && data.mapEmbedUrl ? (
                   <iframe
                     src={data.mapEmbedUrl}

@@ -7,6 +7,7 @@ import { Mail, Phone, Linkedin, Twitter } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 import {
   MOTION,
@@ -98,11 +99,11 @@ const socialIconVariants = {
 
 export default function TeamSection({ data, documentId, sectionKey }: TeamSectionProps) {
   const { t } = useLanguage()
-  const bgClass = bgClasses[data.backgroundColor || 'gray']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'gray')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const columns = data.columns || 3
-  const photoShape = photoShapeClasses[data.photoShape || 'circle']
-  const cardStyle = cardStyleClasses[data.cardStyle || 'shadow']
+  const photoShape = sl(photoShapeClasses, data.photoShape, 'circle')
+  const cardStyle = sl(cardStyleClasses, data.cardStyle, 'shadow')
 
   if (!data.members || data.members.length === 0) return null
 

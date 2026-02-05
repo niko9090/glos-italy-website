@@ -11,6 +11,7 @@ import {
   tapScale,
 } from '@/lib/animations/config'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 
 interface IconBoxesSectionProps {
   documentId?: string
@@ -115,10 +116,10 @@ const boxVariants = {
 
 export default function IconBoxesSection({ data, documentId, sectionKey }: IconBoxesSectionProps) {
   const { t } = useLanguage()
-  const bgClass = bgClasses[data.backgroundColor || 'white']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const columns = data.columns || 3
-  const iconSize = iconSizeClasses[data.iconSize || 'large']
+  const iconSize = sl(iconSizeClasses, data.iconSize, 'large')
   const textAlign = data.textAlign || 'center'
 
   if (!data.boxes || data.boxes.length === 0) return null
@@ -189,7 +190,7 @@ export default function IconBoxesSection({ data, documentId, sectionKey }: IconB
           className={`grid grid-cols-1 ${gridCols[columns]} gap-6`}
         >
           {data.boxes.map((box) => {
-            const color = colorClasses[box.color || 'primary']
+            const color = sl(colorClasses, box.color, 'primary')
             const boxClasses = getBoxClasses(data.boxStyle || 'card')
             const hoverClasses = getHoverClasses(data.hoverEffect || 'lift')
 

@@ -8,6 +8,7 @@ import { motion, useInView } from 'framer-motion'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 
 interface StatItem {
@@ -242,7 +243,7 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
   })
 
   const getItemVariants = () => {
-    switch (data.entranceAnimation) {
+    switch (cs(data.entranceAnimation)) {
       case 'none':
         return { hidden: {}, visible: {} }
       case 'fade':
@@ -293,7 +294,7 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
     : null
 
   return (
-    <section data-sanity-edit-target className={`relative overflow-hidden ${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor}`}>
+    <section data-sanity-edit-target className={`relative overflow-hidden ${getSpacingClasses(data)} ${sl(bgClasses, data.backgroundColor, 'primary')} ${textColor}`}>
       {/* Background Image */}
       {backgroundColor?.includes('image') && backgroundUrl && (
         <div className="absolute inset-0 z-0">
@@ -398,7 +399,7 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
                 {/* Number */}
                 <div className="relative mb-3">
                   <div
-                    className={`${numberSizeClasses[data.numberSize || 'xl']} ${numberWeightClasses[data.numberWeight || 'bold']} leading-none`}
+                    className={`${sl(numberSizeClasses, data.numberSize, 'xl')} ${sl(numberWeightClasses, data.numberWeight, 'bold')} leading-none`}
                     style={{ textShadow: '0 2px 20px rgba(255,255,255,0.15)' }}
                   >
                     <AnimatedNumber
@@ -436,7 +437,7 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
                   y: -8,
                   transition: { type: 'spring', stiffness: 300, damping: 20 }
                 }}
-                className={`group text-center ${cardStyleClasses[data.cardStyle || 'glass']} cursor-pointer relative overflow-hidden rounded-2xl p-8`}
+                className={`group text-center ${sl(cardStyleClasses, data.cardStyle, 'glass')} cursor-pointer relative overflow-hidden rounded-2xl p-8`}
               >
                 {/* Gradient border glow on hover */}
                 <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-white/10 via-transparent to-white/5" />

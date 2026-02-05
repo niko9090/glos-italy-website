@@ -25,6 +25,7 @@ import {
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 
 // Icon mapping for Lucide icons
@@ -142,9 +143,9 @@ export default function StrengthsSection({ data, documentId, sectionKey }: Stren
   // Get icon style classes
   const getIconStyleClasses = (color: string = 'primary') => {
     const accent = colorAccents[color] || colorAccents.primary
-    const size = iconSizeClasses[data.iconSize || 'lg']
+    const size = sl(iconSizeClasses, data.iconSize, 'lg')
 
-    switch (data.iconStyle) {
+    switch (cs(data.iconStyle)) {
       case 'simple':
         return `${size.wrapper} ${accent.text} flex items-center justify-center`
       case 'outlined':
@@ -160,7 +161,7 @@ export default function StrengthsSection({ data, documentId, sectionKey }: Stren
 
   // Layout grid classes
   const getLayoutClasses = () => {
-    switch (data.layout) {
+    switch (cs(data.layout)) {
       case 'grid-2':
         return 'grid grid-cols-1 md:grid-cols-2 gap-8'
       case 'grid-4':
@@ -180,7 +181,7 @@ export default function StrengthsSection({ data, documentId, sectionKey }: Stren
   const getCardClasses = () => {
     const baseClasses = 'relative rounded-2xl transition-all duration-300'
 
-    switch (data.cardStyle) {
+    switch (cs(data.cardStyle)) {
       case 'elevated':
         return `${baseClasses} bg-white p-6 lg:p-8 shadow-lg hover:shadow-2xl`
       case 'bordered':
@@ -198,7 +199,7 @@ export default function StrengthsSection({ data, documentId, sectionKey }: Stren
   const getHoverAnimation = (color: string = 'primary') => {
     const accent = colorAccents[color] || colorAccents.primary
 
-    switch (data.hoverEffect) {
+    switch (cs(data.hoverEffect)) {
       case 'lift':
         return {
           y: -8,
@@ -251,7 +252,7 @@ export default function StrengthsSection({ data, documentId, sectionKey }: Stren
 
   // Render icon
   const renderIcon = (item: StrengthItem) => {
-    const iconSize = iconSizeClasses[data.iconSize || 'lg']
+    const iconSize = sl(iconSizeClasses, data.iconSize, 'lg')
 
     // Custom image icon
     if (item.iconImage && isValidImage(item.iconImage)) {
@@ -292,7 +293,7 @@ export default function StrengthsSection({ data, documentId, sectionKey }: Stren
 
   // Decorative elements renderer
   const renderDecorativeElements = () => {
-    switch (data.decorativeElements) {
+    switch (cs(data.decorativeElements)) {
       case 'circles':
         return (
           <>
@@ -336,7 +337,7 @@ export default function StrengthsSection({ data, documentId, sectionKey }: Stren
     <section
       data-sanity-edit-target
       ref={sectionRef}
-      className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden relative`}
+      className={`${getSpacingClasses(data)} ${sl(bgClasses, backgroundColor, 'white')} ${textColor} overflow-hidden relative`}
     >
       {/* Background Image */}
       {data.backgroundImage && isValidImage(data.backgroundImage) && (

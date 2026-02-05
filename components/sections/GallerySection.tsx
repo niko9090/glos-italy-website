@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn, Filter, Search } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
@@ -220,20 +221,20 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
     if (layout?.includes('carousel')) return 'flex overflow-x-auto snap-x snap-mandatory'
     if (layout?.includes('masonry')) return `columns-${colsMobile} md:columns-${cols} space-y-${data.gap || 'md'}`
 
-    const colClasses: Record<number, string> = {
-      1: 'grid-cols-1',
-      2: `grid-cols-${colsMobile} md:grid-cols-2`,
-      3: `grid-cols-${colsMobile} md:grid-cols-3`,
-      4: `grid-cols-${colsMobile} md:grid-cols-4`,
-      5: `grid-cols-${colsMobile} md:grid-cols-5`,
-      6: `grid-cols-${colsMobile} md:grid-cols-6`,
+    const colClasses: Record<string, string> = {
+      '1': 'grid-cols-1',
+      '2': `grid-cols-${colsMobile} md:grid-cols-2`,
+      '3': `grid-cols-${colsMobile} md:grid-cols-3`,
+      '4': `grid-cols-${colsMobile} md:grid-cols-4`,
+      '5': `grid-cols-${colsMobile} md:grid-cols-5`,
+      '6': `grid-cols-${colsMobile} md:grid-cols-6`,
     }
-    return `grid ${colClasses[cols] || colClasses[4]}`
+    return `grid ${sl(colClasses, String(cols), '4')}`
   }
 
   // Hover effect classes
   const getHoverClasses = () => {
-    switch (data.hoverEffect) {
+    switch (cs(data.hoverEffect)) {
       case 'zoom':
         return 'group-hover:scale-110 transition-transform duration-500'
       case 'zoom-bright':
@@ -264,7 +265,7 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
   }
 
   const getItemVariants = () => {
-    switch (data.animation) {
+    switch (cs(data.animation)) {
       case 'none':
         return { hidden: {}, visible: {} }
       case 'fade':
@@ -311,7 +312,7 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
   const darkBg = ['black', 'primary'].includes(backgroundColor)
 
   return (
-    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} overflow-hidden`}>
+    <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${sl(bgClasses, data.backgroundColor, 'white')} overflow-hidden`}>
       <div className="container-glos">
         {/* Header */}
         <motion.div
@@ -386,7 +387,7 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
-          className={`${getGridClasses()} ${gapClasses[data.gap || 'md']}`}
+          className={`${getGridClasses()} ${sl(gapClasses, data.gap, 'md')}`}
         >
           {displayedImages.map((image, index) => {
             const ImageWrapper = image.link && !data.enableLightbox ? Link : 'button'
@@ -399,7 +400,7 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
                 key={image._key}
                 variants={getItemVariants()}
                 whileHover={data.hoverEffect?.includes('lift') ? { y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.15)' } : undefined}
-                className={`group relative overflow-hidden ${roundedClasses[data.rounded || 'md']} ${shadowClasses[data.shadow || 'none']} ${
+                className={`group relative overflow-hidden ${sl(roundedClasses, data.rounded, 'md')} ${sl(shadowClasses, data.shadow, 'none')} ${
                   data.border?.includes('thin') ? 'ring-1 ring-gray-200' :
                   data.border?.includes('normal') ? 'ring-2 ring-gray-200' :
                   data.border?.includes('decorative') ? 'ring-2 ring-primary/30' : ''
@@ -409,13 +410,13 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
               >
                 <ImageWrapper
                   {...(wrapperProps as any)}
-                  className={`block relative ${aspectClasses[data.aspectRatio || 'square']} ${data.layout?.includes('masonry') ? 'w-full' : 'w-full h-full'}`}
+                  className={`block relative ${sl(aspectClasses, data.aspectRatio, 'square')} ${data.layout?.includes('masonry') ? 'w-full' : 'w-full h-full'}`}
                 >
                   <Image
                     src={safeImageUrl(image, 600, 600)!}
                     alt={image.alt || t(image.caption) || ''}
                     fill
-                    className={`object-cover ${getHoverClasses()} ${filterClasses[data.imageFilter || 'none']}`}
+                    className={`object-cover ${getHoverClasses()} ${sl(filterClasses, data.imageFilter, 'none')}`}
                   />
 
                   {/* Hover Overlay */}

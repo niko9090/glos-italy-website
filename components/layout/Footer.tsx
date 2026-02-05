@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Facebook, Instagram, Linkedin, Youtube, Twitter, Mail, Phone, MapPin } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { sl } from '@/lib/utils/stegaSafe'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
 
@@ -62,11 +63,11 @@ export default function Footer({ settings, navigation }: FooterProps) {
   const address = t(settings?.address)
 
   // Get customization settings with defaults
-  const logoSize = logoSizeClasses[settings?.footerLogoSize || 'lg'] || logoSizeClasses.lg
-  const footerStyle = footerStyleClasses[settings?.footerStyle || 'metal-dark'] || footerStyleClasses['metal-dark']
-  const footerPadding = footerPaddingClasses[settings?.footerPadding || 'lg'] || footerPaddingClasses.lg
-  const footerColumnsGap = footerColumnsGapClasses[settings?.footerColumnsGap || '12'] || footerColumnsGapClasses['12']
-  const footerColumns = footerColumnsClasses[settings?.footerColumns || '4'] || footerColumnsClasses['4']
+  const logoSize = sl(logoSizeClasses, settings?.footerLogoSize, 'lg')
+  const footerStyle = sl(footerStyleClasses, settings?.footerStyle, 'metal-dark')
+  const footerPadding = sl(footerPaddingClasses, settings?.footerPadding, 'lg')
+  const footerColumnsGap = sl(footerColumnsGapClasses, settings?.footerColumnsGap, '12')
+  const footerColumns = sl(footerColumnsClasses, settings?.footerColumns, '4')
   const showSocial = settings?.footerShowSocial !== false
   const showQuickLinks = settings?.footerShowQuickLinks !== false
   const showProducts = settings?.footerShowProducts !== false

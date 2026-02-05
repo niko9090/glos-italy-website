@@ -9,6 +9,7 @@ import { Star, Quote, ChevronLeft, ChevronRight, Play, ExternalLink, Calendar, B
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 
 interface TestimonialItem {
@@ -93,7 +94,7 @@ function AnimatedStar({ filled, delay, style = 'yellow' }: { filled: boolean; de
     numeric: { filled: 'text-yellow-400 fill-yellow-400', empty: 'text-gray-300' },
   }
 
-  const colors = colorClasses[style] || colorClasses.yellow
+  const colors = sl(colorClasses, style, 'yellow')
 
   return (
     <motion.div
@@ -268,7 +269,7 @@ export default function TestimonialsSection({ data, documentId, sectionKey }: Te
   })
 
   const getItemVariants = () => {
-    switch (data.animation) {
+    switch (cs(data.animation)) {
       case 'none':
         return { hidden: {}, visible: {} }
       case 'fade':
@@ -312,8 +313,8 @@ export default function TestimonialsSection({ data, documentId, sectionKey }: Te
   // Render testimonial card
   const renderTestimonialCard = (testimonial: TestimonialItem, index: number, isFeatured = false) => {
     const avatarPos = data.avatarPosition || 'bottom'
-    const avatarSizeConfig = avatarSizeClasses[data.avatarSize || 'md']
-    const accentColor = accentClasses[data.accentColor || 'primary']
+    const avatarSizeConfig = sl(avatarSizeClasses, data.avatarSize, 'md')
+    const accentColor = sl(accentClasses, data.accentColor, 'primary')
 
     const avatarElement = showAvatar && isValidImage(testimonial.avatar) && (
       <motion.div
@@ -363,7 +364,7 @@ export default function TestimonialsSection({ data, documentId, sectionKey }: Te
       <motion.div
         key={testimonial._key}
         variants={getItemVariants()}
-        className={`relative group ${cardStyleClasses[data.cardStyle || 'shadow']} ${hoverClasses[data.hoverEffect || 'lift']} ${isFeatured ? 'md:col-span-2' : ''}`}
+        className={`relative group ${sl(cardStyleClasses, data.cardStyle, 'shadow')} ${sl(hoverClasses, data.hoverEffect, 'lift')} ${isFeatured ? 'md:col-span-2' : ''}`}
       >
         {/* Quote icon for 'icon' style */}
         {data.quoteStyle?.includes('icon') && (
@@ -406,7 +407,7 @@ export default function TestimonialsSection({ data, documentId, sectionKey }: Te
         )}
 
         {/* Quote */}
-        <blockquote className={`${quoteStyleClasses[data.quoteStyle || 'quotes']} ${quoteSizeClasses[data.quoteSize || 'md']} leading-relaxed mb-6`}>
+        <blockquote className={`${sl(quoteStyleClasses, data.quoteStyle, 'quotes')} ${sl(quoteSizeClasses, data.quoteSize, 'md')} leading-relaxed mb-6`}>
           {data.quoteStyle?.includes('quotes') && (
             <span className={`absolute -top-2 -left-2 text-6xl ${accentColor} opacity-20 font-serif`}>"</span>
           )}
@@ -615,7 +616,7 @@ export default function TestimonialsSection({ data, documentId, sectionKey }: Te
                 ? 'bg-primary text-white rounded-bl-none'
                 : 'bg-gray-100 text-gray-900 rounded-br-none'
             }`}>
-              <p className={quoteSizeClasses[data.quoteSize || 'md']}>"{String(t(testimonialItem.quote) || '')}"</p>
+              <p className={sl(quoteSizeClasses, data.quoteSize, 'md')}>"{String(t(testimonialItem.quote) || '')}"</p>
               <div className={`absolute bottom-0 ${i % 2 === 0 ? 'left-0 -translate-x-full' : 'right-0 translate-x-full'} w-0 h-0 border-t-[20px] ${i % 2 === 0 ? 'border-t-primary' : 'border-t-gray-100'} ${i % 2 === 0 ? 'border-r-[20px] border-r-transparent' : 'border-l-[20px] border-l-transparent'}`} />
             </div>
             <div className={`flex items-center gap-3 mt-4 ${i % 2 === 0 ? '' : 'justify-end'}`}>
@@ -707,7 +708,7 @@ export default function TestimonialsSection({ data, documentId, sectionKey }: Te
 
   // Render layout based on type
   const renderLayout = () => {
-    switch (layout) {
+    switch (cs(layout)) {
       case 'grid-2':
         return renderGridLayout(2)
       case 'grid-3':
@@ -741,7 +742,7 @@ export default function TestimonialsSection({ data, documentId, sectionKey }: Te
     <section
       data-sanity-edit-target
       ref={containerRef}
-      className={`relative overflow-hidden ${getSpacingClasses(data)} ${bgClasses[data.backgroundColor || 'gray-light']} ${textColor}`}
+      className={`relative overflow-hidden ${getSpacingClasses(data)} ${sl(bgClasses, data.backgroundColor, 'gray-light')} ${textColor}`}
     >
       {/* Pattern background */}
       {data.backgroundColor?.includes('pattern') && (

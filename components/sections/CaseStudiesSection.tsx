@@ -9,6 +9,7 @@ import { ArrowRight, Building2, TrendingUp, Users, Award } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 
 interface StatItem {
@@ -122,7 +123,7 @@ export default function CaseStudiesSection({ data, documentId, sectionKey }: Cas
 
   // Hover animation
   const getHoverAnimation = () => {
-    switch (data.hoverEffect) {
+    switch (cs(data.hoverEffect)) {
       case 'scale':
         return { scale: 1.02, transition: { duration: 0.3 } }
       case 'lift':
@@ -157,7 +158,7 @@ export default function CaseStudiesSection({ data, documentId, sectionKey }: Cas
         return `${base} flex flex-col md:flex-row bg-white shadow-lg hover:shadow-2xl`
       }
 
-      switch (data.cardStyle) {
+      switch (cs(data.cardStyle)) {
         case 'elevated':
           return `${base} bg-white shadow-lg hover:shadow-2xl`
         case 'glass':
@@ -436,7 +437,7 @@ export default function CaseStudiesSection({ data, documentId, sectionKey }: Cas
 
   // Layout wrapper classes
   const getLayoutClasses = () => {
-    switch (data.layout) {
+    switch (cs(data.layout)) {
       case 'horizontal':
         return 'flex flex-col gap-8'
       case 'featured':
@@ -452,7 +453,7 @@ export default function CaseStudiesSection({ data, documentId, sectionKey }: Cas
     <section
       data-sanity-edit-target
       ref={sectionRef}
-      className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden`}
+      className={`${getSpacingClasses(data)} ${sl(bgClasses, backgroundColor, 'white')} ${textColor} overflow-hidden`}
     >
       <div className="container-glos">
         {/* Header */}

@@ -8,6 +8,7 @@ import { ArrowRight } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 
 interface TextImageSectionProps {
@@ -158,14 +159,14 @@ export default function TextImageSection({ data, documentId, sectionKey }: TextI
   const { t } = useLanguage()
 
   // Get classes from data
-  const bgClass = bgClasses[data.backgroundColor || 'white']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
   const spacingClass = getSpacingClasses(data)
-  const imageSize = imageSizeClasses[data.imageSize || 'medium']
-  const imageShape = imageShapeClasses[data.imageShape || 'rectangle']
-  const imageShadow = imageShadowClasses[data.imageShadow || 'md']
-  const imageBorder = imageBorderClasses[data.imageBorder || 'none']
-  const verticalAlign = verticalAlignClasses[data.verticalAlign || 'center']
-  const contentWidth = contentWidthClasses[data.contentWidth || 'normal']
+  const imageSize = sl(imageSizeClasses, data.imageSize, 'medium')
+  const imageShape = sl(imageShapeClasses, data.imageShape, 'rectangle')
+  const imageShadow = sl(imageShadowClasses, data.imageShadow, 'md')
+  const imageBorder = sl(imageBorderClasses, data.imageBorder, 'none')
+  const verticalAlign = sl(verticalAlignClasses, data.verticalAlign, 'center')
+  const contentWidth = sl(contentWidthClasses, data.contentWidth, 'normal')
   const imagePosition = data.imagePosition || 'right'
 
   // Determine text color based on background
@@ -232,7 +233,7 @@ export default function TextImageSection({ data, documentId, sectionKey }: TextI
       {data.buttons && data.buttons.length > 0 ? (
         <div className="flex flex-wrap gap-4">
           {data.buttons.map((button) => {
-            const buttonClass = buttonVariantClasses[button.variant || 'primary']
+            const buttonClass = sl(buttonVariantClasses, button.variant, 'primary')
             const buttonText = t(button.text)
 
             if (!buttonText || !button.link) return null

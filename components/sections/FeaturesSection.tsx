@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Check, ArrowRight } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
 import RichText from '@/components/RichText'
@@ -144,9 +145,9 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
       red: { bg: 'bg-red-100', text: 'text-red-600', border: 'border-red-500' },
       cyan: { bg: 'bg-cyan-100', text: 'text-cyan-600', border: 'border-cyan-500' },
     }
-    const colors = colorMap[color] || colorMap.default
+    const colors = sl(colorMap, color, 'default')
 
-    switch (data.iconStyle) {
+    switch (cs(data.iconStyle)) {
       case 'simple':
         return colors.text
       case 'filled':
@@ -219,7 +220,7 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
   }
 
   const getItemVariants = () => {
-    switch (data.animation) {
+    switch (cs(data.animation)) {
       case 'none':
         return { hidden: {}, visible: {} }
       case 'fade':
@@ -287,7 +288,7 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
     <section
       data-sanity-edit-target
       ref={sectionRef}
-      className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden`}
+      className={`${getSpacingClasses(data)} ${sl(bgClasses, data.backgroundColor, 'white')} ${textColor} overflow-hidden`}
     >
       <div className="container-glos">
         {/* Header */}
@@ -322,7 +323,7 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
         )}
 
         {/* Main Content */}
-        <div className={isSplitLayout ? 'grid lg:grid-cols-2 gap-12 items-center' : contentWidthClasses[data.contentWidth || 'normal']}>
+        <div className={isSplitLayout ? 'grid lg:grid-cols-2 gap-12 items-center' : sl(contentWidthClasses, data.contentWidth, 'normal')}>
           {/* Image (left position) */}
           {showImage && data.imagePosition?.includes('left') && (
             <motion.div
@@ -362,7 +363,7 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-50px' }}
-            className={`${getLayoutClasses()} ${gapClasses[data.gap || 'lg']}`}
+            className={`${getLayoutClasses()} ${sl(gapClasses, data.gap, 'lg')}`}
           >
             {data.items?.map((item, index) => {
               const wrapperClassName = `block ${
@@ -384,7 +385,7 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
                       data.iconPosition?.includes('top') ? 'mb-4' : ''
                     } ${data.iconPosition?.includes('background') ? 'absolute right-4 top-4 opacity-10 text-6xl' : ''}`}>
                       {item.iconImage && isValidImage(item.iconImage) ? (
-                        <div className={iconSizeClasses[data.iconSize || 'lg']}>
+                        <div className={sl(iconSizeClasses, data.iconSize, 'lg')}>
                           <Image
                             src={safeImageUrl(item.iconImage, 64) || ''}
                             alt=""
@@ -394,7 +395,7 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
                           />
                         </div>
                       ) : item.icon ? (
-                        <div className={`${getIconStyleClasses(item.color)} ${iconSizeClasses[data.iconSize || 'lg']} flex items-center justify-center ${
+                        <div className={`${getIconStyleClasses(item.color)} ${sl(iconSizeClasses, data.iconSize, 'lg')} flex items-center justify-center ${
                           data.hoverEffect?.includes('icon-bounce') ? 'group-hover:animate-bounce' : ''
                         } ${data.iconAnimation?.includes('pulse') ? 'animate-pulse' : ''} ${
                           data.iconAnimation?.includes('bounce') ? 'animate-bounce' : ''
@@ -402,7 +403,7 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
                           {item.icon}
                         </div>
                       ) : (
-                        <div className={`${getIconStyleClasses(item.color)} ${iconSizeClasses[data.iconSize || 'lg']} flex items-center justify-center`}>
+                        <div className={`${getIconStyleClasses(item.color)} ${sl(iconSizeClasses, data.iconSize, 'lg')} flex items-center justify-center`}>
                           <Check className="w-6 h-6" />
                         </div>
                       )}
@@ -453,7 +454,7 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
                     boxShadow: '0 25px 50px -12px rgba(0, 71, 171, 0.25)',
                     transition: { duration: 0.3, ease: 'easeOut' }
                   }}
-                  className={`${cardStyleClasses[data.cardStyle || 'shadow-md']} ${hoverEffectClasses[data.hoverEffect || 'none']} ${
+                  className={`${sl(cardStyleClasses, data.cardStyle, 'shadow-md')} ${sl(hoverEffectClasses, data.hoverEffect, 'none')} ${
                     layout?.includes('alternating') && index % 2 === 1 ? 'md:flex-row-reverse' : ''
                   } ${layout?.includes('timeline') ? 'relative pl-8 border-l-2 border-primary/30' : ''} cursor-pointer`}
                   style={{ transformStyle: 'preserve-3d' }}
@@ -521,7 +522,7 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
           >
             <Link
               href={data.ctaLink}
-              className={`inline-flex items-center gap-2 ${ctaVariantClasses[data.ctaVariant || 'primary']}`}
+              className={`inline-flex items-center gap-2 ${sl(ctaVariantClasses, data.ctaVariant, 'primary')}`}
             >
               {String(t(data.ctaText) || '')}
               <ArrowRight className="w-5 h-5" />

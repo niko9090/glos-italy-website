@@ -10,6 +10,7 @@ import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 
 interface CarouselSlide {
   _key: string
@@ -207,7 +208,7 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
   // Arrow style classes
   const getArrowClasses = () => {
     const base = 'absolute top-1/2 -translate-y-1/2 z-10 transition-all'
-    switch (data.arrowStyle) {
+    switch (cs(data.arrowStyle)) {
       case 'square':
         return `${base} p-3 bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 rounded-lg`
       case 'icon-only':
@@ -242,7 +243,7 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
     const effect = data.effect || 'slide'
     const speed = (data.transitionSpeed || 500) / 1000
 
-    switch (effect) {
+    switch (cs(effect)) {
       case 'fade':
         return {
           enter: { opacity: 0 },
@@ -278,11 +279,11 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
 
   const currentSlide = validSlides[currentIndex]
   const layout = data.layout || 'fullscreen'
-  const heightClass = heightClasses[data.height || 'large']
+  const heightClass = sl(heightClasses, data.height, 'large')
   const slideVariants = getSlideVariants()
 
   return (
-    <section data-sanity-edit-target className={`relative overflow-hidden ${getSpacingClasses(data)} ${bgClasses[data.backgroundColor || 'transparent']}`}>
+    <section data-sanity-edit-target className={`relative overflow-hidden ${getSpacingClasses(data)} ${sl(bgClasses, data.backgroundColor, 'transparent')}`}>
       {/* Section Header */}
       {!!(data.title || data.subtitle) && (
         <div className="container-glos py-8 text-center">
@@ -303,7 +304,7 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
       <div
         className={`relative ${heightClass} ${
           data.containerPadding ? 'mx-4 md:mx-8' : ''
-        } ${roundedClasses[data.rounded || 'none']} ${shadowClasses[data.shadow || 'none']} overflow-hidden`}
+        } ${sl(roundedClasses, data.rounded, 'none')} ${sl(shadowClasses, data.shadow, 'none')} overflow-hidden`}
         onMouseEnter={() => data.pauseOnHover && setIsPaused(true)}
         onMouseLeave={() => data.pauseOnHover && setIsPaused(false)}
       >
@@ -330,10 +331,10 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
             </div>
 
             {/* Overlay */}
-            <div className={`absolute inset-0 ${overlayClasses[currentSlide.overlay || 'medium']}`} />
+            <div className={`absolute inset-0 ${sl(overlayClasses, currentSlide.overlay, 'medium')}`} />
 
             {/* Content */}
-            <div className={`absolute inset-0 flex ${textPositionClasses[currentSlide.textPosition || 'center']}`}>
+            <div className={`absolute inset-0 flex ${sl(textPositionClasses, currentSlide.textPosition, 'center')}`}>
               <div className="max-w-3xl px-4">
                 {/* Badge */}
                 {!!currentSlide.badge?.text && (
@@ -342,7 +343,7 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
                     className={`inline-block px-4 py-1 rounded-full text-white text-sm font-semibold mb-4 ${
-                      badgeColorClasses[currentSlide.badge.color || 'blue']
+                      sl(badgeColorClasses, currentSlide.badge.color, 'blue')
                     }`}
                   >
                     {String(currentSlide.badge.text)}
@@ -396,7 +397,7 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
                     {!!currentSlide.buttonText && currentSlide.buttonLink && (
                       <Link
                         href={currentSlide.buttonLink}
-                        className={buttonVariantClasses[currentSlide.buttonVariant || 'primary']}
+                        className={sl(buttonVariantClasses, currentSlide.buttonVariant, 'primary')}
                       >
                         {String(t(currentSlide.buttonText) || '')}
                       </Link>
@@ -404,7 +405,7 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
                     {!!currentSlide.secondButtonText && currentSlide.secondButtonLink && (
                       <Link
                         href={currentSlide.secondButtonLink}
-                        className={buttonVariantClasses['ghost']}
+                        className={sl(buttonVariantClasses, 'ghost', 'ghost')}
                       >
                         {String(t(currentSlide.secondButtonText) || '')}
                       </Link>

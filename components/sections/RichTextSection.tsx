@@ -3,6 +3,7 @@
 
 import { motion } from 'framer-motion'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 
 interface RichTextSectionProps {
@@ -75,11 +76,11 @@ const getDividerClasses = (dividers: string | undefined): string => {
 }
 
 export default function RichTextSection({ data, documentId, sectionKey }: RichTextSectionProps) {
-  const bgClass = bgClasses[data.backgroundColor || 'white'] || bgClasses['white']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
   const spacingClass = getSpacingClasses(data)
   const textColor = data.backgroundColor === 'black' ? 'text-white' : 'text-gray-900'
-  const contentWidth = contentWidthClasses[data.contentWidth || 'normal'] || contentWidthClasses['normal']
-  const textAlign = textAlignClasses[data.textAlign || 'left'] || textAlignClasses['left']
+  const contentWidth = sl(contentWidthClasses, data.contentWidth, 'normal')
+  const textAlign = sl(textAlignClasses, data.textAlign, 'left')
   const dividerClass = getDividerClasses(data.dividers)
   const columns = data.columns || 1
 

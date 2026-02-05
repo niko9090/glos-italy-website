@@ -9,6 +9,7 @@ import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 import { fadeInUp, scaleIn, MOTION } from '@/lib/animations/config'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 
 interface BeforeAfterSectionProps {
   documentId?: string
@@ -180,7 +181,7 @@ function ComparisonSlider({
 
 export default function BeforeAfterSection({ data, documentId, sectionKey }: BeforeAfterSectionProps) {
   const { t } = useLanguage()
-  const bgClass = bgClasses[data.backgroundColor || 'gray']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'gray')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'slider-horizontal'
   const aspectRatio = data.aspectRatio?.replace('/', ' / ') || '16 / 9'

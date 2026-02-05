@@ -11,6 +11,7 @@ import {
   fadeInUp,
 } from '@/lib/animations/config'
 import * as LucideIcons from 'lucide-react'
+import { sl } from '@/lib/utils/stegaSafe'
 
 // ============================================================================
 // Types
@@ -181,7 +182,7 @@ function CounterItemComponent({
     cyan: { bg: 'bg-cyan-100', text: 'text-cyan-600' },
   }
 
-  const iconColor = colorClasses[counter.color || 'primary'] || colorClasses.primary
+  const iconColor = sl(colorClasses, counter.color, 'primary')
 
   return (
     <motion.div
@@ -285,10 +286,10 @@ export default function CounterSection({ data, documentId, sectionKey }: Counter
     'grid-4': 'grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12',
   }
 
-  const bgClass = bgClasses[data.backgroundColor || 'white'] || 'bg-white'
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
   const textColorClass = getTextColorClass()
-  const paddingClass = paddingClasses[data.paddingY || 'large']
-  const layoutClass = layoutClasses[data.layout || 'grid-4']
+  const paddingClass = sl(paddingClasses, data.paddingY, 'large')
+  const layoutClass = sl(layoutClasses, data.layout, 'grid-4')
 
   // Container animation variants with stagger
   const containerVariants = useMemo(

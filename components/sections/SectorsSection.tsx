@@ -9,6 +9,7 @@ import { ArrowRight } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 
 interface SectorItem {
@@ -103,7 +104,7 @@ export default function SectorsSection({ data, documentId, sectionKey }: Sectors
 
   // Layout grid classes
   const getLayoutClasses = () => {
-    switch (data.layout) {
+    switch (cs(data.layout)) {
       case 'grid-2':
         return 'grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8'
       case 'grid-4':
@@ -122,7 +123,7 @@ export default function SectorsSection({ data, documentId, sectionKey }: Sectors
     const accent = colorAccents[color] || colorAccents.default
     const baseClasses = 'relative rounded-2xl p-6 lg:p-8 transition-all duration-300 group cursor-pointer'
 
-    switch (data.cardStyle) {
+    switch (cs(data.cardStyle)) {
       case 'minimal':
         return `${baseClasses} hover:bg-gray-50`
       case 'elevated':
@@ -170,7 +171,7 @@ export default function SectorsSection({ data, documentId, sectionKey }: Sectors
   const getHoverAnimation = (color: string = 'default') => {
     const accent = colorAccents[color] || colorAccents.default
 
-    switch (data.hoverEffect) {
+    switch (cs(data.hoverEffect)) {
       case 'scale':
         return {
           scale: 1.05,
@@ -206,7 +207,7 @@ export default function SectorsSection({ data, documentId, sectionKey }: Sectors
     <section
       data-sanity-edit-target
       ref={sectionRef}
-      className={`${getSpacingClasses(data)} ${bgClasses[backgroundColor]} ${textColor} overflow-hidden`}
+      className={`${getSpacingClasses(data)} ${sl(bgClasses, backgroundColor, 'gray-light')} ${textColor} overflow-hidden`}
     >
       <div className="container-glos">
         {/* Header */}
@@ -282,7 +283,7 @@ export default function SectorsSection({ data, documentId, sectionKey }: Sectors
                   {(sector.icon || sector.iconImage) && (
                     <div className="mb-4">
                       {sector.iconImage && isValidImage(sector.iconImage) ? (
-                        <div className={`${iconSizeClasses[data.iconSize || 'lg']} relative`}>
+                        <div className={`${sl(iconSizeClasses, data.iconSize, 'lg')} relative`}>
                           <Image
                             src={safeImageUrl(sector.iconImage, 96) || ''}
                             alt=""
@@ -294,7 +295,7 @@ export default function SectorsSection({ data, documentId, sectionKey }: Sectors
                       ) : sector.icon ? (
                         <div
                           className={`
-                            ${iconSizeClasses[data.iconSize || 'lg']}
+                            ${sl(iconSizeClasses, data.iconSize, 'lg')}
                             ${imageUrl ? 'bg-white/20 backdrop-blur-sm' : accent.bg}
                             rounded-2xl flex items-center justify-center
                             group-hover:scale-110 transition-transform duration-300

@@ -15,6 +15,7 @@ import {
   staggerItem
 } from '@/lib/animations/config'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 
 interface VideoSectionProps {
   documentId?: string
@@ -134,7 +135,7 @@ export default function VideoSection({ data, documentId, sectionKey }: VideoSect
   const [showControls, setShowControls] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
 
-  const bgClass = bgClasses[data.backgroundColor || 'white']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const aspectRatio = data.aspectRatio?.replace('/', ' / ') || '16 / 9'
 

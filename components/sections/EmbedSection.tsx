@@ -4,6 +4,7 @@
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 import { getSpacingClasses } from '@/lib/utils/spacing'
+import { sl } from '@/lib/utils/stegaSafe'
 
 interface EmbedSectionProps {
   documentId?: string
@@ -40,7 +41,7 @@ const bgClasses: Record<string, string> = {
 }
 
 export default function EmbedSection({ data, documentId, sectionKey }: EmbedSectionProps) {
-  const bgClass = bgClasses[data.backgroundColor || 'white']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const height = data.height || '450'
   const isFullWidth = data.width?.includes('full')

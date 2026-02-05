@@ -14,6 +14,7 @@ import {
   fadeInUp,
   hoverLift,
 } from '@/lib/animations/config'
+import { sl } from '@/lib/utils/stegaSafe'
 
 interface PlanFeature {
   _key: string
@@ -315,7 +316,7 @@ export default function PricingSection({ data, documentId, sectionKey }: Pricing
     <section
       data-sanity-edit-target
       ref={sectionRef}
-      className={`relative overflow-hidden ${paddingClasses[data.paddingY || 'large']} ${bgClasses[backgroundColor]} ${textColor}`}
+      className={`relative overflow-hidden ${sl(paddingClasses, data.paddingY, 'large')} ${sl(bgClasses, backgroundColor, 'gray-light')} ${textColor}`}
     >
       <div className="container-glos">
         {/* Header */}

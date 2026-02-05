@@ -7,6 +7,7 @@ import { ChevronDown, ChevronRight, Plus, Minus, Search, ArrowRight } from 'luci
 import Link from 'next/link'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
+import { sl, cs } from '@/lib/utils/stegaSafe'
 
 // Tipi per le FAQ
 interface FaqItem {
@@ -155,7 +156,7 @@ export default function FaqSection({ data, documentId, sectionKey }: FaqSectionP
   const [searchQuery, setSearchQuery] = useState('')
   const { t, language } = useLanguage()
 
-  const bgClass = bgClasses[data.backgroundColor || 'white'] || bgClasses.white
+  const bgClass = sl(bgClasses, data.backgroundColor, 'white')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'accordion'
   const cardStyle = data.cardStyle || 'shadow'
@@ -307,7 +308,7 @@ export default function FaqSection({ data, documentId, sectionKey }: FaqSectionP
   }) => {
     const isOpen = openItems.includes(item._key)
     const displayIndex = globalIndex !== undefined ? globalIndex : index
-    const cardClass = cardStyleClasses[cardStyle] || cardStyleClasses.shadow
+    const cardClass = sl(cardStyleClasses, cardStyle, 'shadow')
 
     return (
       <motion.div
@@ -471,7 +472,7 @@ export default function FaqSection({ data, documentId, sectionKey }: FaqSectionP
 
   // Render layout appropriato
   const renderContent = () => {
-    switch (layout) {
+    switch (cs(layout)) {
       case 'list':
         return renderList()
       case 'two-columns':
@@ -484,10 +485,10 @@ export default function FaqSection({ data, documentId, sectionKey }: FaqSectionP
   }
 
   // Compute spacing classes
-  const ptClass = paddingTopClasses[data.paddingTop || 'lg'] || paddingTopClasses.lg
-  const pbClass = paddingBottomClasses[data.paddingBottom || 'lg'] || paddingBottomClasses.lg
-  const mtClass = marginTopClasses[data.marginTop || 'none'] || ''
-  const mbClass = marginBottomClasses[data.marginBottom || 'none'] || ''
+  const ptClass = sl(paddingTopClasses, data.paddingTop, 'lg')
+  const pbClass = sl(paddingBottomClasses, data.paddingBottom, 'lg')
+  const mtClass = sl(marginTopClasses, data.marginTop, 'none')
+  const mbClass = sl(marginBottomClasses, data.marginBottom, 'none')
 
   return (
     <section data-sanity-edit-target className={`${ptClass} ${pbClass} ${mtClass} ${mbClass} ${bgClass}`}>

@@ -12,6 +12,7 @@ import {
   staggerContainerFast,
   staggerItem,
 } from '@/lib/animations/config'
+import { sl } from '@/lib/utils/stegaSafe'
 
 interface LogoCloudSectionProps {
   documentId?: string
@@ -42,7 +43,7 @@ const bgClasses: Record<string, string> = {
 }
 
 export default function LogoCloudSection({ data, documentId, sectionKey }: LogoCloudSectionProps) {
-  const bgClass = bgClasses[data.backgroundColor || 'gray']
+  const bgClass = sl(bgClasses, data.backgroundColor, 'gray')
   const textColor = data.backgroundColor?.includes('dark') ? 'text-white' : 'text-gray-900'
   const layout = data.layout || 'grid'
   const columns = data.columns || 5

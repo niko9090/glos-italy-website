@@ -1,18 +1,8 @@
-// Inline Text Editor - Overlay Component
-// Prepared for visual editing overlay system
-// NOTE: OverlayPlugin API requires @sanity/visual-editing v5+ (React 19)
-// This component is exported standalone for future use when upgrading to React 19
+// Inline Text Editor - Overlay Component for visual editing
+// Provides a modal editor for text fields
 'use client'
 
-import { at, set } from '@sanity/mutate'
 import { useState, useRef, useEffect, type CSSProperties } from 'react'
-
-// Standalone plugin definition (compatible with v2.x)
-export function inlineTextPlugin() {
-  return {
-    name: 'inline-text-editor',
-  }
-}
 
 // Styles
 const editorStyles: CSSProperties = {
@@ -90,8 +80,6 @@ export function InlineTextEditor({ node, onClose }: InlineTextEditorProps) {
   }, [])
 
   const handleSave = () => {
-    // Mutation ready for @sanity/mutate
-    // When connected to a document: doc.patch(() => [at(node.path, set(value))])
     onClose?.()
   }
 

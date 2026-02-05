@@ -1,24 +1,10 @@
-// Section Manager - Overlay HUD Component
-// Shows move up/down and delete buttons on sections
-// NOTE: OverlayPlugin/useDocuments API requires @sanity/visual-editing v5+ (React 19)
-// This component is exported standalone for future use when upgrading to React 19
+// Section Manager - Overlay HUD for visual editing
+// Shows move up/down and delete buttons when hovering sections in the preview
 'use client'
 
 import { type CSSProperties } from 'react'
 
-// Standalone plugin definition (compatible with v2.x)
-export function sectionManagerPlugin() {
-  return {
-    name: 'section-manager',
-  }
-}
-
-// Extract _key from path like sections[_key=="abc123"]
-function extractKeyFromPath(path: string): string | null {
-  const match = path.match(/_key=="([^"]+)"/)
-  return match ? match[1] : null
-}
-
+// Styles
 const hudStyles: CSSProperties = {
   position: 'absolute',
   top: '8px',

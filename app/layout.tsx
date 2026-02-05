@@ -1,7 +1,8 @@
-// Root Layout - v3.0.0 Visual Editing
-import type { Metadata } from 'next'
+// Root Layout - v3.1.0 Visual Editing with React 19
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { draftMode } from 'next/headers'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
 import { SanityLive } from '@/lib/sanity/live'
 import { VisualEditing } from 'next-sanity'
@@ -23,6 +24,14 @@ const inter = Inter({
   display: 'swap',
   weight: ['300', '400', '500', '600', '700', '800'],
 })
+
+// Viewport config (themeColor moved here from metadata - Next.js 15)
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#1a1a2e' },
+  ],
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings()
@@ -49,11 +58,6 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     // Manifest
     manifest: '/site.webmanifest',
-    // Theme color
-    themeColor: [
-      { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-      { media: '(prefers-color-scheme: dark)', color: '#1a1a2e' },
-    ],
     // Category
     category: 'technology',
     // Classification
@@ -71,15 +75,8 @@ export default async function RootLayout({
     getNavigation(),
   ])
 
-  // Safe draftMode check - returns false during build/static generation
-  let isDraft = false
-  try {
-    const { draftMode } = await import('next/headers')
-    const dm = await draftMode()
-    isDraft = dm.isEnabled
-  } catch {
-    isDraft = false
-  }
+  const dm = await draftMode()
+  const isDraft = dm.isEnabled
 
   // Prepare company info for structured data
   const companyName = getTextValue(settings?.companyName) || SITE_NAME
@@ -106,7 +103,7 @@ export default async function RootLayout({
           phoneNumber={settings?.whatsapp || '39XXXXXXXXXX'}
           message={settings?.whatsappMessage || 'Ciao, vorrei informazioni sui vostri prodotti.'}
         />
-        {/* SanityLive - handles live content updates */}
+        {/* SanityLive - handles live content updates in real-time */}
         <SanityLive />
         {/* Visual Editing - active only in draft mode */}
         {isDraft && <VisualEditing />}

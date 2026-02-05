@@ -391,10 +391,6 @@ export default function StatsSection({ data, documentId, sectionKey }: StatsSect
                         height={48}
                         className="inline-block"
                       />
-                    ) : stat.icon ? (
-                      <span className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-3xl shadow-lg group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300">
-                        {stat.icon}
-                      </span>
                     ) : null}
                   </div>
                 )}

@@ -17,5 +17,5 @@ export {
   SkeletonBadge,
 } from './Skeleton'
 
-// WhatsApp Button
-export { WhatsAppButton } from './WhatsAppButton'
+// Live Chat (Tawk.to)
+export { TawkToChat } from './TawkToChat'

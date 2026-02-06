@@ -128,14 +128,14 @@ export default function StatsSection({ data }: StatsSectionProps) {
 
       <div className="container-glos relative z-10">
         {/* Header */}
-        {(data.title || data.subtitle) && (
+        {!!(data.title || data.subtitle) && (
           <div className="text-center mb-12">
-            {data.title && (
+            {!!data.title && (
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
                 <RichText value={data.title} />
               </h2>
             )}
-            {data.subtitle && (
+            {!!data.subtitle && (
               <p className={`text-lg ${mutedColor}`}>
                 <RichText value={data.subtitle} />
               </p>
@@ -212,7 +212,7 @@ export default function StatsSection({ data }: StatsSectionProps) {
         </div>
 
         {/* Description */}
-        {data.description && (
+        {!!data.description && (
           <div className={`text-center mt-8 ${mutedColor} max-w-2xl mx-auto`}>
             <RichText value={data.description} />
           </div>

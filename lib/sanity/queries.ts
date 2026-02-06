@@ -22,6 +22,8 @@ export const siteSettingsQuery = defineQuery(`
     tiktok,
     whatsapp,
     whatsappMessage,
+    tawkPropertyId,
+    tawkWidgetId,
     // Header settings
     headerLogoSize,
     headerHeight,

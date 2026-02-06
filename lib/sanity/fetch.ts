@@ -54,6 +54,9 @@ export interface SiteSettings {
   tiktok?: string
   whatsapp?: string
   whatsappMessage?: string
+  // Live Chat (Tawk.to)
+  tawkPropertyId?: string
+  tawkWidgetId?: string
   // Header settings
   headerLogoSize?: string
   headerHeight?: string

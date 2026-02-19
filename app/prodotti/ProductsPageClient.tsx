@@ -1,17 +1,17 @@
-// Products Page Client Component - VETRINA SHOWCASE Design
-// Pagina elegante senza sidebar, organizzata per categorie con sezioni full-width
+// Products Page Client Component - WOW SHOWCASE Design
+// Focus sul Blender GLOS come prodotto hero, design professionale e innovativo
 'use client'
 
 import { useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 import type { Product, Category } from '@/lib/sanity/fetch'
 import ProductBadges from '@/components/products/ProductBadges'
-import { ArrowRight, Award, Cog, Shield, Wrench, Zap, Package } from 'lucide-react'
+import { ArrowRight, Award, Cog, Shield, Wrench, Zap, Package, CheckCircle2, Sparkles, Play } from 'lucide-react'
 
 interface ProductsPageClientProps {
   products: Product[]
@@ -19,12 +19,39 @@ interface ProductsPageClientProps {
   listinoPrezziPdfUrl?: string | null
 }
 
-// Animation variants
+// Animation variants ottimizzate per effetto WOW
 const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 60 },
   visible: {
     opacity: 1,
     y: 0,
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+  }
+}
+
+const fadeInLeft = {
+  hidden: { opacity: 0, x: -60 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+  }
+}
+
+const fadeInRight = {
+  hidden: { opacity: 0, x: 60 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+  }
+}
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
     transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
   }
 }
@@ -34,95 +61,77 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.12,
+      staggerChildren: 0.1,
       delayChildren: 0.2
     }
   }
 }
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 15
-    }
+const cardHover = {
+  rest: { scale: 1, y: 0 },
+  hover: {
+    scale: 1.02,
+    y: -8,
+    transition: { duration: 0.3, ease: 'easeOut' }
   }
 }
 
-const heroTextVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.15,
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  })
-}
-
-// Mapping categorie -> descrizioni e icone
+// Info categorie
 const CATEGORY_INFO: Record<string, { description: string; icon: React.ElementType }> = {
-  'blender': {
-    description: 'Miscelatori professionali brevettati per la perfetta omogeneizzazione di vernici, smalti e pitture. Tecnologia Blender GLOS con sistema di miscelazione esclusivo.',
-    icon: Cog
-  },
   'policut': {
-    description: 'Taglierine professionali di precisione per carta da parati, tessuti e materiali tecnici. Linea completa: Twin, Easy e Basic.',
+    description: 'Taglierine professionali di precisione per pannelli isolanti. Tecnologia a filo caldo per tagli netti e puliti.',
     icon: Zap
   },
   'fiber-cut': {
-    description: 'Sistemi di taglio specializzati per fibre minerali, lana di roccia e materiali isolanti. Massima precisione e sicurezza.',
+    description: 'Sistemi di taglio specializzati per fibre minerali e lana di roccia.',
     icon: Shield
   },
   'termolight': {
-    description: 'Termoventilatori professionali per asciugatura rapida. Ideali per cantieri, verniciatura e applicazioni industriali.',
+    description: 'Termoventilatori professionali per asciugatura rapida in cantiere.',
     icon: Wrench
   },
   'wash-station': {
-    description: 'Stazioni di lavaggio professionali per attrezzi e rulli. Pulizia efficiente ed ecologica degli strumenti di lavoro.',
+    description: 'Stazioni di lavaggio eco-compatibili per attrezzi e rulli.',
     icon: Award
   },
   'taglierine-manuali': {
-    description: 'Taglierine manuali e accessori per il taglio preciso. Complementi essenziali per ogni colorificio.',
+    description: 'Taglierine manuali e accessori per il taglio di precisione.',
     icon: Wrench
   },
   'accessori': {
-    description: 'Accessori e ricambi originali GL.OS per tutti i nostri macchinari. Qualita garantita Made in Italy.',
+    description: 'Accessori e ricambi originali GL.OS.',
     icon: Package
   }
 }
 
-// Prodotti di punta (ordinati per priorità - Blender PRIMO)
-const FEATURED_PRODUCTS_PRIORITY = [
-  'blender', // Blender GLOS BG2 - prodotto di punta principale
-  'twin-120', // Policut Twin
-  'fiber-cut', // Fiber Cut
-  'termolight' // Termolight
-]
-
 export default function ProductsPageClient({ products, categories, listinoPrezziPdfUrl }: ProductsPageClientProps) {
   const listinoPdfUrl = listinoPrezziPdfUrl || '/listino-glos.pdf'
 
-  // Raggruppa prodotti per categoria
+  // Trova il Blender
+  const blenderProduct = useMemo(() => {
+    return products.find(p => {
+      const slug = p.slug?.current?.toLowerCase() || ''
+      const name = getTextValue(p.name).toLowerCase()
+      return slug.includes('blender') || name.includes('blender')
+    })
+  }, [products])
+
+  // Raggruppa prodotti per categoria (escludendo Blender che ha sezione dedicata)
   const productsByCategory = useMemo(() => {
     const grouped: Record<string, { category: Category; products: Product[] }> = {}
 
     categories.forEach(cat => {
-      grouped[cat._id] = {
-        category: cat,
-        products: products.filter(p => p.category?._id === cat._id)
+      const catName = getTextValue(cat.name).toLowerCase()
+      // Escludi la categoria Blender
+      if (!catName.includes('blender')) {
+        grouped[cat._id] = {
+          category: cat,
+          products: products.filter(p => p.category?._id === cat._id)
+        }
       }
     })
 
-    // Ordina le categorie per priorita (Blender prima, poi Policut, ecc.)
-    const priorityOrder = ['blender', 'policut', 'fiber', 'termo', 'wash', 'taglierine', 'accessori']
+    const priorityOrder = ['policut', 'fiber', 'termo', 'wash', 'taglierine', 'accessori']
 
     return Object.values(grouped)
       .filter(g => g.products.length > 0)
@@ -135,178 +144,285 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
       })
   }, [products, categories])
 
-  // Prodotti in evidenza (ordinati per priorità - Blender primo)
-  const featuredProducts = useMemo(() => {
-    const featured: Product[] = []
-
-    // Prima aggiungi i prodotti nell'ordine di priorità definito
-    FEATURED_PRODUCTS_PRIORITY.forEach(keyword => {
-      const match = products.find(p => {
-        const slug = p.slug?.current?.toLowerCase() || ''
-        const name = getTextValue(p.name).toLowerCase()
-        return (slug.includes(keyword) || name.includes(keyword)) &&
-               !featured.some(f => f._id === p._id)
-      })
-      if (match) featured.push(match)
-    })
-
-    // Aggiungi altri prodotti con isFeatured se non già inclusi
-    products.forEach(p => {
-      if (p.isFeatured && !featured.some(f => f._id === p._id) && featured.length < 4) {
-        featured.push(p)
-      }
-    })
-
-    return featured.slice(0, 4)
-  }, [products])
-
-  // Helper per ottenere info categoria
   const getCategoryInfo = (categoryName: string) => {
     const nameLower = categoryName.toLowerCase()
     for (const [key, info] of Object.entries(CATEGORY_INFO)) {
       if (nameLower.includes(key)) return info
     }
-    return { description: 'Macchinari professionali di alta qualità Made in Italy.', icon: Package }
+    return { description: 'Macchinari professionali Made in Italy.', icon: Package }
   }
 
   return (
-    <div className="min-h-screen bg-metal-50">
-      {/* ========== HERO SECTION - FLUID PAINT ========== */}
-      <section className="relative min-h-[70vh] flex items-center overflow-hidden">
-        {/* Immagine di sfondo fluida - vernice in movimento */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: 'url(/images/abstract-fluid.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'hue-rotate(200deg) saturate(1.3) brightness(0.4)',
-          }}
-        />
-
-        {/* Overlay gradient blu per unificare */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628]/90 via-[#0d2847]/70 to-[#1e3a5f]/80" />
-
-        {/* Effetto fluido animato */}
-        <motion.div
-          className="absolute inset-0 opacity-50"
-          animate={{
-            scale: [1, 1.02, 1],
-            x: [0, 10, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          style={{
-            backgroundImage: 'url(/images/paint-fluid-blue.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'hue-rotate(180deg) saturate(1.5) brightness(0.5)',
-            mixBlendMode: 'overlay',
-          }}
-        />
-
-        {/* Gradient fluido sovrapposto */}
-        <div
-          className="absolute inset-0 opacity-60"
-          style={{
-            background: `
-              radial-gradient(ellipse 80% 60% at 20% 80%, rgba(30, 64, 175, 0.5) 0%, transparent 50%),
-              radial-gradient(ellipse 60% 80% at 80% 20%, rgba(59, 130, 246, 0.4) 0%, transparent 50%),
-              radial-gradient(ellipse 100% 50% at 50% 100%, rgba(15, 23, 42, 0.8) 0%, transparent 60%)
-            `,
-          }}
-        />
-
-        {/* Onde di luce animate - effetto vernice che si mescola */}
-        <motion.div
-          className="absolute inset-0 opacity-20"
-          animate={{
-            backgroundPosition: ['0% 0%', '100% 100%'],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'linear',
-          }}
-          style={{
-            background: `
-              linear-gradient(45deg, transparent 30%, rgba(96, 165, 250, 0.15) 50%, transparent 70%),
-              linear-gradient(-45deg, transparent 30%, rgba(147, 197, 253, 0.1) 50%, transparent 70%)
-            `,
-            backgroundSize: '400% 400%',
-          }}
-        />
-
-        {/* Glow centrale morbido per il testo */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-blue-500/15 rounded-full blur-[150px]" />
-
-        {/* CONTENUTO */}
-        <div className="container-glos relative z-10 py-20">
-          <div className="max-w-5xl mx-auto text-center">
-            {/* Titolo principale */}
-            <motion.h1
-              custom={0}
-              variants={heroTextVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-              style={{ textShadow: '0 4px 30px rgba(0,0,0,0.5)' }}
-            >
-              I Nostri{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-200">
-                Prodotti
-              </span>
-            </motion.h1>
-
-            <motion.p
-              custom={1}
-              variants={heroTextVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-lg md:text-xl lg:text-2xl text-blue-100/90 max-w-3xl mx-auto leading-relaxed"
-              style={{ textShadow: '0 2px 20px rgba(0,0,0,0.4)' }}
-            >
-              Macchinari professionali per colorifici e industria delle vernici.
-              <br className="hidden md:block" />
-              Qualità, precisione e affidabilità Made in Italy.
-            </motion.p>
-          </div>
+    <div className="min-h-screen bg-white overflow-hidden">
+      {/* ========== HERO COMPATTO ========== */}
+      <section className="relative min-h-[45vh] flex items-center bg-gradient-to-br from-[#0a1628] via-[#0f2744] to-[#0a1628]">
+        {/* Elementi decorativi animati */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="absolute -top-40 -right-40 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute -bottom-40 -left-40 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.5, 0.3, 0.5] }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
         </div>
 
-        {/* Fade bottom naturale */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-metal-50 to-transparent" />
+        {/* Griglia sottile */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                           linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }} />
+
+        <div className="container-glos relative z-10 py-16">
+          <motion.div
+            className="max-w-4xl mx-auto text-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+              Tecnologia{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400">
+                Made in Italy
+              </span>
+            </h1>
+            <p className="text-lg md:text-xl text-blue-200/80 max-w-2xl mx-auto">
+              Macchinari professionali per l'industria delle vernici.
+              Innovazione, qualità e affidabilità dal 2005.
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Transizione fluida */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
       </section>
 
-      {/* ========== PRODOTTI IN EVIDENZA ========== */}
-      {featuredProducts.length > 0 && (
-        <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-metal-50 to-white relative overflow-hidden">
-          {/* Decorazioni sfondo */}
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+      {/* ========== BLENDER GLOS - SEZIONE HERO PRODOTTO ========== */}
+      <section className="relative py-20 lg:py-28 bg-white">
+        {/* Decorazioni sfondo */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-blue-50 to-transparent opacity-70" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-radial from-primary/5 to-transparent" />
 
-          <div className="container-glos relative z-10">
+        <div className="container-glos relative z-10">
+          {/* Header sezione */}
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-semibold text-sm mb-6">
+              <Sparkles className="w-4 h-4" />
+              Prodotto di Punta
+            </span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-metal-900 mb-4">
+              Blender <span className="text-primary">GLOS</span>
+            </h2>
+            <p className="text-xl text-metal-600 max-w-3xl mx-auto">
+              Il miscelatore professionale che ha rivoluzionato l'industria delle vernici.
+              Tecnologia brevettata per risultati impeccabili.
+            </p>
+          </motion.div>
 
-            {/* Grid prodotti in evidenza */}
+          {/* Layout principale Blender */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-20">
+            {/* Colonna Immagine */}
             <motion.div
-              variants={staggerContainer}
+              variants={fadeInLeft}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-8"
+              viewport={{ once: true }}
+              className="relative"
             >
-              {featuredProducts.map((product, index) => (
-                <FeaturedProductCard key={product._id} product={product} index={index} />
-              ))}
+              <div className="relative aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-metal-100 to-metal-50 shadow-2xl shadow-metal-300/30">
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-blue-500/10" />
+
+                {blenderProduct && isValidImage(blenderProduct.mainImage) ? (
+                  <Image
+                    src={safeImageUrl(blenderProduct.mainImage, 800, 800)!}
+                    alt="Blender GLOS BG2"
+                    fill
+                    className="object-contain p-8 hover:scale-105 transition-transform duration-700"
+                    priority
+                  />
+                ) : (
+                  <Image
+                    src="/images/glos-blender.jpg"
+                    alt="Blender GLOS BG2"
+                    fill
+                    className="object-contain p-8"
+                    priority
+                  />
+                )}
+
+                {/* Badge angolo */}
+                <div className="absolute top-6 left-6">
+                  <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white font-bold rounded-full shadow-lg">
+                    <Award className="w-4 h-4" />
+                    Brevettato
+                  </span>
+                </div>
+              </div>
+
+              {/* Elementi decorativi fluttuanti */}
+              <motion.div
+                className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-primary to-blue-600 rounded-2xl shadow-xl"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4, repeat: Infinity }}
+              />
+              <motion.div
+                className="absolute -top-6 -left-6 w-20 h-20 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl shadow-lg"
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              />
+            </motion.div>
+
+            {/* Colonna Contenuto */}
+            <motion.div
+              variants={fadeInRight}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <h3 className="text-3xl md:text-4xl font-bold text-metal-900 mb-6">
+                Miscelazione Perfetta,{' '}
+                <span className="text-primary">Zero Compromessi</span>
+              </h3>
+
+              <p className="text-lg text-metal-600 leading-relaxed mb-8">
+                Il Blender GLOS BG2 rappresenta l'eccellenza nella miscelazione professionale.
+                Progettato e costruito interamente in Italia, utilizza il nostro esclusivo
+                <strong className="text-metal-800"> Mix GLOS System</strong> con rotazione alternata
+                che garantisce una miscelazione perfetta senza inglobare aria.
+              </p>
+
+              {/* Punti di forza */}
+              <div className="space-y-4 mb-10">
+                {[
+                  { text: 'Tecnologia brevettata Mix GLOS System', highlight: true },
+                  { text: 'Nessuna aria inglobata nel prodotto finale' },
+                  { text: 'Velocità variabile per ogni tipo di vernice' },
+                  { text: 'Oltre 150 secchi al giorno di capacità' },
+                  { text: 'Costruzione robusta per uso intensivo' },
+                ].map((point, i) => (
+                  <motion.div
+                    key={i}
+                    className={`flex items-center gap-3 ${point.highlight ? 'text-primary font-semibold' : 'text-metal-700'}`}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    <CheckCircle2 className={`w-5 h-5 flex-shrink-0 ${point.highlight ? 'text-primary' : 'text-green-500'}`} />
+                    <span>{point.text}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href={blenderProduct ? `/prodotti/${blenderProduct.slug?.current}` : '/prodotti'}
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 hover:-translate-y-1"
+                >
+                  Scopri il Blender GLOS
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="/contatti"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-metal-100 hover:bg-metal-200 text-metal-800 font-semibold rounded-xl transition-all duration-300"
+                >
+                  Richiedi Preventivo
+                </Link>
+              </div>
             </motion.div>
           </div>
-        </section>
-      )}
 
-      {/* ========== SEZIONI PER CATEGORIA ========== */}
+          {/* Mix GLOS System - Feature di spicco */}
+          <motion.div
+            variants={scaleIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="relative bg-gradient-to-br from-[#0a1628] via-[#0f2744] to-[#1a365d] rounded-3xl overflow-hidden shadow-2xl"
+          >
+            {/* Pattern sfondo */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+              backgroundSize: '32px 32px'
+            }} />
+
+            <div className="relative grid md:grid-cols-2 gap-8 p-8 lg:p-12">
+              {/* Immagine Mix GLOS System */}
+              <div className="relative aspect-video md:aspect-square rounded-2xl overflow-hidden bg-white/10">
+                <Image
+                  src="/images/mix-glos-system.jpg"
+                  alt="Mix GLOS System - Sistema di miscelazione brevettato"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full">
+                    <Play className="w-4 h-4" />
+                    Mix GLOS System in azione
+                  </span>
+                </div>
+              </div>
+
+              {/* Contenuto */}
+              <div className="flex flex-col justify-center">
+                <span className="inline-flex items-center gap-2 text-cyan-400 font-semibold text-sm mb-4">
+                  <Cog className="w-4 h-4" />
+                  TECNOLOGIA ESCLUSIVA
+                </span>
+                <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                  Mix GLOS System
+                </h3>
+                <p className="text-blue-100/80 text-lg leading-relaxed mb-6">
+                  Il cuore tecnologico del nostro Blender. Un sistema di rotazione alternata
+                  a velocità variabile che miscela vernici, smalti e pitture in modo perfetto,
+                  eliminando completamente il problema dell'aria inglobata.
+                </p>
+                <ul className="space-y-3 text-blue-100/90">
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                    Rotazione alternata brevettata
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                    Vernice pronta all'uso senza attese
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+                    Adatto a tutti i tipi di contenitori
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ========== SEPARATORE VISIVO ========== */}
+      <div className="relative h-32 bg-gradient-to-b from-white via-metal-50 to-metal-100">
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center">
+          <motion.div
+            className="w-px h-16 bg-gradient-to-b from-transparent via-primary/50 to-transparent"
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true }}
+          />
+        </div>
+      </div>
+
+      {/* ========== ALTRE CATEGORIE PRODOTTI ========== */}
       {productsByCategory.map((group, groupIndex) => {
         const categoryName = getTextValue(group.category.name)
         const categoryInfo = getCategoryInfo(categoryName)
@@ -316,19 +432,12 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
         return (
           <section
             key={group.category._id}
-            className={`py-16 md:py-20 lg:py-24 relative overflow-hidden ${
-              isEven
-                ? 'bg-white'
-                : 'bg-gradient-to-br from-metal-100 via-metal-50 to-white'
+            className={`py-16 lg:py-24 relative overflow-hidden ${
+              isEven ? 'bg-metal-100' : 'bg-white'
             }`}
           >
-            {/* Decorazioni per sezioni alternate */}
-            {!isEven && (
-              <>
-                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-metal-300/10 rounded-full blur-3xl" />
-              </>
-            )}
+            {/* Decorazioni */}
+            <div className={`absolute top-0 ${isEven ? 'right-0' : 'left-0'} w-96 h-96 bg-primary/5 rounded-full blur-3xl`} />
 
             <div className="container-glos relative z-10">
               {/* Header categoria */}
@@ -336,45 +445,36 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                 variants={fadeInUp}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                className="mb-14"
+                viewport={{ once: true }}
+                className="mb-12"
               >
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-                  <div className="max-w-2xl">
-                    {/* Icon e titolo */}
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-blue-600 shadow-lg shadow-primary/25">
-                        <CategoryIcon className="w-6 h-6 text-white" />
+                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="p-2.5 rounded-xl bg-primary text-white shadow-lg shadow-primary/25">
+                        <CategoryIcon className="w-5 h-5" />
                       </div>
-                      <h2 className="text-3xl md:text-4xl font-bold text-metal-800">
+                      <h2 className="text-3xl md:text-4xl font-bold text-metal-900">
                         {categoryName}
                       </h2>
                     </div>
-                    <p className="text-lg text-metal-600 leading-relaxed">
+                    <p className="text-metal-600 max-w-xl">
                       {categoryInfo.description}
                     </p>
                   </div>
-
-                  {/* Badge conteggio */}
-                  <div className="flex-shrink-0">
-                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-metal-100 text-metal-700 font-medium">
-                      <Package className="w-4 h-4" />
-                      {group.products.length} prodott{group.products.length === 1 ? 'o' : 'i'}
-                    </span>
-                  </div>
+                  <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm text-metal-600 font-medium text-sm">
+                    {group.products.length} prodott{group.products.length === 1 ? 'o' : 'i'}
+                  </span>
                 </div>
-
-                {/* Linea decorativa */}
-                <div className="mt-8 h-px bg-gradient-to-r from-primary/50 via-metal-200 to-transparent" />
               </motion.div>
 
-              {/* Grid prodotti categoria */}
+              {/* Grid prodotti */}
               <motion.div
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-50px" }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
               >
                 {group.products.map((product) => (
                   <ProductCard key={product._id} product={product} />
@@ -386,17 +486,20 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
       })}
 
       {/* ========== CTA FINALE ========== */}
-      <section className="relative py-16 md:py-20 overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-metal-800 via-metal-900 to-metal-800" />
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-[#0047AB] to-[#003380]" />
 
-        {/* Pattern */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 20L20 0v20H0zm20 0h20L20 40V20z'/%3E%3C/g%3E%3C/svg%3E")`
-        }} />
-
-        {/* Glow effects */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px]" />
+        {/* Elementi decorativi */}
+        <motion.div
+          className="absolute top-10 left-10 w-64 h-64 bg-white/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.3, 1] }}
+          transition={{ duration: 6, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute bottom-10 right-10 w-80 h-80 bg-cyan-400/10 rounded-full blur-3xl"
+          animate={{ scale: [1.3, 1, 1.3] }}
+          transition={{ duration: 6, repeat: Infinity }}
+        />
 
         <div className="container-glos relative z-10">
           <motion.div
@@ -407,17 +510,17 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
             className="max-w-3xl mx-auto text-center"
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-              Hai bisogno di informazioni?
+              Pronti a fare la differenza?
             </h2>
-            <p className="text-xl text-metal-300 mb-10 leading-relaxed">
-              Contattaci per un preventivo personalizzato o per scoprire quale soluzione
-              GL.OS è la più adatta alle tue esigenze.
+            <p className="text-xl text-blue-100/90 mb-10">
+              Contattaci per scoprire come i nostri macchinari possono
+              migliorare la produttività della tua attività.
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/contatti"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary hover:bg-primary-dark text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white hover:bg-blue-50 text-primary font-bold rounded-xl shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
                 Richiedi Informazioni
                 <ArrowRight className="w-5 h-5" />
@@ -427,7 +530,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                 download
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/20 hover:border-white/30 transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-xl border border-white/30 transition-all duration-300"
               >
                 <Package className="w-5 h-5" />
                 Scarica Listino Prezzi
@@ -440,150 +543,65 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
   )
 }
 
-// ========== COMPONENTE CARD PRODOTTO IN EVIDENZA ==========
-function FeaturedProductCard({ product, index }: { product: Product; index: number }) {
-  const isLarge = index < 2
-
+// ========== COMPONENTE CARD PRODOTTO ==========
+function ProductCard({ product }: { product: Product }) {
   return (
     <motion.article
-      variants={cardVariants}
-      className={`group relative bg-white rounded-2xl overflow-hidden border border-metal-200 hover:border-primary/30 transition-all duration-500 ${
-        isLarge ? 'md:col-span-1' : ''
-      }`}
-      whileHover={{
-        y: -8,
-        boxShadow: '0 25px 60px -12px rgba(0, 71, 171, 0.2)',
-      }}
+      variants={scaleIn}
+      initial="rest"
+      whileHover="hover"
+      animate="rest"
+      className="group relative bg-white rounded-2xl overflow-hidden shadow-lg shadow-metal-200/50 hover:shadow-xl hover:shadow-primary/20 transition-all duration-500"
     >
-      <Link href={`/prodotti/${product.slug?.current}`} className="block">
-        {/* Layout orizzontale per card grandi */}
-        <div className={`flex ${isLarge ? 'flex-col lg:flex-row' : 'flex-col'}`}>
+      <motion.div variants={cardHover}>
+        <Link href={`/prodotti/${product.slug?.current}`} className="block">
           {/* Immagine */}
-          <div className={`relative overflow-hidden bg-gradient-to-br from-metal-50 to-metal-100 ${
-            isLarge ? 'lg:w-1/2 aspect-[4/3] lg:aspect-auto' : 'aspect-[4/3]'
-          }`}>
-            {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 600, 450) ? (
+          <div className="relative aspect-[4/3] bg-gradient-to-br from-metal-50 to-white overflow-hidden">
+            {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 400, 300) ? (
               <Image
-                src={safeImageUrl(product.mainImage, 600, 450)!}
+                src={safeImageUrl(product.mainImage, 400, 300)!}
                 alt={String(product.name || '')}
                 fill
-                className="object-contain p-6 transition-all duration-700 group-hover:scale-105"
+                className="object-contain p-6 group-hover:scale-110 transition-transform duration-700"
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
-                <Package className="w-24 h-24 text-metal-300" />
+                <Package className="w-16 h-16 text-metal-300" />
               </div>
             )}
 
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Overlay hover */}
+            <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
             {/* Badges */}
-            <div className="absolute top-4 left-4 z-10">
+            <div className="absolute top-3 left-3 z-10">
               <ProductBadges
                 isNew={product.isNew}
                 isFeatured={product.isFeatured}
                 badges={product.badges}
                 customBadge={product.customBadge}
-                size="md"
+                size="sm"
               />
             </div>
           </div>
 
           {/* Content */}
-          <div className={`p-6 lg:p-8 flex flex-col justify-center ${isLarge ? 'lg:w-1/2' : ''}`}>
-            {product.category && (
-              <span className="inline-block text-xs font-bold text-primary uppercase tracking-wider mb-3">
-                {getTextValue(product.category.name)}
-              </span>
-            )}
-
-            <h3 className="text-2xl lg:text-3xl font-bold text-metal-800 mb-4 group-hover:text-primary transition-colors duration-300">
+          <div className="p-5">
+            <h3 className="text-lg font-bold text-metal-900 mb-2 group-hover:text-primary transition-colors">
               {getTextValue(product.name)}
             </h3>
 
-            <div className="text-metal-600 line-clamp-3 leading-relaxed mb-6">
+            <div className="text-metal-600 text-sm line-clamp-2 leading-relaxed mb-4">
               <RichText value={product.shortDescription} />
             </div>
 
-            <div className="flex items-center text-primary font-semibold group/cta">
-              <span className="group-hover/cta:mr-2 transition-all duration-300">Scopri di più</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
+            <div className="flex items-center text-primary font-semibold text-sm">
+              <span>Scopri di più</span>
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform duration-300" />
             </div>
           </div>
-        </div>
-      </Link>
-    </motion.article>
-  )
-}
-
-// ========== COMPONENTE CARD PRODOTTO STANDARD ==========
-function ProductCard({ product }: { product: Product }) {
-  return (
-    <motion.article
-      variants={cardVariants}
-      className="group relative bg-white rounded-2xl overflow-hidden border border-metal-200 hover:border-primary/30 transition-all duration-500 h-full flex flex-col"
-      whileHover={{
-        y: -6,
-        boxShadow: '0 20px 40px -12px rgba(0, 71, 171, 0.15)',
-      }}
-    >
-      <Link href={`/prodotti/${product.slug?.current}`} className="flex flex-col h-full">
-        {/* Immagine */}
-        <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-metal-50 to-metal-100">
-          {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 400, 300) ? (
-            <Image
-              src={safeImageUrl(product.mainImage, 400, 300)!}
-              alt={String(product.name || '')}
-              fill
-              className="object-contain p-4 transition-all duration-700 group-hover:scale-105"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Package className="w-16 h-16 text-metal-300" />
-            </div>
-          )}
-
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-          {/* Badges */}
-          <div className="absolute top-3 left-3 z-10">
-            <ProductBadges
-              isNew={product.isNew}
-              isFeatured={product.isFeatured}
-              badges={product.badges}
-              customBadge={product.customBadge}
-              size="sm"
-            />
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="p-5 flex flex-col flex-grow">
-          {product.category && (
-            <span className="inline-block text-xs font-semibold text-primary uppercase tracking-wider mb-2">
-              {getTextValue(product.category.name)}
-            </span>
-          )}
-
-          <h3 className="text-lg font-bold text-metal-800 mb-2 group-hover:text-primary transition-colors duration-300 line-clamp-2">
-            {getTextValue(product.name)}
-          </h3>
-
-          <div className="text-metal-600 text-sm line-clamp-2 leading-relaxed flex-grow mb-4">
-            <RichText value={product.shortDescription} />
-          </div>
-
-          {/* CTA */}
-          <div className="mt-auto pt-4 border-t border-metal-100">
-            <div className="flex items-center justify-between text-primary font-medium text-sm">
-              <span className="group-hover:underline underline-offset-4">Scopri di più</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-            </div>
-          </div>
-        </div>
-      </Link>
+        </Link>
+      </motion.div>
     </motion.article>
   )
 }

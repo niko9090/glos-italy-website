@@ -172,69 +172,30 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
 
         <div className="container-glos relative z-10 py-20">
           <div className="max-w-5xl mx-auto text-center">
-            {/* Badge */}
-            <motion.div
+            {/* Titolo principale */}
+            <motion.h1
               custom={0}
               variants={heroTextVariants}
               initial="hidden"
               animate="visible"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8"
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight"
             >
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-metal-300 text-sm font-medium tracking-wide">
-                Tecnologia Italiana dal 2005
-              </span>
-            </motion.div>
-
-            {/* Titolo principale */}
-            <motion.h1
-              custom={1}
-              variants={heroTextVariants}
-              initial="hidden"
-              animate="visible"
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
-            >
-              Macchinari di{' '}
-              <span className="relative">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-400 to-primary">
-                  Precisione
-                </span>
-                <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
+              I Nostri{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-400 to-primary">
+                Prodotti
               </span>
             </motion.h1>
 
             <motion.p
-              custom={2}
+              custom={1}
               variants={heroTextVariants}
               initial="hidden"
               animate="visible"
-              className="text-xl md:text-2xl text-metal-300 max-w-3xl mx-auto mb-12 leading-relaxed"
+              className="text-xl md:text-2xl text-metal-300 max-w-3xl mx-auto leading-relaxed"
             >
-              GL.OS progetta e produce macchinari professionali per l&apos;industria delle vernici.
-              Blender GLOS, taglierine e attrezzature di qualita superiore.
+              Macchinari professionali per colorifici e industria delle vernici.
+              Qualità, precisione e affidabilità Made in Italy.
             </motion.p>
-
-            {/* Caratteristiche chiave */}
-            <motion.div
-              custom={3}
-              variants={heroTextVariants}
-              initial="hidden"
-              animate="visible"
-              className="flex flex-wrap justify-center gap-x-10 gap-y-4"
-            >
-              {[
-                { icon: Award, text: 'Made in Italy' },
-                { icon: Shield, text: 'Tecnologia Brevettata' },
-                { icon: Wrench, text: 'Assistenza Dedicata' }
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 text-metal-400 group">
-                  <div className="p-2 rounded-lg bg-white/5 border border-white/10 group-hover:border-primary/50 transition-colors">
-                    <item.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <span className="font-medium">{item.text}</span>
-                </div>
-              ))}
-            </motion.div>
           </div>
         </div>
 
@@ -250,24 +211,6 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
 
           <div className="container-glos relative z-10">
-            {/* Header sezione */}
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              className="text-center mb-16"
-            >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
-                IN EVIDENZA
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-metal-800 mb-4">
-                Prodotti di Punta
-              </h2>
-              <p className="text-xl text-metal-600 max-w-2xl mx-auto">
-                I nostri macchinari piu richiesti, scelti da colorifici e professionisti in tutta Italia
-              </p>
-            </motion.div>
 
             {/* Grid prodotti in evidenza */}
             <motion.div

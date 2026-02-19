@@ -80,6 +80,9 @@ export interface SiteSettings {
     label?: string
     href?: string
   }>
+  // Downloads
+  listinoPrezziPdfUrl?: string
+  catalogoPdfUrl?: string
 }
 
 export interface Navigation {

@@ -150,26 +150,138 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
 
   return (
     <div className="min-h-screen bg-metal-50">
-      {/* ========== HERO SECTION ========== */}
+      {/* ========== HERO SECTION - MIXING CONCEPT ========== */}
       <section className="relative min-h-[70vh] flex items-center overflow-hidden">
-        {/* Background con gradient industriale premium */}
-        <div className="absolute inset-0 bg-gradient-to-br from-metal-900 via-metal-800 to-metal-900" />
+        {/* Background base blu scuro */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a1628] via-[#0d2847] to-[#0a1628]" />
 
-        {/* Pattern overlay sottile */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }} />
+        {/* LATO SINISTRO: Effetto miscelazione imperfetta con bolle */}
+        <div className="absolute inset-y-0 left-0 w-1/2 overflow-hidden">
+          {/* Immagine paint mixing con effetto */}
+          <div
+            className="absolute inset-0 opacity-40"
+            style={{
+              backgroundImage: 'url(/images/paint-mixing-bg.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'hue-rotate(-10deg) saturate(1.2)',
+            }}
+          />
+          {/* Effetto bolle/texture imperfetta */}
+          <div className="absolute inset-0 opacity-30" style={{
+            backgroundImage: `radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.4) 0%, transparent 8%),
+                             radial-gradient(circle at 60% 20%, rgba(37, 99, 235, 0.3) 0%, transparent 6%),
+                             radial-gradient(circle at 40% 60%, rgba(96, 165, 250, 0.35) 0%, transparent 10%),
+                             radial-gradient(circle at 80% 40%, rgba(59, 130, 246, 0.25) 0%, transparent 7%),
+                             radial-gradient(circle at 25% 80%, rgba(37, 99, 235, 0.3) 0%, transparent 9%),
+                             radial-gradient(circle at 70% 70%, rgba(147, 197, 253, 0.2) 0%, transparent 5%),
+                             radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.35) 0%, transparent 8%),
+                             radial-gradient(circle at 90% 15%, rgba(96, 165, 250, 0.25) 0%, transparent 6%)`,
+          }} />
+          {/* Swirl animato */}
+          <motion.div
+            className="absolute inset-0 opacity-20"
+            animate={{
+              backgroundPosition: ['0% 0%', '100% 100%'],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: 'linear',
+            }}
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%233B82F6' d='M45.3,-51.2C58.3,-40.9,68.1,-25.6,71.2,-8.5C74.3,8.6,70.7,27.4,60.1,41.3C49.5,55.2,31.9,64.2,13.1,68.5C-5.7,72.8,-25.7,72.4,-41.5,63.6C-57.3,54.8,-68.9,37.6,-73.1,18.7C-77.3,-0.2,-74.1,-20.8,-64.2,-36.9C-54.3,-53,-37.7,-64.6,-20.6,-72.4C-3.5,-80.2,14.1,-84.2,29.4,-77.8C44.7,-71.4,57.7,-54.6,45.3,-51.2Z' transform='translate(100 100)'/%3E%3C/svg%3E")`,
+              backgroundSize: '400px 400px',
+            }}
+          />
+        </div>
 
-        {/* Elementi decorativi */}
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-radial from-primary/20 via-transparent to-transparent opacity-50 blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-radial from-blue-500/10 via-transparent to-transparent opacity-40 blur-3xl" />
+        {/* LATO DESTRO: Effetto miscelazione perfetta, crema liscia */}
+        <div className="absolute inset-y-0 right-0 w-1/2 overflow-hidden">
+          {/* Gradient liscio come crema */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(135deg,
+                rgba(30, 64, 175, 0.9) 0%,
+                rgba(37, 99, 235, 0.85) 25%,
+                rgba(59, 130, 246, 0.8) 50%,
+                rgba(96, 165, 250, 0.75) 75%,
+                rgba(147, 197, 253, 0.7) 100%)`,
+            }}
+          />
+          {/* Effetto setoso/crema */}
+          <div className="absolute inset-0 opacity-60" style={{
+            backgroundImage: 'url(/images/gradient-smooth-bg.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'hue-rotate(200deg) saturate(0.8) brightness(0.9)',
+            mixBlendMode: 'soft-light',
+          }} />
+          {/* Wave sottili per effetto "mescolato perfettamente" */}
+          <motion.div
+            className="absolute inset-0 opacity-30"
+            animate={{
+              backgroundPosition: ['0% 50%', '100% 50%'],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: 'easeInOut',
+            }}
+            style={{
+              background: `linear-gradient(90deg,
+                transparent 0%,
+                rgba(255,255,255,0.1) 25%,
+                rgba(255,255,255,0.15) 50%,
+                rgba(255,255,255,0.1) 75%,
+                transparent 100%)`,
+              backgroundSize: '200% 100%',
+            }}
+          />
+        </div>
 
-        {/* Linee decorative geometriche */}
-        <div className="absolute top-20 left-10 w-px h-40 bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
-        <div className="absolute top-40 left-20 w-px h-60 bg-gradient-to-b from-transparent via-metal-500/20 to-transparent" />
-        <div className="absolute bottom-20 right-10 w-px h-40 bg-gradient-to-b from-transparent via-primary/30 to-transparent" />
-        <div className="absolute bottom-40 right-20 w-px h-60 bg-gradient-to-b from-transparent via-metal-500/20 to-transparent" />
+        {/* TRANSIZIONE CENTRALE: Blend tra i due lati */}
+        <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[40%] pointer-events-none">
+          {/* Gradient di fusione */}
+          <div className="absolute inset-0" style={{
+            background: `linear-gradient(90deg,
+              transparent 0%,
+              rgba(13, 40, 71, 0.5) 20%,
+              rgba(30, 64, 175, 0.6) 50%,
+              rgba(13, 40, 71, 0.5) 80%,
+              transparent 100%)`,
+          }} />
+          {/* Effetto "mixing" animato al centro */}
+          <motion.div
+            className="absolute inset-0 opacity-40"
+            animate={{
+              scale: [1, 1.05, 1],
+              rotate: [0, 2, -2, 0],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+            style={{
+              background: `radial-gradient(ellipse at center,
+                rgba(59, 130, 246, 0.4) 0%,
+                rgba(37, 99, 235, 0.2) 40%,
+                transparent 70%)`,
+            }}
+          />
+        </div>
 
+        {/* Overlay per uniformare e scurire leggermente */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/30 via-transparent to-[#0a1628]/50" />
+
+        {/* Glow centrale per il testo */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/10 rounded-full blur-[100px]" />
+
+        {/* CONTENUTO */}
         <div className="container-glos relative z-10 py-20">
           <div className="max-w-5xl mx-auto text-center">
             {/* Titolo principale */}
@@ -178,10 +290,10 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
               variants={heroTextVariants}
               initial="hidden"
               animate="visible"
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight"
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight drop-shadow-2xl"
             >
               I Nostri{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-400 to-primary">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-blue-100 to-blue-300">
                 Prodotti
               </span>
             </motion.h1>
@@ -191,16 +303,17 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
               variants={heroTextVariants}
               initial="hidden"
               animate="visible"
-              className="text-xl md:text-2xl text-metal-300 max-w-3xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-blue-100/90 max-w-3xl mx-auto leading-relaxed drop-shadow-lg"
             >
               Macchinari professionali per colorifici e industria delle vernici.
+              <br className="hidden md:block" />
               Qualità, precisione e affidabilità Made in Italy.
             </motion.p>
           </div>
         </div>
 
         {/* Fade bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-metal-50 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-metal-50 via-metal-50/80 to-transparent" />
       </section>
 
       {/* ========== PRODOTTI IN EVIDENZA ========== */}

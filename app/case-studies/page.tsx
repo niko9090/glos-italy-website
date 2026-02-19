@@ -293,7 +293,7 @@ export default async function CaseStudiesPage() {
                 href="/contatti"
                 className="btn-primary inline-flex items-center gap-2"
               >
-                Contattaci per saperne di piu
+                Contattaci per saperne di più
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>

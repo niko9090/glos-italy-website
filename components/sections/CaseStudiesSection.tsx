@@ -427,7 +427,7 @@ export default function CaseStudiesSection({ data, documentId, sectionKey }: Cas
 
           {/* Arrow */}
           <div className="flex items-center gap-1 text-primary font-medium text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-            <span>Leggi di piu</span>
+            <span>Leggi di più</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>

@@ -345,7 +345,7 @@ function ProductCard({ product, variant = 'grid' }: { product: Product; variant?
 
             <div className="mt-4">
               <span className="inline-flex items-center text-primary font-medium group-hover:gap-2 transition-all">
-                Scopri di piu
+                Scopri di più
                 <ChevronRight className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-1 transition-all" />
               </span>
             </div>

@@ -288,7 +288,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
                           </p>
                         )}
                         <div className="mt-4 flex items-center gap-2 text-primary font-medium text-sm">
-                          <span>Scopri di piu</span>
+                          <span>Scopri di più</span>
                           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>

@@ -324,7 +324,7 @@ export default function SectorsSection({ data, documentId, sectionKey }: Sectors
                   {/* Arrow indicator */}
                   {sectorSlug && (
                     <div className="mt-4 flex items-center gap-2 text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-sm">Scopri di piu</span>
+                      <span className="text-sm">Scopri di più</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
                   )}

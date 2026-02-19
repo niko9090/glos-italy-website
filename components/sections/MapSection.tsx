@@ -115,7 +115,7 @@ const CustomMap = nextDynamic(
                         rel={marker.link.startsWith('http') ? 'noopener noreferrer' : undefined}
                         className="text-primary text-sm font-medium hover:underline inline-flex items-center gap-1"
                       >
-                        Scopri di piu
+                        Scopri di più
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     )}

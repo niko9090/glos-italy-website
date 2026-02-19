@@ -565,7 +565,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
                   <p className="text-xl font-semibold text-gray-900">
                     {t(data.formSuccessMessage) || 'Messaggio inviato con successo!'}
                   </p>
-                  <p className="text-gray-600 mt-2">Ti risponderemo al piu presto.</p>
+                  <p className="text-gray-600 mt-2">Ti risponderemo al più presto.</p>
                   <button
                     onClick={() => setSubmitStatus('idle')}
                     className="mt-6 text-primary hover:text-primary-dark font-medium transition-colors"

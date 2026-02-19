@@ -244,7 +244,7 @@ export async function POST(request: NextRequest) {
       if (!emailResult.success) {
         console.error('Errore invio email:', emailResult.error)
         // Continuiamo comunque a restituire successo al frontend
-        // perche il messaggio e stato ricevuto
+        // perché il messaggio è stato ricevuto
       }
     } else {
       console.log('RESEND_API_KEY non configurata - email non inviata ma richiesta salvata')

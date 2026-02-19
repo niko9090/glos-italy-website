@@ -11,7 +11,7 @@ import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 import type { Product, Category } from '@/lib/sanity/fetch'
 import ProductBadges from '@/components/products/ProductBadges'
-import { ArrowRight, Award, Cog, Shield, Wrench, Zap, Package, CheckCircle2, Sparkles, Play } from 'lucide-react'
+import { ArrowRight, Award, Cog, Shield, Wrench, Zap, Package, CheckCircle2 } from 'lucide-react'
 
 interface ProductsPageClientProps {
   products: Product[]
@@ -216,10 +216,6 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-semibold text-sm mb-6">
-              <Sparkles className="w-4 h-4" />
-              Prodotto di Punta
-            </span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-metal-900 mb-4">
               Blender <span className="text-primary">GLOS</span>
             </h2>
@@ -270,17 +266,6 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                 </div>
               </div>
 
-              {/* Elementi decorativi fluttuanti */}
-              <motion.div
-                className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-primary to-blue-600 rounded-2xl shadow-xl"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-              />
-              <motion.div
-                className="absolute -top-6 -left-6 w-20 h-20 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl shadow-lg"
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
             </motion.div>
 
             {/* Colonna Contenuto */}
@@ -295,32 +280,51 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                 <span className="text-primary">Zero Compromessi</span>
               </h3>
 
-              <p className="text-lg text-metal-600 leading-relaxed mb-8">
+              <p className="text-lg text-metal-600 leading-relaxed mb-6">
                 Il Blender GLOS BG2 rappresenta l'eccellenza nella miscelazione professionale.
-                Progettato e costruito interamente in Italia, utilizza il nostro esclusivo
-                <strong className="text-metal-800"> Mix GLOS System</strong> con rotazione alternata
-                che garantisce una miscelazione perfetta senza inglobare aria.
+                Progettato e costruito interamente in Italia, è dotato del nostro esclusivo
+                <strong className="text-metal-800"> Mix GLOS System</strong>: un sistema di rotazione
+                alternata a velocità variabile che miscela vernici, smalti e pitture in modo perfetto,
+                eliminando completamente il problema dell'aria inglobata.
+              </p>
+
+              {/* Immagine Mix GLOS System integrata */}
+              <div className="relative h-48 md:h-56 rounded-2xl overflow-hidden mb-8 shadow-lg">
+                <Image
+                  src="/images/mix-glos-system.jpg"
+                  alt="Mix GLOS System"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent" />
+              </div>
+
+              <p className="text-metal-600 leading-relaxed mb-8">
+                La vernice risulta pronta all'uso immediatamente, senza attese o schiuma.
+                Con una capacità di oltre 150 secchi al giorno e una costruzione robusta
+                per uso intensivo, il BG2 è la scelta dei professionisti che non accettano compromessi.
               </p>
 
               {/* Punti di forza */}
-              <div className="space-y-4 mb-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">
                 {[
-                  { text: 'Tecnologia brevettata Mix GLOS System', highlight: true },
-                  { text: 'Nessuna aria inglobata nel prodotto finale' },
-                  { text: 'Velocità variabile per ogni tipo di vernice' },
-                  { text: 'Oltre 150 secchi al giorno di capacità' },
-                  { text: 'Costruzione robusta per uso intensivo' },
+                  'Tecnologia brevettata esclusiva',
+                  'Zero aria inglobata',
+                  'Velocità variabile',
+                  'Oltre 150 secchi/giorno',
+                  'Costruzione Made in Italy',
+                  'Adatto a tutti i contenitori',
                 ].map((point, i) => (
                   <motion.div
                     key={i}
-                    className={`flex items-center gap-3 ${point.highlight ? 'text-primary font-semibold' : 'text-metal-700'}`}
+                    className="flex items-center gap-2 text-metal-700"
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
+                    transition={{ delay: i * 0.05 }}
                     viewport={{ once: true }}
                   >
-                    <CheckCircle2 className={`w-5 h-5 flex-shrink-0 ${point.highlight ? 'text-primary' : 'text-green-500'}`} />
-                    <span>{point.text}</span>
+                    <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-primary" />
+                    <span>{point}</span>
                   </motion.div>
                 ))}
               </div>
@@ -344,69 +348,6 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
             </motion.div>
           </div>
 
-          {/* Mix GLOS System - Feature di spicco */}
-          <motion.div
-            variants={scaleIn}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="relative bg-gradient-to-br from-[#0a1628] via-[#0f2744] to-[#1a365d] rounded-3xl overflow-hidden shadow-2xl"
-          >
-            {/* Pattern sfondo */}
-            <div className="absolute inset-0 opacity-10" style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-              backgroundSize: '32px 32px'
-            }} />
-
-            <div className="relative grid md:grid-cols-2 gap-8 p-8 lg:p-12">
-              {/* Immagine Mix GLOS System */}
-              <div className="relative aspect-video md:aspect-square rounded-2xl overflow-hidden bg-white/10">
-                <Image
-                  src="/images/mix-glos-system.jpg"
-                  alt="Mix GLOS System - Sistema di miscelazione brevettato"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full">
-                    <Play className="w-4 h-4" />
-                    Mix GLOS System in azione
-                  </span>
-                </div>
-              </div>
-
-              {/* Contenuto */}
-              <div className="flex flex-col justify-center">
-                <span className="inline-flex items-center gap-2 text-cyan-400 font-semibold text-sm mb-4">
-                  <Cog className="w-4 h-4" />
-                  TECNOLOGIA ESCLUSIVA
-                </span>
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  Mix GLOS System
-                </h3>
-                <p className="text-blue-100/80 text-lg leading-relaxed mb-6">
-                  Il cuore tecnologico del nostro Blender. Un sistema di rotazione alternata
-                  a velocità variabile che miscela vernici, smalti e pitture in modo perfetto,
-                  eliminando completamente il problema dell'aria inglobata.
-                </p>
-                <ul className="space-y-3 text-blue-100/90">
-                  <li className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full" />
-                    Rotazione alternata brevettata
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full" />
-                    Vernice pronta all'uso senza attese
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full" />
-                    Adatto a tutti i tipi di contenitori
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 

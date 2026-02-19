@@ -41,7 +41,7 @@ export default function LanguageSelector({ variant = 'default', className = '' }
           <button
             key={lang.id}
             onClick={() => handleSelect(lang.id)}
-            className={`p-1.5 rounded-md transition-all focus-ring ${
+            className={`p-2.5 rounded-md transition-all focus-ring min-w-[44px] min-h-[44px] flex items-center justify-center ${
               language === lang.id
                 ? 'bg-primary/10 scale-110'
                 : 'hover:bg-gray-100 opacity-60 hover:opacity-100'

@@ -36,11 +36,11 @@ const categories: Category[] = [
       {
         code: 'TWIN 120-20',
         name: 'Policut Twin 120/20',
-        description: 'Taglierina autoportante prof. in alluminio e inox, taglio a 45° sx/dx, scanalature, diagonale. Profondita 20cm.',
+        description: 'Taglierina autoportante prof. in alluminio e inox, taglio a 45° sx/dx, scanalature, diagonale. Profondità 20cm.',
         price: 1299,
         specs: [
           { label: 'Misura max. taglio', value: '1320 mm' },
-          { label: 'Profondita taglio', value: '210 mm' },
+          { label: 'Profondità taglio', value: '210 mm' },
           { label: 'Macchina chiusa', value: '1570x600x205 mm' },
           { label: 'Peso', value: '14 kg' },
         ],
@@ -49,11 +49,11 @@ const categories: Category[] = [
       {
         code: 'TWIN 120-30',
         name: 'Policut Twin 120/30',
-        description: 'Taglierina autoportante prof. in alluminio e inox, taglio a 45° sx/dx, scanalature, diagonale. Profondita 30cm.',
+        description: 'Taglierina autoportante prof. in alluminio e inox, taglio a 45° sx/dx, scanalature, diagonale. Profondità 30cm.',
         price: 1299,
         specs: [
           { label: 'Misura max. taglio', value: '1320 mm' },
-          { label: 'Profondita taglio', value: '310 mm' },
+          { label: 'Profondità taglio', value: '310 mm' },
           { label: 'Macchina chiusa', value: '1570x700x205 mm' },
           { label: 'Peso', value: '14 kg' },
         ],
@@ -69,11 +69,11 @@ const categories: Category[] = [
       {
         code: 'EASY 120-20',
         name: 'Policut Easy 1200/20',
-        description: 'Top di gamma: produttivita e tagli di grande dimensione. Sostegno autoportante, utilizzo anche in appoggio.',
+        description: 'Top di gamma: produttività e tagli di grande dimensione. Sostegno autoportante, utilizzo anche in appoggio.',
         price: 995,
         specs: [
           { label: 'Misura max. taglio', value: '1320 mm' },
-          { label: 'Profondita taglio', value: '210 mm' },
+          { label: 'Profondità taglio', value: '210 mm' },
           { label: 'Macchina chiusa', value: '1570x600x205 mm' },
           { label: 'Peso', value: '14 kg' },
         ],
@@ -81,51 +81,51 @@ const categories: Category[] = [
       {
         code: 'EASY 120-30',
         name: 'Policut Easy 1200/30',
-        description: 'Top di gamma: produttivita e tagli di grande dimensione. Profondita 30cm.',
+        description: 'Top di gamma: produttività e tagli di grande dimensione. Profondità 30cm.',
         price: 995,
         specs: [
           { label: 'Misura max. taglio', value: '1320 mm' },
-          { label: 'Profondita taglio', value: '310 mm' },
+          { label: 'Profondità taglio', value: '310 mm' },
         ],
       },
       {
         code: 'EASY 100-20',
         name: 'Policut Easy 1000/20',
-        description: 'Il giusto compromesso in cantiere: leggerezza e produttivita. Tagli perfetti su pannelli grandi.',
+        description: 'Il giusto compromesso in cantiere: leggerezza e produttività. Tagli perfetti su pannelli grandi.',
         price: 975,
         specs: [
           { label: 'Misura max. taglio', value: '1110 mm' },
-          { label: 'Profondita taglio', value: '210 mm' },
+          { label: 'Profondità taglio', value: '210 mm' },
         ],
       },
       {
         code: 'EASY 100-30',
         name: 'Policut Easy 1000/30',
-        description: 'Il giusto compromesso in cantiere: leggerezza e produttivita. Profondita 30cm.',
+        description: 'Il giusto compromesso in cantiere: leggerezza e produttività. Profondità 30cm.',
         price: 975,
         specs: [
           { label: 'Misura max. taglio', value: '1110 mm' },
-          { label: 'Profondita taglio', value: '310 mm' },
+          { label: 'Profondità taglio', value: '310 mm' },
         ],
       },
       {
         code: 'EASY 70-20',
         name: 'Policut Easy 700/20',
-        description: 'La piu compatta e leggera della gamma Easy. Ideale per ponteggi alti o luoghi scomodi.',
+        description: 'La più compatta e leggera della gamma Easy. Ideale per ponteggi alti o luoghi scomodi.',
         price: 945,
         specs: [
           { label: 'Misura max. taglio', value: '645 mm' },
-          { label: 'Profondita taglio', value: '210 mm' },
+          { label: 'Profondità taglio', value: '210 mm' },
         ],
       },
       {
         code: 'EASY 70-30',
         name: 'Policut Easy 700/30',
-        description: 'La piu compatta e leggera della gamma Easy. Profondita 30cm.',
+        description: 'La più compatta e leggera della gamma Easy. Profondità 30cm.',
         price: 945,
         specs: [
           { label: 'Misura max. taglio', value: '645 mm' },
-          { label: 'Profondita taglio', value: '310 mm' },
+          { label: 'Profondità taglio', value: '310 mm' },
         ],
       },
     ],
@@ -142,7 +142,7 @@ const categories: Category[] = [
         price: 998,
         specs: [
           { label: 'Misura max. taglio', value: '1320 mm' },
-          { label: 'Profondita taglio', value: '330 mm' },
+          { label: 'Profondità taglio', value: '330 mm' },
           { label: 'Macchina chiusa', value: '1660x635x200 mm' },
           { label: 'Peso', value: '15,5 kg' },
         ],
@@ -154,7 +154,7 @@ const categories: Category[] = [
         price: 880,
         specs: [
           { label: 'Misura max. taglio', value: '1320 mm' },
-          { label: 'Profondita taglio', value: '330 mm' },
+          { label: 'Profondità taglio', value: '330 mm' },
         ],
       },
       {
@@ -164,7 +164,7 @@ const categories: Category[] = [
         price: 928,
         specs: [
           { label: 'Misura max. taglio', value: '1095 mm' },
-          { label: 'Profondita taglio', value: '330 mm' },
+          { label: 'Profondità taglio', value: '330 mm' },
           { label: 'Macchina chiusa', value: '1430x635x200 mm' },
           { label: 'Peso', value: '14,5 kg' },
         ],
@@ -178,11 +178,11 @@ const categories: Category[] = [
       {
         code: 'EASYBASIC 120CC',
         name: 'Easy Basic 1200 CC',
-        description: 'Il giusto compromesso in cantiere: leggerezza e produttivita. Con cavo continuo.',
+        description: 'Il giusto compromesso in cantiere: leggerezza e produttività. Con cavo continuo.',
         price: 888,
         specs: [
           { label: 'Misura max. taglio', value: '1110 mm' },
-          { label: 'Profondita taglio', value: '210-310 mm' },
+          { label: 'Profondità taglio', value: '210-310 mm' },
         ],
       },
       {
@@ -198,7 +198,7 @@ const categories: Category[] = [
         price: 844,
         specs: [
           { label: 'Misura max. taglio', value: '1095 mm' },
-          { label: 'Profondita taglio', value: '330 mm' },
+          { label: 'Profondità taglio', value: '330 mm' },
         ],
       },
       {
@@ -210,11 +210,11 @@ const categories: Category[] = [
       {
         code: 'EASYBASIC 70',
         name: 'Easy Basic 700',
-        description: 'La soluzione piu compatta per tagli seriali su ponteggi.',
+        description: 'La soluzione più compatta per tagli seriali su ponteggi.',
         price: 695,
         specs: [
           { label: 'Misura max. taglio', value: '640 mm' },
-          { label: 'Profondita taglio', value: '330 mm' },
+          { label: 'Profondità taglio', value: '330 mm' },
         ],
       },
     ],
@@ -231,7 +231,7 @@ const categories: Category[] = [
         price: 336,
         specs: [
           { label: 'Spessore di taglio', value: '200/360 mm' },
-          { label: 'Profondita', value: '400 mm' },
+          { label: 'Profondità', value: '400 mm' },
         ],
       },
       {
@@ -265,11 +265,11 @@ const categories: Category[] = [
         price: 1299,
         specs: [
           { label: 'Misura max. taglio', value: '1280 mm' },
-          { label: 'Profondita taglio', value: '235 mm' },
+          { label: 'Profondità taglio', value: '235 mm' },
           { label: 'Dimensioni', value: '1750x416x200 mm' },
           { label: 'Peso', value: '21 kg' },
         ],
-        badge: 'Novita',
+        badge: 'Novità',
       },
     ],
   },
@@ -281,7 +281,7 @@ const categories: Category[] = [
       {
         code: 'TMLIGHT',
         name: 'Termolight (con cavalletto)',
-        description: 'Termoventilatore professionale per asciugatura rapida. 1600 m3/h, ricicla aria 22 volte/ora. 2 lampade professionali, centralina umidita.',
+        description: 'Termoventilatore professionale per asciugatura rapida. 1600 m3/h, ricicla aria 22 volte/ora. 2 lampade professionali, centralina umidità.',
         price: 495,
         specs: [
           { label: 'Potenza', value: '2025 W' },
@@ -308,7 +308,7 @@ const categories: Category[] = [
       {
         code: 'BLENDER GLOS',
         name: 'Blender GLOS',
-        description: 'Miscelatore professionale a colonna con tecnologia brevettata Mix Glos System. Rotazione alternata a velocita variabile. Non ingloba aria. Fino a 150 secchi/giorno.',
+        description: 'Miscelatore professionale a colonna con tecnologia brevettata Mix Glos System. Rotazione alternata a velocità variabile. Non ingloba aria. Fino a 150 secchi/giorno.',
         price: 0,
         specs: [
           { label: 'Alimentazione', value: '230V / 50-60Hz' },
@@ -318,7 +318,7 @@ const categories: Category[] = [
           { label: 'Dimensioni', value: '1750x500x1000 mm' },
           { label: 'Peso', value: '120 kg' },
           { label: 'Contenitori', value: 'Plastica / Metallo / Tondi / Ovali' },
-          { label: 'Capacita max', value: '14 L / 25 kg' },
+          { label: 'Capacità max', value: '14 L / 25 kg' },
         ],
         badge: 'Brevettato',
       },
@@ -543,7 +543,7 @@ export default function ListinoPrezziClient({ categoryImages = {} }: ListinoPrez
           <div className="absolute top-0 left-0 w-96 h-96 bg-blue-400 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-400 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
         </div>
-        <div className="container-glos py-16 md:py-24 relative z-10">
+        <div className="container-glos py-12 md:py-16 lg:py-20 relative z-10">
           <motion.div
             initial={fadeInUp.initial}
             animate={fadeInUp.animate}
@@ -553,7 +553,7 @@ export default function ListinoPrezziClient({ categoryImages = {} }: ListinoPrez
             <p className="text-blue-300 uppercase tracking-widest text-sm font-semibold mb-4">
               Catalogo Ufficiale GLOS
             </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               Listino Prezzi
             </h1>
             <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto mb-8">
@@ -801,7 +801,7 @@ export default function ListinoPrezziClient({ categoryImages = {} }: ListinoPrez
                     </h3>
                     <p>
                       In caso di ritardo si applicano interessi di mora (D.Lgs.
-                      231/02). Le merci restano di proprieta del fornitore fino a
+                      231/02). Le merci restano di proprietà del fornitore fino a
                       totale pagamento.
                     </p>
                   </div>
@@ -832,7 +832,7 @@ export default function ListinoPrezziClient({ categoryImages = {} }: ListinoPrez
               Hai bisogno di un preventivo personalizzato?
             </h2>
             <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              Contattaci per offerte su grandi quantita, configurazioni speciali
+              Contattaci per offerte su grandi quantità, configurazioni speciali
               o per richiedere il prezzo di Blender GLOS e Wash Station.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">

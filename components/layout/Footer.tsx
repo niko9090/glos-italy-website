@@ -14,13 +14,13 @@ interface FooterProps {
   navigation: Navigation | null
 }
 
-// Logo size classes
-const logoSizeClasses: Record<string, { height: string; width: number }> = {
-  sm: { height: 'h-8', width: 100 },
-  md: { height: 'h-10', width: 125 },
-  lg: { height: 'h-12', width: 150 },
-  xl: { height: 'h-14', width: 175 },
-  '2xl': { height: 'h-16', width: 200 },
+// Logo size classes - dimensioni aumentate per maggiore visibilità
+const logoSizeClasses: Record<string, { height: string; width: number; dynamicHeight: number }> = {
+  sm: { height: 'h-10', width: 125, dynamicHeight: 40 },
+  md: { height: 'h-12', width: 150, dynamicHeight: 48 },
+  lg: { height: 'h-16', width: 200, dynamicHeight: 64 },
+  xl: { height: 'h-20', width: 250, dynamicHeight: 80 },
+  '2xl': { height: 'h-24', width: 300, dynamicHeight: 96 },
 }
 
 // Footer style classes
@@ -63,7 +63,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
   const address = t(settings?.address)
 
   // Get customization settings with defaults
-  const logoSize = sl(logoSizeClasses, settings?.footerLogoSize, 'lg')
+  const logoSize = sl(logoSizeClasses, settings?.footerLogoSize, 'xl')
   const footerStyle = sl(footerStyleClasses, settings?.footerStyle, 'metal-dark')
   const footerPadding = sl(footerPaddingClasses, settings?.footerPadding, 'lg')
   const footerColumnsGap = sl(footerColumnsGapClasses, settings?.footerColumnsGap, '12')
@@ -90,24 +90,26 @@ export default function Footer({ settings, navigation }: FooterProps) {
       <div className={`container-glos ${footerPadding}`}>
         <div className={`grid ${footerColumns} ${footerColumnsGap}`}>
           {/* Company Info */}
-          <div>
+          <div className="flex flex-col items-center md:items-start">
             {isValidImage(footerLogo) && safeImageUrl(footerLogo, logoSize.width) ? (
-              <Image
-                src={safeImageUrl(footerLogo, logoSize.width)!}
-                alt={companyName}
-                width={logoSize.width}
-                height={60}
-                className={`${logoSize.height} w-auto mb-6 object-contain`}
-                style={{ filter: !isValidImage(settings?.logoWhite) ? 'brightness(0) invert(1)' : 'none' }}
-              />
+              <div className="inline-block p-4 md:p-5 bg-white/5 backdrop-blur-sm rounded-xl mb-10 border border-white/10 shadow-lg shadow-black/20">
+                <Image
+                  src={safeImageUrl(footerLogo, logoSize.width)!}
+                  alt={companyName}
+                  width={logoSize.width}
+                  height={logoSize.dynamicHeight}
+                  className={`${logoSize.height} w-auto object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]`}
+                  style={{ filter: !isValidImage(settings?.logoWhite) ? 'brightness(0) invert(1)' : 'none' }}
+                />
+              </div>
             ) : (
-              <h3 className="text-2xl font-bold mb-6">
+              <h3 className="text-2xl font-bold mb-10">
                 {companyName}
               </h3>
             )}
 
             {slogan && (
-              <p className="text-gray-400 mb-6">{slogan}</p>
+              <p className="text-gray-400 mb-8 text-center md:text-left">{slogan}</p>
             )}
 
             {/* Social Links */}
@@ -118,7 +120,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     href={settings.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
                     aria-label="Seguici su Facebook (si apre in una nuova finestra)"
                     role="listitem"
                   >
@@ -130,7 +132,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     href={settings.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
                     aria-label="Seguici su Instagram (si apre in una nuova finestra)"
                     role="listitem"
                   >
@@ -142,7 +144,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     href={settings.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
                     aria-label="Seguici su LinkedIn (si apre in una nuova finestra)"
                     role="listitem"
                   >
@@ -154,7 +156,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     href={settings.youtube}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
                     aria-label="Seguici su YouTube (si apre in una nuova finestra)"
                     role="listitem"
                   >
@@ -166,7 +168,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     href={settings.twitter}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
                     aria-label="Seguici su Twitter/X (si apre in una nuova finestra)"
                     role="listitem"
                   >
@@ -178,7 +180,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     href={settings.tiktok}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
+                    className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
                     aria-label="Seguici su TikTok (si apre in una nuova finestra)"
                     role="listitem"
                   >

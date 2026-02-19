@@ -131,11 +131,11 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
     },
   }
 
-  // Height classes
+  // Height classes - Ridotti per laptop
   const heightClasses: Record<string, string> = {
-    auto: 'min-h-[60vh]',
-    medium: 'min-h-[70vh]',
-    large: 'min-h-[85vh]',
+    auto: 'min-h-[50vh]',
+    medium: 'min-h-[60vh]',
+    large: 'min-h-[70vh]',
     full: 'min-h-screen',
     custom: '',
   }
@@ -158,12 +158,12 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
     full: 'max-w-none',
   }
 
-  // Title size classes
+  // Title size classes - Ottimizzati per laptop
   const titleSizeClasses: Record<string, string> = {
-    normal: 'text-3xl md:text-4xl lg:text-5xl',
-    large: 'text-4xl md:text-5xl lg:text-6xl',
-    xl: 'text-5xl md:text-6xl lg:text-7xl',
-    xxl: 'text-6xl md:text-7xl lg:text-8xl',
+    normal: 'text-2xl md:text-3xl lg:text-4xl',
+    large: 'text-3xl md:text-4xl lg:text-5xl',
+    xl: 'text-4xl md:text-5xl lg:text-6xl',
+    xxl: 'text-5xl md:text-6xl lg:text-7xl',
   }
 
   // Text color classes

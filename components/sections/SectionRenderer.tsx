@@ -48,8 +48,19 @@ interface SectionRendererProps {
   sectionKey?: string
 }
 
+// Lista delle sezioni da nascondere (non renderizzare)
+// Per riattivare una sezione, rimuoverla da questo array
+const HIDDEN_SECTIONS: string[] = [
+  'statsSection', // Nascosta: 30+ Anni, 500+ Clienti, etc.
+]
+
 export function SectionRenderer({ section, products, documentId, sectionKey }: SectionRendererProps) {
   if (!section || !section._type) {
+    return null
+  }
+
+  // Salta il rendering delle sezioni nascoste
+  if (HIDDEN_SECTIONS.includes(section._type)) {
     return null
   }
 

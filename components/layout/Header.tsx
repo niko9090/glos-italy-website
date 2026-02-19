@@ -131,7 +131,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className="lg:hidden p-2 text-gray-700 focus-ring rounded-lg"
+              className="lg:hidden p-3 text-gray-700 focus-ring rounded-lg"
               aria-label={isMobileMenuOpen ? 'Chiudi menu di navigazione' : 'Apri menu di navigazione'}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-menu"

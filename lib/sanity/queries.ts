@@ -43,7 +43,10 @@ export const siteSettingsQuery = defineQuery(`
     footerPadding,
     footerColumnsGap,
     footerCopyrightText,
-    footerBottomLinks
+    footerBottomLinks,
+    // Download files
+    "listinoPrezziPdfUrl": listinoPrezziPdf.asset->url,
+    "catalogoPdfUrl": catalogoPdf.asset->url
   }
 `)
 
@@ -110,7 +113,12 @@ export const allProductsQuery = defineQuery(`
     category->{
       _id,
       name,
-      slug
+      slug,
+      parentCategory->{
+        _id,
+        name,
+        slug
+      }
     },
     price,
     isNew,
@@ -137,7 +145,12 @@ export const productBySlugQuery = defineQuery(`
     category->{
       _id,
       name,
-      slug
+      slug,
+      parentCategory->{
+        _id,
+        name,
+        slug
+      }
     },
     specifications[] {
       _key,
@@ -168,7 +181,10 @@ export const productBySlugQuery = defineQuery(`
       mainImage,
       shortDescription,
       category->{
-        name
+        name,
+        parentCategory->{
+          name
+        }
       }
     },
     seo
@@ -210,7 +226,56 @@ export const productSlugsQuery = defineQuery(`
 // ============================================
 
 export const allCategoriesQuery = defineQuery(`
-  *[_type == "productCategory" && isActive == true] | order(name asc) {
+  *[_type == "productCategory" && isActive == true] | order(sortOrder asc, name asc) {
+    _id,
+    name,
+    slug,
+    description,
+    image,
+    parentCategory->{
+      _id,
+      name,
+      slug
+    },
+    "productCount": count(*[_type == "product" && references(^._id)])
+  }
+`)
+
+// Categorie principali con sottocategorie annidate
+export const categoriesWithSubcategoriesQuery = defineQuery(`
+  *[_type == "productCategory" && isActive == true && !defined(parentCategory)] | order(sortOrder asc, name asc) {
+    _id,
+    name,
+    slug,
+    description,
+    image,
+    "productCount": count(*[_type == "product" && references(^._id)]),
+    "subcategories": *[_type == "productCategory" && isActive == true && parentCategory._ref == ^._id] | order(sortOrder asc, name asc) {
+      _id,
+      name,
+      slug,
+      description,
+      image,
+      "productCount": count(*[_type == "product" && references(^._id)])
+    }
+  }
+`)
+
+// Solo categorie principali (senza parentCategory)
+export const mainCategoriesQuery = defineQuery(`
+  *[_type == "productCategory" && isActive == true && !defined(parentCategory)] | order(sortOrder asc, name asc) {
+    _id,
+    name,
+    slug,
+    description,
+    image,
+    "productCount": count(*[_type == "product" && references(^._id)])
+  }
+`)
+
+// Sottocategorie di una specifica categoria
+export const subcategoriesByCategoryQuery = defineQuery(`
+  *[_type == "productCategory" && isActive == true && parentCategory._ref == $categoryId] | order(sortOrder asc, name asc) {
     _id,
     name,
     slug,
@@ -227,6 +292,19 @@ export const categoryBySlugQuery = defineQuery(`
     slug,
     description,
     image,
+    parentCategory->{
+      _id,
+      name,
+      slug
+    },
+    "subcategories": *[_type == "productCategory" && isActive == true && parentCategory._ref == ^._id] | order(sortOrder asc, name asc) {
+      _id,
+      name,
+      slug,
+      description,
+      image,
+      "productCount": count(*[_type == "product" && references(^._id)])
+    },
     seo
   }
 `)

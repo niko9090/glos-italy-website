@@ -99,8 +99,13 @@ const CATEGORY_INFO: Record<string, { description: string; icon: React.ElementTy
   }
 }
 
-// Prodotti di punta (slug o nome parziale)
-const FEATURED_PRODUCTS = ['blender-glos-bg2', 'policut-twin', 'fiber-cut', 'bg2']
+// Prodotti di punta (ordinati per priorità - Blender PRIMO)
+const FEATURED_PRODUCTS_PRIORITY = [
+  'blender', // Blender GLOS BG2 - prodotto di punta principale
+  'twin-120', // Policut Twin
+  'fiber-cut', // Fiber Cut
+  'termolight' // Termolight
+]
 
 export default function ProductsPageClient({ products, categories, listinoPrezziPdfUrl }: ProductsPageClientProps) {
   const listinoPdfUrl = listinoPrezziPdfUrl || '/listino-glos.pdf'
@@ -130,13 +135,29 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
       })
   }, [products, categories])
 
-  // Prodotti in evidenza
+  // Prodotti in evidenza (ordinati per priorità - Blender primo)
   const featuredProducts = useMemo(() => {
-    return products.filter(p => {
-      const slug = p.slug?.current?.toLowerCase() || ''
-      const name = getTextValue(p.name).toLowerCase()
-      return p.isFeatured || FEATURED_PRODUCTS.some(fp => slug.includes(fp) || name.includes(fp))
-    }).slice(0, 4)
+    const featured: Product[] = []
+
+    // Prima aggiungi i prodotti nell'ordine di priorità definito
+    FEATURED_PRODUCTS_PRIORITY.forEach(keyword => {
+      const match = products.find(p => {
+        const slug = p.slug?.current?.toLowerCase() || ''
+        const name = getTextValue(p.name).toLowerCase()
+        return (slug.includes(keyword) || name.includes(keyword)) &&
+               !featured.some(f => f._id === p._id)
+      })
+      if (match) featured.push(match)
+    })
+
+    // Aggiungi altri prodotti con isFeatured se non già inclusi
+    products.forEach(p => {
+      if (p.isFeatured && !featured.some(f => f._id === p._id) && featured.length < 4) {
+        featured.push(p)
+      }
+    })
+
+    return featured.slice(0, 4)
   }, [products])
 
   // Helper per ottenere info categoria
@@ -145,7 +166,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
     for (const [key, info] of Object.entries(CATEGORY_INFO)) {
       if (nameLower.includes(key)) return info
     }
-    return { description: 'Macchinari professionali di alta qualita Made in Italy.', icon: Package }
+    return { description: 'Macchinari professionali di alta qualità Made in Italy.', icon: Package }
   }
 
   return (
@@ -290,7 +311,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
               variants={heroTextVariants}
               initial="hidden"
               animate="visible"
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight drop-shadow-2xl"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-2xl"
             >
               I Nostri{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-blue-100 to-blue-300">
@@ -303,7 +324,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
               variants={heroTextVariants}
               initial="hidden"
               animate="visible"
-              className="text-xl md:text-2xl text-blue-100/90 max-w-3xl mx-auto leading-relaxed drop-shadow-lg"
+              className="text-lg md:text-xl lg:text-2xl text-blue-100/90 max-w-3xl mx-auto leading-relaxed drop-shadow-lg"
             >
               Macchinari professionali per colorifici e industria delle vernici.
               <br className="hidden md:block" />
@@ -318,7 +339,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
 
       {/* ========== PRODOTTI IN EVIDENZA ========== */}
       {featuredProducts.length > 0 && (
-        <section className="py-20 md:py-28 bg-gradient-to-b from-metal-50 to-white relative overflow-hidden">
+        <section className="py-16 md:py-20 lg:py-24 bg-gradient-to-b from-metal-50 to-white relative overflow-hidden">
           {/* Decorazioni sfondo */}
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
@@ -351,7 +372,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
         return (
           <section
             key={group.category._id}
-            className={`py-20 md:py-28 relative overflow-hidden ${
+            className={`py-16 md:py-20 lg:py-24 relative overflow-hidden ${
               isEven
                 ? 'bg-white'
                 : 'bg-gradient-to-br from-metal-100 via-metal-50 to-white'
@@ -409,7 +430,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-50px" }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6"
               >
                 {group.products.map((product) => (
                   <ProductCard key={product._id} product={product} />
@@ -421,7 +442,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
       })}
 
       {/* ========== CTA FINALE ========== */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-16 md:py-20 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-metal-800 via-metal-900 to-metal-800" />
 
@@ -441,12 +462,12 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
             viewport={{ once: true }}
             className="max-w-3xl mx-auto text-center"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
               Hai bisogno di informazioni?
             </h2>
             <p className="text-xl text-metal-300 mb-10 leading-relaxed">
               Contattaci per un preventivo personalizzato o per scoprire quale soluzione
-              GL.OS e la piu adatta alle tue esigenze.
+              GL.OS è la più adatta alle tue esigenze.
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -542,7 +563,7 @@ function FeaturedProductCard({ product, index }: { product: Product; index: numb
             </div>
 
             <div className="flex items-center text-primary font-semibold group/cta">
-              <span className="group-hover/cta:mr-2 transition-all duration-300">Scopri di piu</span>
+              <span className="group-hover/cta:mr-2 transition-all duration-300">Scopri di più</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
             </div>
           </div>
@@ -613,7 +634,7 @@ function ProductCard({ product }: { product: Product }) {
           {/* CTA */}
           <div className="mt-auto pt-4 border-t border-metal-100">
             <div className="flex items-center justify-between text-primary font-medium text-sm">
-              <span className="group-hover:underline underline-offset-4">Scopri di piu</span>
+              <span className="group-hover:underline underline-offset-4">Scopri di più</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
             </div>
           </div>

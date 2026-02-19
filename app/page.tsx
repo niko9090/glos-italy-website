@@ -48,7 +48,7 @@ export default async function HomePage() {
 
   // Prepare company info for structured data
   const companyName = getTextValue(settings?.companyName) || SITE_NAME
-  const slogan = getTextValue(settings?.slogan) || 'Prodotti di qualita Made in Italy'
+  const slogan = getTextValue(settings?.slogan) || 'Prodotti di qualità Made in Italy'
 
   if (!page) {
     return (
@@ -60,7 +60,7 @@ export default async function HomePage() {
         <div className="container-glos py-20 text-center">
           <h1 className="text-4xl font-bold mb-4">Benvenuti in GLOS Italy</h1>
           <p className="text-gray-600">
-            Il contenuto della homepage verra caricato dal CMS Sanity.
+            Il contenuto della homepage verrà caricato dal CMS Sanity.
           </p>
         </div>
       </>

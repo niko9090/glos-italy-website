@@ -12,7 +12,6 @@ import Footer from '@/components/layout/Footer'
 import DraftBanner from '@/components/layout/DraftBanner'
 import PageTransition from '@/components/layout/PageTransition'
 import SkipLink from '@/components/accessibility/SkipLink'
-import { TawkToChat } from '@/components/ui/TawkToChat'
 import { LanguageProvider } from '@/lib/context/LanguageContext'
 import { generateSiteMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { getTextValue } from '@/lib/utils/textHelpers'
@@ -100,11 +99,6 @@ export default async function RootLayout({
           </main>
           <Footer settings={settings} navigation={navigation} />
         </LanguageProvider>
-        {/* Live Chat - Tawk.to */}
-        <TawkToChat
-          propertyId={settings?.tawkPropertyId}
-          widgetId={settings?.tawkWidgetId || 'default'}
-        />
         {/* SanityLive - handles live content updates in real-time */}
         <SanityLive />
         {/* Visual Editing - active only in draft mode */}

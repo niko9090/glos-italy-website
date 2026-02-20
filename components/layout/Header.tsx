@@ -20,9 +20,9 @@ interface HeaderProps {
 // Menu di fallback se Sanity non ha dati
 const defaultNavItems = [
   { _key: 'home', label: 'Home', href: '/' },
+  { _key: 'chi-siamo', label: 'Chi Siamo', href: '/chi-siamo' },
   { _key: 'prodotti', label: 'Prodotti', href: '/prodotti' },
   { _key: 'listino', label: 'Listino Prezzi', href: '/listino-prezzi' },
-  { _key: 'chi-siamo', label: 'Chi Siamo', href: '/chi-siamo' },
   { _key: 'rivenditori', label: 'Rivenditori', href: '/rivenditori' },
   { _key: 'contatti', label: 'Contatti', href: '/contatti' },
 ]

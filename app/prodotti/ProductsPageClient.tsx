@@ -153,16 +153,17 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
     })
   }, [products])
 
-  // Raggruppa prodotti per categoria (escludendo Blender dalla lista generale)
+  // Raggruppa prodotti per categoria (escludendo Blender e Accessori)
   const productsByCategory = useMemo(() => {
     const grouped: Record<string, { category: Category; products: Product[] }> = {}
     categories.forEach(cat => {
       const catName = getTextValue(cat.name).toLowerCase()
-      if (!catName.includes('blender')) {
+      // Escludi Blender (ha sezione dedicata) e Accessori (solo nel listino)
+      if (!catName.includes('blender') && !catName.includes('accessori')) {
         grouped[cat._id] = { category: cat, products: products.filter(p => p.category?._id === cat._id) }
       }
     })
-    const order = ['policut', 'fiber', 'termo', 'wash', 'taglierine', 'accessori']
+    const order = ['policut', 'fiber', 'termo', 'wash', 'taglierine']
     return Object.values(grouped)
       .filter(g => g.products.length > 0)
       .sort((a, b) => {
@@ -186,14 +187,21 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
 
   return (
     <div className="min-h-screen bg-white">
-      {/* ===== HERO - TITOLO PAGINA ===== */}
+      {/* ===== HERO - TITOLO PAGINA CON IMMAGINE ===== */}
       <section className="relative bg-gradient-to-br from-[#0a1628] via-[#0f2744] to-[#1a365d] overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
+        {/* Immagine di sfondo */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/industrial-precision.jpg"
+            alt="Macchinari di precisione"
+            fill
+            className="object-cover opacity-20"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/80 via-[#0f2744]/70 to-[#1a365d]/90" />
         </div>
 
-        <div className="container-glos relative z-10 py-16 lg:py-20">
+        <div className="container-glos relative z-10 py-20 lg:py-28">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -206,10 +214,33 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               I Nostri Prodotti
             </h1>
-            <p className="text-xl text-blue-100/90 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-xl text-blue-100/90 leading-relaxed max-w-2xl mx-auto mb-10">
               Macchinari di precisione progettati e costruiti in Italia.
               Qualità, innovazione e affidabilità dal 2005.
             </p>
+
+            {/* Immagine hero sotto il titolo */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="relative rounded-2xl overflow-hidden shadow-2xl max-w-5xl mx-auto"
+            >
+              <div className="aspect-[21/9] relative">
+                <Image
+                  src="/images/industrial-precision.jpg"
+                  alt="Precisione industriale GLOS"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/60 via-transparent to-transparent" />
+              </div>
+              {/* Badge Made in Italy */}
+              <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                <span className="text-sm font-bold text-primary">Made in Italy dal 2005</span>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -230,11 +261,6 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm mb-6">
-                <Sparkles className="w-5 h-5 text-yellow-300" />
-                <span className="text-sm font-semibold text-blue-100">Prodotto di Punta</span>
-              </div>
-
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">
                 Blender GLOS
               </h2>

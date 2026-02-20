@@ -595,10 +595,10 @@ export default function ListinoPrezziClient() {
         {/* Immagine di sfondo */}
         <div className="absolute inset-0">
           <Image
-            src="/images/paint-mixing-bg.jpg"
-            alt="Miscelazione vernici professionali"
+            src="/images/engineering-innovation.jpg"
+            alt="Produzione industriale"
             fill
-            className="object-cover opacity-40"
+            className="object-cover opacity-30"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/80 via-[#0f2744]/70 to-[#1a365d]/90" />

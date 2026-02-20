@@ -598,7 +598,7 @@ export default function ListinoPrezziClient() {
             src="/images/paint-mixing-bg.jpg"
             alt="Miscelazione vernici professionali"
             fill
-            className="object-cover opacity-20"
+            className="object-cover opacity-40"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/80 via-[#0f2744]/70 to-[#1a365d]/90" />

@@ -445,6 +445,40 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
         </motion.div>
       )}
 
+      {/* Effetto fusione due immagini per homepage */}
+      {backgroundType?.includes('image') && !backgroundUrl && (
+        <div className="absolute inset-0 z-0">
+          {/* Immagine sinistra - vernice blu scuro con texture */}
+          <div className="absolute inset-0 w-1/2 left-0">
+            <Image
+              src="/images/hero-blue-texture-left.jpg"
+              alt=""
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Gradiente fusione verso destra */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a1628]" />
+          </div>
+          {/* Immagine destra - vernice blu fluida */}
+          <div className="absolute inset-0 w-1/2 right-0 left-auto">
+            <Image
+              src="/images/hero-blue-texture-right.jpg"
+              alt=""
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Gradiente fusione verso sinistra */}
+            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[#0a1628]" />
+          </div>
+          {/* Overlay centrale per fusione armoniosa */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0a1628]/60 to-transparent" />
+          {/* Overlay generale per leggibilità testo */}
+          <div className={`absolute inset-0 ${getOverlayClass()}`} />
+        </div>
+      )}
+
       {/* Video background */}
       {backgroundType?.includes('video') && (
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -511,20 +545,7 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
         />
       )}
 
-      {/* Default gradient if image selected but no image uploaded */}
-      {backgroundType?.includes('image') && !backgroundUrl && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 1,
-            background: 'linear-gradient(to bottom right, #0047AB, #003380, #111827)'
-          }}
-        />
-      )}
+      {/* Il fallback per image senza URL ora usa le due immagini fuse sopra */}
 
       {/* Floating decorative elements */}
       {data.floatingElements?.map((element) => (

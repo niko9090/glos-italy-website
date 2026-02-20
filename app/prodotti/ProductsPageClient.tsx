@@ -1,4 +1,4 @@
-// Products Page Client Component - Design con Bande Alternate
+// Products Page Client Component - Design con Bande Alternate e Specifiche Tecniche
 'use client'
 
 import { useMemo } from 'react'
@@ -10,7 +10,7 @@ import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 import type { Product, Category } from '@/lib/sanity/fetch'
 import ProductBadges from '@/components/products/ProductBadges'
-import { ArrowRight, Zap, Shield, Wrench, Package, ChevronRight, Sparkles, Scissors, Wind, Droplets } from 'lucide-react'
+import { ArrowRight, Zap, Shield, Wrench, Package, ChevronRight, Sparkles, Scissors, Wind, Droplets, Check, Gauge, Timer, Ruler, Weight, Thermometer, Volume2 } from 'lucide-react'
 
 interface ProductsPageClientProps {
   products: Product[]
@@ -39,54 +39,105 @@ const slideInRight = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: 'easeOut' } }
 }
 
-// Info categorie con descrizioni estese
+// Info categorie con descrizioni estese e specifiche tecniche
 const CATEGORY_INFO: Record<string, {
   description: string
   longDescription: string
   icon: React.ElementType
   features: string[]
+  specs: { label: string; value: string; icon: React.ElementType }[]
+  benefits: string[]
 }> = {
   'blender': {
     description: 'Miscelatori professionali per vernici',
-    longDescription: 'Il Blender GLOS BG2 rappresenta l\'eccellenza italiana nella miscelazione delle vernici. Con il sistema brevettato Mix GLOS System, garantisce una miscelazione perfetta senza inglobare aria, rivoluzionando il settore.',
+    longDescription: 'Il Blender GLOS BG2 rappresenta l\'eccellenza italiana nella miscelazione delle vernici. Con il sistema brevettato Mix GLOS System a rotazione alternata, garantisce una miscelazione perfetta senza inglobare aria, rivoluzionando il settore delle vernici e dei rivestimenti.',
     icon: Sparkles,
-    features: ['Sistema brevettato', 'Made in Italy', 'Zero aria inglobata', '150+ secchi/giorno']
+    features: ['Sistema brevettato Mix GLOS', 'Rotazione alternata a velocità variabile', 'Zero aria inglobata', 'Costruzione 100% italiana'],
+    specs: [
+      { label: 'Capacità', value: '150+ secchi/giorno', icon: Gauge },
+      { label: 'Sistema', value: 'Mix GLOS System', icon: Sparkles },
+      { label: 'Rotazione', value: 'Alternata brevettata', icon: Timer },
+      { label: 'Risultato', value: 'Zero bolle d\'aria', icon: Check }
+    ],
+    benefits: ['Miscelazione omogenea garantita', 'Risparmio di tempo e materiale', 'Manutenzione minima', 'Assistenza tecnica dedicata']
   },
   'policut': {
     description: 'Taglierine professionali a filo caldo',
-    longDescription: 'Le taglierine Policut sono progettate per il taglio preciso di pannelli isolanti in polistirene e poliuretano. Tecnologia a filo caldo per tagli netti e senza residui, ideali per cantieri e laboratori.',
+    longDescription: 'Le taglierine Policut rappresentano lo standard industriale per il taglio di pannelli isolanti in polistirene (EPS, XPS) e poliuretano. La tecnologia a filo caldo garantisce tagli netti, precisi e senza residui, ideali per cantieri edili, laboratori e industrie.',
     icon: Zap,
-    features: ['Filo caldo di precisione', 'Taglio netto', 'Per pannelli isolanti', 'Uso professionale']
+    features: ['Tecnologia filo caldo nichel-cromo', 'Taglio senza polvere né residui', 'Guide di precisione integrate', 'Struttura in alluminio anodizzato'],
+    specs: [
+      { label: 'Larghezza taglio', value: 'Fino a 1200mm', icon: Ruler },
+      { label: 'Spessore max', value: 'Fino a 500mm', icon: Ruler },
+      { label: 'Temperatura filo', value: 'Regolabile', icon: Thermometer },
+      { label: 'Alimentazione', value: '230V / 50Hz', icon: Zap }
+    ],
+    benefits: ['Taglio pulito senza sbavature', 'Alta velocità di lavorazione', 'Precisione millimetrica', 'Facile da trasportare']
   },
   'fiber': {
     description: 'Taglio specializzato per fibre minerali',
-    longDescription: 'Soluzioni dedicate al taglio di lana di roccia e fibre minerali. Macchine robuste e affidabili per lavorazioni industriali con la massima sicurezza operativa.',
+    longDescription: 'Macchine specializzate per il taglio professionale di lana di roccia, lana di vetro e fibre minerali. Progettate per garantire massima sicurezza operativa e precisione anche sui materiali più difficili da lavorare.',
     icon: Shield,
-    features: ['Per lana di roccia', 'Alta sicurezza', 'Uso industriale', 'Robustezza garantita']
+    features: ['Lame speciali per fibre minerali', 'Sistema di aspirazione integrato', 'Protezioni di sicurezza certificate', 'Piano di lavoro anti-vibrazione'],
+    specs: [
+      { label: 'Materiali', value: 'Lana roccia/vetro', icon: Shield },
+      { label: 'Sicurezza', value: 'Certificata CE', icon: Check },
+      { label: 'Aspirazione', value: 'Integrata', icon: Wind },
+      { label: 'Precisione', value: '±1mm', icon: Ruler }
+    ],
+    benefits: ['Riduzione delle polveri', 'Taglio senza sfilacciature', 'Ambiente di lavoro più sicuro', 'Durata lame prolungata']
   },
   'termo': {
     description: 'Termoventilatori professionali',
-    longDescription: 'Termoventilatori ad alta efficienza per asciugatura rapida in cantiere. Potenti, silenziosi e progettati per un uso intensivo in ambienti professionali.',
+    longDescription: 'Termoventilatori industriali ad alta efficienza per asciugatura rapida in cantiere, riscaldamento di ambienti di lavoro e accelerazione dei processi di essiccazione. Potenti, affidabili e progettati per un uso intensivo.',
     icon: Wind,
-    features: ['Asciugatura rapida', 'Alta efficienza', 'Silenziosità', 'Uso intensivo']
+    features: ['Motori brushless alta efficienza', 'Termostato regolabile', 'Protezione surriscaldamento', 'Struttura in acciaio verniciato'],
+    specs: [
+      { label: 'Potenza', value: 'Fino a 15kW', icon: Zap },
+      { label: 'Portata aria', value: 'Fino a 1500 m³/h', icon: Wind },
+      { label: 'Rumorosità', value: '<65 dB', icon: Volume2 },
+      { label: 'Peso', value: 'Da 8 a 25 kg', icon: Weight }
+    ],
+    benefits: ['Asciugatura rapida', 'Consumi ridotti', 'Funzionamento silenzioso', 'Trasporto agevole']
   },
   'wash': {
     description: 'Stazioni di lavaggio eco-compatibili',
-    longDescription: 'Wash Station GLOS: la soluzione ecologica per il lavaggio di rulli, pennelli e attrezzature. Sistema a circuito chiuso che riduce gli sprechi e rispetta l\'ambiente.',
+    longDescription: 'Wash Station GLOS: la soluzione ecologica e professionale per il lavaggio di rulli, pennelli, pistole e attrezzature per verniciatura. Sistema a circuito chiuso con filtrazione che riduce drasticamente i consumi d\'acqua e l\'impatto ambientale.',
     icon: Droplets,
-    features: ['Eco-compatibile', 'Circuito chiuso', 'Zero sprechi', 'Rispetto ambiente']
+    features: ['Sistema a circuito chiuso', 'Filtrazione multistadio', 'Vasca in acciaio inox', 'Pompa di ricircolo silenziosa'],
+    specs: [
+      { label: 'Capacità vasca', value: '30-50 litri', icon: Droplets },
+      { label: 'Risparmio acqua', value: 'Fino al 90%', icon: Check },
+      { label: 'Filtrazione', value: 'Multistadio', icon: Shield },
+      { label: 'Materiale', value: 'Inox AISI 304', icon: Shield }
+    ],
+    benefits: ['Rispetto normative ambientali', 'Risparmio idrico garantito', 'Facilità di smaltimento', 'Lunga durata nel tempo']
   },
   'taglierine': {
     description: 'Taglierine manuali di precisione',
-    longDescription: 'Taglierine manuali per il taglio di precisione su misura. Strumenti essenziali per il professionista che richiede flessibilità e controllo totale.',
+    longDescription: 'Taglierine manuali professionali per il taglio di precisione di pannelli isolanti, polistirene e materiali espansi. Strumenti essenziali per chi richiede flessibilità, portabilità e controllo totale sul taglio.',
     icon: Scissors,
-    features: ['Taglio su misura', 'Controllo manuale', 'Flessibilità', 'Precisione']
+    features: ['Lama regolabile in profondità', 'Impugnatura ergonomica', 'Guide angolari incluse', 'Custodia di trasporto'],
+    specs: [
+      { label: 'Profondità taglio', value: 'Fino a 200mm', icon: Ruler },
+      { label: 'Angoli', value: '0° - 45° - 90°', icon: Ruler },
+      { label: 'Peso', value: '<2 kg', icon: Weight },
+      { label: 'Lama', value: 'Intercambiabile', icon: Scissors }
+    ],
+    benefits: ['Massima portabilità', 'Precisione manuale', 'Nessun costo energetico', 'Ideale per piccoli lavori']
   },
   'accessori': {
     description: 'Accessori e ricambi originali',
-    longDescription: 'Gamma completa di accessori e ricambi originali GLOS per mantenere le vostre macchine sempre efficienti. Qualità garantita e compatibilità perfetta.',
+    longDescription: 'Gamma completa di accessori, ricambi originali e consumabili GLOS per garantire massima efficienza e durata dei vostri macchinari. Solo componenti originali per prestazioni sempre al top.',
     icon: Package,
-    features: ['Ricambi originali', 'Qualità garantita', 'Compatibilità', 'Lunga durata']
+    features: ['Ricambi 100% originali', 'Compatibilità garantita', 'Spedizione rapida', 'Assistenza tecnica'],
+    specs: [
+      { label: 'Fili ricambio', value: 'Tutti i modelli', icon: Zap },
+      { label: 'Lame', value: 'Varie misure', icon: Scissors },
+      { label: 'Filtri', value: 'Per Wash Station', icon: Shield },
+      { label: 'Garanzia', value: '12 mesi', icon: Check }
+    ],
+    benefits: ['Prestazioni originali', 'Durata garantita', 'Installazione facile', 'Supporto tecnico']
   }
 }
 
@@ -102,15 +153,16 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
     })
   }, [products])
 
-  // Raggruppa prodotti per categoria
+  // Raggruppa prodotti per categoria (escludendo Blender dalla lista generale)
   const productsByCategory = useMemo(() => {
     const grouped: Record<string, { category: Category; products: Product[] }> = {}
     categories.forEach(cat => {
       const catName = getTextValue(cat.name).toLowerCase()
-      // Include tutte le categorie
-      grouped[cat._id] = { category: cat, products: products.filter(p => p.category?._id === cat._id) }
+      if (!catName.includes('blender')) {
+        grouped[cat._id] = { category: cat, products: products.filter(p => p.category?._id === cat._id) }
+      }
     })
-    const order = ['blender', 'policut', 'fiber', 'termo', 'wash', 'taglierine', 'accessori']
+    const order = ['policut', 'fiber', 'termo', 'wash', 'taglierine', 'accessori']
     return Object.values(grouped)
       .filter(g => g.products.length > 0)
       .sort((a, b) => {
@@ -127,25 +179,21 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
     for (const [key, info] of Object.entries(CATEGORY_INFO)) {
       if (lower.includes(key)) return info
     }
-    return {
-      description: 'Macchinari professionali Made in Italy.',
-      longDescription: 'Prodotti di qualità progettati e costruiti in Italia per soddisfare le esigenze dei professionisti più esigenti.',
-      icon: Package,
-      features: ['Made in Italy', 'Qualità professionale', 'Assistenza dedicata', 'Garanzia']
-    }
+    return CATEGORY_INFO['accessori']
   }
+
+  const blenderInfo = CATEGORY_INFO['blender']
 
   return (
     <div className="min-h-screen bg-white">
       {/* ===== HERO - TITOLO PAGINA ===== */}
       <section className="relative bg-gradient-to-br from-[#0a1628] via-[#0f2744] to-[#1a365d] overflow-hidden">
-        {/* Pattern decorativo */}
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
           <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
         </div>
 
-        <div className="container-glos relative z-10 py-20 lg:py-28">
+        <div className="container-glos relative z-10 py-16 lg:py-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -164,21 +212,164 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
             </p>
           </motion.div>
         </div>
+      </section>
 
-        {/* Onda decorativa bottom */}
+      {/* ===== BLENDER GLOS - SEZIONE SPECIALE ===== */}
+      <section className="relative bg-gradient-to-br from-[#0047AB] via-[#0055CC] to-[#0066EE] text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-300 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4" />
+        </div>
+
+        <div className="container-glos relative z-10 py-16 lg:py-24">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Contenuto */}
+            <motion.div
+              variants={slideInLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm mb-6">
+                <Sparkles className="w-5 h-5 text-yellow-300" />
+                <span className="text-sm font-semibold text-blue-100">Prodotto di Punta</span>
+              </div>
+
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">
+                Blender GLOS
+              </h2>
+              <p className="text-2xl text-blue-200 font-medium mb-6">BG2</p>
+
+              <p className="text-lg text-blue-100 leading-relaxed mb-8">
+                {blenderInfo.longDescription}
+              </p>
+
+              {/* Specifiche Tecniche in Cards */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {blenderInfo.specs.map((spec, i) => {
+                  const SpecIcon = spec.icon
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      viewport={{ once: true }}
+                      className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <SpecIcon className="w-4 h-4 text-blue-300" />
+                        <span className="text-blue-300 text-sm font-medium">{spec.label}</span>
+                      </div>
+                      <p className="text-white font-bold">{spec.value}</p>
+                    </motion.div>
+                  )
+                })}
+              </div>
+
+              {/* Vantaggi */}
+              <div className="mb-8">
+                <h4 className="text-sm font-semibold text-blue-200 uppercase tracking-wide mb-4">Vantaggi Principali</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {blenderInfo.benefits.map((benefit, i) => (
+                    <div key={i} className="flex items-center gap-2 text-blue-100">
+                      <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
+                      <span className="text-sm">{benefit}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* CTA */}
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href={blenderProduct ? `/prodotti/${blenderProduct.slug?.current}` : '/contatti'}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary font-bold rounded-xl hover:bg-blue-50 transition-all shadow-lg"
+                >
+                  Scopri tutti i dettagli
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="/contatti"
+                  className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all"
+                >
+                  Richiedi preventivo
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Immagine Blender */}
+            <motion.div
+              variants={slideInRight}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <div className="relative">
+                <div className="relative bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
+                  {blenderProduct && isValidImage(blenderProduct.mainImage) ? (
+                    <Image
+                      src={safeImageUrl(blenderProduct.mainImage, 600, 600)!}
+                      alt="Blender GLOS BG2"
+                      width={600}
+                      height={600}
+                      className="w-full h-auto object-contain"
+                      priority
+                    />
+                  ) : (
+                    <Image
+                      src="/images/glos-blender.jpg"
+                      alt="Blender GLOS BG2"
+                      width={600}
+                      height={600}
+                      className="w-full h-auto object-contain"
+                      priority
+                    />
+                  )}
+                </div>
+
+                {/* Card Mix GLOS System */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.4 }}
+                  viewport={{ once: true }}
+                  className="absolute -bottom-6 -right-6 lg:bottom-8 lg:-right-8 w-48 lg:w-56"
+                >
+                  <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                    <div className="relative h-28 lg:h-32">
+                      <Image
+                        src="/images/mix-glos-system.jpg"
+                        alt="Mix GLOS System"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-3 bg-gradient-to-r from-primary to-blue-600">
+                      <p className="text-white text-xs font-bold">MIX GLOS SYSTEM</p>
+                      <p className="text-blue-100 text-[10px]">Tecnologia brevettata</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Onda separatore */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+          <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <path d="M0 60L48 52.5C96 45 192 30 288 22.5C384 15 480 15 576 20C672 25 768 35 864 40C960 45 1056 45 1152 42.5C1248 40 1344 35 1392 32.5L1440 30V60H1392C1344 60 1248 60 1152 60C1056 60 960 60 864 60C768 60 672 60 576 60C480 60 384 60 288 60C192 60 96 60 48 60H0Z" fill="white"/>
           </svg>
         </div>
       </section>
 
-      {/* ===== CATEGORIE PRODOTTI - BANDE ALTERNATE ===== */}
+      {/* ===== ALTRE CATEGORIE PRODOTTI - BANDE ALTERNATE ===== */}
       {productsByCategory.map((group, groupIndex) => {
         const categoryName = getTextValue(group.category.name)
         const categoryInfo = getCategoryInfo(categoryName)
         const CategoryIcon = categoryInfo.icon
-        const isBlue = groupIndex % 2 === 0
+        const isBlue = groupIndex % 2 === 1 // Alterna partendo da bianco dopo Blender
 
         return (
           <section
@@ -189,7 +380,6 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                 : 'bg-white text-gray-900'
             }`}
           >
-            {/* Pattern sfondo per sezioni blu */}
             {isBlue && (
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
@@ -198,8 +388,8 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
             )}
 
             <div className="container-glos relative z-10 py-16 lg:py-24">
-              {/* Header Categoria */}
-              <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center mb-12">
+              {/* Header Categoria con layout a 2 colonne */}
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-12">
                 {/* Info Categoria */}
                 <motion.div
                   variants={groupIndex % 2 === 0 ? slideInLeft : slideInRight}
@@ -229,23 +419,52 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                     {categoryInfo.longDescription}
                   </p>
 
-                  {/* Features */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {categoryInfo.features.map((feature, i) => (
-                      <div
-                        key={i}
-                        className={`flex items-center gap-2 text-sm ${
-                          isBlue ? 'text-blue-100' : 'text-gray-600'
-                        }`}
-                      >
-                        <ChevronRight className={`w-4 h-4 ${isBlue ? 'text-blue-300' : 'text-primary'}`} />
-                        {feature}
-                      </div>
-                    ))}
+                  {/* Caratteristiche Principali */}
+                  <div className="mb-6">
+                    <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
+                      isBlue ? 'text-blue-200' : 'text-gray-500'
+                    }`}>
+                      Caratteristiche Principali
+                    </h4>
+                    <div className="space-y-2">
+                      {categoryInfo.features.map((feature, i) => (
+                        <div
+                          key={i}
+                          className={`flex items-center gap-3 ${
+                            isBlue ? 'text-blue-100' : 'text-gray-700'
+                          }`}
+                        >
+                          <Check className={`w-5 h-5 flex-shrink-0 ${isBlue ? 'text-green-400' : 'text-green-600'}`} />
+                          <span>{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Vantaggi */}
+                  <div>
+                    <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
+                      isBlue ? 'text-blue-200' : 'text-gray-500'
+                    }`}>
+                      Vantaggi
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {categoryInfo.benefits.map((benefit, i) => (
+                        <div
+                          key={i}
+                          className={`flex items-center gap-2 text-sm ${
+                            isBlue ? 'text-blue-100' : 'text-gray-600'
+                          }`}
+                        >
+                          <ChevronRight className={`w-4 h-4 ${isBlue ? 'text-blue-300' : 'text-primary'}`} />
+                          {benefit}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
 
-                {/* Immagine rappresentativa (primo prodotto della categoria) */}
+                {/* Specifiche Tecniche + Immagine */}
                 <motion.div
                   variants={groupIndex % 2 === 0 ? slideInRight : slideInLeft}
                   initial="hidden"
@@ -253,19 +472,47 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                   viewport={{ once: true }}
                   className={groupIndex % 2 === 1 ? 'lg:order-1' : ''}
                 >
+                  {/* Immagine categoria */}
                   {group.products[0] && isValidImage(group.products[0].mainImage) && (
-                    <div className={`relative rounded-2xl overflow-hidden ${
-                      isBlue ? 'bg-white/10 backdrop-blur-sm p-8' : 'bg-gray-50 p-8'
+                    <div className={`relative rounded-2xl overflow-hidden mb-6 ${
+                      isBlue ? 'bg-white/10 backdrop-blur-sm p-6' : 'bg-gray-50 p-6'
                     }`}>
                       <Image
                         src={safeImageUrl(group.products[0].mainImage, 500, 400)!}
                         alt={categoryName}
                         width={500}
                         height={400}
-                        className="w-full h-auto object-contain mx-auto max-h-[300px]"
+                        className="w-full h-auto object-contain mx-auto max-h-[280px]"
                       />
                     </div>
                   )}
+
+                  {/* Specifiche Tecniche */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {categoryInfo.specs.map((spec, i) => {
+                      const SpecIcon = spec.icon
+                      return (
+                        <div
+                          key={i}
+                          className={`rounded-xl p-4 ${
+                            isBlue
+                              ? 'bg-white/10 backdrop-blur-sm border border-white/20'
+                              : 'bg-gray-50 border border-gray-100'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 mb-1">
+                            <SpecIcon className={`w-4 h-4 ${isBlue ? 'text-blue-300' : 'text-primary'}`} />
+                            <span className={`text-xs font-medium ${isBlue ? 'text-blue-200' : 'text-gray-500'}`}>
+                              {spec.label}
+                            </span>
+                          </div>
+                          <p className={`font-bold ${isBlue ? 'text-white' : 'text-gray-900'}`}>
+                            {spec.value}
+                          </p>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </motion.div>
               </div>
 
@@ -283,7 +530,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
               </motion.div>
             </div>
 
-            {/* Separatore ondulato per sezioni blu */}
+            {/* Separatore ondulato */}
             {isBlue && groupIndex < productsByCategory.length - 1 && (
               <div className="absolute bottom-0 left-0 right-0">
                 <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">

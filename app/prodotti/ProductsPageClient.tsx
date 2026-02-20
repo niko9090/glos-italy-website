@@ -214,33 +214,10 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               I Nostri Prodotti
             </h1>
-            <p className="text-xl text-blue-100/90 leading-relaxed max-w-2xl mx-auto mb-10">
+            <p className="text-xl text-blue-100/90 leading-relaxed max-w-2xl mx-auto">
               Macchinari di precisione progettati e costruiti in Italia.
               Qualità, innovazione e affidabilità dal 2005.
             </p>
-
-            {/* Immagine hero sotto il titolo */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="relative rounded-2xl overflow-hidden shadow-2xl max-w-5xl mx-auto"
-            >
-              <div className="aspect-[21/9] relative">
-                <Image
-                  src="/images/industrial-precision.jpg"
-                  alt="Precisione industriale GLOS"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/60 via-transparent to-transparent" />
-              </div>
-              {/* Badge Made in Italy */}
-              <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
-                <span className="text-sm font-bold text-primary">Made in Italy dal 2005</span>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </section>

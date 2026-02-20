@@ -595,10 +595,10 @@ export default function ListinoPrezziClient() {
         {/* Immagine di sfondo */}
         <div className="absolute inset-0">
           <Image
-            src="/images/engineering-innovation.jpg"
-            alt="Produzione industriale"
+            src="/images/glos-blender.jpg"
+            alt="Blender GLOS - Miscelatore professionale"
             fill
-            className="object-cover opacity-30"
+            className="object-cover opacity-25"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/80 via-[#0f2744]/70 to-[#1a365d]/90" />

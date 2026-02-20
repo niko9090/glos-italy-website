@@ -61,19 +61,6 @@ const CATEGORY_INFO: Record<string, {
     ],
     benefits: ['Miscelazione omogenea garantita', 'Risparmio di tempo e materiale', 'Manutenzione minima', 'Assistenza tecnica dedicata']
   },
-  'fiber': {
-    description: 'Taglio specializzato per fibre minerali',
-    longDescription: 'Macchine specializzate per il taglio professionale di lana di roccia, lana di vetro e fibre minerali. Progettate per garantire massima sicurezza operativa e precisione anche sui materiali più difficili da lavorare.',
-    icon: Shield,
-    features: ['Lame speciali per fibre minerali', 'Sistema di aspirazione integrato', 'Protezioni di sicurezza certificate', 'Piano di lavoro anti-vibrazione'],
-    specs: [
-      { label: 'Materiali', value: 'Lana roccia/vetro', icon: Shield },
-      { label: 'Sicurezza', value: 'Certificata CE', icon: Check },
-      { label: 'Aspirazione', value: 'Integrata', icon: Wind },
-      { label: 'Precisione', value: '±1mm', icon: Ruler }
-    ],
-    benefits: ['Riduzione delle polveri', 'Taglio senza sfilacciature', 'Ambiente di lavoro più sicuro', 'Durata lame prolungata']
-  },
   'termo': {
     description: 'Termoventilatori professionali',
     longDescription: 'Termoventilatori industriali ad alta efficienza per asciugatura rapida in cantiere, riscaldamento di ambienti di lavoro e accelerazione dei processi di essiccazione. Potenti, affidabili e progettati per un uso intensivo.',
@@ -101,17 +88,17 @@ const CATEGORY_INFO: Record<string, {
     benefits: ['Rispetto normative ambientali', 'Risparmio idrico garantito', 'Facilità di smaltimento', 'Lunga durata nel tempo']
   },
   'taglierine': {
-    description: 'Taglierine professionali a filo caldo',
-    longDescription: 'La famiglia Taglierine GLOS comprende i modelli Policut Basic e Policut Easy: taglierine professionali a filo caldo per il taglio di pannelli isolanti in polistirene (EPS, XPS) e poliuretano. Tecnologia a filo caldo nichel-cromo per tagli netti, precisi e senza residui.',
+    description: 'Taglierine professionali per isolanti',
+    longDescription: 'La famiglia Taglierine GLOS comprende: Policut Basic, Policut Easy (a filo caldo per polistirene EPS/XPS e poliuretano) e Fiber Cut (per lana di roccia e fibre minerali). Soluzioni complete per il taglio professionale di tutti i materiali isolanti.',
     icon: Zap,
-    features: ['Modelli Policut Basic e Policut Easy', 'Tecnologia filo caldo nichel-cromo', 'Taglio senza polvere né residui', 'Struttura in alluminio anodizzato'],
+    features: ['Policut Basic e Easy (filo caldo)', 'Fiber Cut (fibre minerali)', 'Taglio senza polvere né residui', 'Struttura in alluminio anodizzato'],
     specs: [
       { label: 'Larghezza taglio', value: 'Fino a 1200mm', icon: Ruler },
       { label: 'Spessore max', value: 'Fino a 500mm', icon: Ruler },
-      { label: 'Temperatura filo', value: 'Regolabile', icon: Thermometer },
+      { label: 'Materiali', value: 'EPS, XPS, lana roccia', icon: Shield },
       { label: 'Alimentazione', value: '230V / 50Hz', icon: Zap }
     ],
-    benefits: ['Taglio pulito senza sbavature', 'Alta velocità di lavorazione', 'Precisione millimetrica', 'Facile da trasportare']
+    benefits: ['Taglio pulito senza sbavature', 'Adatte a tutti gli isolanti', 'Precisione millimetrica', 'Facile da trasportare']
   },
   'accessori': {
     description: 'Accessori e ricambi originali',
@@ -157,8 +144,8 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
         return
       }
 
-      // Unisci Policut e Taglierine in un'unica categoria
-      if (catName.includes('policut') || catName.includes('taglierine')) {
+      // Unisci Policut, Fiber Cut e Taglierine in un'unica categoria
+      if (catName.includes('policut') || catName.includes('taglierine') || catName.includes('fiber')) {
         const catProducts = products.filter(p => p.category?._id === cat._id)
         taglierineProducts.push(...catProducts)
         if (!taglierineCategory || catName.includes('taglierine')) {
@@ -182,7 +169,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
       }
     }
 
-    const order = ['taglierine', 'fiber', 'termo', 'wash']
+    const order = ['taglierine', 'termo', 'wash']
     return Object.values(grouped)
       .filter(g => g.products.length > 0)
       .sort((a, b) => {

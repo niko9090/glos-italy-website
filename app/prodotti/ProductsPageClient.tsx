@@ -158,8 +158,8 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
     const grouped: Record<string, { category: Category; products: Product[] }> = {}
     categories.forEach(cat => {
       const catName = getTextValue(cat.name).toLowerCase()
-      // Escludi Blender (ha sezione dedicata) e Accessori (solo nel listino)
-      if (!catName.includes('blender') && !catName.includes('accessori')) {
+      // Escludi: Blender (ha sezione dedicata), Accessori e Filo (nel listino), Miscelatori (duplicato Blender)
+      if (!catName.includes('blender') && !catName.includes('accessori') && !catName.includes('filo') && !catName.includes('miscelatori')) {
         grouped[cat._id] = { category: cat, products: products.filter(p => p.category?._id === cat._id) }
       }
     })

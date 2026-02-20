@@ -595,8 +595,8 @@ export default function ListinoPrezziClient() {
         {/* Immagine di sfondo */}
         <div className="absolute inset-0">
           <Image
-            src="/images/industrial-precision.jpg"
-            alt="Macchinari di precisione"
+            src="/images/engineering-innovation.jpg"
+            alt="Ingegneria e innovazione"
             fill
             className="object-cover opacity-20"
             priority

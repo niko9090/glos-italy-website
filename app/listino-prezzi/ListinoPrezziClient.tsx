@@ -39,6 +39,39 @@ interface CategoryFamily {
 // Famiglie di prodotti raggruppate
 const categoryFamilies: CategoryFamily[] = [
   {
+    id: 'blender',
+    name: 'Blender GLOS',
+    icon: Sparkles,
+    description: 'Miscelatore professionale brevettato per vernici ad acqua',
+    subcategories: [
+      {
+        id: 'blender',
+        name: 'Blender GLOS',
+        subtitle: 'Miscelatore professionale brevettato per vernici ad acqua',
+        note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato',
+        products: [
+          {
+            code: 'BLENDER GLOS',
+            name: 'Blender GLOS BG2',
+            description: 'Miscelatore professionale a colonna con tecnologia brevettata Mix Glos System. Rotazione alternata a velocità variabile. Non ingloba aria. Fino a 150 secchi/giorno.',
+            price: 0,
+            specs: [
+              { label: 'Alimentazione', value: '230V / 50-60Hz' },
+              { label: 'Aria compressa', value: '350 L/min' },
+              { label: 'Potenza standard', value: '0,55 kW (1400 rpm)' },
+              { label: 'Potenza ovali', value: '0,75 kW (2800 rpm)' },
+              { label: 'Dimensioni', value: '1750x500x1000 mm' },
+              { label: 'Peso', value: '120 kg' },
+              { label: 'Contenitori', value: 'Plastica / Metallo / Tondi / Ovali' },
+              { label: 'Capacità max', value: '14 L / 25 kg' },
+            ],
+            badge: 'Brevettato',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: 'taglierine',
     name: 'Taglierine',
     icon: Zap,
@@ -326,39 +359,6 @@ const categoryFamilies: CategoryFamily[] = [
     ],
   },
   {
-    id: 'blender',
-    name: 'Blender GLOS',
-    icon: Sparkles,
-    description: 'Miscelatore professionale brevettato per vernici ad acqua',
-    subcategories: [
-      {
-        id: 'blender',
-        name: 'Blender GLOS',
-        subtitle: 'Miscelatore professionale brevettato per vernici ad acqua',
-        note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato',
-        products: [
-          {
-            code: 'BLENDER GLOS',
-            name: 'Blender GLOS BG2',
-            description: 'Miscelatore professionale a colonna con tecnologia brevettata Mix Glos System. Rotazione alternata a velocità variabile. Non ingloba aria. Fino a 150 secchi/giorno.',
-            price: 0,
-            specs: [
-              { label: 'Alimentazione', value: '230V / 50-60Hz' },
-              { label: 'Aria compressa', value: '350 L/min' },
-              { label: 'Potenza standard', value: '0,55 kW (1400 rpm)' },
-              { label: 'Potenza ovali', value: '0,75 kW (2800 rpm)' },
-              { label: 'Dimensioni', value: '1750x500x1000 mm' },
-              { label: 'Peso', value: '120 kg' },
-              { label: 'Contenitori', value: 'Plastica / Metallo / Tondi / Ovali' },
-              { label: 'Capacità max', value: '14 L / 25 kg' },
-            ],
-            badge: 'Brevettato',
-          },
-        ],
-      },
-    ],
-  },
-  {
     id: 'washstation',
     name: 'Wash Station',
     icon: Droplets,
@@ -558,7 +558,7 @@ const itemVariants = {
 
 export default function ListinoPrezziClient() {
   const [activeFamily, setActiveFamily] = useState<string | null>(null)
-  const [expandedFamilies, setExpandedFamilies] = useState<string[]>(['taglierine'])
+  const [expandedFamilies, setExpandedFamilies] = useState<string[]>(['blender'])
 
   const toggleFamily = (familyId: string) => {
     setExpandedFamilies(prev =>

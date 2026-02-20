@@ -61,19 +61,6 @@ const CATEGORY_INFO: Record<string, {
     ],
     benefits: ['Miscelazione omogenea garantita', 'Risparmio di tempo e materiale', 'Manutenzione minima', 'Assistenza tecnica dedicata']
   },
-  'policut': {
-    description: 'Taglierine professionali a filo caldo',
-    longDescription: 'La famiglia Policut comprende le taglierine professionali a filo caldo GLOS: Policut Basic e Policut Easy. Rappresentano lo standard industriale per il taglio di pannelli isolanti in polistirene (EPS, XPS) e poliuretano. Tecnologia a filo caldo per tagli netti, precisi e senza residui.',
-    icon: Zap,
-    features: ['Policut Basic e Policut Easy', 'Tecnologia filo caldo nichel-cromo', 'Taglio senza polvere né residui', 'Struttura in alluminio anodizzato'],
-    specs: [
-      { label: 'Larghezza taglio', value: 'Fino a 1200mm', icon: Ruler },
-      { label: 'Spessore max', value: 'Fino a 500mm', icon: Ruler },
-      { label: 'Temperatura filo', value: 'Regolabile', icon: Thermometer },
-      { label: 'Alimentazione', value: '230V / 50Hz', icon: Zap }
-    ],
-    benefits: ['Taglio pulito senza sbavature', 'Alta velocità di lavorazione', 'Precisione millimetrica', 'Facile da trasportare']
-  },
   'fiber': {
     description: 'Taglio specializzato per fibre minerali',
     longDescription: 'Macchine specializzate per il taglio professionale di lana di roccia, lana di vetro e fibre minerali. Progettate per garantire massima sicurezza operativa e precisione anche sui materiali più difficili da lavorare.',
@@ -114,17 +101,17 @@ const CATEGORY_INFO: Record<string, {
     benefits: ['Rispetto normative ambientali', 'Risparmio idrico garantito', 'Facilità di smaltimento', 'Lunga durata nel tempo']
   },
   'taglierine': {
-    description: 'Taglierine manuali di precisione',
-    longDescription: 'Taglierine manuali professionali per il taglio di precisione di pannelli isolanti, polistirene e materiali espansi. Strumenti essenziali per chi richiede flessibilità, portabilità e controllo totale sul taglio.',
-    icon: Scissors,
-    features: ['Lama regolabile in profondità', 'Impugnatura ergonomica', 'Guide angolari incluse', 'Custodia di trasporto'],
+    description: 'Taglierine professionali a filo caldo',
+    longDescription: 'La famiglia Taglierine GLOS comprende i modelli Policut Basic e Policut Easy: taglierine professionali a filo caldo per il taglio di pannelli isolanti in polistirene (EPS, XPS) e poliuretano. Tecnologia a filo caldo nichel-cromo per tagli netti, precisi e senza residui.',
+    icon: Zap,
+    features: ['Modelli Policut Basic e Policut Easy', 'Tecnologia filo caldo nichel-cromo', 'Taglio senza polvere né residui', 'Struttura in alluminio anodizzato'],
     specs: [
-      { label: 'Profondità taglio', value: 'Fino a 200mm', icon: Ruler },
-      { label: 'Angoli', value: '0° - 45° - 90°', icon: Ruler },
-      { label: 'Peso', value: '<2 kg', icon: Weight },
-      { label: 'Lama', value: 'Intercambiabile', icon: Scissors }
+      { label: 'Larghezza taglio', value: 'Fino a 1200mm', icon: Ruler },
+      { label: 'Spessore max', value: 'Fino a 500mm', icon: Ruler },
+      { label: 'Temperatura filo', value: 'Regolabile', icon: Thermometer },
+      { label: 'Alimentazione', value: '230V / 50Hz', icon: Zap }
     ],
-    benefits: ['Massima portabilità', 'Precisione manuale', 'Nessun costo energetico', 'Ideale per piccoli lavori']
+    benefits: ['Taglio pulito senza sbavature', 'Alta velocità di lavorazione', 'Precisione millimetrica', 'Facile da trasportare']
   },
   'accessori': {
     description: 'Accessori e ricambi originali',
@@ -154,21 +141,53 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
   }, [products])
 
   // Raggruppa prodotti per categoria (escludendo Blender e Accessori)
+  // NOTA: Policut viene unito dentro Taglierine (stessa famiglia)
   const productsByCategory = useMemo(() => {
-    const grouped: Record<string, { category: Category; products: Product[] }> = {}
+    const grouped: Record<string, { category: Category; products: Product[]; displayName: string }> = {}
+
+    // Trova tutti i prodotti Policut/Taglierine per unirli
+    const taglierineProducts: Product[] = []
+    let taglierineCategory: Category | null = null
+
     categories.forEach(cat => {
       const catName = getTextValue(cat.name).toLowerCase()
+
       // Escludi: Blender (ha sezione dedicata), Accessori e Filo (nel listino), Miscelatori (duplicato Blender)
-      if (!catName.includes('blender') && !catName.includes('accessori') && !catName.includes('filo') && !catName.includes('miscelatori')) {
-        grouped[cat._id] = { category: cat, products: products.filter(p => p.category?._id === cat._id) }
+      if (catName.includes('blender') || catName.includes('accessori') || catName.includes('filo') || catName.includes('miscelatori')) {
+        return
+      }
+
+      // Unisci Policut e Taglierine in un'unica categoria
+      if (catName.includes('policut') || catName.includes('taglierine')) {
+        const catProducts = products.filter(p => p.category?._id === cat._id)
+        taglierineProducts.push(...catProducts)
+        if (!taglierineCategory || catName.includes('taglierine')) {
+          taglierineCategory = cat
+        }
+      } else {
+        grouped[cat._id] = {
+          category: cat,
+          products: products.filter(p => p.category?._id === cat._id),
+          displayName: getTextValue(cat.name)
+        }
       }
     })
-    const order = ['policut', 'fiber', 'termo', 'wash', 'taglierine']
+
+    // Aggiungi la categoria Taglierine unificata
+    if (taglierineCategory && taglierineProducts.length > 0) {
+      grouped['taglierine-unified'] = {
+        category: taglierineCategory,
+        products: taglierineProducts,
+        displayName: 'Taglierine'
+      }
+    }
+
+    const order = ['taglierine', 'fiber', 'termo', 'wash']
     return Object.values(grouped)
       .filter(g => g.products.length > 0)
       .sort((a, b) => {
-        const nameA = getTextValue(a.category.name).toLowerCase()
-        const nameB = getTextValue(b.category.name).toLowerCase()
+        const nameA = a.displayName.toLowerCase()
+        const nameB = b.displayName.toLowerCase()
         const iA = order.findIndex(p => nameA.includes(p))
         const iB = order.findIndex(p => nameB.includes(p))
         return (iA === -1 ? 999 : iA) - (iB === -1 ? 999 : iB)
@@ -369,7 +388,7 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
 
       {/* ===== ALTRE CATEGORIE PRODOTTI - BANDE ALTERNATE ===== */}
       {productsByCategory.map((group, groupIndex) => {
-        const categoryName = getTextValue(group.category.name)
+        const categoryName = group.displayName || getTextValue(group.category.name)
         const categoryInfo = getCategoryInfo(categoryName)
         const CategoryIcon = categoryInfo.icon
         const isBlue = groupIndex % 2 === 1 // Alterna partendo da bianco dopo Blender

@@ -63,9 +63,9 @@ const CATEGORY_INFO: Record<string, {
   },
   'policut': {
     description: 'Taglierine professionali a filo caldo',
-    longDescription: 'Le taglierine Policut rappresentano lo standard industriale per il taglio di pannelli isolanti in polistirene (EPS, XPS) e poliuretano. La tecnologia a filo caldo garantisce tagli netti, precisi e senza residui, ideali per cantieri edili, laboratori e industrie.',
+    longDescription: 'La famiglia Policut comprende le taglierine professionali a filo caldo GLOS: Policut Basic e Policut Easy. Rappresentano lo standard industriale per il taglio di pannelli isolanti in polistirene (EPS, XPS) e poliuretano. Tecnologia a filo caldo per tagli netti, precisi e senza residui.',
     icon: Zap,
-    features: ['Tecnologia filo caldo nichel-cromo', 'Taglio senza polvere né residui', 'Guide di precisione integrate', 'Struttura in alluminio anodizzato'],
+    features: ['Policut Basic e Policut Easy', 'Tecnologia filo caldo nichel-cromo', 'Taglio senza polvere né residui', 'Struttura in alluminio anodizzato'],
     specs: [
       { label: 'Larghezza taglio', value: 'Fino a 1200mm', icon: Ruler },
       { label: 'Spessore max', value: 'Fino a 500mm', icon: Ruler },

@@ -391,15 +391,15 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
             )}
 
             <div className="container-glos relative z-10 py-16 lg:py-24">
-              {/* Header Categoria con layout a 2 colonne */}
-              <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-12">
-                {/* Info Categoria */}
+              {/* Header Categoria - Layout ottimizzato per mobile */}
+              <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-12">
+                {/* Titolo + Badge - Sempre per primo */}
                 <motion.div
                   variants={groupIndex % 2 === 0 ? slideInLeft : slideInRight}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  className={groupIndex % 2 === 1 ? 'lg:order-2' : ''}
+                  className={`order-1 ${groupIndex % 2 === 1 ? 'lg:order-2' : 'lg:order-1'}`}
                 >
                   <div className={`inline-flex items-center gap-3 px-4 py-2 rounded-full mb-6 ${
                     isBlue ? 'bg-white/10 backdrop-blur-sm' : 'bg-primary/10'
@@ -410,70 +410,73 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                     </span>
                   </div>
 
-                  <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${
+                  <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 lg:mb-4 ${
                     isBlue ? 'text-white' : 'text-gray-900'
                   }`}>
                     {categoryName}
                   </h2>
 
-                  <p className={`text-lg leading-relaxed mb-6 ${
-                    isBlue ? 'text-blue-100' : 'text-gray-600'
-                  }`}>
-                    {categoryInfo.longDescription}
-                  </p>
-
-                  {/* Caratteristiche Principali */}
-                  <div className="mb-6">
-                    <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
-                      isBlue ? 'text-blue-200' : 'text-gray-500'
+                  {/* Descrizione - nascosta su mobile, visibile su desktop */}
+                  <div className="hidden lg:block">
+                    <p className={`text-lg leading-relaxed mb-6 ${
+                      isBlue ? 'text-blue-100' : 'text-gray-600'
                     }`}>
-                      Caratteristiche Principali
-                    </h4>
-                    <div className="space-y-2">
-                      {categoryInfo.features.map((feature, i) => (
-                        <div
-                          key={i}
-                          className={`flex items-center gap-3 ${
-                            isBlue ? 'text-blue-100' : 'text-gray-700'
-                          }`}
-                        >
-                          <Check className={`w-5 h-5 flex-shrink-0 ${isBlue ? 'text-green-400' : 'text-green-600'}`} />
-                          <span>{feature}</span>
-                        </div>
-                      ))}
+                      {categoryInfo.longDescription}
+                    </p>
+
+                    {/* Caratteristiche Principali */}
+                    <div className="mb-6">
+                      <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
+                        isBlue ? 'text-blue-200' : 'text-gray-500'
+                      }`}>
+                        Caratteristiche Principali
+                      </h4>
+                      <div className="space-y-2">
+                        {categoryInfo.features.map((feature, i) => (
+                          <div
+                            key={i}
+                            className={`flex items-center gap-3 ${
+                              isBlue ? 'text-blue-100' : 'text-gray-700'
+                            }`}
+                          >
+                            <Check className={`w-5 h-5 flex-shrink-0 ${isBlue ? 'text-green-400' : 'text-green-600'}`} />
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Vantaggi */}
-                  <div>
-                    <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
-                      isBlue ? 'text-blue-200' : 'text-gray-500'
-                    }`}>
-                      Vantaggi
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {categoryInfo.benefits.map((benefit, i) => (
-                        <div
-                          key={i}
-                          className={`flex items-center gap-2 text-sm ${
-                            isBlue ? 'text-blue-100' : 'text-gray-600'
-                          }`}
-                        >
-                          <ChevronRight className={`w-4 h-4 ${isBlue ? 'text-blue-300' : 'text-primary'}`} />
-                          {benefit}
-                        </div>
-                      ))}
+                    {/* Vantaggi */}
+                    <div>
+                      <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
+                        isBlue ? 'text-blue-200' : 'text-gray-500'
+                      }`}>
+                        Vantaggi
+                      </h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {categoryInfo.benefits.map((benefit, i) => (
+                          <div
+                            key={i}
+                            className={`flex items-center gap-2 text-sm ${
+                              isBlue ? 'text-blue-100' : 'text-gray-600'
+                            }`}
+                          >
+                            <ChevronRight className={`w-4 h-4 ${isBlue ? 'text-blue-300' : 'text-primary'}`} />
+                            {benefit}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
 
-                {/* Specifiche Tecniche + Immagine */}
+                {/* Immagine - Subito dopo il titolo su mobile */}
                 <motion.div
                   variants={groupIndex % 2 === 0 ? slideInRight : slideInLeft}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  className={groupIndex % 2 === 1 ? 'lg:order-1' : ''}
+                  className={`order-2 w-full ${groupIndex % 2 === 1 ? 'lg:order-1' : 'lg:order-2'}`}
                 >
                   {/* Immagine categoria */}
                   {group.products[0] && isValidImage(group.products[0].mainImage) && (
@@ -517,6 +520,59 @@ export default function ProductsPageClient({ products, categories, listinoPrezzi
                     })}
                   </div>
                 </motion.div>
+
+                {/* Descrizione + Caratteristiche - Solo su mobile, dopo l'immagine */}
+                <div className={`order-3 lg:hidden ${isBlue ? 'text-white' : 'text-gray-900'}`}>
+                  <p className={`text-base leading-relaxed mb-6 ${
+                    isBlue ? 'text-blue-100' : 'text-gray-600'
+                  }`}>
+                    {categoryInfo.longDescription}
+                  </p>
+
+                  {/* Caratteristiche Principali Mobile */}
+                  <div className="mb-6">
+                    <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
+                      isBlue ? 'text-blue-200' : 'text-gray-500'
+                    }`}>
+                      Caratteristiche Principali
+                    </h4>
+                    <div className="space-y-2">
+                      {categoryInfo.features.map((feature, i) => (
+                        <div
+                          key={i}
+                          className={`flex items-center gap-3 ${
+                            isBlue ? 'text-blue-100' : 'text-gray-700'
+                          }`}
+                        >
+                          <Check className={`w-5 h-5 flex-shrink-0 ${isBlue ? 'text-green-400' : 'text-green-600'}`} />
+                          <span className="text-sm">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Vantaggi Mobile */}
+                  <div>
+                    <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
+                      isBlue ? 'text-blue-200' : 'text-gray-500'
+                    }`}>
+                      Vantaggi
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {categoryInfo.benefits.map((benefit, i) => (
+                        <div
+                          key={i}
+                          className={`flex items-center gap-2 text-sm ${
+                            isBlue ? 'text-blue-100' : 'text-gray-600'
+                          }`}
+                        >
+                          <ChevronRight className={`w-4 h-4 ${isBlue ? 'text-blue-300' : 'text-primary'}`} />
+                          {benefit}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Grid Prodotti */}

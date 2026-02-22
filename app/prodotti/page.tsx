@@ -53,7 +53,6 @@ export default async function ProductsPage() {
       <ProductsPageClient
         products={products}
         categories={categories}
-        listinoPrezziPdfUrl={settings?.listinoPrezziPdfUrl}
       />
     </>
   )

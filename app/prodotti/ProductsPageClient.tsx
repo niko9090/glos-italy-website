@@ -11,11 +11,11 @@ import RichText from '@/components/RichText'
 import type { Product, Category } from '@/lib/sanity/fetch'
 import ProductBadges from '@/components/products/ProductBadges'
 import { ArrowRight, Zap, Shield, Wrench, Package, ChevronRight, Sparkles, Scissors, Wind, Droplets, Check, Gauge, Timer, Ruler, Weight, Thermometer, Volume2 } from 'lucide-react'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 interface ProductsPageClientProps {
   products: Product[]
   categories: Category[]
-  listinoPrezziPdfUrl?: string | null
 }
 
 // Animazioni
@@ -115,8 +115,9 @@ const CATEGORY_INFO: Record<string, {
   }
 }
 
-export default function ProductsPageClient({ products, categories, listinoPrezziPdfUrl }: ProductsPageClientProps) {
-  const listinoPdfUrl = listinoPrezziPdfUrl || '/listino-glos.pdf'
+export default function ProductsPageClient({ products, categories }: ProductsPageClientProps) {
+  const { language } = useLanguage()
+  const listinoPdfUrl = `/api/download-listino?lang=${language}`
 
   // Trova il Blender
   const blenderProduct = useMemo(() => {

@@ -16,6 +16,7 @@ import { LanguageProvider } from '@/lib/context/LanguageContext'
 import { generateSiteMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { getTextValue } from '@/lib/utils/textHelpers'
 import { OrganizationSchema, WebsiteSchema } from '@/components/seo/JsonLd'
+import CookieBanner from '@/components/CookieBanner'
 
 // Font Inter - font principale per tutto il sito (look industriale/meccanico)
 const inter = Inter({
@@ -98,6 +99,7 @@ export default async function RootLayout({
             <PageTransition>{children}</PageTransition>
           </main>
           <Footer settings={settings} navigation={navigation} />
+          <CookieBanner />
         </LanguageProvider>
         {/* SanityLive - handles live content updates in real-time */}
         <SanityLive />

@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { fetchSiteSettings } from '@/lib/sanity/fetch'
+import { getSiteSettings } from '@/lib/sanity/fetch'
 
 export const metadata: Metadata = {
   title: 'Cookie Policy | GLOS Italy',
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 }
 
 export default async function CookiePolicyPage() {
-  const settings = await fetchSiteSettings()
+  const settings = await getSiteSettings()
 
   const companyName = settings?.legalName || 'GLOS Italy S.r.l.'
   const email = settings?.email || 'info@glos.it'

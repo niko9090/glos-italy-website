@@ -1,13 +1,11 @@
-// Dealers Page - v1.6.0 - Clean map, centered video, testimonials
+// Dealers Page - v1.7.0 - Clean map, testimonials only
 import { Metadata } from 'next'
-import Link from 'next/link'
 import Image from 'next/image'
 import { getAllDealers, getSiteSettings, getAllTestimonials } from '@/lib/sanity/fetch'
 import { MapPin, Star, Quote } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { OrganizationSchema, BreadcrumbSchema, WebPageSchema, LocalBusinessSchema } from '@/components/seo/JsonLd'
-import DealerCard from '@/components/DealerCard'
 import DealersMap from '@/components/DealersMapWrapper'
 
 export const metadata: Metadata = {
@@ -38,13 +36,8 @@ export default async function DealersPage() {
     getAllTestimonials(),
   ])
 
-  // Separa featured e normali, poi per tipo
+  // Separa featured per LocalBusiness schema
   const featuredDealers = dealers.filter((d) => d.isFeatured)
-  const normalDealers = dealers.filter((d) => !d.isFeatured)
-
-  const distributors = normalDealers.filter((d) => d.type === 'distributore')
-  const resellers = normalDealers.filter((d) => d.type === 'rivenditore')
-  const agents = normalDealers.filter((d) => d.type === 'agente')
 
   // Conta rivenditori che possono apparire sulla mappa (con coordinate O con città/indirizzo per geocoding)
   const dealersWithCoords = dealers.filter((d) =>
@@ -56,24 +49,6 @@ export default async function DealersPage() {
     { name: 'Home', url: '/' },
     { name: 'Rivenditori', url: '/rivenditori' },
   ]
-
-  const DealerSection = ({ title, emoji, dealers: sectionDealers }: { title: string; emoji: string; dealers: any[] }) => {
-    if (sectionDealers.length === 0) return null
-
-    return (
-      <div className="mb-12">
-        <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-          <span>{emoji}</span> {title}
-          <span className="text-sm font-normal text-gray-500">({sectionDealers.length})</span>
-        </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sectionDealers.map((dealer) => (
-            <DealerCard key={dealer._id} dealer={dealer} />
-          ))}
-        </div>
-      </div>
-    )
-  }
 
   return (
     <>
@@ -139,11 +114,11 @@ export default async function DealersPage() {
           ) : null}
 
           {/* Recensioni Clienti */}
-          {testimonials.length > 0 && (
-            <div className="mb-12">
-              <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-                <Quote className="w-6 h-6 text-primary" /> Cosa Dicono i Nostri Clienti
-              </h2>
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+              <Quote className="w-6 h-6 text-primary" /> Cosa Dicono i Nostri Clienti
+            </h2>
+            {testimonials.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {testimonials.slice(0, 6).map((testimonial) => (
                   <div
@@ -194,48 +169,15 @@ export default async function DealersPage() {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* Featured Dealers */}
-          {featuredDealers.length > 0 && (
-            <div className="mb-12">
-              <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-                <Star className="w-6 h-6 text-yellow-500" /> Partner in Evidenza
-                <span className="text-sm font-normal text-gray-500">({featuredDealers.length})</span>
-              </h2>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {featuredDealers.map((dealer) => (
-                  <DealerCard key={dealer._id} dealer={dealer} showFeatured />
-                ))}
+            ) : (
+              <div className="bg-gray-50 rounded-2xl p-8 text-center">
+                <Quote className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">
+                  Le recensioni dei clienti saranno disponibili a breve.
+                </p>
               </div>
-            </div>
-          )}
-
-          {/* Distributors */}
-          <DealerSection title="Distributori" emoji="🏭" dealers={distributors} />
-
-          {/* Resellers */}
-          <DealerSection title="Rivenditori" emoji="🏪" dealers={resellers} />
-
-          {/* Agents */}
-          <DealerSection title="Agenti" emoji="👤" dealers={agents} />
-
-          {/* Empty State */}
-          {dealers.length === 0 && (
-            <div className="text-center py-16 bg-gray-50 rounded-2xl">
-              <div className="text-6xl mb-4">🏪</div>
-              <h3 className="text-xl font-semibold mb-2">Nessun rivenditore disponibile</h3>
-              <p className="text-gray-500 mb-6">
-                La rete vendita è in fase di costruzione.
-                <br />
-                Contattaci per diventare partner!
-              </p>
-              <Link href="/contatti" className="btn-primary">
-                Contattaci
-              </Link>
-            </div>
-          )}
+            )}
+          </div>
 
         </div>
       </div>

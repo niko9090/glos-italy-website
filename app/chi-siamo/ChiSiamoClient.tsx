@@ -174,7 +174,7 @@ export default function ChiSiamoClient() {
       </section>
 
       {/* Values Section */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-primary to-[#003380] text-white">
         <div className="container-glos">
           <motion.div
             initial={fadeInUp.initial}
@@ -183,8 +183,8 @@ export default function ChiSiamoClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">I Nostri Valori</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">I Nostri Valori</h2>
+            <p className="text-blue-100 max-w-2xl mx-auto">
               I principi che guidano ogni nostra decisione, dalla progettazione alla produzione.
             </p>
           </motion.div>
@@ -197,13 +197,13 @@ export default function ChiSiamoClient() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center p-8 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                className="text-center p-8 rounded-2xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
               >
-                <div className="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-2xl flex items-center justify-center">
-                  <value.icon className="w-8 h-8 text-primary" />
+                <div className="w-16 h-16 mx-auto mb-6 bg-white/20 rounded-2xl flex items-center justify-center">
+                  <value.icon className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
-                <p className="text-gray-600">{value.description}</p>
+                <h3 className="text-xl font-bold text-white mb-3">{value.title}</h3>
+                <p className="text-blue-100">{value.description}</p>
               </motion.div>
             ))}
           </div>

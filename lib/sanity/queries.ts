@@ -8,12 +8,21 @@ import { defineQuery } from 'next-sanity'
 export const siteSettingsQuery = defineQuery(`
   *[_type == "siteSettings"][0] {
     companyName,
+    legalName,
     slogan,
     logo,
     logoWhite,
     email,
     phone,
     address,
+    // Legal
+    vatNumber,
+    fiscalCode,
+    pec,
+    rea,
+    capitaleSociale,
+    sdi,
+    // Social
     facebook,
     instagram,
     linkedin,

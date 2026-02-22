@@ -40,12 +40,21 @@ import {
 
 export interface SiteSettings {
   companyName?: string
+  legalName?: string
   slogan?: string
   logo?: unknown
   logoWhite?: unknown
   email?: string
   phone?: string
   address?: string
+  // Legal
+  vatNumber?: string
+  fiscalCode?: string
+  pec?: string
+  rea?: string
+  capitaleSociale?: string
+  sdi?: string
+  // Social
   facebook?: string
   instagram?: string
   linkedin?: string

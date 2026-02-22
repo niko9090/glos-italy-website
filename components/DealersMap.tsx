@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
+import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useLanguage } from '@/lib/context/LanguageContext'
@@ -250,9 +251,9 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
     )
   }
 
-  // Centro Italia
+  // Centro Italia - zoom 5 per vedere tutta l'Italia
   const italyCenter: [number, number] = [42.5, 12.5]
-  const defaultZoom = 6
+  const defaultZoom = 5
 
   // Combina dealer con coordinate e dealer geocodificati
   const dealersWithLocation = dealers.filter((d) => {
@@ -345,27 +346,52 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
 
-        {dealersWithLocation.map((dealer) => {
-          // Usa coordinate salvate o geocodificate
-          const coords = (dealer.location?.lat && dealer.location?.lng)
-            ? { lat: dealer.location.lat, lng: dealer.location.lng }
-            : geocodedDealers[dealer._id]
+        <MarkerClusterGroup
+          chunkedLoading
+          maxClusterRadius={60}
+          spiderfyOnMaxZoom={true}
+          showCoverageOnHover={false}
+          iconCreateFunction={(cluster) => {
+            const count = cluster.getChildCount()
+            let size = 'small'
+            if (count > 10) size = 'medium'
+            if (count > 25) size = 'large'
 
-          if (!coords) return null
+            const sizeClasses: Record<string, { className: string; iconSize: [number, number] }> = {
+              small: { className: 'marker-cluster-small', iconSize: [40, 40] },
+              medium: { className: 'marker-cluster-medium', iconSize: [50, 50] },
+              large: { className: 'marker-cluster-large', iconSize: [60, 60] },
+            }
 
-          return (
-            <Marker
-              key={dealer._id}
-              position={[coords.lat, coords.lng]}
-              eventHandlers={{
-                click: () => {
-                  setModalDealer(dealer)
-                  onSelectDealer?.(dealer)
-                },
-              }}
-            />
-          )
-        })}
+            return L.divIcon({
+              html: `<div class="cluster-icon">${count}</div>`,
+              className: `custom-cluster-icon ${sizeClasses[size].className}`,
+              iconSize: sizeClasses[size].iconSize,
+            })
+          }}
+        >
+          {dealersWithLocation.map((dealer) => {
+            // Usa coordinate salvate o geocodificate
+            const coords = (dealer.location?.lat && dealer.location?.lng)
+              ? { lat: dealer.location.lat, lng: dealer.location.lng }
+              : geocodedDealers[dealer._id]
+
+            if (!coords) return null
+
+            return (
+              <Marker
+                key={dealer._id}
+                position={[coords.lat, coords.lng]}
+                eventHandlers={{
+                  click: () => {
+                    setModalDealer(dealer)
+                    onSelectDealer?.(dealer)
+                  },
+                }}
+              />
+            )
+          })}
+        </MarkerClusterGroup>
       </MapContainer>
 
       {/* Modal Rivenditore - Centrato nella pagina */}

@@ -348,7 +348,8 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
 
         <MarkerClusterGroup
           chunkedLoading
-          maxClusterRadius={60}
+          maxClusterRadius={50}
+          disableClusteringAtZoom={10}
           spiderfyOnMaxZoom={true}
           showCoverageOnHover={false}
           iconCreateFunction={(cluster: L.MarkerCluster) => {

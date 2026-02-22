@@ -351,7 +351,7 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
           maxClusterRadius={60}
           spiderfyOnMaxZoom={true}
           showCoverageOnHover={false}
-          iconCreateFunction={(cluster) => {
+          iconCreateFunction={(cluster: L.MarkerCluster) => {
             const count = cluster.getChildCount()
             let size = 'small'
             if (count > 10) size = 'medium'

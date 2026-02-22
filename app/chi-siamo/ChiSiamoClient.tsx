@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { MapPin, Award, Users, Wrench, ArrowRight } from 'lucide-react'
+import { MapPin, Award, Users, Wrench, Target, Shield, Lightbulb } from 'lucide-react'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -20,11 +20,22 @@ const fadeInRight = {
   animate: { opacity: 1, x: 0 },
 }
 
-const stats = [
-  { number: '20+', label: 'Anni di Esperienza', description: 'Due decenni di innovazione continua' },
-  { number: '12.000+', label: 'Policut Vendute', description: 'Taglierine di precisione in tutto il mondo' },
-  { number: '250+', label: 'Blender BG2', description: 'Miscelatori ad alte prestazioni' },
-  { number: '8.000+', label: 'Thermolight', description: 'Sistemi di illuminazione industriale' },
+const values = [
+  {
+    icon: Target,
+    title: 'Precisione',
+    description: 'Ogni componente è progettato con tolleranze millimetriche per garantire prestazioni costanti.',
+  },
+  {
+    icon: Shield,
+    title: 'Affidabilità',
+    description: 'Macchinari costruiti per durare nel tempo, con materiali di prima qualità certificati.',
+  },
+  {
+    icon: Lightbulb,
+    title: 'Innovazione',
+    description: 'Ricerca continua per sviluppare soluzioni che anticipano le esigenze del mercato.',
+  },
 ]
 
 export default function ChiSiamoClient() {
@@ -162,8 +173,8 @@ export default function ChiSiamoClient() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-primary to-[#003380] text-white">
+      {/* Values Section */}
+      <section className="py-16 md:py-20 bg-white">
         <div className="container-glos">
           <motion.div
             initial={fadeInUp.initial}
@@ -172,56 +183,35 @@ export default function ChiSiamoClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">I Nostri Numeri</h2>
-            <p className="text-blue-200 max-w-2xl mx-auto">
-              Oltre due decenni di risultati concreti e clienti soddisfatti in tutto il mondo.
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">I Nostri Valori</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              I principi che guidano ogni nostra decisione, dalla progettazione alla produzione.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {stats.map((stat, index) => (
+          <div className="grid md:grid-cols-3 gap-8">
+            {values.map((value, index) => (
               <motion.div
-                key={stat.label}
+                key={value.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center p-6 rounded-2xl bg-white/10 backdrop-blur-sm"
+                className="text-center p-8 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors"
               >
-                <div className="text-4xl md:text-5xl font-bold text-white mb-2">
-                  {stat.number}
+                <div className="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-2xl flex items-center justify-center">
+                  <value.icon className="w-8 h-8 text-primary" />
                 </div>
-                <div className="text-lg font-semibold text-blue-100 mb-1">
-                  {stat.label}
-                </div>
-                <div className="text-sm text-blue-200/80">
-                  {stat.description}
-                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
+                <p className="text-gray-600">{value.description}</p>
               </motion.div>
             ))}
           </div>
-
-          {/* 100% Made in Italy badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-12 flex justify-center"
-          >
-            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full">
-              <span className="text-3xl">🇮🇹</span>
-              <div>
-                <div className="text-xl font-bold">100% Made in Italy</div>
-                <div className="text-sm text-blue-200">Progettazione e produzione italiana</div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
       {/* Method Section */}
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 bg-gray-50">
         <div className="container-glos">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Image */}
@@ -252,7 +242,7 @@ export default function ChiSiamoClient() {
               </div>
 
               {/* Floating card */}
-              <div className="absolute -bottom-6 -right-6 bg-white rounded-xl shadow-xl p-4 max-w-[200px]">
+              <div className="absolute -bottom-6 -right-6 bg-white rounded-xl shadow-xl p-4 max-w-[200px] hidden md:block">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                     <Wrench className="w-6 h-6 text-green-600" />
@@ -321,87 +311,6 @@ export default function ChiSiamoClient() {
               </div>
             </motion.div>
           </div>
-        </div>
-      </section>
-
-      {/* Products Preview */}
-      <section className="py-16 md:py-20 bg-gray-50">
-        <div className="container-glos">
-          <motion.div
-            initial={fadeInUp.initial}
-            whileInView={fadeInUp.animate}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">I Nostri Prodotti</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Scopri la gamma completa di macchinari GLOS per il settore delle vernici e dei rivestimenti.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                name: 'Taglierine Policut',
-                image: '/images/products/policut-taglierine.jpg',
-                description: 'Precisione millimetrica per taglio tinte',
-                href: '/prodotti'
-              },
-              {
-                name: 'Blender GLOS',
-                image: '/images/products/blender-glos.jpg',
-                description: 'Miscelazione professionale automatizzata',
-                href: '/prodotti'
-              },
-              {
-                name: 'Policut Twin',
-                image: '/images/products/policut-twin.jpg',
-                description: 'Doppia postazione per alta produttività',
-                href: '/prodotti'
-              },
-            ].map((product, index) => (
-              <motion.div
-                key={product.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Link href={product.href} className="group block">
-                  <div className="relative h-64 rounded-2xl overflow-hidden shadow-lg mb-4">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">
-                    {product.name}
-                  </h3>
-                  <p className="text-gray-600">{product.description}</p>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-12 text-center"
-          >
-            <Link
-              href="/prodotti"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90 transition-colors"
-            >
-              Scopri tutti i prodotti
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </motion.div>
         </div>
       </section>
 

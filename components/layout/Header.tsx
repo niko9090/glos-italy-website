@@ -61,7 +61,7 @@ const navGapClasses: Record<string, string> = {
 
 export default function Header({ settings, navigation }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { language, t } = useLanguage()
+  const { t } = useLanguage()
   const companyName = t(settings?.companyName) || 'GLOS Italy'
 
   // Usa items da Sanity se esistono, altrimenti usa il fallback
@@ -103,31 +103,15 @@ export default function Header({ settings, navigation }: HeaderProps) {
 
           {/* Desktop Navigation */}
           <nav className={`hidden lg:flex items-center ${navGap}`}>
-            {navItems.map((item) => {
-              // Se è il link al listino, usa un link di download
-              if (item.href === '/listino-prezzi') {
-                return (
-                  <a
-                    key={item._key}
-                    href={`/api/download-listino?lang=${language}`}
-                    className="text-gray-700 hover:text-primary font-medium py-2 transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {t(item.label)}
-                  </a>
-                )
-              }
-              return (
-                <Link
-                  key={item._key}
-                  href={item.href || '#'}
-                  className="text-gray-700 hover:text-primary font-medium py-2 transition-colors"
-                >
-                  {t(item.label)}
-                </Link>
-              )
-            })}
+            {navItems.map((item) => (
+              <Link
+                key={item._key}
+                href={item.href || '#'}
+                className="text-gray-700 hover:text-primary font-medium py-2 transition-colors"
+              >
+                {t(item.label)}
+              </Link>
+            ))}
           </nav>
 
           {/* Right Section */}
@@ -172,33 +156,16 @@ export default function Header({ settings, navigation }: HeaderProps) {
           >
             <div className="container-glos py-4">
               <nav className="flex flex-col gap-2">
-                {navItems.map((item) => {
-                  // Se è il link al listino, usa un link di download
-                  if (item.href === '/listino-prezzi') {
-                    return (
-                      <a
-                        key={item._key}
-                        href={`/api/download-listino?lang=${language}`}
-                        onClick={toggleMobileMenu}
-                        className="block py-3 text-gray-700 font-medium hover:text-primary"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {t(item.label)}
-                      </a>
-                    )
-                  }
-                  return (
-                    <Link
-                      key={item._key}
-                      href={item.href || '#'}
-                      onClick={toggleMobileMenu}
-                      className="block py-3 text-gray-700 font-medium hover:text-primary"
-                    >
-                      {t(item.label)}
-                    </Link>
-                  )
-                })}
+                {navItems.map((item) => (
+                  <Link
+                    key={item._key}
+                    href={item.href || '#'}
+                    onClick={toggleMobileMenu}
+                    className="block py-3 text-gray-700 font-medium hover:text-primary"
+                  >
+                    {t(item.label)}
+                  </Link>
+                ))}
 
                 {/* Language Selector (Mobile) */}
                 {showLanguageSelector && (

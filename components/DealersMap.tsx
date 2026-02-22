@@ -341,8 +341,8 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
         zoomControl={true}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
 
         {dealersWithLocation.map((dealer) => {
@@ -368,14 +368,14 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
         })}
       </MapContainer>
 
-      {/* Modal Rivenditore - Posizionato in alto per visibilità immediata */}
+      {/* Modal Rivenditore - Centrato nella pagina */}
       {modalDealer && (
         <div
-          className="fixed inset-0 z-[9999] bg-black/70 flex items-start justify-center pt-8 md:pt-16 p-4 overflow-y-auto"
+          className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center p-4 overflow-y-auto"
           onClick={() => setModalDealer(null)}
         >
           <div
-            className="bg-white rounded-xl max-w-lg w-full max-h-[80vh] overflow-y-auto shadow-2xl relative animate-in fade-in slide-in-from-top-4 duration-200"
+            className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header compatto */}

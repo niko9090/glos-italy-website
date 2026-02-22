@@ -1,8 +1,10 @@
-// Dealers Page - v1.5.0 - Video modal centered
+// Dealers Page - v1.6.0 - Clean map, centered video, testimonials
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { getAllDealers, getSiteSettings } from '@/lib/sanity/fetch'
-import { MapPin, Star } from 'lucide-react'
+import Image from 'next/image'
+import { getAllDealers, getSiteSettings, getAllTestimonials } from '@/lib/sanity/fetch'
+import { MapPin, Star, Quote } from 'lucide-react'
+import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { OrganizationSchema, BreadcrumbSchema, WebPageSchema, LocalBusinessSchema } from '@/components/seo/JsonLd'
 import DealerCard from '@/components/DealerCard'
@@ -30,9 +32,10 @@ export const metadata: Metadata = {
 }
 
 export default async function DealersPage() {
-  const [dealers, settings] = await Promise.all([
+  const [dealers, settings, testimonials] = await Promise.all([
     getAllDealers(),
     getSiteSettings(),
+    getAllTestimonials(),
   ])
 
   // Separa featured e normali, poi per tipo
@@ -135,6 +138,65 @@ export default async function DealersPage() {
             </div>
           ) : null}
 
+          {/* Recensioni Clienti */}
+          {testimonials.length > 0 && (
+            <div className="mb-12">
+              <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+                <Quote className="w-6 h-6 text-primary" /> Cosa Dicono i Nostri Clienti
+              </h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {testimonials.slice(0, 6).map((testimonial) => (
+                  <div
+                    key={testimonial._id}
+                    className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+                  >
+                    {/* Rating */}
+                    {testimonial.rating && (
+                      <div className="flex gap-1 mb-4">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-5 h-5 ${
+                              i < testimonial.rating! ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Quote */}
+                    <blockquote className="text-gray-700 mb-4 italic">
+                      "{testimonial.quote}"
+                    </blockquote>
+
+                    {/* Author */}
+                    <div className="flex items-center gap-3">
+                      {isValidImage(testimonial.avatar) && safeImageUrl(testimonial.avatar, 48, 48) && (
+                        <Image
+                          src={safeImageUrl(testimonial.avatar, 48, 48)!}
+                          alt={testimonial.author || ''}
+                          width={48}
+                          height={48}
+                          className="rounded-full"
+                        />
+                      )}
+                      <div>
+                        <p className="font-semibold text-gray-900">{testimonial.author}</p>
+                        {(testimonial.role || testimonial.company) && (
+                          <p className="text-sm text-gray-500">
+                            {testimonial.role}
+                            {testimonial.role && testimonial.company && ' - '}
+                            {testimonial.company}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Featured Dealers */}
           {featuredDealers.length > 0 && (
             <div className="mb-12">
@@ -175,19 +237,6 @@ export default async function DealersPage() {
             </div>
           )}
 
-          {/* CTA */}
-          {dealers.length > 0 && (
-            <div className="bg-gradient-to-r from-primary to-primary-dark rounded-2xl p-8 mt-12 text-center text-white">
-              <h3 className="text-2xl font-semibold mb-4">Vuoi diventare rivenditore?</h3>
-              <p className="text-white/80 mb-6 max-w-2xl mx-auto">
-                Unisciti alla rete GLOS Italy e offri ai tuoi clienti prodotti di qualità Made in Italy.
-                Supporto tecnico, formazione e materiale marketing inclusi.
-              </p>
-              <Link href="/contatti" className="inline-block bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                Diventa Partner
-              </Link>
-            </div>
-          )}
         </div>
       </div>
     </>

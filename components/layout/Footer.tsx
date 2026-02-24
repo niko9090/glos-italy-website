@@ -259,14 +259,28 @@ export default function Footer({ settings, navigation }: FooterProps) {
                   </li>
                 )}
                 {settings?.email && (
-                  <li className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-primary flex-shrink-0" />
-                    <a
-                      href={`mailto:${String(t(settings.email) || '')}`}
-                      className="text-gray-400 hover:text-white transition-colors"
-                    >
-                      {t(settings.email)}
-                    </a>
+                  <li className="flex items-start gap-3">
+                    <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
+                    <div className="text-gray-400">
+                      <a href={`mailto:${settings.email}`} className="hover:text-white transition-colors block">
+                        {settings.email}
+                      </a>
+                      {settings?.salesEmail && (
+                        <a href={`mailto:${settings.salesEmail}`} className="hover:text-white transition-colors block text-sm mt-1">
+                          Commerciale: {settings.salesEmail}
+                        </a>
+                      )}
+                      {settings?.technicalEmail && (
+                        <a href={`mailto:${settings.technicalEmail}`} className="hover:text-white transition-colors block text-sm mt-1">
+                          Assistenza: {settings.technicalEmail}
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                )}
+                {settings?.vatNumber && (
+                  <li className="flex items-center gap-3 text-gray-500 text-sm pt-2 border-t border-gray-800">
+                    <span>P.IVA: {settings.vatNumber}</span>
                   </li>
                 )}
               </ul>

@@ -13,8 +13,11 @@ export const siteSettingsQuery = defineQuery(`
     logo,
     logoWhite,
     email,
+    salesEmail,
+    technicalEmail,
     phone,
     address,
+    website,
     // Legal
     vatNumber,
     fiscalCode,

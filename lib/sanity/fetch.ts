@@ -45,8 +45,11 @@ export interface SiteSettings {
   logo?: unknown
   logoWhite?: unknown
   email?: string
+  salesEmail?: string
+  technicalEmail?: string
   phone?: string
   address?: string
+  website?: string
   // Legal
   vatNumber?: string
   fiscalCode?: string

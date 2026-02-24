@@ -293,9 +293,9 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                           {featureIcons[feature.icon] || <CheckCircle className="w-5 h-5" />}
                         </div>
                         <div>
-                          <h4 className="font-medium text-metal-800">{String(feature.title || '')}</h4>
+                          <h4 className="font-medium text-metal-800">{String(getTextValue(feature.title) || '')}</h4>
                           {!!feature.description && (
-                            <p className="text-sm text-metal-500 mt-0.5">{String(feature.description)}</p>
+                            <p className="text-sm text-metal-500 mt-0.5">{String(getTextValue(feature.description) || '')}</p>
                           )}
                         </div>
                       </div>
@@ -534,15 +534,14 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="relative max-w-5xl max-h-[85vh] w-full h-full p-4"
+              className="flex items-center justify-center w-full h-full p-4"
               onClick={(e) => e.stopPropagation()}
             >
               {allImages[selectedImageIndex] && safeImageUrl(allImages[selectedImageIndex], 1200, 1200) && (
-                <Image
+                <img
                   src={safeImageUrl(allImages[selectedImageIndex], 1200, 1200)!}
                   alt={`${productName} - immagine ${selectedImageIndex + 1}`}
-                  fill
-                  className="object-contain"
+                  className="max-w-full max-h-[85vh] object-contain"
                 />
               )}
             </motion.div>

@@ -464,15 +464,15 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
   const getLayoutClasses = () => {
     const layout = data.layout || 'form-left'
     const gap = getColumnsGap()
-    if (layout?.includes('form-left')) return `grid lg:grid-cols-2 ${gap} lg:${gap} items-stretch`
-    if (layout?.includes('form-right')) return `grid lg:grid-cols-2 ${gap} lg:${gap} items-stretch`
+    if (layout?.includes('form-left')) return `grid lg:grid-cols-2 ${gap} lg:${gap} items-start`
+    if (layout?.includes('form-right')) return `grid lg:grid-cols-2 ${gap} lg:${gap} items-start`
     if (layout?.includes('stacked')) return `flex flex-col ${gap}`
     if (layout?.includes('map-first')) return `flex flex-col-reverse ${gap}`
     if (layout?.includes('form-only')) return 'max-w-2xl mx-auto'
     if (layout?.includes('info-only')) return 'max-w-4xl mx-auto'
-    if (layout?.includes('grid')) return `grid md:grid-cols-3 ${gap} items-stretch`
+    if (layout?.includes('grid')) return `grid md:grid-cols-3 ${gap} items-start`
     if (layout?.includes('map-overlay')) return 'relative'
-    return `grid lg:grid-cols-2 ${gap} lg:${gap} items-stretch`
+    return `grid lg:grid-cols-2 ${gap} lg:${gap} items-start`
   }
 
   // Use default fields if no custom fields defined

@@ -38,7 +38,9 @@ interface GallerySectionProps {
     marginTop?: string
     marginBottom?: string
     // Layout
-    layout?: 'grid' | 'masonry' | 'carousel' | 'justified' | 'collage' | 'featured-grid' | 'circular'
+    layout?: 'grid' | 'masonry' | 'carousel' | 'justified' | 'collage' | 'featured-grid' | 'circular' | 'marquee'
+    marqueeSpeed?: 'slow' | 'normal' | 'fast'
+    marqueeDirection?: 'left' | 'right'
     columns?: number
     columnsMobile?: number
     gap?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
@@ -218,6 +220,7 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
     const colsMobile = data.columnsMobile || 2
     const layout = data.layout || 'grid'
 
+    if (layout === 'marquee') return ''
     if (layout?.includes('carousel')) return 'flex overflow-x-auto snap-x snap-mandatory'
     if (layout?.includes('masonry')) return `columns-${colsMobile} md:columns-${cols} space-y-${data.gap || 'md'}`
 
@@ -230,6 +233,82 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
       '6': `grid-cols-${colsMobile} md:grid-cols-6`,
     }
     return `grid ${sl(colClasses, String(cols), '4')}`
+  }
+
+  // Marquee animation speed
+  const getMarqueeSpeed = () => {
+    switch (data.marqueeSpeed) {
+      case 'slow': return '60s'
+      case 'fast': return '20s'
+      default: return '40s'
+    }
+  }
+
+  // Render marquee layout
+  const renderMarquee = () => {
+    if (!displayedImages.length) return null
+
+    const direction = data.marqueeDirection === 'right' ? 'reverse' : 'normal'
+    const speed = getMarqueeSpeed()
+
+    // Duplicate images for seamless loop
+    const allImages = [...displayedImages, ...displayedImages]
+
+    return (
+      <div className="relative overflow-hidden">
+        {/* Gradient overlays for fade effect */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+
+        <motion.div
+          className="flex gap-6"
+          animate={{ x: direction === 'normal' ? [0, -50 * displayedImages.length + '%'] : [-50 * displayedImages.length + '%', 0] }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: 'loop',
+              duration: parseInt(speed),
+              ease: 'linear',
+            },
+          }}
+        >
+          {allImages.map((image, index) => (
+            <div
+              key={`${image._key}-${index}`}
+              className={`flex-shrink-0 w-72 md:w-96 group relative overflow-hidden ${sl(roundedClasses, data.rounded, 'lg')} ${sl(shadowClasses, data.shadow, 'md')}`}
+            >
+              <div className="aspect-[4/3] relative">
+                <Image
+                  src={safeImageUrl(image, 600, 450)!}
+                  alt={image.alt || t(image.caption) || ''}
+                  fill
+                  className={`object-cover ${getHoverClasses()} ${sl(filterClasses, data.imageFilter, 'none')}`}
+                />
+
+                {/* Hover Overlay */}
+                {data.enableLightbox && (
+                  <button
+                    onClick={() => openLightbox(index % displayedImages.length)}
+                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center"
+                  >
+                    <div className="p-3 bg-white/20 backdrop-blur-sm rounded-full">
+                      <ZoomIn className="w-6 h-6 text-white" />
+                    </div>
+                  </button>
+                )}
+
+                {/* Caption */}
+                {!!image.caption && data.showCaptions !== 'never' && (
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent translate-y-full group-hover:translate-y-0 transition-transform">
+                    <p className="text-white text-sm">{String(t(image.caption) || '')}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    )
   }
 
   // Hover effect classes
@@ -381,7 +460,11 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
           </div>
         )}
 
+        {/* Marquee Layout */}
+        {data.layout === 'marquee' && renderMarquee()}
+
         {/* Grid */}
+        {data.layout !== 'marquee' && (
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -451,6 +534,7 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
             )
           })}
         </motion.div>
+        )}
 
         {/* Show More Button */}
         {data.showMoreButton && data.maxImages && data.maxImages > 0 && filteredImages.length > data.maxImages && !showAll && (

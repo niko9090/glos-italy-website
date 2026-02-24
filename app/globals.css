@@ -821,7 +821,9 @@ textarea:focus-visible {
 }
 
 .marquee-track {
-  animation: marquee-scroll 40s linear infinite;
+  animation-name: marquee-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
   will-change: transform;
 }
 

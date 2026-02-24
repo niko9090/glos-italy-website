@@ -254,22 +254,22 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
     // Duplicate images for seamless loop
     const allImages = [...displayedImages, ...displayedImages]
 
-    return (
-      <div className="relative overflow-hidden">
-        {/* Gradient overlays for fade effect */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+    // Determine background color for gradient fade
+    const bgColor = data.backgroundColor === 'gray-light' ? 'from-gray-50' :
+                    data.backgroundColor === 'gray' ? 'from-gray-100' :
+                    data.backgroundColor === 'black' ? 'from-gray-900' : 'from-white'
 
-        <motion.div
-          className="flex gap-6"
-          animate={{ x: direction === 'normal' ? [0, -50 * displayedImages.length + '%'] : [-50 * displayedImages.length + '%', 0] }}
-          transition={{
-            x: {
-              repeat: Infinity,
-              repeatType: 'loop',
-              duration: parseInt(speed),
-              ease: 'linear',
-            },
+    return (
+      <div className="relative overflow-hidden -mx-4 md:-mx-8 px-4 md:px-8">
+        {/* Gradient overlays for fade effect */}
+        <div className={`absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r ${bgColor} to-transparent z-10 pointer-events-none`} />
+        <div className={`absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l ${bgColor} to-transparent z-10 pointer-events-none`} />
+
+        <div
+          className="flex gap-6 marquee-track"
+          style={{
+            animationDuration: speed,
+            animationDirection: direction,
           }}
         >
           {allImages.map((image, index) => (
@@ -306,7 +306,7 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
               </div>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     )
   }

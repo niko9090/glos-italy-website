@@ -266,10 +266,9 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
         <div className={`absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l ${bgColor} to-transparent z-10 pointer-events-none`} />
 
         <div
-          className="flex gap-6 marquee-track"
+          className="flex gap-6 hover:[animation-play-state:paused]"
           style={{
-            animationDuration: speed,
-            animationDirection: direction,
+            animation: `marquee-scroll ${speed} linear infinite ${direction}`,
           }}
         >
           {allImages.map((image, index) => (

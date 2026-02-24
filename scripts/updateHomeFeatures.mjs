@@ -1,11 +1,11 @@
-// Script per aggiornare i 4 tile della homepage - Design premium
+// Script per aggiornare i 4 tile della homepage - Design premium raffinato
 
 const projectId = '97oreljh'
 const dataset = 'production'
 const token = 'skA1PF9CiGcxPjkXxpxCzCoxUErZKlzi4x8ajNyRqQMlHw9jhdusMoOORZZt4onZlUaVgBHKNKG2hxwe7OxeFcugABIPQDhgkU8pMoxTOcuOx8ePAclCdJuXxloTw1csZ0yrEWODDX9KwWjuYN6lFWPKTdIKtaS45a4sLk54QZySu1eewqEz'
 const apiVersion = '2024-01-01'
 
-// I nuovi contenuti - con badge numerici per enfasi
+// Contenuti con badge numerici
 const newFeatures = [
   {
     _key: 'feature1',
@@ -29,7 +29,7 @@ const newFeatures = [
       en: 'We design and build every component in Italy. Our short supply chain allows meticulous quality control and guarantees solutions of excellence.',
       es: 'Diseñamos y construimos cada componente en Italia. La cadena corta nos permite un control meticuloso de la calidad y garantizar soluciones de excelencia.'
     },
-    color: 'green'
+    color: 'blue'
   },
   {
     _key: 'feature3',
@@ -41,7 +41,7 @@ const newFeatures = [
       en: 'We develop innovative technologies to optimize color management in modern industry, reducing waste and maximizing precision in every process.',
       es: 'Desarrollamos tecnologías innovadoras para optimizar la gestión del color en la industria moderna, reduciendo desperdicios y maximizando la precisión.'
     },
-    color: 'purple'
+    color: 'blue'
   },
   {
     _key: 'feature4',
@@ -53,25 +53,26 @@ const newFeatures = [
       en: 'For our flagship product, the GLOS BG2 Blender, we offer up to 36 months warranty: a concrete commitment to the continuity and reliability of your work.',
       es: 'Para nuestro producto estrella, el Blender GLOS BG2, ofrecemos garantía de hasta 36 meses: un compromiso concreto con la continuidad de tu trabajo.'
     },
-    color: 'orange'
+    color: 'blue'
   }
 ]
 
-// Impostazioni sezione - layout 2x2 più grande e impattante
+// Impostazioni raffinate
 const sectionSettings = {
   eyebrow: { it: 'Perché scegliere GLOS', en: 'Why choose GLOS', es: 'Por qué elegir GLOS' },
   title: { it: 'Eccellenza industriale dal 2005', en: 'Industrial excellence since 2005', es: 'Excelencia industrial desde 2005' },
-  subtitle: { it: 'Quattro pilastri che definiscono il nostro impegno verso la qualità e l\'innovazione', en: 'Four pillars that define our commitment to quality and innovation', es: 'Cuatro pilares que definen nuestro compromiso con la calidad y la innovación' },
+  subtitle: { it: 'Quattro pilastri che definiscono il nostro impegno verso qualità e innovazione', en: 'Four pillars that define our commitment to quality and innovation', es: 'Cuatro pilares que definen nuestro compromiso con calidad e innovación' },
   layout: 'grid-2',
   iconPosition: 'hidden',
-  cardStyle: 'border',
-  backgroundColor: 'gray-light',
+  cardStyle: 'shadow-lg',
+  backgroundColor: 'primary-light',
   textAlign: 'left',
-  gap: 'xl',
+  gap: 'lg',
   animation: 'stagger',
-  hoverEffect: 'lift',
+  hoverEffect: 'glow',
   paddingTop: 'xl',
-  paddingBottom: 'xl'
+  paddingBottom: 'xl',
+  accentColor: 'primary'
 }
 
 async function fetchSanity(query) {
@@ -105,8 +106,6 @@ async function updateHomeFeatures() {
       return
     }
 
-    console.log('Pagina home trovata:', result._id)
-
     const sections = result.sections || []
     let featuresSectionIndex = -1
 
@@ -122,7 +121,7 @@ async function updateHomeFeatures() {
       return
     }
 
-    console.log(`Sezione features all'indice ${featuresSectionIndex}`)
+    console.log(`Aggiornamento sezione all'indice ${featuresSectionIndex}...`)
 
     const mutations = [
       {
@@ -142,17 +141,15 @@ async function updateHomeFeatures() {
             [`sections[${featuresSectionIndex}].animation`]: sectionSettings.animation,
             [`sections[${featuresSectionIndex}].hoverEffect`]: sectionSettings.hoverEffect,
             [`sections[${featuresSectionIndex}].paddingTop`]: sectionSettings.paddingTop,
-            [`sections[${featuresSectionIndex}].paddingBottom`]: sectionSettings.paddingBottom
+            [`sections[${featuresSectionIndex}].paddingBottom`]: sectionSettings.paddingBottom,
+            [`sections[${featuresSectionIndex}].accentColor`]: sectionSettings.accentColor
           }
         }
       }
     ]
 
-    console.log('Aggiornamento in corso...')
     const mutationResult = await mutateSanity(mutations)
-
-    console.log('Risultato:', JSON.stringify(mutationResult, null, 2))
-    console.log('✅ Homepage aggiornata con design premium!')
+    console.log('✅ Design raffinato applicato!')
 
   } catch (error) {
     console.error('Errore:', error)

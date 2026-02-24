@@ -238,9 +238,9 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
   // Marquee animation speed
   const getMarqueeSpeed = () => {
     switch (data.marqueeSpeed) {
-      case 'slow': return '60s'
-      case 'fast': return '20s'
-      default: return '40s'
+      case 'slow': return '120s'
+      case 'fast': return '40s'
+      default: return '80s'
     }
   }
 

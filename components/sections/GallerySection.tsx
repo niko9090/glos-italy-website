@@ -260,7 +260,7 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
                     data.backgroundColor === 'black' ? 'from-gray-900' : 'from-white'
 
     return (
-      <div className="relative overflow-hidden -mx-4 md:-mx-8 px-4 md:px-8">
+      <div className="relative overflow-hidden w-full">
         {/* Gradient overlays for fade effect */}
         <div className={`absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r ${bgColor} to-transparent z-10 pointer-events-none`} />
         <div className={`absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l ${bgColor} to-transparent z-10 pointer-events-none`} />
@@ -392,8 +392,8 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
 
   return (
     <section data-sanity-edit-target className={`${getSpacingClasses(data)} ${sl(bgClasses, data.backgroundColor, 'white')} overflow-hidden`}>
+      {/* Header - always in container */}
       <div className="container-glos">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -416,6 +416,13 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
             </div>
           )}
         </motion.div>
+      </div>
+
+      {/* Marquee - full width */}
+      {data.layout === 'marquee' && renderMarquee()}
+
+      {/* Other layouts - in container */}
+      <div className={data.layout === 'marquee' ? 'hidden' : 'container-glos'}>
 
         {/* Filters and Search */}
         {(data.enableFilters || data.enableSearch) && (
@@ -459,9 +466,6 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
             )}
           </div>
         )}
-
-        {/* Marquee Layout */}
-        {data.layout === 'marquee' && renderMarquee()}
 
         {/* Grid */}
         {data.layout !== 'marquee' && (
@@ -548,22 +552,24 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
           </div>
         )}
 
-        {/* Lightbox */}
-        <AnimatePresence>
-          {lightboxIndex !== null && displayedImages.length > 0 && (
-            <motion.div
-              variants={lightboxVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              className={`fixed inset-0 z-50 flex items-center justify-center ${
-                data.lightboxStyle?.includes('minimal') ? 'bg-white' : 'bg-black/95'
-              }`}
-              onClick={closeLightbox}
-              role="dialog"
-              aria-modal="true"
-              aria-label={`Visualizzatore immagini - Immagine ${lightboxIndex + 1} di ${displayedImages.length}`}
-            >
+      </div>
+
+      {/* Lightbox - outside container for all layouts */}
+      <AnimatePresence>
+        {lightboxIndex !== null && displayedImages.length > 0 && (
+          <motion.div
+            variants={lightboxVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className={`fixed inset-0 z-50 flex items-center justify-center ${
+              data.lightboxStyle?.includes('minimal') ? 'bg-white' : 'bg-black/95'
+            }`}
+            onClick={closeLightbox}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Visualizzatore immagini - Immagine ${lightboxIndex + 1} di ${displayedImages.length}`}
+          >
               {/* Close Button */}
               <motion.button
                 initial={{ opacity: 0, scale: 0 }}
@@ -698,10 +704,9 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
                   )}
                 </div>
               )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

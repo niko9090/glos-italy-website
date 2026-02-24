@@ -10,6 +10,7 @@ import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 import type { Product } from '@/lib/sanity/fetch'
 import ProductBadges from '@/components/products/ProductBadges'
+import { useLanguage } from '@/lib/context/LanguageContext'
 import {
   ArrowLeft,
   ChevronLeft,
@@ -61,9 +62,19 @@ const fileTypeIcons: Record<string, React.ReactNode> = {
   zip: <FileText className="w-5 h-5 text-amber-500" />,
 }
 
+// Depliant multilingua per prodotti specifici
+const productDepliants: Record<string, Record<string, string>> = {
+  'eco-cut-1000-30': {
+    it: '/documents/products/EcoCut_Depliant_ITA.pdf',
+    en: '/documents/products/EcoCut_Depliant_ENG.pdf',
+    es: '/documents/products/EcoCut_Depliant_ESP.pdf',
+  }
+}
+
 export default function ProductPageClient({ product, relatedProducts }: ProductPageClientProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
+  const { language } = useLanguage()
 
   // Build gallery array: main image + gallery images
   const allImages = [
@@ -76,6 +87,13 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
   const specifications = product.specifications || []
   const features = (product as any).features || []
   const documents = (product as any).documents || []
+
+  // Get depliant URL for this product based on current language
+  const productSlug = product.slug?.current || ''
+  const depliantUrls = productDepliants[productSlug]
+  const depliantUrl = depliantUrls
+    ? (depliantUrls[language] || depliantUrls['en'])
+    : null
 
   // Lightbox navigation
   const goToPrevious = useCallback(() => {
@@ -228,7 +246,7 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-4 mb-10">
+              <div className="flex flex-wrap gap-4 mb-6">
                 <Link
                   href="/contatti"
                   className="btn-primary flex items-center gap-2 text-lg px-8 py-4"
@@ -244,6 +262,22 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                   Listino Prezzi
                 </Link>
               </div>
+
+              {/* Depliant Download Button */}
+              {depliantUrl && (
+                <div className="mb-10">
+                  <a
+                    href={depliantUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                    className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl"
+                  >
+                    <Download className="w-5 h-5" />
+                    Scarica Depliant PDF
+                  </a>
+                </div>
+              )}
 
               {/* Quick Features */}
               {features.length > 0 && (

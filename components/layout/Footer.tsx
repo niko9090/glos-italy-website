@@ -278,9 +278,10 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     </div>
                   </li>
                 )}
-                {settings?.vatNumber && (
-                  <li className="flex items-center gap-3 text-gray-500 text-sm pt-2 border-t border-gray-800">
-                    <span>P.IVA: {settings.vatNumber}</span>
+                {(settings?.vatNumber || settings?.pec) && (
+                  <li className="text-gray-500 text-sm pt-2 border-t border-gray-800 space-y-1">
+                    {settings?.vatNumber && <span className="block">P.IVA: {settings.vatNumber}</span>}
+                    {settings?.pec && <span className="block">PEC: {settings.pec}</span>}
                   </li>
                 )}
               </ul>

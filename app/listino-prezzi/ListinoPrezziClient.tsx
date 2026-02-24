@@ -322,6 +322,28 @@ const categoryFamilies: CategoryFamily[] = [
           },
         ],
       },
+      {
+        id: 'ecocut',
+        name: 'Eco-Cut',
+        subtitle: '4ª generazione - Taglierina professionale per polistirolo',
+        note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato',
+        products: [
+          {
+            code: 'ECOCUT 100-30',
+            name: 'Eco-Cut 1000/30',
+            description: 'L\'evoluzione della taglierina per polistirolo. Design modulare, trasformatore integrato. Tagli da 45° a 45°, scanalature, diagonali. L\'unica taglierina sul mercato che unisce qualità e prezzo in un design modulare.',
+            price: 0,
+            specs: [
+              { label: 'Misura max. taglio', value: '1000×500 mm' },
+              { label: 'Profondità taglio', value: '300 mm' },
+              { label: 'Dimensioni chiusa', value: '1450×480×200 mm' },
+              { label: 'Peso', value: '13 kg' },
+              { label: 'Voltaggio', value: '24V' },
+            ],
+            badge: 'Novità',
+          },
+        ],
+      },
     ],
   },
   {

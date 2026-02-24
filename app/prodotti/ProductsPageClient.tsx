@@ -582,7 +582,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                 </div>
               </div>
 
-              {/* Grid Prodotti */}
+              {/* Grid Prodotti - Ordina mettendo NEW e Featured in cima */}
               <motion.div
                 variants={stagger}
                 initial="hidden"
@@ -590,9 +590,16 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                 viewport={{ once: true }}
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
               >
-                {group.products.map((product) => (
-                  <ProductCard key={product._id} product={product} isOnBlue={isBlue} />
-                ))}
+                {[...group.products]
+                  .sort((a, b) => {
+                    // Prodotti NEW prima, poi Featured, poi gli altri
+                    const aScore = (a.isNew ? 2 : 0) + (a.isFeatured ? 1 : 0)
+                    const bScore = (b.isNew ? 2 : 0) + (b.isFeatured ? 1 : 0)
+                    return bScore - aScore
+                  })
+                  .map((product) => (
+                    <ProductCard key={product._id} product={product} isOnBlue={isBlue} />
+                  ))}
               </motion.div>
             </div>
 

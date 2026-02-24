@@ -494,10 +494,11 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+            className="fixed top-0 left-0 right-0 bottom-0 z-[9999] bg-black overflow-hidden"
             onClick={() => setLightboxOpen(false)}
             onKeyDown={handleKeyDown}
             tabIndex={0}
+            style={{ position: 'fixed', width: '100vw', height: '100vh' }}
           >
             {/* Close button */}
             <button
@@ -513,14 +514,14 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
               <>
                 <button
                   onClick={(e) => { e.stopPropagation(); goToPrevious() }}
-                  className="absolute left-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors z-10"
                   aria-label="Immagine precedente"
                 >
                   <ChevronLeft className="w-8 h-8" />
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); goToNext() }}
-                  className="absolute right-4 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors z-10"
                   aria-label="Immagine successiva"
                 >
                   <ChevronRight className="w-8 h-8" />
@@ -528,23 +529,19 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
               </>
             )}
 
-            {/* Main image */}
-            <motion.div
-              key={selectedImageIndex}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="flex items-center justify-center w-full h-full p-4"
+            {/* Main image - centered */}
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
               onClick={(e) => e.stopPropagation()}
             >
               {allImages[selectedImageIndex] && safeImageUrl(allImages[selectedImageIndex], 1200, 1200) && (
                 <img
                   src={safeImageUrl(allImages[selectedImageIndex], 1200, 1200)!}
                   alt={`${productName} - immagine ${selectedImageIndex + 1}`}
-                  className="max-w-full max-h-[85vh] object-contain"
+                  style={{ maxWidth: '90vw', maxHeight: '85vh', objectFit: 'contain' }}
                 />
               )}
-            </motion.div>
+            </div>
 
             {/* Image counter */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-white/10 backdrop-blur rounded-full text-white text-sm">

@@ -636,8 +636,8 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
               className={`
-                bg-white/80 backdrop-blur-lg rounded-2xl ${getFormPadding()}
-                border border-white/30 shadow-2xl
+                bg-white rounded-2xl ${getFormPadding()}
+                shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-gray-100
                 ${data.layout?.includes('form-right') ? 'lg:order-2' : ''}
               `}
             >
@@ -839,7 +839,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           >
             {/* Contact Items */}
             {data.showContactInfo !== false && data.contactItems && data.contactItems.length > 0 && (
-              <div className={`bg-white/80 backdrop-blur-lg rounded-2xl ${getInfoPadding()} border border-white/30 shadow-xl`}>
+              <div className={`bg-white rounded-2xl ${getInfoPadding()} shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-gray-100`}>
                 {!!data.contactInfoTitle && (
                   <h3 className="text-xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                     {String(t(data.contactInfoTitle) || '')}
@@ -881,7 +881,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
 
             {/* Opening Hours */}
             {data.showOpeningHours && data.openingHours && data.openingHours.length > 0 && (
-              <div className={`bg-white/80 backdrop-blur-lg rounded-2xl ${getInfoPadding()} border border-white/30 shadow-xl`}>
+              <div className={`bg-white rounded-2xl ${getInfoPadding()} shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-gray-100`}>
                 <div className="flex items-center gap-3 mb-5">
                   <div className={getIconStyleClasses()}>
                     <Clock className="w-5 h-5" />
@@ -901,7 +901,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
 
             {/* Social Links */}
             {data.showSocialLinks && data.socialLinks && data.socialLinks.length > 0 && (
-              <div className={`bg-white/80 backdrop-blur-lg rounded-2xl ${getInfoPadding()} border border-white/30 shadow-xl`}>
+              <div className={`bg-white rounded-2xl ${getInfoPadding()} shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-gray-100`}>
                 {!!data.socialTitle && (
                   <h3 className="text-lg font-bold text-gray-900 mb-4">{String(t(data.socialTitle) || '')}</h3>
                 )}

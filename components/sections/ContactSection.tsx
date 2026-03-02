@@ -490,44 +490,87 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
     ? `${sl(containerMaxWidthClasses, data.containerMaxWidth, 'normal')} mx-auto px-4 md:px-6`
     : 'container-glos'
 
-  // Check if wave background is enabled
-  const showWaveBackground = backgroundColor === 'wave-blue-white' || backgroundColor === 'gradient-blue-light'
+  // Check if premium background is enabled
+  const showPremiumBackground = backgroundColor === 'wave-blue-white' || backgroundColor === 'gradient-blue-light'
 
   return (
-    <section data-sanity-edit-target className={`${getSpacingClasses()} ${showWaveBackground ? 'bg-white' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showWaveBackground ? 'text-gray-900' : textColor} relative overflow-hidden`}>
-      {/* Wave Blue/White Background */}
-      {showWaveBackground && (
+    <section data-sanity-edit-target className={`${getSpacingClasses()} ${showPremiumBackground ? 'bg-gradient-to-br from-[#0a1628] via-[#0d2847] to-[#1a4480]' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showPremiumBackground ? 'text-white' : textColor} relative overflow-hidden`}>
+      {/* Premium Elegant Background */}
+      {showPremiumBackground && (
         <>
-          {/* Top wave - blue section */}
-          <div className="absolute top-0 left-0 right-0 h-[60%] bg-gradient-to-br from-primary via-[#0047AB] to-[#003380]">
-            {/* Wave SVG at bottom of blue section */}
-            <svg
-              className="absolute bottom-0 left-0 w-full"
-              viewBox="0 0 1440 120"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              preserveAspectRatio="none"
-              style={{ height: '120px', transform: 'translateY(1px)' }}
-            >
-              <path
-                d="M0,64 C360,128 720,0 1080,64 C1260,96 1380,80 1440,64 L1440,120 L0,120 Z"
-                fill="#ffffff"
-              />
-              <path
-                d="M0,80 C240,40 480,100 720,80 C960,60 1200,100 1440,80 L1440,120 L0,120 Z"
-                fill="#ffffff"
-                opacity="0.6"
-              />
-            </svg>
-          </div>
-          {/* Decorative circles */}
-          <div className="absolute top-20 right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute top-40 left-10 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
+          {/* Animated gradient overlay */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(59,130,246,0.3)_0%,_transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(99,102,241,0.2)_0%,_transparent_50%)]" />
+
+          {/* Floating geometric shapes */}
+          <motion.div
+            className="absolute top-20 right-[10%] w-72 h-72 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
+            }}
+            animate={{
+              y: [0, -20, 0],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          <motion.div
+            className="absolute top-40 left-[5%] w-96 h-96 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)',
+            }}
+            animate={{
+              y: [0, 15, 0],
+              x: [0, 10, 0],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          />
+          <motion.div
+            className="absolute bottom-20 right-[20%] w-64 h-64 rounded-full"
+            style={{
+              background: 'radial-gradient(circle, rgba(147,197,253,0.1) 0%, transparent 70%)',
+            }}
+            animate={{
+              y: [0, -15, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 7,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: 1,
+            }}
+          />
+
+          {/* Subtle grid pattern */}
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                               linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+              backgroundSize: '60px 60px',
+            }}
+          />
+
+          {/* Light beam effect */}
+          <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+          <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-blue-300/10 to-transparent" />
+
+          {/* Bottom fade to soften */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent" />
         </>
       )}
 
-      {/* Decorations (for non-wave backgrounds) */}
-      {data.showDecorations && !showWaveBackground && (
+      {/* Decorations (for non-premium backgrounds) */}
+      {data.showDecorations && !showPremiumBackground && (
         <>
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
@@ -542,25 +585,25 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
-          className={`text-center ${getHeaderMarginBottom()} ${showWaveBackground ? 'text-white' : ''}`}
+          className={`text-center ${getHeaderMarginBottom()}`}
         >
           {!!data.eyebrow && (
-            <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${showWaveBackground ? 'text-blue-200' : darkBg ? 'opacity-80' : 'text-primary'}`}>
+            <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${showPremiumBackground ? 'text-blue-300' : darkBg ? 'opacity-80' : 'text-primary'}`}>
               {String(t(data.eyebrow) || '')}
             </p>
           )}
           {!!data.title && (
-            <h2 className={`section-title mb-4 ${showWaveBackground ? 'text-white' : ''}`}>
+            <h2 className={`section-title mb-4 ${showPremiumBackground ? 'text-white drop-shadow-lg' : ''}`}>
               <RichText value={data.title} />
             </h2>
           )}
           {!!data.subtitle && (
-            <div className={`section-subtitle ${showWaveBackground ? 'text-blue-100' : ''}`}>
+            <div className={`section-subtitle ${showPremiumBackground ? 'text-blue-100' : ''}`}>
               <RichText value={data.subtitle} />
             </div>
           )}
           {!!data.description && (
-            <p className={`mt-4 max-w-2xl mx-auto ${showWaveBackground ? 'text-blue-100' : 'opacity-80'}`}>
+            <p className={`mt-4 max-w-2xl mx-auto ${showPremiumBackground ? 'text-blue-200/90' : 'opacity-80'}`}>
               {String(t(data.description) || '')}
             </p>
           )}

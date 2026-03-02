@@ -502,7 +502,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           <div
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(180deg, #ffffff 0%, #ffffff 20%, rgba(15,52,96,0.03) 35%, rgba(15,52,96,0.15) 50%, rgba(22,33,62,0.4) 65%, rgba(26,26,46,0.7) 80%, #1a1a2e 100%)',
+              background: 'linear-gradient(180deg, #ffffff 0%, rgba(15,52,96,0.02) 10%, rgba(15,52,96,0.08) 20%, rgba(15,52,96,0.2) 30%, rgba(22,33,62,0.4) 45%, rgba(26,26,46,0.65) 60%, #1a1a2e 80%, #1a1a2e 100%)',
             }}
           />
 
@@ -512,9 +512,9 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
             style={{
               width: '800px',
               height: '800px',
-              top: '25%',
+              top: '5%',
               left: '-10%',
-              background: 'radial-gradient(circle, rgba(15,52,96,0.25) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(15,52,96,0.2) 0%, transparent 70%)',
               filter: 'blur(80px)',
             }}
             animate={{
@@ -529,9 +529,9 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
             style={{
               width: '700px',
               height: '700px',
-              top: '30%',
+              top: '10%',
               right: '-15%',
-              background: 'radial-gradient(circle, rgba(22,33,62,0.3) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(22,33,62,0.25) 0%, transparent 70%)',
               filter: 'blur(100px)',
             }}
             animate={{
@@ -546,9 +546,9 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
             style={{
               width: '600px',
               height: '600px',
-              top: '40%',
+              top: '20%',
               left: '30%',
-              background: 'radial-gradient(circle, rgba(26,68,128,0.2) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(26,68,128,0.18) 0%, transparent 70%)',
               filter: 'blur(90px)',
             }}
             animate={{
@@ -564,7 +564,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
             style={{
               width: '500px',
               height: '500px',
-              bottom: '10%',
+              top: '35%',
               left: '20%',
               background: 'radial-gradient(circle, rgba(15,52,96,0.2) 0%, transparent 70%)',
               filter: 'blur(70px)',
@@ -581,9 +581,9 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
             style={{
               width: '550px',
               height: '550px',
-              bottom: '20%',
+              top: '30%',
               right: '10%',
-              background: 'radial-gradient(circle, rgba(22,33,62,0.25) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(22,33,62,0.22) 0%, transparent 70%)',
               filter: 'blur(85px)',
             }}
             animate={{

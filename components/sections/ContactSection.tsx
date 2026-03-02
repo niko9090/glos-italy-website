@@ -494,78 +494,102 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
   const showPremiumBackground = backgroundColor === 'wave-blue-white' || backgroundColor === 'gradient-blue-light'
 
   return (
-    <section data-sanity-edit-target className={`${getSpacingClasses()} ${showPremiumBackground ? 'bg-gradient-to-br from-[#0a1628] via-[#0d2847] to-[#1a4480]' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showPremiumBackground ? 'text-white' : textColor} relative overflow-hidden`}>
-      {/* Premium Elegant Background */}
+    <section data-sanity-edit-target className={`${getSpacingClasses()} ${showPremiumBackground ? 'bg-gradient-to-br from-primary via-[#2563eb] to-[#60a5fa]' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showPremiumBackground ? 'text-white' : textColor} relative overflow-hidden`}>
+      {/* Premium Elegant Background with Floating Bubbles */}
       {showPremiumBackground && (
         <>
-          {/* Animated gradient overlay */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(59,130,246,0.3)_0%,_transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(99,102,241,0.2)_0%,_transparent_50%)]" />
+          {/* White gradient overlays for lighter feel */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(255,255,255,0.4)_0%,_transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(255,255,255,0.3)_0%,_transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.15)_0%,_transparent_70%)]" />
 
-          {/* Floating geometric shapes */}
+          {/* Floating Blurred Bubbles */}
           <motion.div
-            className="absolute top-20 right-[10%] w-72 h-72 rounded-full"
-            style={{
-              background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
-            }}
+            className="absolute top-[10%] right-[15%] w-80 h-80 rounded-full blur-3xl"
+            style={{ background: 'rgba(255,255,255,0.4)' }}
             animate={{
-              y: [0, -20, 0],
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-          <motion.div
-            className="absolute top-40 left-[5%] w-96 h-96 rounded-full"
-            style={{
-              background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)',
-            }}
-            animate={{
-              y: [0, 15, 0],
-              x: [0, 10, 0],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
-          <motion.div
-            className="absolute bottom-20 right-[20%] w-64 h-64 rounded-full"
-            style={{
-              background: 'radial-gradient(circle, rgba(147,197,253,0.1) 0%, transparent 70%)',
-            }}
-            animate={{
-              y: [0, -15, 0],
+              y: [0, -30, 0],
+              x: [0, 20, 0],
               scale: [1, 1.1, 1],
             }}
-            transition={{
-              duration: 7,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: 1,
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute top-[30%] left-[5%] w-64 h-64 rounded-full blur-3xl"
+            style={{ background: 'rgba(255,255,255,0.35)' }}
+            animate={{
+              y: [0, 25, 0],
+              x: [0, -15, 0],
             }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+          />
+          <motion.div
+            className="absolute bottom-[15%] right-[25%] w-72 h-72 rounded-full blur-3xl"
+            style={{ background: 'rgba(255,255,255,0.3)' }}
+            animate={{
+              y: [0, -20, 0],
+              x: [0, 15, 0],
+              scale: [1, 1.15, 1],
+            }}
+            transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          />
+          <motion.div
+            className="absolute top-[50%] left-[20%] w-48 h-48 rounded-full blur-2xl"
+            style={{ background: 'rgba(255,255,255,0.25)' }}
+            animate={{
+              y: [0, 30, 0],
+              x: [0, -20, 0],
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          />
+          <motion.div
+            className="absolute bottom-[30%] left-[40%] w-56 h-56 rounded-full blur-3xl"
+            style={{ background: 'rgba(255,255,255,0.2)' }}
+            animate={{
+              y: [0, -25, 0],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+          />
+          <motion.div
+            className="absolute top-[15%] left-[50%] w-40 h-40 rounded-full blur-2xl"
+            style={{ background: 'rgba(255,255,255,0.3)' }}
+            animate={{
+              y: [0, 20, 0],
+              x: [0, 25, 0],
+            }}
+            transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
+          />
+          <motion.div
+            className="absolute bottom-[10%] right-[10%] w-36 h-36 rounded-full blur-2xl"
+            style={{ background: 'rgba(255,255,255,0.35)' }}
+            animate={{
+              y: [0, -15, 0],
+              x: [0, -10, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
           />
 
-          {/* Subtle grid pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                               linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-              backgroundSize: '60px 60px',
+          {/* Subtle light blue bubble accents */}
+          <motion.div
+            className="absolute top-[60%] right-[5%] w-32 h-32 rounded-full blur-2xl"
+            style={{ background: 'rgba(147,197,253,0.3)' }}
+            animate={{
+              y: [0, 18, 0],
+              x: [0, -12, 0],
             }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
           />
-
-          {/* Light beam effect */}
-          <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-white/10 to-transparent" />
-          <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-blue-300/10 to-transparent" />
-
-          {/* Bottom fade to soften */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/20 to-transparent" />
+          <motion.div
+            className="absolute top-[5%] left-[30%] w-28 h-28 rounded-full blur-xl"
+            style={{ background: 'rgba(191,219,254,0.4)' }}
+            animate={{
+              y: [0, -12, 0],
+              scale: [1, 1.15, 1],
+            }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+          />
         </>
       )}
 

@@ -118,7 +118,7 @@ interface ContactSectionProps {
     infoSectionsGap?: string
     mapMarginTop?: string
     // Style
-    backgroundColor?: 'white' | 'gray-light' | 'gray' | 'primary' | 'primary-light' | 'black' | 'gradient'
+    backgroundColor?: 'white' | 'gray-light' | 'gray' | 'primary' | 'primary-light' | 'black' | 'gradient' | 'gradient-blue' | 'gradient-blue-light' | 'wave-blue-white'
     textColor?: 'auto' | 'dark' | 'light'
     cardStyle?: 'none' | 'border' | 'shadow' | 'glass' | 'colored'
     iconStyle?: 'simple' | 'circle-filled' | 'circle-outlined' | 'square'

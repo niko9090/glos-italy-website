@@ -494,19 +494,14 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
   const showPremiumBackground = backgroundColor === 'wave-blue-white' || backgroundColor === 'gradient-blue-light'
 
   return (
-    <section data-sanity-edit-target className={`${getSpacingClasses()} ${showPremiumBackground ? 'bg-gradient-to-br from-primary via-[#2563eb] to-[#60a5fa]' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showPremiumBackground ? 'text-white' : textColor} relative overflow-hidden`}>
-      {/* Premium Elegant Background with Floating Bubbles */}
+    <section data-sanity-edit-target className={`${getSpacingClasses()} ${showPremiumBackground ? 'bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showPremiumBackground ? 'text-white' : textColor} relative overflow-hidden`}>
+      {/* Premium Background with Floating White Bubbles */}
       {showPremiumBackground && (
         <>
-          {/* White gradient overlays for lighter feel */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(255,255,255,0.4)_0%,_transparent_60%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(255,255,255,0.3)_0%,_transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.15)_0%,_transparent_70%)]" />
-
-          {/* Floating Blurred Bubbles */}
+          {/* Floating White Blurred Bubbles */}
           <motion.div
             className="absolute top-[10%] right-[15%] w-80 h-80 rounded-full blur-3xl"
-            style={{ background: 'rgba(255,255,255,0.4)' }}
+            style={{ background: 'rgba(255,255,255,0.15)' }}
             animate={{
               y: [0, -30, 0],
               x: [0, 20, 0],
@@ -516,7 +511,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           />
           <motion.div
             className="absolute top-[30%] left-[5%] w-64 h-64 rounded-full blur-3xl"
-            style={{ background: 'rgba(255,255,255,0.35)' }}
+            style={{ background: 'rgba(255,255,255,0.12)' }}
             animate={{
               y: [0, 25, 0],
               x: [0, -15, 0],
@@ -525,7 +520,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           />
           <motion.div
             className="absolute bottom-[15%] right-[25%] w-72 h-72 rounded-full blur-3xl"
-            style={{ background: 'rgba(255,255,255,0.3)' }}
+            style={{ background: 'rgba(255,255,255,0.1)' }}
             animate={{
               y: [0, -20, 0],
               x: [0, 15, 0],
@@ -535,7 +530,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           />
           <motion.div
             className="absolute top-[50%] left-[20%] w-48 h-48 rounded-full blur-2xl"
-            style={{ background: 'rgba(255,255,255,0.25)' }}
+            style={{ background: 'rgba(255,255,255,0.08)' }}
             animate={{
               y: [0, 30, 0],
               x: [0, -20, 0],
@@ -544,7 +539,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           />
           <motion.div
             className="absolute bottom-[30%] left-[40%] w-56 h-56 rounded-full blur-3xl"
-            style={{ background: 'rgba(255,255,255,0.2)' }}
+            style={{ background: 'rgba(255,255,255,0.1)' }}
             animate={{
               y: [0, -25, 0],
               scale: [1, 1.2, 1],
@@ -553,7 +548,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           />
           <motion.div
             className="absolute top-[15%] left-[50%] w-40 h-40 rounded-full blur-2xl"
-            style={{ background: 'rgba(255,255,255,0.3)' }}
+            style={{ background: 'rgba(255,255,255,0.12)' }}
             animate={{
               y: [0, 20, 0],
               x: [0, 25, 0],
@@ -562,7 +557,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           />
           <motion.div
             className="absolute bottom-[10%] right-[10%] w-36 h-36 rounded-full blur-2xl"
-            style={{ background: 'rgba(255,255,255,0.35)' }}
+            style={{ background: 'rgba(255,255,255,0.15)' }}
             animate={{
               y: [0, -15, 0],
               x: [0, -10, 0],
@@ -570,11 +565,9 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
             }}
             transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
           />
-
-          {/* Subtle light blue bubble accents */}
           <motion.div
             className="absolute top-[60%] right-[5%] w-32 h-32 rounded-full blur-2xl"
-            style={{ background: 'rgba(147,197,253,0.3)' }}
+            style={{ background: 'rgba(255,255,255,0.1)' }}
             animate={{
               y: [0, 18, 0],
               x: [0, -12, 0],
@@ -583,7 +576,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           />
           <motion.div
             className="absolute top-[5%] left-[30%] w-28 h-28 rounded-full blur-xl"
-            style={{ background: 'rgba(191,219,254,0.4)' }}
+            style={{ background: 'rgba(255,255,255,0.18)' }}
             animate={{
               y: [0, -12, 0],
               scale: [1, 1.15, 1],

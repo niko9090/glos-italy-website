@@ -598,7 +598,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
             </h2>
           )}
           {!!data.subtitle && (
-            <div className={`section-subtitle ${showPremiumBackground ? 'text-blue-100' : ''}`}>
+            <div className={`section-subtitle mx-auto text-center ${showPremiumBackground ? 'text-blue-100' : ''}`}>
               <RichText value={data.subtitle} />
             </div>
           )}

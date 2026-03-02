@@ -229,7 +229,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 </li>
                 <li>
                   <Link href="/rivenditori" className="text-gray-400 hover:text-white transition-colors">
-                    Trova Rivenditore
+                    Community
                   </Link>
                 </li>
               </ul>

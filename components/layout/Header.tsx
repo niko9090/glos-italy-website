@@ -23,7 +23,7 @@ const defaultNavItems = [
   { _key: 'chi-siamo', label: 'Chi Siamo', href: '/chi-siamo' },
   { _key: 'prodotti', label: 'Prodotti', href: '/prodotti' },
   { _key: 'listino', label: 'Listino Prezzi', href: '/listino-prezzi' },
-  { _key: 'rivenditori', label: 'Rivenditori', href: '/rivenditori' },
+  { _key: 'community', label: 'Community', href: '/rivenditori' },
   { _key: 'contatti', label: 'Contatti', href: '/contatti' },
 ]
 

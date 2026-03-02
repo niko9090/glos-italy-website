@@ -9,14 +9,14 @@ import { OrganizationSchema, BreadcrumbSchema, WebPageSchema, LocalBusinessSchem
 import DealersMap from '@/components/DealersMapWrapper'
 
 export const metadata: Metadata = {
-  title: 'Rivenditori',
-  description: 'Trova il rivenditore GLOS Italy più vicino a te. Rete vendita autorizzata in Italia e Europa per macchinari di precisione.',
+  title: 'Community',
+  description: 'Entra nella Community GLOS Italy. Trova i nostri partner e rivenditori autorizzati in Italia e Europa.',
   alternates: {
     canonical: `${SITE_URL}/rivenditori`,
   },
   openGraph: {
-    title: 'Rivenditori | GLOS Italy',
-    description: 'Trova il rivenditore GLOS Italy più vicino a te. Rete vendita autorizzata in Italia e Europa.',
+    title: 'Community | GLOS Italy',
+    description: 'Entra nella Community GLOS Italy. Trova i nostri partner e rivenditori autorizzati in Italia e Europa.',
     url: `${SITE_URL}/rivenditori`,
     siteName: SITE_NAME,
     locale: 'it_IT',
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Rivenditori | GLOS Italy',
-    description: 'Trova il rivenditore GLOS Italy più vicino a te. Rete vendita autorizzata in Italia e Europa.',
+    title: 'Community | GLOS Italy',
+    description: 'Entra nella Community GLOS Italy. Trova i nostri partner e rivenditori autorizzati in Italia e Europa.',
   },
 }
 
@@ -47,7 +47,7 @@ export default async function DealersPage() {
   // Breadcrumb data
   const breadcrumbItems = [
     { name: 'Home', url: '/' },
-    { name: 'Rivenditori', url: '/rivenditori' },
+    { name: 'Community', url: '/rivenditori' },
   ]
 
   return (
@@ -56,8 +56,8 @@ export default async function DealersPage() {
       <OrganizationSchema data={settings || {}} />
       <BreadcrumbSchema items={breadcrumbItems} />
       <WebPageSchema
-        title="Rivenditori GLOS Italy"
-        description="Trova il rivenditore GLOS Italy più vicino a te. Rete vendita autorizzata in Italia e Europa."
+        title="Community GLOS Italy"
+        description="Entra nella Community GLOS Italy. Trova i nostri partner e rivenditori autorizzati."
         url="/rivenditori"
       />
       {/* LocalBusiness schema for featured dealers */}
@@ -83,13 +83,13 @@ export default async function DealersPage() {
         <div className="container-glos">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="section-title mb-4">I Nostri Rivenditori</h1>
+            <h1 className="section-title mb-4">Community GLOS</h1>
             <p className="section-subtitle mx-auto">
-              Trova il punto vendita GLOS Italy più vicino a te
+              Entra nella nostra community e trova i partner GLOS Italy
             </p>
             {dealers.length > 0 && (
               <p className="text-sm text-gray-500 mt-2">
-                {dealers.length} rivenditori in {new Set(dealers.map(d => d.country || 'Italia').filter(Boolean)).size} paesi
+                {dealers.length} partner in {new Set(dealers.map(d => d.country || 'Italia').filter(Boolean)).size} paesi
               </p>
             )}
           </div>

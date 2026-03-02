@@ -482,8 +482,8 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                 >
                   {/* Immagine categoria */}
                   {group.products[0] && isValidImage(group.products[0].mainImage) && (
-                    <div className={`relative rounded-2xl overflow-hidden mb-6 ${
-                      isBlue ? 'bg-white/10 backdrop-blur-sm p-6' : 'bg-gray-50 p-6'
+                    <div className={`relative rounded-2xl overflow-hidden mb-6 p-6 ${
+                      isBlue ? 'bg-white' : 'bg-gradient-to-br from-[#0047AB] to-[#0055CC]'
                     }`}>
                       <Image
                         src={safeImageUrl(group.products[0].mainImage, 500, 400)!}
@@ -504,17 +504,17 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                           key={i}
                           className={`rounded-xl p-4 ${
                             isBlue
-                              ? 'bg-white/10 backdrop-blur-sm border border-white/20'
-                              : 'bg-gray-50 border border-gray-100'
+                              ? 'bg-white text-gray-900'
+                              : 'bg-gradient-to-br from-[#0047AB] to-[#0055CC] text-white'
                           }`}
                         >
                           <div className="flex items-center gap-2 mb-1">
-                            <SpecIcon className={`w-4 h-4 ${isBlue ? 'text-blue-300' : 'text-primary'}`} />
-                            <span className={`text-xs font-medium ${isBlue ? 'text-blue-200' : 'text-gray-500'}`}>
+                            <SpecIcon className={`w-4 h-4 ${isBlue ? 'text-primary' : 'text-blue-200'}`} />
+                            <span className={`text-xs font-medium ${isBlue ? 'text-gray-500' : 'text-blue-200'}`}>
                               {spec.label}
                             </span>
                           </div>
-                          <p className={`font-bold ${isBlue ? 'text-white' : 'text-gray-900'}`}>
+                          <p className={`font-bold ${isBlue ? 'text-gray-900' : 'text-white'}`}>
                             {spec.value}
                           </p>
                         </div>
@@ -650,7 +650,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
   )
 }
 
-// Card Prodotto
+// Card Prodotto - Bianca su blu, Blu su bianco
 function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolean }) {
   return (
     <motion.article
@@ -658,11 +658,11 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
       className={`group rounded-2xl overflow-hidden transition-all duration-300 ${
         isOnBlue
           ? 'bg-white shadow-lg hover:shadow-2xl'
-          : 'bg-white border border-gray-200 shadow-md hover:shadow-xl'
+          : 'bg-gradient-to-br from-[#0047AB] to-[#0055CC] shadow-lg hover:shadow-2xl'
       }`}
     >
       <Link href={`/prodotti/${product.slug?.current}`} className="block">
-        <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
+        <div className={`relative aspect-[4/3] overflow-hidden ${isOnBlue ? 'bg-gray-50' : 'bg-white/10'}`}>
           {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 400, 300) ? (
             <Image
               src={safeImageUrl(product.mainImage, 400, 300)!}
@@ -672,7 +672,7 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <Package className="w-16 h-16 text-gray-300" />
+              <Package className={`w-16 h-16 ${isOnBlue ? 'text-gray-300' : 'text-white/30'}`} />
             </div>
           )}
           <ProductBadges
@@ -684,13 +684,13 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
           />
         </div>
         <div className="p-5">
-          <h3 className="font-bold mb-2 transition-colors text-gray-900 group-hover:text-primary">
+          <h3 className={`font-bold mb-2 transition-colors ${isOnBlue ? 'text-gray-900 group-hover:text-primary' : 'text-white'}`}>
             {getTextValue(product.name)}
           </h3>
-          <div className="text-sm line-clamp-2 mb-4 text-gray-600">
+          <div className={`text-sm line-clamp-2 mb-4 ${isOnBlue ? 'text-gray-600' : 'text-blue-100'}`}>
             <RichText value={product.shortDescription} />
           </div>
-          <span className="inline-flex items-center font-medium text-sm group-hover:gap-2 transition-all text-primary">
+          <span className={`inline-flex items-center font-medium text-sm group-hover:gap-2 transition-all ${isOnBlue ? 'text-primary' : 'text-white'}`}>
             Scopri di più <ArrowRight className="w-4 h-4 ml-1" />
           </span>
         </div>

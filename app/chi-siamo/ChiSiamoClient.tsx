@@ -59,7 +59,7 @@ export default function ChiSiamoClient() {
             initial={fadeInUp.initial}
             animate={fadeInUp.animate}
             transition={{ duration: 0.8 }}
-            className="max-w-4xl"
+            className="max-w-4xl mx-auto text-center"
           >
             <p className="text-blue-300 uppercase tracking-widest text-sm font-semibold mb-4">
               La Nostra Storia
@@ -70,7 +70,7 @@ export default function ChiSiamoClient() {
                 Made in Italy
               </span>
             </h1>
-            <p className="text-xl text-blue-100 max-w-2xl">
+            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
               Dal cuore della Motor Valley, progettiamo e produciamo macchinari
               che definiscono gli standard del settore.
             </p>

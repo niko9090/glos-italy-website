@@ -10,13 +10,13 @@ import DealersMap from '@/components/DealersMapWrapper'
 
 export const metadata: Metadata = {
   title: 'Community',
-  description: 'Entra nella Community GLOS Italy. Trova i nostri partner e rivenditori autorizzati in Italia e Europa.',
+  description: 'Entra nella Community GLOS Italy. Trova i rivenditori autorizzati in Italia e Europa.',
   alternates: {
     canonical: `${SITE_URL}/rivenditori`,
   },
   openGraph: {
     title: 'Community | GLOS Italy',
-    description: 'Entra nella Community GLOS Italy. Trova i nostri partner e rivenditori autorizzati in Italia e Europa.',
+    description: 'Entra nella Community GLOS Italy. Trova i rivenditori autorizzati in Italia e Europa.',
     url: `${SITE_URL}/rivenditori`,
     siteName: SITE_NAME,
     locale: 'it_IT',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Community | GLOS Italy',
-    description: 'Entra nella Community GLOS Italy. Trova i nostri partner e rivenditori autorizzati in Italia e Europa.',
+    description: 'Entra nella Community GLOS Italy. Trova i rivenditori autorizzati in Italia e Europa.',
   },
 }
 
@@ -57,7 +57,7 @@ export default async function DealersPage() {
       <BreadcrumbSchema items={breadcrumbItems} />
       <WebPageSchema
         title="Community GLOS Italy"
-        description="Entra nella Community GLOS Italy. Trova i nostri partner e rivenditori autorizzati."
+        description="Entra nella Community GLOS Italy. Trova i rivenditori autorizzati."
         url="/rivenditori"
       />
       {/* LocalBusiness schema for featured dealers */}
@@ -85,11 +85,11 @@ export default async function DealersPage() {
           <div className="text-center mb-12">
             <h1 className="section-title mb-4">Community GLOS</h1>
             <p className="section-subtitle mx-auto">
-              Entra nella nostra community e trova i partner GLOS Italy
+              Entra nella nostra community e scopri i rivenditori GLOS Italy
             </p>
             {dealers.length > 0 && (
               <p className="text-sm text-gray-500 mt-2">
-                {dealers.length} partner in {new Set(dealers.map(d => d.country || 'Italia').filter(Boolean)).size} paesi
+                {dealers.length} rivenditori in {new Set(dealers.map(d => d.country || 'Italia').filter(Boolean)).size} paesi
               </p>
             )}
           </div>

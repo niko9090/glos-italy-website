@@ -495,83 +495,102 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
 
   return (
     <section data-sanity-edit-target className={`${getSpacingClasses()} ${showPremiumBackground ? 'bg-white' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showPremiumBackground ? 'text-gray-900' : textColor} relative overflow-hidden`}>
-      {/* Premium Background: White top, Blue bottom with wave transition */}
+      {/* Premium Background: Soft gradient white to blue */}
       {showPremiumBackground && (
         <>
-          {/* Blue section at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-[55%] bg-gradient-to-b from-[#0f3460] via-[#16213e] to-[#1a1a2e]" />
-
-          {/* Blurred wave transition - multiple layers for smooth effect */}
-          <motion.div
-            className="absolute left-0 right-0 h-[400px] blur-3xl"
+          {/* Base gradient - very soft transition */}
+          <div
+            className="absolute inset-0"
             style={{
-              top: '35%',
-              background: 'linear-gradient(to bottom, transparent 0%, #0f3460 50%, #16213e 100%)',
-              borderRadius: '50% 50% 0 0 / 100% 100% 0 0',
+              background: 'linear-gradient(180deg, #ffffff 0%, #ffffff 20%, rgba(15,52,96,0.03) 35%, rgba(15,52,96,0.15) 50%, rgba(22,33,62,0.4) 65%, rgba(26,26,46,0.7) 80%, #1a1a2e 100%)',
             }}
-            animate={{
-              scaleX: [1, 1.02, 1],
-              y: [0, -10, 0],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
           />
 
-          {/* Secondary wave layer */}
+          {/* Soft floating blobs for organic feel */}
           <motion.div
-            className="absolute left-[-5%] right-[-5%] h-[350px] blur-2xl opacity-80"
+            className="absolute rounded-full"
             style={{
-              top: '38%',
-              background: 'linear-gradient(to bottom, transparent 0%, #1a4480 40%, #0f3460 100%)',
-              borderRadius: '60% 40% 0 0 / 100% 100% 0 0',
+              width: '800px',
+              height: '800px',
+              top: '25%',
+              left: '-10%',
+              background: 'radial-gradient(circle, rgba(15,52,96,0.25) 0%, transparent 70%)',
+              filter: 'blur(80px)',
             }}
             animate={{
-              scaleX: [1, 0.98, 1],
-              y: [0, 8, 0],
+              x: [0, 50, 0],
+              y: [0, -30, 0],
             }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
           />
 
-          {/* Third wave layer for depth */}
           <motion.div
-            className="absolute left-[-10%] right-[-10%] h-[300px] blur-3xl opacity-60"
+            className="absolute rounded-full"
             style={{
-              top: '42%',
-              background: 'linear-gradient(to bottom, transparent 0%, #2563eb 30%, #1a4480 100%)',
-              borderRadius: '40% 60% 0 0 / 100% 100% 0 0',
-            }}
-            animate={{
-              scaleX: [1, 1.03, 1],
-              y: [0, -5, 0],
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-          />
-
-          {/* Floating blur accents */}
-          <motion.div
-            className="absolute w-96 h-96 rounded-full blur-3xl opacity-40"
-            style={{
+              width: '700px',
+              height: '700px',
               top: '30%',
-              left: '10%',
-              background: '#0f3460',
+              right: '-15%',
+              background: 'radial-gradient(circle, rgba(22,33,62,0.3) 0%, transparent 70%)',
+              filter: 'blur(100px)',
+            }}
+            animate={{
+              x: [0, -40, 0],
+              y: [0, 25, 0],
+            }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          />
+
+          <motion.div
+            className="absolute rounded-full"
+            style={{
+              width: '600px',
+              height: '600px',
+              top: '40%',
+              left: '30%',
+              background: 'radial-gradient(circle, rgba(26,68,128,0.2) 0%, transparent 70%)',
+              filter: 'blur(90px)',
             }}
             animate={{
               x: [0, 30, 0],
               y: [0, -20, 0],
+              scale: [1, 1.1, 1],
             }}
-            transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+            transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
           />
+
           <motion.div
-            className="absolute w-80 h-80 rounded-full blur-3xl opacity-30"
+            className="absolute rounded-full"
             style={{
-              top: '35%',
-              right: '5%',
-              background: '#1a4480',
+              width: '500px',
+              height: '500px',
+              bottom: '10%',
+              left: '20%',
+              background: 'radial-gradient(circle, rgba(15,52,96,0.2) 0%, transparent 70%)',
+              filter: 'blur(70px)',
             }}
             animate={{
-              x: [0, -25, 0],
+              x: [0, -35, 0],
               y: [0, 15, 0],
             }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+            transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+          />
+
+          <motion.div
+            className="absolute rounded-full"
+            style={{
+              width: '550px',
+              height: '550px',
+              bottom: '20%',
+              right: '10%',
+              background: 'radial-gradient(circle, rgba(22,33,62,0.25) 0%, transparent 70%)',
+              filter: 'blur(85px)',
+            }}
+            animate={{
+              x: [0, 25, 0],
+              y: [0, -20, 0],
+            }}
+            transition={{ duration: 17, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
           />
         </>
       )}

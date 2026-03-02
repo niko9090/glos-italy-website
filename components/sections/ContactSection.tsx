@@ -147,6 +147,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
     gradient: 'bg-gradient-to-br from-primary via-primary-dark to-blue-900',
     'gradient-blue': 'bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]',
     'gradient-blue-light': 'bg-gradient-to-br from-primary to-[#003380]',
+    'wave-blue-white': 'bg-white', // Handled separately with SVG wave
   }
 
   // Text color
@@ -489,10 +490,44 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
     ? `${sl(containerMaxWidthClasses, data.containerMaxWidth, 'normal')} mx-auto px-4 md:px-6`
     : 'container-glos'
 
+  // Check if wave background is enabled
+  const showWaveBackground = backgroundColor === 'wave-blue-white' || backgroundColor === 'gradient-blue-light'
+
   return (
-    <section data-sanity-edit-target className={`${getSpacingClasses()} ${sl(bgClasses, data.backgroundColor, 'gray-light')} ${textColor} relative overflow-hidden`}>
-      {/* Decorations */}
-      {data.showDecorations && (
+    <section data-sanity-edit-target className={`${getSpacingClasses()} ${showWaveBackground ? 'bg-white' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showWaveBackground ? 'text-gray-900' : textColor} relative overflow-hidden`}>
+      {/* Wave Blue/White Background */}
+      {showWaveBackground && (
+        <>
+          {/* Top wave - blue section */}
+          <div className="absolute top-0 left-0 right-0 h-[60%] bg-gradient-to-br from-primary via-[#0047AB] to-[#003380]">
+            {/* Wave SVG at bottom of blue section */}
+            <svg
+              className="absolute bottom-0 left-0 w-full"
+              viewBox="0 0 1440 120"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              preserveAspectRatio="none"
+              style={{ height: '120px', transform: 'translateY(1px)' }}
+            >
+              <path
+                d="M0,64 C360,128 720,0 1080,64 C1260,96 1380,80 1440,64 L1440,120 L0,120 Z"
+                fill="#ffffff"
+              />
+              <path
+                d="M0,80 C240,40 480,100 720,80 C960,60 1200,100 1440,80 L1440,120 L0,120 Z"
+                fill="#ffffff"
+                opacity="0.6"
+              />
+            </svg>
+          </div>
+          {/* Decorative circles */}
+          <div className="absolute top-20 right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+          <div className="absolute top-40 left-10 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
+        </>
+      )}
+
+      {/* Decorations (for non-wave backgrounds) */}
+      {data.showDecorations && !showWaveBackground && (
         <>
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
           <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
@@ -507,25 +542,25 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
-          className={`text-center ${getHeaderMarginBottom()}`}
+          className={`text-center ${getHeaderMarginBottom()} ${showWaveBackground ? 'text-white' : ''}`}
         >
           {!!data.eyebrow && (
-            <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${darkBg ? 'opacity-80' : 'text-primary'}`}>
+            <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${showWaveBackground ? 'text-blue-200' : darkBg ? 'opacity-80' : 'text-primary'}`}>
               {String(t(data.eyebrow) || '')}
             </p>
           )}
           {!!data.title && (
-            <h2 className="section-title mb-4">
+            <h2 className={`section-title mb-4 ${showWaveBackground ? 'text-white' : ''}`}>
               <RichText value={data.title} />
             </h2>
           )}
           {!!data.subtitle && (
-            <div className="section-subtitle">
+            <div className={`section-subtitle ${showWaveBackground ? 'text-blue-100' : ''}`}>
               <RichText value={data.subtitle} />
             </div>
           )}
           {!!data.description && (
-            <p className="mt-4 max-w-2xl mx-auto opacity-80">
+            <p className={`mt-4 max-w-2xl mx-auto ${showWaveBackground ? 'text-blue-100' : 'opacity-80'}`}>
               {String(t(data.description) || '')}
             </p>
           )}

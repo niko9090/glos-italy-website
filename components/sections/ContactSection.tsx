@@ -145,13 +145,15 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
     'primary-light': 'bg-blue-50',
     black: 'bg-gray-900',
     gradient: 'bg-gradient-to-br from-primary via-primary-dark to-blue-900',
+    'gradient-blue': 'bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]',
+    'gradient-blue-light': 'bg-gradient-to-br from-primary to-[#003380]',
   }
 
   // Text color
   const getTextColor = () => {
     if (data.textColor?.includes('dark')) return 'text-gray-900'
     if (data.textColor?.includes('light')) return 'text-white'
-    const darkBgs = ['primary', 'black', 'gradient']
+    const darkBgs = ['primary', 'black', 'gradient', 'gradient-blue', 'gradient-blue-light']
     return darkBgs.some(bg => (data.backgroundColor || 'white').includes(bg)) ? 'text-white' : 'text-gray-900'
   }
 
@@ -457,7 +459,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
 
   const backgroundColor = data.backgroundColor || 'gray-light'
   const textColor = getTextColor()
-  const darkBg = ['primary', 'black', 'gradient'].includes(backgroundColor)
+  const darkBg = ['primary', 'black', 'gradient', 'gradient-blue', 'gradient-blue-light'].includes(backgroundColor)
   const animationVariants = getAnimationVariants()
 
   // Layout classes - AGGIORNATI per bilanciamento altezze + spacing dinamico

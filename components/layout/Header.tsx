@@ -27,13 +27,13 @@ const defaultNavItems = [
   { _key: 'contatti', label: 'Contatti', href: '/contatti' },
 ]
 
-// Logo size classes
+// Logo size classes - dimensioni aumentate
 const logoSizeClasses: Record<string, { height: string; width: number }> = {
-  sm: { height: 'h-8', width: 100 },
-  md: { height: 'h-10', width: 125 },
-  lg: { height: 'h-12', width: 150 },
-  xl: { height: 'h-14', width: 175 },
-  '2xl': { height: 'h-16', width: 200 },
+  sm: { height: 'h-10', width: 125 },
+  md: { height: 'h-12', width: 150 },
+  lg: { height: 'h-14', width: 175 },
+  xl: { height: 'h-16', width: 200 },
+  '2xl': { height: 'h-20', width: 250 },
 }
 
 // Header height classes
@@ -107,7 +107,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
               <Link
                 key={item._key}
                 href={item.href || '#'}
-                className="text-gray-700 hover:text-primary font-medium py-2 transition-colors"
+                className="text-gray-700 hover:text-primary font-medium text-lg py-2 transition-colors"
               >
                 {t(item.label)}
               </Link>
@@ -161,7 +161,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
                     key={item._key}
                     href={item.href || '#'}
                     onClick={toggleMobileMenu}
-                    className="block py-3 text-gray-700 font-medium hover:text-primary"
+                    className="block py-3 text-gray-700 font-medium text-lg hover:text-primary"
                   >
                     {t(item.label)}
                   </Link>

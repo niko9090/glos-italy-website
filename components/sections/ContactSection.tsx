@@ -494,94 +494,84 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
   const showPremiumBackground = backgroundColor === 'wave-blue-white' || backgroundColor === 'gradient-blue-light'
 
   return (
-    <section data-sanity-edit-target className={`${getSpacingClasses()} ${showPremiumBackground ? 'bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showPremiumBackground ? 'text-white' : textColor} relative overflow-hidden`}>
-      {/* Premium Background with Floating White Bubbles */}
+    <section data-sanity-edit-target className={`${getSpacingClasses()} ${showPremiumBackground ? 'bg-white' : sl(bgClasses, data.backgroundColor, 'gray-light')} ${showPremiumBackground ? 'text-gray-900' : textColor} relative overflow-hidden`}>
+      {/* Premium Background: White top, Blue bottom with wave transition */}
       {showPremiumBackground && (
         <>
-          {/* Floating White Blurred Bubbles */}
+          {/* Blue section at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-[55%] bg-gradient-to-b from-[#0f3460] via-[#16213e] to-[#1a1a2e]" />
+
+          {/* Blurred wave transition - multiple layers for smooth effect */}
           <motion.div
-            className="absolute top-[10%] right-[15%] w-80 h-80 rounded-full blur-3xl"
-            style={{ background: 'rgba(255,255,255,0.15)' }}
-            animate={{
-              y: [0, -30, 0],
-              x: [0, 20, 0],
-              scale: [1, 1.1, 1],
+            className="absolute left-0 right-0 h-[400px] blur-3xl"
+            style={{
+              top: '35%',
+              background: 'linear-gradient(to bottom, transparent 0%, #0f3460 50%, #16213e 100%)',
+              borderRadius: '50% 50% 0 0 / 100% 100% 0 0',
             }}
-            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="absolute top-[30%] left-[5%] w-64 h-64 rounded-full blur-3xl"
-            style={{ background: 'rgba(255,255,255,0.12)' }}
             animate={{
-              y: [0, 25, 0],
-              x: [0, -15, 0],
+              scaleX: [1, 1.02, 1],
+              y: [0, -10, 0],
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+
+          {/* Secondary wave layer */}
+          <motion.div
+            className="absolute left-[-5%] right-[-5%] h-[350px] blur-2xl opacity-80"
+            style={{
+              top: '38%',
+              background: 'linear-gradient(to bottom, transparent 0%, #1a4480 40%, #0f3460 100%)',
+              borderRadius: '60% 40% 0 0 / 100% 100% 0 0',
+            }}
+            animate={{
+              scaleX: [1, 0.98, 1],
+              y: [0, 8, 0],
             }}
             transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
           />
+
+          {/* Third wave layer for depth */}
           <motion.div
-            className="absolute bottom-[15%] right-[25%] w-72 h-72 rounded-full blur-3xl"
-            style={{ background: 'rgba(255,255,255,0.1)' }}
+            className="absolute left-[-10%] right-[-10%] h-[300px] blur-3xl opacity-60"
+            style={{
+              top: '42%',
+              background: 'linear-gradient(to bottom, transparent 0%, #2563eb 30%, #1a4480 100%)',
+              borderRadius: '40% 60% 0 0 / 100% 100% 0 0',
+            }}
             animate={{
+              scaleX: [1, 1.03, 1],
+              y: [0, -5, 0],
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+          />
+
+          {/* Floating blur accents */}
+          <motion.div
+            className="absolute w-96 h-96 rounded-full blur-3xl opacity-40"
+            style={{
+              top: '30%',
+              left: '10%',
+              background: '#0f3460',
+            }}
+            animate={{
+              x: [0, 30, 0],
               y: [0, -20, 0],
-              x: [0, 15, 0],
-              scale: [1, 1.15, 1],
             }}
-            transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+            transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
           />
           <motion.div
-            className="absolute top-[50%] left-[20%] w-48 h-48 rounded-full blur-2xl"
-            style={{ background: 'rgba(255,255,255,0.08)' }}
-            animate={{
-              y: [0, 30, 0],
-              x: [0, -20, 0],
+            className="absolute w-80 h-80 rounded-full blur-3xl opacity-30"
+            style={{
+              top: '35%',
+              right: '5%',
+              background: '#1a4480',
             }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          />
-          <motion.div
-            className="absolute bottom-[30%] left-[40%] w-56 h-56 rounded-full blur-3xl"
-            style={{ background: 'rgba(255,255,255,0.1)' }}
             animate={{
-              y: [0, -25, 0],
-              scale: [1, 1.2, 1],
+              x: [0, -25, 0],
+              y: [0, 15, 0],
             }}
-            transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-          />
-          <motion.div
-            className="absolute top-[15%] left-[50%] w-40 h-40 rounded-full blur-2xl"
-            style={{ background: 'rgba(255,255,255,0.12)' }}
-            animate={{
-              y: [0, 20, 0],
-              x: [0, 25, 0],
-            }}
-            transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut', delay: 0.8 }}
-          />
-          <motion.div
-            className="absolute bottom-[10%] right-[10%] w-36 h-36 rounded-full blur-2xl"
-            style={{ background: 'rgba(255,255,255,0.15)' }}
-            animate={{
-              y: [0, -15, 0],
-              x: [0, -10, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 2.5 }}
-          />
-          <motion.div
-            className="absolute top-[60%] right-[5%] w-32 h-32 rounded-full blur-2xl"
-            style={{ background: 'rgba(255,255,255,0.1)' }}
-            animate={{
-              y: [0, 18, 0],
-              x: [0, -12, 0],
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-          />
-          <motion.div
-            className="absolute top-[5%] left-[30%] w-28 h-28 rounded-full blur-xl"
-            style={{ background: 'rgba(255,255,255,0.18)' }}
-            animate={{
-              y: [0, -12, 0],
-              scale: [1, 1.15, 1],
-            }}
-            transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+            transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
           />
         </>
       )}
@@ -605,22 +595,22 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
           className={`text-center ${getHeaderMarginBottom()}`}
         >
           {!!data.eyebrow && (
-            <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${showPremiumBackground ? 'text-blue-300' : darkBg ? 'opacity-80' : 'text-primary'}`}>
+            <p className={`text-sm font-semibold tracking-widest uppercase mb-4 ${showPremiumBackground ? 'text-primary' : darkBg ? 'opacity-80' : 'text-primary'}`}>
               {String(t(data.eyebrow) || '')}
             </p>
           )}
           {!!data.title && (
-            <h2 className={`section-title mb-4 ${showPremiumBackground ? 'text-white drop-shadow-lg' : ''}`}>
+            <h2 className={`section-title mb-4 ${showPremiumBackground ? 'text-gray-900' : ''}`}>
               <RichText value={data.title} />
             </h2>
           )}
           {!!data.subtitle && (
-            <div className={`section-subtitle mx-auto text-center ${showPremiumBackground ? 'text-blue-100' : ''}`}>
+            <div className={`section-subtitle mx-auto text-center ${showPremiumBackground ? 'text-gray-600' : ''}`}>
               <RichText value={data.subtitle} />
             </div>
           )}
           {!!data.description && (
-            <p className={`mt-4 max-w-2xl mx-auto ${showPremiumBackground ? 'text-blue-200/90' : 'opacity-80'}`}>
+            <p className={`mt-4 max-w-2xl mx-auto ${showPremiumBackground ? 'text-gray-500' : 'opacity-80'}`}>
               {String(t(data.description) || '')}
             </p>
           )}

@@ -229,13 +229,8 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
         </div>
       </section>
 
-      {/* ===== BLENDER GLOS - SEZIONE SPECIALE ===== */}
-      <section className="relative bg-gradient-to-br from-[#0047AB] via-[#0055CC] to-[#0066EE] text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-300 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4" />
-        </div>
-
+      {/* ===== BLENDER GLOS - SEZIONE SPECIALE (SFONDO BIANCO) ===== */}
+      <section className="relative bg-white text-gray-900 overflow-hidden">
         <div className="container-glos relative z-10 py-16 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Contenuto */}
@@ -245,16 +240,16 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
               whileInView="visible"
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
                 Blender GLOS
               </h2>
-              <p className="text-2xl text-blue-200 font-medium mb-6">BG2</p>
+              <p className="text-2xl text-primary font-medium mb-6">BG2</p>
 
-              <p className="text-lg text-blue-100 leading-relaxed mb-8">
+              <p className="text-lg text-gray-600 leading-relaxed mb-8">
                 {blenderInfo.longDescription}
               </p>
 
-              {/* Specifiche Tecniche in Cards */}
+              {/* Specifiche Tecniche in Cards BLU */}
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {blenderInfo.specs.map((spec, i) => {
                   const SpecIcon = spec.icon
@@ -265,11 +260,11 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
                       viewport={{ once: true }}
-                      className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20"
+                      className="bg-gradient-to-br from-[#0047AB] to-[#0055CC] rounded-xl p-4 text-white"
                     >
                       <div className="flex items-center gap-2 mb-2">
-                        <SpecIcon className="w-4 h-4 text-blue-300" />
-                        <span className="text-blue-300 text-sm font-medium">{spec.label}</span>
+                        <SpecIcon className="w-4 h-4 text-blue-200" />
+                        <span className="text-blue-200 text-sm font-medium">{spec.label}</span>
                       </div>
                       <p className="text-white font-bold">{spec.value}</p>
                     </motion.div>
@@ -279,11 +274,11 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
 
               {/* Vantaggi */}
               <div className="mb-8">
-                <h4 className="text-sm font-semibold text-blue-200 uppercase tracking-wide mb-4">Vantaggi Principali</h4>
+                <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Vantaggi Principali</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {blenderInfo.benefits.map((benefit, i) => (
-                    <div key={i} className="flex items-center gap-2 text-blue-100">
-                      <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
+                    <div key={i} className="flex items-center gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
                       <span className="text-sm">{benefit}</span>
                     </div>
                   ))}
@@ -294,14 +289,14 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
               <div className="flex flex-wrap gap-4">
                 <Link
                   href={blenderProduct ? `/prodotti/${blenderProduct.slug?.current}` : '/contatti'}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary font-bold rounded-xl hover:bg-blue-50 transition-all shadow-lg"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg"
                 >
                   Scopri tutti i dettagli
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
                   href="/contatti"
-                  className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary/5 transition-all"
                 >
                   Richiedi preventivo
                 </Link>
@@ -316,7 +311,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
               viewport={{ once: true }}
             >
               <div className="relative">
-                <div className="relative bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
+                <div className="relative bg-gray-50 rounded-3xl p-8 border border-gray-100">
                   {blenderProduct && isValidImage(blenderProduct.mainImage) ? (
                     <Image
                       src={safeImageUrl(blenderProduct.mainImage, 600, 600)!}
@@ -366,10 +361,10 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
           </div>
         </div>
 
-        {/* Onda separatore */}
+        {/* Onda separatore verso blu */}
         <div className="absolute -bottom-px left-0 right-0 overflow-hidden">
           <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-[60px] block">
-            <path d="M0 60L48 52.5C96 45 192 30 288 22.5C384 15 480 15 576 20C672 25 768 35 864 40C960 45 1056 45 1152 42.5C1248 40 1344 35 1392 32.5L1440 30V60H1392C1344 60 1248 60 1152 60C1056 60 960 60 864 60C768 60 672 60 576 60C480 60 384 60 288 60C192 60 96 60 48 60H0Z" fill="white"/>
+            <path d="M0 60L48 52.5C96 45 192 30 288 22.5C384 15 480 15 576 20C672 25 768 35 864 40C960 45 1056 45 1152 42.5C1248 40 1344 35 1392 32.5L1440 30V60H1392C1344 60 1248 60 1152 60C1056 60 960 60 864 60C768 60 672 60 576 60C480 60 384 60 288 60C192 60 96 60 48 60H0Z" fill="#0047AB"/>
           </svg>
         </div>
       </section>
@@ -379,7 +374,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
         const categoryName = group.displayName || getTextValue(group.category.name)
         const categoryInfo = getCategoryInfo(categoryName)
         const CategoryIcon = categoryInfo.icon
-        const isBlue = groupIndex % 2 === 1 // Alterna partendo da bianco dopo Blender
+        const isBlue = groupIndex % 2 === 0 // Alterna partendo da blu dopo Blender (che è bianco)
 
         return (
           <section
@@ -604,10 +599,10 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
             </div>
 
             {/* Separatore ondulato */}
-            {isBlue && groupIndex < productsByCategory.length - 1 && (
+            {groupIndex < productsByCategory.length - 1 && (
               <div className="absolute -bottom-px left-0 right-0 overflow-hidden">
                 <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-[60px] block">
-                  <path d="M0 60L48 52.5C96 45 192 30 288 22.5C384 15 480 15 576 20C672 25 768 35 864 40C960 45 1056 45 1152 42.5C1248 40 1344 35 1392 32.5L1440 30V60H1392C1344 60 1248 60 1152 60C1056 60 960 60 864 60C768 60 672 60 576 60C480 60 384 60 288 60C192 60 96 60 48 60H0Z" fill="white"/>
+                  <path d="M0 60L48 52.5C96 45 192 30 288 22.5C384 15 480 15 576 20C672 25 768 35 864 40C960 45 1056 45 1152 42.5C1248 40 1344 35 1392 32.5L1440 30V60H1392C1344 60 1248 60 1152 60C1056 60 960 60 864 60C768 60 672 60 576 60C480 60 384 60 288 60C192 60 96 60 48 60H0Z" fill={isBlue ? 'white' : '#0047AB'}/>
                 </svg>
               </div>
             )}
@@ -663,11 +658,11 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
       className={`group rounded-2xl overflow-hidden transition-all duration-300 ${
         isOnBlue
           ? 'bg-white shadow-lg hover:shadow-2xl'
-          : 'bg-white shadow-sm hover:shadow-xl border border-gray-100'
+          : 'bg-gradient-to-br from-[#0047AB] to-[#0055CC] shadow-lg hover:shadow-2xl text-white'
       }`}
     >
       <Link href={`/prodotti/${product.slug?.current}`} className="block">
-        <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
+        <div className={`relative aspect-[4/3] overflow-hidden ${isOnBlue ? 'bg-gray-50' : 'bg-white/10'}`}>
           {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 400, 300) ? (
             <Image
               src={safeImageUrl(product.mainImage, 400, 300)!}
@@ -677,7 +672,7 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <Package className="w-16 h-16 text-gray-300" />
+              <Package className={`w-16 h-16 ${isOnBlue ? 'text-gray-300' : 'text-white/30'}`} />
             </div>
           )}
           <ProductBadges
@@ -689,13 +684,13 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
           />
         </div>
         <div className="p-5">
-          <h3 className="font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+          <h3 className={`font-bold mb-2 transition-colors ${isOnBlue ? 'text-gray-900 group-hover:text-primary' : 'text-white'}`}>
             {getTextValue(product.name)}
           </h3>
-          <div className="text-sm text-gray-600 line-clamp-2 mb-4">
+          <div className={`text-sm line-clamp-2 mb-4 ${isOnBlue ? 'text-gray-600' : 'text-blue-100'}`}>
             <RichText value={product.shortDescription} />
           </div>
-          <span className="inline-flex items-center text-primary font-medium text-sm group-hover:gap-2 transition-all">
+          <span className={`inline-flex items-center font-medium text-sm group-hover:gap-2 transition-all ${isOnBlue ? 'text-primary' : 'text-white'}`}>
             Scopri di più <ArrowRight className="w-4 h-4 ml-1" />
           </span>
         </div>

@@ -658,11 +658,11 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
       className={`group rounded-2xl overflow-hidden transition-all duration-300 ${
         isOnBlue
           ? 'bg-white shadow-lg hover:shadow-2xl'
-          : 'bg-gradient-to-br from-[#0047AB] to-[#0055CC] shadow-lg hover:shadow-2xl text-white'
+          : 'bg-white border border-gray-200 shadow-md hover:shadow-xl'
       }`}
     >
       <Link href={`/prodotti/${product.slug?.current}`} className="block">
-        <div className={`relative aspect-[4/3] overflow-hidden ${isOnBlue ? 'bg-gray-50' : 'bg-white/10'}`}>
+        <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
           {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 400, 300) ? (
             <Image
               src={safeImageUrl(product.mainImage, 400, 300)!}
@@ -672,7 +672,7 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <Package className={`w-16 h-16 ${isOnBlue ? 'text-gray-300' : 'text-white/30'}`} />
+              <Package className="w-16 h-16 text-gray-300" />
             </div>
           )}
           <ProductBadges
@@ -684,13 +684,13 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
           />
         </div>
         <div className="p-5">
-          <h3 className={`font-bold mb-2 transition-colors ${isOnBlue ? 'text-gray-900 group-hover:text-primary' : 'text-white'}`}>
+          <h3 className="font-bold mb-2 transition-colors text-gray-900 group-hover:text-primary">
             {getTextValue(product.name)}
           </h3>
-          <div className={`text-sm line-clamp-2 mb-4 ${isOnBlue ? 'text-gray-600' : 'text-blue-100'}`}>
+          <div className="text-sm line-clamp-2 mb-4 text-gray-600">
             <RichText value={product.shortDescription} />
           </div>
-          <span className={`inline-flex items-center font-medium text-sm group-hover:gap-2 transition-all ${isOnBlue ? 'text-primary' : 'text-white'}`}>
+          <span className="inline-flex items-center font-medium text-sm group-hover:gap-2 transition-all text-primary">
             Scopri di più <ArrowRight className="w-4 h-4 ml-1" />
           </span>
         </div>

@@ -374,7 +374,12 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
             className={`${getLayoutClasses()} ${sl(gapClasses, data.gap, 'lg')}`}
           >
             {data.items?.map((item, index) => {
+              // Check if this item has a feature image
+              const badgeText = item.badge ? String(t(item.badge) || '') : ''
+              const hasFeatureImage = !!featureImages[badgeText]
+
               const wrapperClassName = `block ${
+                hasFeatureImage ? 'flex items-center gap-5' :
                 data.iconPosition?.includes('left') ? 'flex items-start gap-4' :
                 data.iconPosition?.includes('right') ? 'flex items-start gap-4 flex-row-reverse' :
                 ''
@@ -418,31 +423,33 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
                     </div>
                   )}
 
+                  {/* Feature Image based on badge number - Side layout */}
+                  {!!item.badge && (() => {
+                    const badgeText = String(t(item.badge) || '')
+                    const featureImagePath = featureImages[badgeText]
+                    if (featureImagePath) {
+                      return (
+                        <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-2xl overflow-hidden shadow-xl ring-2 ring-white/50">
+                          <Image
+                            src={featureImagePath}
+                            alt=""
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      )
+                    }
+                    return null
+                  })()}
+
                   {/* Content */}
                   <div className={`flex-1 ${data.textAlign?.includes('center') && data.iconPosition?.includes('top') ? 'text-center' : ''}`}>
-                    {/* Feature Image based on badge number */}
-                    {!!item.badge && (() => {
-                      const badgeText = String(t(item.badge) || '')
-                      const featureImagePath = featureImages[badgeText]
-                      if (featureImagePath) {
-                        return (
-                          <div className="relative w-20 h-20 mb-4 rounded-xl overflow-hidden shadow-lg">
-                            <Image
-                              src={featureImagePath}
-                              alt=""
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        )
-                      }
-                      // Fallback to badge text if no image mapping
-                      return (
-                        <span className="inline-block px-2 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-2">
-                          {badgeText}
-                        </span>
-                      )
-                    })()}
+                    {/* Badge fallback if no image */}
+                    {!!item.badge && !featureImages[String(t(item.badge) || '')] && (
+                      <span className="inline-block px-2 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-2">
+                        {String(t(item.badge) || '')}
+                      </span>
+                    )}
 
                     {/* Title */}
                     {!!item.title && (

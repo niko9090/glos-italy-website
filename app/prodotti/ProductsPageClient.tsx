@@ -303,10 +303,12 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                 <a
                   href={`/docs/blender-glos-bg2-${language === 'en' ? 'en' : language === 'es' ? 'es' : 'it'}.pdf`}
                   download
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gray-800 text-white font-semibold rounded-xl hover:bg-gray-900 transition-all"
                 >
                   <Download className="w-5 h-5" />
-                  Scarica depliant
+                  Scheda Tecnica PDF
                 </a>
               </div>
             </motion.div>

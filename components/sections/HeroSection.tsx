@@ -632,11 +632,28 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
           {!!data.subtitle && (
             <motion.div
               variants={heroItemVariants}
-              className="text-xl md:text-2xl mb-10 opacity-90"
+              className="text-xl md:text-2xl mb-6 opacity-90"
             >
               <RichText value={data.subtitle} />
             </motion.div>
           )}
+
+          {/* Tagline with Read More */}
+          <motion.div
+            variants={heroItemVariants}
+            className="mb-10"
+          >
+            <p className="text-lg md:text-xl opacity-80 mb-3">
+              Dal cuore della Motor Valley, progettiamo e produciamo macchinari che definiscono gli standard del settore.
+            </p>
+            <Link
+              href="/chi-siamo"
+              className="inline-flex items-center gap-2 text-white/90 hover:text-white transition-colors group"
+            >
+              <span className="border-b border-white/50 group-hover:border-white">Leggi di più</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
 
           {/* Buttons */}
           {buttons.length > 0 && (

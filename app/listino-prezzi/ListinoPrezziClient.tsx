@@ -78,6 +78,28 @@ const categoryFamilies: CategoryFamily[] = [
     description: 'Taglierine professionali a filo caldo per isolanti: Policut Twin, Easy, Basic e Fiber Cut',
     subcategories: [
       {
+        id: 'ecocut',
+        name: 'Eco-Cut',
+        subtitle: '4ª generazione - Taglierina professionale per polistirolo',
+        note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato',
+        products: [
+          {
+            code: 'ECOCUT 100-30',
+            name: 'Eco-Cut 1000/30',
+            description: 'L\'evoluzione della taglierina per polistirolo. Design modulare, trasformatore integrato. Tagli da 45° a 45°, scanalature, diagonali. L\'unica taglierina sul mercato che unisce qualità e prezzo in un design modulare.',
+            price: 0,
+            specs: [
+              { label: 'Misura max. taglio', value: '1000×500 mm' },
+              { label: 'Profondità taglio', value: '300 mm' },
+              { label: 'Dimensioni chiusa', value: '1450×480×200 mm' },
+              { label: 'Peso', value: '13 kg' },
+              { label: 'Voltaggio', value: '24V' },
+            ],
+            badge: 'Novità',
+          },
+        ],
+      },
+      {
         id: 'twin',
         name: 'Policut Twin',
         subtitle: 'Serie Gamma - Taglierine autoportanti professionali',
@@ -317,28 +339,6 @@ const categoryFamilies: CategoryFamily[] = [
               { label: 'Profondità taglio', value: '235 mm' },
               { label: 'Dimensioni', value: '1750x416x200 mm' },
               { label: 'Peso', value: '21 kg' },
-            ],
-            badge: 'Novità',
-          },
-        ],
-      },
-      {
-        id: 'ecocut',
-        name: 'Eco-Cut',
-        subtitle: '4ª generazione - Taglierina professionale per polistirolo',
-        note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato',
-        products: [
-          {
-            code: 'ECOCUT 100-30',
-            name: 'Eco-Cut 1000/30',
-            description: 'L\'evoluzione della taglierina per polistirolo. Design modulare, trasformatore integrato. Tagli da 45° a 45°, scanalature, diagonali. L\'unica taglierina sul mercato che unisce qualità e prezzo in un design modulare.',
-            price: 0,
-            specs: [
-              { label: 'Misura max. taglio', value: '1000×500 mm' },
-              { label: 'Profondità taglio', value: '300 mm' },
-              { label: 'Dimensioni chiusa', value: '1450×480×200 mm' },
-              { label: 'Peso', value: '13 kg' },
-              { label: 'Voltaggio', value: '24V' },
             ],
             badge: 'Novità',
           },
@@ -642,16 +642,6 @@ export default function ListinoPrezziClient() {
             <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto mb-8">
               Attrezzature professionali Made in Italy per edilizia, industria e settore del colore.
             </p>
-            <div className="flex flex-wrap gap-3 justify-center">
-              <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full text-sm border border-white/20">
-                <Check className="w-4 h-4 text-green-400" />
-                Prezzi IVA esclusa
-              </span>
-              <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full text-sm border border-white/20">
-                <Check className="w-4 h-4 text-green-400" />
-                Porto franco da 500
-              </span>
-            </div>
           </motion.div>
         </div>
       </section>
@@ -749,10 +739,6 @@ export default function ListinoPrezziClient() {
                   })}
                 </div>
                 <div className="p-4 border-t border-gray-100">
-                  <div className="text-xs text-gray-500 space-y-1 mb-4">
-                    <p>Prezzi al pezzo, IVA e trasporto esclusi.</p>
-                    <p>Porto franco da 500,00 netti.</p>
-                  </div>
                   <Link
                     href="/contatti"
                     className="block w-full text-center px-4 py-3 bg-[#0047AB] text-white rounded-xl text-sm font-semibold hover:bg-[#003380] transition-colors"

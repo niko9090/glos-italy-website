@@ -80,16 +80,68 @@ const productDatasheets: Record<string, Record<string, string>> = {
   }
 }
 
+// Galleria immagini EXPO per prodotti specifici
+const productExpoGallery: Record<string, string[]> = {
+  'policut-basic-1000': [
+    '/images/products/policut-basic-1000/laterale-guida.jpg',
+    '/images/products/policut-basic-1000/laterale-guida-orizzontale.jpg',
+    '/images/products/policut-basic-1000/frontale.jpg',
+  ],
+  'policut-basic-1200': [
+    '/images/products/policut-basic-1200/laterale-guida.jpg',
+    '/images/products/policut-basic-1200/frontale.jpg',
+  ],
+  'policut-twin-s': [
+    '/images/products/policut-twin-s/frontale-guida.jpg',
+    '/images/products/policut-twin-s/laterale.jpg',
+    '/images/products/policut-twin-s/frontale-compatto.jpg',
+  ],
+  'policut-easy-1000': [
+    '/images/products/policut-easy-1000/laterale.jpg',
+    '/images/products/policut-easy-1000/frontale-lama.jpg',
+    '/images/products/policut-easy-1000/in-uso.jpg',
+  ],
+  'policut-easy-1200': [
+    '/images/products/policut-easy-1200/frontale.jpg',
+  ],
+  'wash-station': [
+    '/images/products/wash-station/frontale.jpg',
+    '/images/products/wash-station/angolare.jpg',
+    '/images/products/wash-station/posteriore-pedale.jpg',
+    '/images/products/wash-station/pannello-comandi.jpg',
+    '/images/products/wash-station/cupola-aperta.jpg',
+    '/images/products/wash-station/dettaglio-comandi.jpg',
+    '/images/products/wash-station/dettaglio-logo.jpg',
+    '/images/products/wash-station/dall-alto.jpg',
+    '/images/products/wash-station/interno-vasca.jpg',
+  ],
+  'termolight': [
+    '/images/products/termolight/frontale.jpg',
+    '/images/products/termolight/dettaglio-comandi.jpg',
+    '/images/products/termolight/laterale-etichetta.jpg',
+  ],
+}
+
 export default function ProductPageClient({ product, relatedProducts }: ProductPageClientProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const { language } = useLanguage()
 
-  // Build gallery array: main image + gallery images
-  const allImages = [
+  // Build gallery array: main image + gallery images + EXPO images
+  const productSlug = product.slug?.current || ''
+  const expoImages = productExpoGallery[productSlug] || []
+
+  // Combine Sanity images with static EXPO images
+  const sanityImages = [
     product.mainImage,
     ...(Array.isArray(product.gallery) ? product.gallery : [])
   ].filter(img => isValidImage(img))
+
+  // Create mixed array - Sanity images as objects, EXPO as strings
+  const allImages: (any | string)[] = [
+    ...sanityImages,
+    ...expoImages
+  ]
 
   const productName: string = getTextValue(product.name)
   const categoryName: string = getTextValue(product.category?.name)
@@ -97,8 +149,13 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
   const features = (product as any).features || []
   const documents = (product as any).documents || []
 
+  // Helper to get image URL (works for both Sanity images and static URLs)
+  const getImageUrl = (img: any, width: number, height: number): string | null => {
+    if (typeof img === 'string') return img // Static URL
+    return safeImageUrl(img, width, height) // Sanity image
+  }
+
   // Get depliant and datasheet URLs for this product based on current language
-  const productSlug = product.slug?.current || ''
   const depliantUrls = productDepliants[productSlug]
   const depliantUrl = depliantUrls
     ? (depliantUrls[language] || depliantUrls['en'])
@@ -162,9 +219,9 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                 className="relative aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-metal-100 to-metal-200 cursor-zoom-in group"
                 onClick={() => setLightboxOpen(true)}
               >
-                {allImages[selectedImageIndex] && safeImageUrl(allImages[selectedImageIndex], 800, 800) ? (
+                {allImages[selectedImageIndex] && getImageUrl(allImages[selectedImageIndex], 800, 800) ? (
                   <Image
-                    src={safeImageUrl(allImages[selectedImageIndex], 800, 800)!}
+                    src={getImageUrl(allImages[selectedImageIndex], 800, 800)!}
                     alt={productName || 'Prodotto'}
                     fill
                     className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
@@ -211,9 +268,9 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                           : 'border-metal-200 hover:border-metal-400'
                       }`}
                     >
-                      {safeImageUrl(img, 100, 100) && (
+                      {getImageUrl(img, 100, 100) && (
                         <Image
-                          src={safeImageUrl(img, 100, 100)!}
+                          src={getImageUrl(img, 100, 100)!}
                           alt={`${productName} - immagine ${index + 1}`}
                           fill
                           className="object-cover"
@@ -561,9 +618,9 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
               onClick={(e) => e.stopPropagation()}
             >
-              {allImages[selectedImageIndex] && safeImageUrl(allImages[selectedImageIndex], 1200, 1200) && (
+              {allImages[selectedImageIndex] && getImageUrl(allImages[selectedImageIndex], 1200, 1200) && (
                 <img
-                  src={safeImageUrl(allImages[selectedImageIndex], 1200, 1200)!}
+                  src={getImageUrl(allImages[selectedImageIndex], 1200, 1200)!}
                   alt={`${productName} - immagine ${selectedImageIndex + 1}`}
                   style={{ maxWidth: '90vw', maxHeight: '85vh', objectFit: 'contain' }}
                 />

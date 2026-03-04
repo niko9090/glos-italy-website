@@ -10,7 +10,7 @@ import { getTextValue } from '@/lib/utils/textHelpers'
 import RichText from '@/components/RichText'
 import type { Product, Category } from '@/lib/sanity/fetch'
 import ProductBadges from '@/components/products/ProductBadges'
-import { ArrowRight, Zap, Shield, Wrench, Package, ChevronRight, Sparkles, Scissors, Wind, Droplets, Check, Gauge, Timer, Ruler, Weight, Thermometer, Volume2 } from 'lucide-react'
+import { ArrowRight, Zap, Shield, Wrench, Package, ChevronRight, Sparkles, Scissors, Wind, Droplets, Check, Gauge, Timer, Ruler, Weight, Thermometer, Volume2, Download } from 'lucide-react'
 import { useLanguage } from '@/lib/context/LanguageContext'
 
 interface ProductsPageClientProps {
@@ -54,9 +54,9 @@ const CATEGORY_INFO: Record<string, {
     icon: Sparkles,
     features: ['Sistema brevettato Mix GLOS', 'Rotazione alternata a velocità variabile', 'Zero aria inglobata', 'Costruzione 100% italiana'],
     specs: [
-      { label: 'Capacità', value: '150+ secchi/giorno', icon: Gauge },
+      { label: 'Capacità', value: '130+ secchi/giorno', icon: Gauge },
       { label: 'Sistema', value: 'Mix GLOS System', icon: Sparkles },
-      { label: 'Rotazione', value: 'Alternata brevettata', icon: Timer },
+      { label: 'Aria compressa', value: '150 L/min', icon: Wind },
       { label: 'Risultato', value: 'Zero bolle d\'aria', icon: Check }
     ],
     benefits: ['Miscelazione omogenea garantita', 'Risparmio di tempo e materiale', 'Manutenzione minima', 'Assistenza tecnica dedicata']
@@ -300,6 +300,14 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                 >
                   Richiedi preventivo
                 </Link>
+                <a
+                  href={`/docs/blender-glos-bg2-${language === 'en' ? 'en' : language === 'es' ? 'es' : 'it'}.pdf`}
+                  download
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-all"
+                >
+                  <Download className="w-5 h-5" />
+                  Scarica depliant
+                </a>
               </div>
             </motion.div>
 

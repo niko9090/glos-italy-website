@@ -10,7 +10,7 @@ import { Check, ArrowRight } from 'lucide-react'
 // Feature images mapping based on badge number
 const featureImages: Record<string, string> = {
   '01': '/images/features/glos-system.jpg',
-  '02': '/images/features/made-in-italy.jpg',
+  '02': '/images/features/made-in-italy.svg',
   '03': '/images/features/electronics-rd.jpg',
   '04': '/images/features/warranty-shield.png',
 }

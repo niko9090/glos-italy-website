@@ -12,7 +12,7 @@ const featureImages: Record<string, string> = {
   '01': '/images/features/glos-system.jpg',
   '02': '/images/features/made-in-italy.jpg',
   '03': '/images/features/electronics-rd.jpg',
-  '04': '/images/features/warranty-shield.jpg',
+  '04': '/images/features/warranty-shield.png',
 }
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { sl, cs } from '@/lib/utils/stegaSafe'

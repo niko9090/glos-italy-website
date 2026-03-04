@@ -339,20 +339,40 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.4 }}
                   viewport={{ once: true }}
-                  className="absolute -bottom-6 -right-6 lg:bottom-8 lg:-right-8 w-48 lg:w-56"
+                  className="absolute -bottom-6 -right-6 lg:bottom-8 lg:-right-8 w-40 lg:w-48"
                 >
                   <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-                    <div className="relative h-28 lg:h-32">
+                    <div className="relative h-24 lg:h-28">
                       <Image
-                        src="/images/mix-glos-system.jpg"
+                        src="/images/features/glos-system.jpg"
                         alt="Mix GLOS System"
                         fill
                         className="object-cover"
                       />
                     </div>
-                    <div className="p-3 bg-gradient-to-r from-primary to-blue-600">
+                    <div className="p-2 bg-gradient-to-r from-primary to-blue-600">
                       <p className="text-white text-xs font-bold">MIX GLOS SYSTEM</p>
                       <p className="text-blue-100 text-[10px]">Tecnologia brevettata</p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Card Garanzia 36 Mesi */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 }}
+                  viewport={{ once: true }}
+                  className="absolute -top-4 -left-4 lg:top-8 lg:-left-8 w-32 lg:w-40"
+                >
+                  <div className="bg-white rounded-2xl shadow-2xl overflow-hidden p-3">
+                    <div className="relative h-20 lg:h-24">
+                      <Image
+                        src="/images/features/warranty-shield.png"
+                        alt="Garanzia 36 mesi"
+                        fill
+                        className="object-contain"
+                      />
                     </div>
                   </div>
                 </motion.div>

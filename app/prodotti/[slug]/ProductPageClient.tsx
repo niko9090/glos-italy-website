@@ -71,6 +71,15 @@ const productDepliants: Record<string, Record<string, string>> = {
   }
 }
 
+// Schede tecniche multilingua per prodotti specifici
+const productDatasheets: Record<string, Record<string, string>> = {
+  'blender-glos-bg2': {
+    it: '/documents/products/blender-glos-bg2-it.pdf',
+    en: '/documents/products/blender-glos-bg2-en.pdf',
+    es: '/documents/products/blender-glos-bg2-es.pdf',
+  }
+}
+
 export default function ProductPageClient({ product, relatedProducts }: ProductPageClientProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -88,11 +97,15 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
   const features = (product as any).features || []
   const documents = (product as any).documents || []
 
-  // Get depliant URL for this product based on current language
+  // Get depliant and datasheet URLs for this product based on current language
   const productSlug = product.slug?.current || ''
   const depliantUrls = productDepliants[productSlug]
   const depliantUrl = depliantUrls
     ? (depliantUrls[language] || depliantUrls['en'])
+    : null
+  const datasheetUrls = productDatasheets[productSlug]
+  const datasheetUrl = datasheetUrls
+    ? (datasheetUrls[language] || datasheetUrls['en'])
     : null
 
   // Lightbox navigation
@@ -263,19 +276,33 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
                 </Link>
               </div>
 
-              {/* Depliant Download Button */}
-              {depliantUrl && (
-                <div className="mb-10">
-                  <a
-                    href={depliantUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download
-                    className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl"
-                  >
-                    <Download className="w-5 h-5" />
-                    Scarica Depliant PDF
-                  </a>
+              {/* Download Buttons: Depliant and/or Datasheet */}
+              {(depliantUrl || datasheetUrl) && (
+                <div className="flex flex-wrap gap-3 mb-10">
+                  {datasheetUrl && (
+                    <a
+                      href={datasheetUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="inline-flex items-center gap-3 px-6 py-3 bg-gray-800 text-white font-semibold rounded-xl hover:bg-gray-900 transition-all shadow-lg hover:shadow-xl"
+                    >
+                      <Download className="w-5 h-5" />
+                      Scheda Tecnica PDF
+                    </a>
+                  )}
+                  {depliantUrl && (
+                    <a
+                      href={depliantUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      download
+                      className="inline-flex items-center gap-3 px-6 py-3 bg-gray-800 text-white font-semibold rounded-xl hover:bg-gray-900 transition-all shadow-lg hover:shadow-xl"
+                    >
+                      <Download className="w-5 h-5" />
+                      Scarica Depliant PDF
+                    </a>
+                  )}
                 </div>
               )}
 

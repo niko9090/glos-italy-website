@@ -161,21 +161,21 @@ export default function ProductPageClient({ product, relatedProducts }: ProductP
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const { language } = useLanguage()
 
-  // Build gallery array: main image + gallery images + EXPO images
+  // Build gallery array: EXPO images (se disponibili) oppure Sanity images
   const productSlug = product.slug?.current || ''
   const expoImages = productExpoGallery[productSlug] || []
 
-  // Combine Sanity images with static EXPO images
+  // Se ci sono immagini EXPO, usa SOLO quelle (rimuove le vecchie)
+  // Altrimenti usa le immagini Sanity
   const sanityImages = [
     product.mainImage,
     ...(Array.isArray(product.gallery) ? product.gallery : [])
   ].filter(img => isValidImage(img))
 
-  // Create mixed array - Sanity images as objects, EXPO as strings
-  const allImages: (any | string)[] = [
-    ...sanityImages,
-    ...expoImages
-  ]
+  // Priorità alle foto EXPO - se presenti, sostituiscono completamente le vecchie
+  const allImages: (any | string)[] = expoImages.length > 0
+    ? expoImages
+    : sanityImages
 
   const productName: string = getTextValue(product.name)
   const categoryName: string = getTextValue(product.category?.name)

@@ -6,6 +6,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Check, ArrowRight } from 'lucide-react'
+
+// Feature images mapping based on badge number
+const featureImages: Record<string, string> = {
+  '01': '/images/features/glos-system.jpg',
+  '02': '/images/features/made-in-italy.jpg',
+  '03': '/images/features/electronics-rd.jpg',
+  '04': '/images/features/warranty-shield.jpg',
+}
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { sl, cs } from '@/lib/utils/stegaSafe'
 import { useLanguage } from '@/lib/context/LanguageContext'
@@ -412,12 +420,29 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
 
                   {/* Content */}
                   <div className={`flex-1 ${data.textAlign?.includes('center') && data.iconPosition?.includes('top') ? 'text-center' : ''}`}>
-                    {/* Badge */}
-                    {!!item.badge && (
-                      <span className="inline-block px-2 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-2">
-                        {String(t(item.badge) || '')}
-                      </span>
-                    )}
+                    {/* Feature Image based on badge number */}
+                    {!!item.badge && (() => {
+                      const badgeText = String(t(item.badge) || '')
+                      const featureImagePath = featureImages[badgeText]
+                      if (featureImagePath) {
+                        return (
+                          <div className="relative w-20 h-20 mb-4 rounded-xl overflow-hidden shadow-lg">
+                            <Image
+                              src={featureImagePath}
+                              alt=""
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )
+                      }
+                      // Fallback to badge text if no image mapping
+                      return (
+                        <span className="inline-block px-2 py-1 text-xs font-semibold bg-primary/10 text-primary rounded-full mb-2">
+                          {badgeText}
+                        </span>
+                      )
+                    })()}
 
                     {/* Title */}
                     {!!item.title && (

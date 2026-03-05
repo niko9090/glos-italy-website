@@ -41,18 +41,47 @@ const values = [
 export default function ChiSiamoClient() {
   return (
     <main className="bg-white">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <Image
-            src="/images/industrial-precision.jpg"
-            alt=""
-            fill
-            className="object-cover"
-            priority
+      {/* Hero Section - Onde fluide animate */}
+      <section className="relative min-h-[55vh] flex items-center justify-center text-white overflow-hidden bg-gradient-to-b from-[#0f172a] to-[#1e293b]">
+        {/* Onde rotanti */}
+        <div className="absolute inset-0 z-0">
+          <motion.div
+            className="absolute w-[200%] h-[200%] top-[-50%] left-[-50%]"
+            style={{
+              background: 'radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(59,130,246,0.1) 50%, transparent 70%)',
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          />
+          <motion.div
+            className="absolute w-[200%] h-[200%] top-[-50%] left-[-50%] opacity-70"
+            style={{
+              background: 'radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(59,130,246,0.08) 50%, transparent 70%)',
+            }}
+            animate={{ rotate: -360 }}
+            transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+          />
+          <motion.div
+            className="absolute w-[200%] h-[200%] top-[-50%] left-[-50%] opacity-50"
+            style={{
+              background: 'radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(139,92,246,0.06) 50%, transparent 70%)',
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a2e]/90 to-[#0f3460]/70" />
+
+        {/* Gradient orbs */}
+        <div className="absolute w-[400px] h-[400px] rounded-full bg-blue-500/30 blur-[80px] top-[-100px] right-[-100px]" />
+        <div className="absolute w-[300px] h-[300px] rounded-full bg-purple-500/20 blur-[80px] bottom-[-100px] left-[-100px]" />
+
+        {/* Linee orizzontali sottili */}
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background: 'repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(255,255,255,0.02) 100px, rgba(255,255,255,0.02) 101px)',
+          }}
+        />
 
         <div className="container-glos py-20 md:py-28 relative z-10">
           <motion.div
@@ -64,7 +93,9 @@ export default function ChiSiamoClient() {
             <p className="text-blue-300 uppercase tracking-widest text-sm font-semibold mb-4">
               La Nostra Storia
             </p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+              style={{ textShadow: '0 4px 20px rgba(0, 0, 0, 0.4)' }}
+            >
               GL.OS: Ingegneria Meccanica e Innovazione{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
                 Made in Italy

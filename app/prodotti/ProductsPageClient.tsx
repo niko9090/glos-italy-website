@@ -195,68 +195,63 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
 
   return (
     <div className="min-h-screen bg-white">
-      {/* ===== HERO - Due immagini fuse (stile homepage) ===== */}
-      <section className="relative overflow-hidden min-h-[50vh] lg:min-h-[60vh] flex items-center">
-        {/* Background: Due immagini fuse */}
-        <div className="absolute inset-0 z-0">
-          {/* Immagine sinistra - texture blu scuro */}
-          <div className="absolute inset-0 w-1/2 left-0">
-            <Image
-              src="/images/hero-blue-texture-left.jpg"
-              alt=""
-              fill
-              className="object-cover"
-              priority
-            />
-            {/* Gradiente fusione verso destra */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a1628]" />
-          </div>
+      {/* ===== HERO - Neon cyberpunk ===== */}
+      <section className="relative overflow-hidden min-h-[50vh] lg:min-h-[55vh] flex items-center justify-center bg-[#0d0d0d]">
+        {/* Griglia prospettica */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            background: `
+              linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px',
+            transform: 'perspective(500px) rotateX(60deg) translateY(-50%)',
+            transformOrigin: 'center top',
+          }}
+        />
 
-          {/* Immagine destra - vernice fluida */}
-          <div className="absolute inset-0 w-1/2 right-0 left-auto">
-            <Image
-              src="/images/hero-blue-texture-right.jpg"
-              alt=""
-              fill
-              className="object-cover"
-              priority
-            />
-            {/* Gradiente fusione verso sinistra */}
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[#0a1628]" />
-          </div>
+        {/* Linee neon animate */}
+        <motion.div
+          className="absolute h-[2px] z-[1]"
+          style={{
+            width: '60%',
+            top: '30%',
+            left: '20%',
+            background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)',
+            boxShadow: '0 0 20px #3b82f6, 0 0 40px #3b82f6',
+          }}
+          animate={{ opacity: [0.3, 1, 0.3], scaleX: [0.8, 1, 0.8] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute h-[2px] z-[1]"
+          style={{
+            width: '40%',
+            top: '50%',
+            left: '30%',
+            background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)',
+            boxShadow: '0 0 20px #3b82f6, 0 0 40px #3b82f6',
+          }}
+          animate={{ opacity: [0.3, 1, 0.3], scaleX: [0.8, 1, 0.8] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        />
+        <motion.div
+          className="absolute h-[2px] z-[1]"
+          style={{
+            width: '50%',
+            top: '70%',
+            left: '25%',
+            background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)',
+            boxShadow: '0 0 20px #3b82f6, 0 0 40px #3b82f6',
+          }}
+          animate={{ opacity: [0.3, 1, 0.3], scaleX: [0.8, 1, 0.8] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        />
 
-          {/* Overlay centrale per fusione armoniosa */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0a1628]/60 to-transparent" />
-
-          {/* Overlay generale per leggibilità testo */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628]/70 via-[#0a1628]/50 to-[#0a1628]/80" />
-        </div>
-
-        {/* Particelle decorative animate */}
-        <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none">
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={`particle-${i}`}
-              className="absolute rounded-full bg-white/5"
-              style={{
-                width: `${30 + i * 20}px`,
-                height: `${30 + i * 20}px`,
-                left: `${15 + i * 18}%`,
-                top: `${25 + i * 12}%`,
-              }}
-              animate={{
-                y: [0, -20, 0],
-                opacity: [0.05, 0.15, 0.05],
-              }}
-              transition={{
-                duration: 4 + i,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: i * 0.5,
-              }}
-            />
-          ))}
-        </div>
+        {/* Glow corners */}
+        <div className="absolute w-[200px] h-[200px] rounded-full bg-pink-500/40 blur-[80px] top-[-50px] left-[-50px]" />
+        <div className="absolute w-[200px] h-[200px] rounded-full bg-blue-500/40 blur-[80px] bottom-[-50px] right-[-50px]" />
 
         {/* Contenuto */}
         <div className="container-glos relative z-10 py-20 lg:py-28">
@@ -266,11 +261,11 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <p className="text-blue-300 uppercase tracking-widest text-sm font-semibold mb-4">
+            <p className="text-cyan-300 uppercase tracking-widest text-sm font-semibold mb-4">
               Catalogo Completo
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-              style={{ textShadow: '0 4px 20px rgba(0, 0, 0, 0.4)' }}
+              style={{ textShadow: '0 0 30px rgba(59,130,246,0.5), 0 4px 20px rgba(0,0,0,0.4)' }}
             >
               I Nostri Prodotti
             </h1>
@@ -281,12 +276,8 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
           </motion.div>
         </div>
 
-        {/* Linea decorativa animata in basso */}
-        <motion.div
-          className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-400/40 to-transparent z-[2]"
-          animate={{ scaleX: [0, 1, 0], x: ['-100%', '0%', '100%'] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        {/* Border glow bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent z-[2]" />
       </section>
 
       {/* ===== BLENDER GLOS - SEZIONE SPECIALE (SFONDO BIANCO) ===== */}

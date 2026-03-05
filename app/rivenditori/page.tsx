@@ -99,7 +99,7 @@ export default async function DealersPage() {
             <div className="mb-12">
               <DealersMap dealers={dealers} />
               <p className="text-sm text-gray-500 text-center mt-2">
-                Clicca sui marker per vedere i dettagli del rivenditore
+                Clicca sui marker per vedere i dettagli
               </p>
             </div>
           ) : dealers.length > 0 ? (

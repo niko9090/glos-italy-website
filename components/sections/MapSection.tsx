@@ -506,7 +506,7 @@ export default function MapSection({ data, dealers = [], documentId, sectionKey 
 
           {data.mapType === 'dealers' && dealersWithLocation.length > 0 && (
             <p className="text-sm text-gray-500 text-center mt-2">
-              Clicca sui marker per vedere i dettagli del rivenditore
+              Clicca sui marker per vedere i dettagli
             </p>
           )}
         </motion.div>

@@ -195,32 +195,56 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
 
   return (
     <div className="min-h-screen bg-white">
-      {/* ===== HERO - Cerchi concentrici pulsanti ===== */}
+      {/* ===== HERO - Effetto vernice/acqua con cerchi ===== */}
       <section className="relative overflow-hidden min-h-[50vh] lg:min-h-[55vh] flex items-center justify-center bg-gradient-to-b from-[#0c1222] to-[#1a2744]">
-        {/* Glow centrale */}
-        <div className="absolute w-[350px] h-[350px] rounded-full bg-blue-500/25 blur-[80px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+        {/* Blob fluidi tipo vernice */}
+        <motion.div
+          className="absolute w-[500px] h-[500px] rounded-[40%_60%_70%_30%/40%_50%_60%_50%] bg-blue-600/20 blur-[60px] left-1/2 top-1/2"
+          style={{ x: '-50%', y: '-50%' }}
+          animate={{
+            borderRadius: [
+              '40% 60% 70% 30% / 40% 50% 60% 50%',
+              '60% 40% 30% 70% / 50% 60% 40% 50%',
+              '40% 60% 70% 30% / 40% 50% 60% 50%',
+            ],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute w-[400px] h-[400px] rounded-[60%_40%_30%_70%/50%_60%_40%_50%] bg-cyan-500/15 blur-[50px] left-1/2 top-1/2"
+          style={{ x: '-40%', y: '-60%' }}
+          animate={{
+            borderRadius: [
+              '60% 40% 30% 70% / 50% 60% 40% 50%',
+              '40% 60% 70% 30% / 60% 40% 50% 60%',
+              '60% 40% 30% 70% / 50% 60% 40% 50%',
+            ],
+            scale: [1, 1.08, 1],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        />
 
-        {/* Cerchi concentrici animati */}
-        {[200, 350, 500, 650, 800, 950].map((size, i) => (
+        {/* Cerchi concentrici come onde nell'acqua */}
+        {[200, 350, 500, 650, 800].map((size, i) => (
           <motion.div
             key={`circle-${i}`}
-            className="absolute rounded-full left-1/2 top-1/2"
+            className="absolute rounded-full left-1/2 top-1/2 border border-blue-400/30"
             style={{
               width: size,
               height: size,
-              border: `${i < 3 ? '2px' : '1px'} solid rgba(59,130,246,${0.4 - i * 0.05})`,
               x: '-50%',
               y: '-50%',
             }}
             animate={{
-              scale: [1, 1.03, 1],
-              opacity: [0.4 + (3-i) * 0.1, 0.7 + (3-i) * 0.1, 0.4 + (3-i) * 0.1],
+              scale: [1, 1.05, 1],
+              opacity: [0.3, 0.5, 0.3],
             }}
             transition={{
               duration: 4,
               repeat: Infinity,
               ease: 'easeInOut',
-              delay: i * 0.4,
+              delay: i * 0.5,
             }}
           />
         ))}

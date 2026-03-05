@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Varianti Gocce/Ripples - GLOS Prodotti</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #111; }
+
+    .label {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      z-index: 100;
+      border: 2px solid #3b82f6;
+      max-width: 300px;
+    }
+
+    .separator {
+      height: 40px;
+      background: linear-gradient(90deg, #3b82f6, #06b6d4, #3b82f6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* Content styles */
+    .content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 800px;
+      padding: 40px 20px;
+    }
+    .eyebrow {
+      color: #93c5fd;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .title {
+      color: white;
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .subtitle {
+      color: rgba(191, 219, 254, 0.9);
+      font-size: clamp(15px, 2vw, 18px);
+      line-height: 1.6;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    /* ========== BASE HERO STYLE ========== */
+    .hero {
+      position: relative;
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0c1222 0%, #1a2744 100%);
+    }
+
+    /* Blob fluidi (effetto vernice) - comuni a tutte */
+    .paint-blob {
+      position: absolute;
+      filter: blur(60px);
+      animation: blob-morph 8s ease-in-out infinite;
+    }
+    .paint-blob-1 {
+      width: 500px;
+      height: 500px;
+      background: rgba(59, 130, 246, 0.2);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
+    .paint-blob-2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(6, 182, 212, 0.15);
+      left: 40%;
+      top: 40%;
+      transform: translate(-50%, -50%);
+      border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+      animation-delay: -3s;
+    }
+    @keyframes blob-morph {
+      0%, 100% {
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+    }
+
+    /* ========== VARIANTE A: 3 punti goccia sparsi ========== */
+    .ripple-point {
+      position: absolute;
+    }
+    .ripple-point .circle {
+      position: absolute;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: ripple-expand 4s ease-out infinite;
+    }
+    @keyframes ripple-expand {
+      0% {
+        width: 0;
+        height: 0;
+        opacity: 0.6;
+      }
+      100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+      }
+    }
+    /* Sequenza per 3 cerchi per punto */
+    .ripple-point .circle:nth-child(1) { animation-delay: 0s; }
+    .ripple-point .circle:nth-child(2) { animation-delay: 1s; }
+    .ripple-point .circle:nth-child(3) { animation-delay: 2s; }
+
+    /* ========== VARIANTE B: Gocce che cadono dall'alto ========== */
+    .drop {
+      position: absolute;
+      width: 6px;
+      height: 10px;
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.8), rgba(6, 182, 212, 0.6));
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: drop-fall 3s ease-in infinite;
+    }
+    @keyframes drop-fall {
+      0% {
+        transform: translateY(-50px) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(30vh) scale(0.8);
+        opacity: 1;
+      }
+      51% {
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(30vh) scale(0);
+        opacity: 0;
+      }
+    }
+    .drop-ripple {
+      position: absolute;
+      animation: drop-ripple-expand 3s ease-out infinite;
+    }
+    .drop-ripple .circle {
+      position: absolute;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .drop-ripple .circle:nth-child(1) { animation: ripple-seq 3s ease-out infinite; animation-delay: 1.5s; }
+    .drop-ripple .circle:nth-child(2) { animation: ripple-seq 3s ease-out infinite; animation-delay: 1.8s; }
+    .drop-ripple .circle:nth-child(3) { animation: ripple-seq 3s ease-out infinite; animation-delay: 2.1s; }
+    @keyframes ripple-seq {
+      0% { width: 0; height: 0; opacity: 0.5; }
+      100% { width: 200px; height: 200px; opacity: 0; }
+    }
+
+    /* ========== VARIANTE C: Pioggia leggera con molti ripples piccoli ========== */
+    .rain-ripple {
+      position: absolute;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 50%;
+      animation: rain-expand 2.5s ease-out infinite;
+    }
+    @keyframes rain-expand {
+      0% {
+        width: 0;
+        height: 0;
+        opacity: 0.4;
+      }
+      100% {
+        width: 150px;
+        height: 150px;
+        opacity: 0;
+      }
+    }
+
+    /* ========== VARIANTE D: Pochi punti grandi strategici ========== */
+    .big-ripple {
+      position: absolute;
+    }
+    .big-ripple .ring {
+      position: absolute;
+      border: 2px solid rgba(59, 130, 246, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: big-expand 5s ease-out infinite;
+    }
+    @keyframes big-expand {
+      0% {
+        width: 50px;
+        height: 50px;
+        opacity: 0.5;
+      }
+      100% {
+        width: 500px;
+        height: 500px;
+        opacity: 0;
+      }
+    }
+    .big-ripple .ring:nth-child(1) { animation-delay: 0s; }
+    .big-ripple .ring:nth-child(2) { animation-delay: 1.2s; }
+    .big-ripple .ring:nth-child(3) { animation-delay: 2.4s; }
+    .big-ripple .ring:nth-child(4) { animation-delay: 3.6s; }
+
+    /* ========== VARIANTE E: Centro + angoli con timing sfalsato ========== */
+    .corner-ripple {
+      position: absolute;
+    }
+    .corner-ripple .wave {
+      position: absolute;
+      border: 1px solid rgba(6, 182, 212, 0.35);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: corner-wave 4s ease-out infinite;
+    }
+    @keyframes corner-wave {
+      0% { width: 20px; height: 20px; opacity: 0.5; }
+      100% { width: 400px; height: 400px; opacity: 0; }
+    }
+
+    /* ========== VARIANTE F: Movimento orizzontale delle gocce ========== */
+    .horizontal-drop {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .horizontal-drop .drop-h {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: rgba(59, 130, 246, 0.6);
+      border-radius: 50%;
+      animation: h-move 4s ease-in-out infinite;
+    }
+    @keyframes h-move {
+      0% { transform: translateX(-100vw); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateX(100vw); opacity: 0; }
+    }
+    .h-ripple-trail {
+      position: absolute;
+      top: 50%;
+    }
+    .h-ripple-trail .hring {
+      position: absolute;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: h-ripple 3s ease-out infinite;
+    }
+    @keyframes h-ripple {
+      0% { width: 0; height: 0; opacity: 0.4; }
+      100% { width: 200px; height: 200px; opacity: 0; }
+    }
+
+    /* ========== VARIANTE G: Punti casuali più visibili ========== */
+    .random-ripple {
+      position: absolute;
+    }
+    .random-ripple .rwave {
+      position: absolute;
+      border: 2px solid rgba(59, 130, 246, 0.5);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: random-expand 4.5s ease-out infinite;
+      box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    }
+    @keyframes random-expand {
+      0% {
+        width: 10px;
+        height: 10px;
+        opacity: 0.7;
+        border-width: 2px;
+      }
+      100% {
+        width: 280px;
+        height: 280px;
+        opacity: 0;
+        border-width: 1px;
+      }
+    }
+
+    .footer-info {
+      padding: 40px 20px;
+      background: #1a1a2e;
+      text-align: center;
+      color: white;
+    }
+    .footer-info h2 { font-size: 22px; margin-bottom: 12px; }
+    .footer-info p { color: #9ca3af; max-width: 600px; margin: 0 auto; font-size: 14px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<!-- ========== VARIANTE A: 3 punti goccia sparsi ========== -->
+<section class="hero">
+  <div class="label">VARIANTE A - 3 punti goccia sparsi<br><small>Cerchi che si espandono da 3 posizioni diverse</small></div>
+
+  <!-- Blob vernice -->
+  <div class="paint-blob paint-blob-1"></div>
+  <div class="paint-blob paint-blob-2"></div>
+
+  <!-- Punto 1: in alto a sinistra -->
+  <div class="ripple-point" style="left: 20%; top: 30%;">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+
+  <!-- Punto 2: centro (principale) -->
+  <div class="ripple-point" style="left: 50%; top: 50%;">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+
+  <!-- Punto 3: in basso a destra -->
+  <div class="ripple-point" style="left: 75%; top: 65%;">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+
+  <div class="content">
+    <p class="eyebrow">Catalogo Completo</p>
+    <h1 class="title">I Nostri Prodotti</h1>
+    <p class="subtitle">Macchinari di precisione progettati e costruiti in Italia.</p>
+  </div>
+</section>
+
+<div class="separator">VARIANTE A - 3 punti sparsi</div>
+
+<!-- ========== VARIANTE B: Gocce che cadono dall'alto ========== -->
+<section class="hero">
+  <div class="label">VARIANTE B - Gocce che cadono<br><small>Le gocce scendono e creano cerchi dove atterrano</small></div>
+
+  <div class="paint-blob paint-blob-1"></div>
+  <div class="paint-blob paint-blob-2"></div>
+
+  <!-- Goccia 1 -->
+  <div class="drop" style="left: 25%; animation-delay: 0s;"></div>
+  <div class="drop-ripple" style="left: 25%; top: calc(30vh + 50%);">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+
+  <!-- Goccia 2 -->
+  <div class="drop" style="left: 50%; animation-delay: 1s;"></div>
+  <div class="drop-ripple" style="left: 50%; top: calc(30vh + 50%);">
+    <div class="circle" style="animation-delay: 2.5s;"></div>
+    <div class="circle" style="animation-delay: 2.8s;"></div>
+    <div class="circle" style="animation-delay: 3.1s;"></div>
+  </div>
+
+  <!-- Goccia 3 -->
+  <div class="drop" style="left: 75%; animation-delay: 2s;"></div>
+  <div class="drop-ripple" style="left: 75%; top: calc(30vh + 50%);">
+    <div class="circle" style="animation-delay: 3.5s;"></div>
+    <div class="circle" style="animation-delay: 3.8s;"></div>
+    <div class="circle" style="animation-delay: 4.1s;"></div>
+  </div>
+
+  <div class="content">
+    <p class="eyebrow">Catalogo Completo</p>
+    <h1 class="title">I Nostri Prodotti</h1>
+    <p class="subtitle">Macchinari di precisione progettati e costruiti in Italia.</p>
+  </div>
+</section>
+
+<div class="separator">VARIANTE B - Gocce che cadono</div>
+
+<!-- ========== VARIANTE C: Pioggia leggera ========== -->
+<section class="hero">
+  <div class="label">VARIANTE C - Pioggia leggera<br><small>Molti piccoli ripples casuali come pioggia</small></div>
+
+  <div class="paint-blob paint-blob-1"></div>
+  <div class="paint-blob paint-blob-2"></div>
+
+  <!-- Molti ripples piccoli sparsi -->
+  <div class="rain-ripple" style="left: 10%; top: 20%; animation-delay: 0s;"></div>
+  <div class="rain-ripple" style="left: 30%; top: 40%; animation-delay: 0.3s;"></div>
+  <div class="rain-ripple" style="left: 15%; top: 70%; animation-delay: 0.6s;"></div>
+  <div class="rain-ripple" style="left: 50%; top: 25%; animation-delay: 0.9s;"></div>
+  <div class="rain-ripple" style="left: 70%; top: 55%; animation-delay: 1.2s;"></div>
+  <div class="rain-ripple" style="left: 85%; top: 30%; animation-delay: 1.5s;"></div>
+  <div class="rain-ripple" style="left: 60%; top: 75%; animation-delay: 1.8s;"></div>
+  <div class="rain-ripple" style="left: 40%; top: 60%; animation-delay: 2.1s;"></div>
+  <div class="rain-ripple" style="left: 25%; top: 85%; animation-delay: 0.4s;"></div>
+  <div class="rain-ripple" style="left: 80%; top: 80%; animation-delay: 0.7s;"></div>
+  <div class="rain-ripple" style="left: 55%; top: 45%; animation-delay: 1s;"></div>
+  <div class="rain-ripple" style="left: 90%; top: 50%; animation-delay: 1.3s;"></div>
+
+  <div class="content">
+    <p class="eyebrow">Catalogo Completo</p>
+    <h1 class="title">I Nostri Prodotti</h1>
+    <p class="subtitle">Macchinari di precisione progettati e costruiti in Italia.</p>
+  </div>
+</section>
+
+<div class="separator">VARIANTE C - Pioggia leggera</div>
+
+<!-- ========== VARIANTE D: 2 punti grandi strategici ========== -->
+<section class="hero">
+  <div class="label">VARIANTE D - 2 punti grandi<br><small>Solo 2 fonti con cerchi grandi e lenti</small></div>
+
+  <div class="paint-blob paint-blob-1"></div>
+  <div class="paint-blob paint-blob-2"></div>
+
+  <!-- Punto grande 1: sinistra -->
+  <div class="big-ripple" style="left: 30%; top: 45%;">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+  </div>
+
+  <!-- Punto grande 2: destra -->
+  <div class="big-ripple" style="left: 70%; top: 55%;">
+    <div class="ring" style="animation-delay: 0.6s;"></div>
+    <div class="ring" style="animation-delay: 1.8s;"></div>
+    <div class="ring" style="animation-delay: 3s;"></div>
+    <div class="ring" style="animation-delay: 4.2s;"></div>
+  </div>
+
+  <div class="content">
+    <p class="eyebrow">Catalogo Completo</p>
+    <h1 class="title">I Nostri Prodotti</h1>
+    <p class="subtitle">Macchinari di precisione progettati e costruiti in Italia.</p>
+  </div>
+</section>
+
+<div class="separator">VARIANTE D - 2 punti grandi</div>
+
+<!-- ========== VARIANTE E: Centro + 4 angoli ========== -->
+<section class="hero">
+  <div class="label">VARIANTE E - Centro + 4 angoli<br><small>5 punti: centro dominante + angoli sfalsati</small></div>
+
+  <div class="paint-blob paint-blob-1"></div>
+  <div class="paint-blob paint-blob-2"></div>
+
+  <!-- Centro (dominante) -->
+  <div class="corner-ripple" style="left: 50%; top: 50%;">
+    <div class="wave"></div>
+    <div class="wave" style="animation-delay: 1s;"></div>
+    <div class="wave" style="animation-delay: 2s;"></div>
+    <div class="wave" style="animation-delay: 3s;"></div>
+  </div>
+
+  <!-- Angolo alto-sinistra -->
+  <div class="corner-ripple" style="left: 15%; top: 20%;">
+    <div class="wave" style="animation-delay: 0.5s;"></div>
+    <div class="wave" style="animation-delay: 1.5s;"></div>
+    <div class="wave" style="animation-delay: 2.5s;"></div>
+  </div>
+
+  <!-- Angolo alto-destra -->
+  <div class="corner-ripple" style="left: 85%; top: 25%;">
+    <div class="wave" style="animation-delay: 1s;"></div>
+    <div class="wave" style="animation-delay: 2s;"></div>
+    <div class="wave" style="animation-delay: 3s;"></div>
+  </div>
+
+  <!-- Angolo basso-sinistra -->
+  <div class="corner-ripple" style="left: 20%; top: 80%;">
+    <div class="wave" style="animation-delay: 1.5s;"></div>
+    <div class="wave" style="animation-delay: 2.5s;"></div>
+    <div class="wave" style="animation-delay: 3.5s;"></div>
+  </div>
+
+  <!-- Angolo basso-destra -->
+  <div class="corner-ripple" style="left: 80%; top: 75%;">
+    <div class="wave" style="animation-delay: 2s;"></div>
+    <div class="wave" style="animation-delay: 3s;"></div>
+  </div>
+
+  <div class="content">
+    <p class="eyebrow">Catalogo Completo</p>
+    <h1 class="title">I Nostri Prodotti</h1>
+    <p class="subtitle">Macchinari di precisione progettati e costruiti in Italia.</p>
+  </div>
+</section>
+
+<div class="separator">VARIANTE E - Centro + 4 angoli</div>
+
+<!-- ========== VARIANTE F: Sequenza orizzontale ========== -->
+<section class="hero">
+  <div class="label">VARIANTE F - Sequenza orizzontale<br><small>Punti in fila che pulsano in sequenza da sinistra a destra</small></div>
+
+  <div class="paint-blob paint-blob-1"></div>
+  <div class="paint-blob paint-blob-2"></div>
+
+  <!-- Punti in sequenza orizzontale -->
+  <div class="h-ripple-trail" style="left: 15%;">
+    <div class="hring" style="animation-delay: 0s;"></div>
+    <div class="hring" style="animation-delay: 0.8s;"></div>
+    <div class="hring" style="animation-delay: 1.6s;"></div>
+  </div>
+  <div class="h-ripple-trail" style="left: 35%;">
+    <div class="hring" style="animation-delay: 0.5s;"></div>
+    <div class="hring" style="animation-delay: 1.3s;"></div>
+    <div class="hring" style="animation-delay: 2.1s;"></div>
+  </div>
+  <div class="h-ripple-trail" style="left: 55%;">
+    <div class="hring" style="animation-delay: 1s;"></div>
+    <div class="hring" style="animation-delay: 1.8s;"></div>
+    <div class="hring" style="animation-delay: 2.6s;"></div>
+  </div>
+  <div class="h-ripple-trail" style="left: 75%;">
+    <div class="hring" style="animation-delay: 1.5s;"></div>
+    <div class="hring" style="animation-delay: 2.3s;"></div>
+  </div>
+
+  <div class="content">
+    <p class="eyebrow">Catalogo Completo</p>
+    <h1 class="title">I Nostri Prodotti</h1>
+    <p class="subtitle">Macchinari di precisione progettati e costruiti in Italia.</p>
+  </div>
+</section>
+
+<div class="separator">VARIANTE F - Sequenza orizzontale</div>
+
+<!-- ========== VARIANTE G: Punti casuali più visibili ========== -->
+<section class="hero">
+  <div class="label">VARIANTE G - Punti casuali visibili<br><small>Ripples sparsi con attivazione casuale, più visibili</small></div>
+
+  <div class="paint-blob paint-blob-1"></div>
+  <div class="paint-blob paint-blob-2"></div>
+
+  <!-- Molti punti sparsi con timing completamente casuale -->
+  <!-- Punto 1 -->
+  <div class="random-ripple" style="left: 12%; top: 35%;">
+    <div class="rwave"></div>
+    <div class="rwave" style="animation-delay: 0.6s;"></div>
+    <div class="rwave" style="animation-delay: 1.2s;"></div>
+  </div>
+  <!-- Punto 2 -->
+  <div class="random-ripple" style="left: 75%; top: 25%;">
+    <div class="rwave" style="animation-delay: 1.8s;"></div>
+    <div class="rwave" style="animation-delay: 2.4s;"></div>
+    <div class="rwave" style="animation-delay: 3s;"></div>
+  </div>
+  <!-- Punto 3 -->
+  <div class="random-ripple" style="left: 45%; top: 70%;">
+    <div class="rwave" style="animation-delay: 0.9s;"></div>
+    <div class="rwave" style="animation-delay: 1.5s;"></div>
+    <div class="rwave" style="animation-delay: 2.1s;"></div>
+  </div>
+  <!-- Punto 4 -->
+  <div class="random-ripple" style="left: 88%; top: 60%;">
+    <div class="rwave" style="animation-delay: 2.7s;"></div>
+    <div class="rwave" style="animation-delay: 3.3s;"></div>
+    <div class="rwave" style="animation-delay: 3.9s;"></div>
+  </div>
+  <!-- Punto 5 -->
+  <div class="random-ripple" style="left: 30%; top: 20%;">
+    <div class="rwave" style="animation-delay: 0.3s;"></div>
+    <div class="rwave" style="animation-delay: 0.9s;"></div>
+    <div class="rwave" style="animation-delay: 1.5s;"></div>
+  </div>
+  <!-- Punto 6 -->
+  <div class="random-ripple" style="left: 60%; top: 45%;">
+    <div class="rwave" style="animation-delay: 1.2s;"></div>
+    <div class="rwave" style="animation-delay: 1.8s;"></div>
+    <div class="rwave" style="animation-delay: 2.4s;"></div>
+  </div>
+  <!-- Punto 7 -->
+  <div class="random-ripple" style="left: 20%; top: 75%;">
+    <div class="rwave" style="animation-delay: 2.1s;"></div>
+    <div class="rwave" style="animation-delay: 2.7s;"></div>
+    <div class="rwave" style="animation-delay: 3.3s;"></div>
+  </div>
+  <!-- Punto 8 -->
+  <div class="random-ripple" style="left: 55%; top: 15%;">
+    <div class="rwave" style="animation-delay: 3.6s;"></div>
+    <div class="rwave" style="animation-delay: 4.2s;"></div>
+  </div>
+  <!-- Punto 9 -->
+  <div class="random-ripple" style="left: 85%; top: 85%;">
+    <div class="rwave" style="animation-delay: 0.6s;"></div>
+    <div class="rwave" style="animation-delay: 1.2s;"></div>
+    <div class="rwave" style="animation-delay: 1.8s;"></div>
+  </div>
+  <!-- Punto 10 -->
+  <div class="random-ripple" style="left: 8%; top: 55%;">
+    <div class="rwave" style="animation-delay: 1.5s;"></div>
+    <div class="rwave" style="animation-delay: 2.1s;"></div>
+    <div class="rwave" style="animation-delay: 2.7s;"></div>
+  </div>
+
+  <div class="content">
+    <p class="eyebrow">Catalogo Completo</p>
+    <h1 class="title">I Nostri Prodotti</h1>
+    <p class="subtitle">Macchinari di precisione progettati e costruiti in Italia.</p>
+  </div>
+</section>
+
+<div class="separator">VARIANTE G - Punti casuali visibili</div>
+
+<div class="footer-info">
+  <h2>Quale preferisci?</h2>
+  <p>
+    <strong>A</strong> = 3 punti sparsi (semplice ma elegante)<br>
+    <strong>B</strong> = Gocce che cadono (effetto realistico)<br>
+    <strong>C</strong> = Pioggia leggera (molti piccoli cerchi)<br>
+    <strong>D</strong> = 2 punti grandi (minimale ma d'impatto)<br>
+    <strong>E</strong> = Centro + 4 angoli (ricco ma ordinato)<br>
+    <strong>F</strong> = Sequenza orizzontale (ritmo da sinistra a destra)<br>
+    <strong>G</strong> = Punti casuali visibili (10 punti sparsi, timing casuale, più visibili)
+  </p>
+</div>
+
+</body>
+</html>

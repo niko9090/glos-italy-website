@@ -116,7 +116,7 @@ export default async function DealersPage() {
           {/* Recensioni Clienti */}
           <div className="mb-12">
             <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-              <Quote className="w-6 h-6 text-primary" /> Cosa Dicono i Nostri Clienti
+              <Quote className="w-6 h-6 text-primary" /> Cosa dicono di noi
             </h2>
             {testimonials.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

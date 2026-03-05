@@ -225,7 +225,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
         />
 
-        {/* Ripples sottili e discreti - solo 4 punti */}
+        {/* Ripples discreti - 4 punti */}
         {[
           { left: '20%', top: '40%', delays: [0, 2, 4] },
           { left: '75%', top: '35%', delays: [1, 3, 5] },
@@ -236,7 +236,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
             {point.delays.map((delay, waveIndex) => (
               <motion.div
                 key={`wave-${pointIndex}-${waveIndex}`}
-                className="absolute rounded-full border border-blue-400/25"
+                className="absolute rounded-full border border-blue-400/40"
                 style={{
                   left: '50%',
                   top: '50%',
@@ -244,12 +244,12 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                   y: '-50%',
                 }}
                 animate={{
-                  width: [0, 200],
-                  height: [0, 200],
-                  opacity: [0.35, 0],
+                  width: [0, 220],
+                  height: [0, 220],
+                  opacity: [0.5, 0],
                 }}
                 transition={{
-                  duration: 6,
+                  duration: 5,
                   repeat: Infinity,
                   ease: 'easeOut',
                   delay: delay,

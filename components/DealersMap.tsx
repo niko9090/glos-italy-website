@@ -428,10 +428,10 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
 
             {/* Video - Locale o YouTube */}
             {modalDealer.localVideoPath ? (
-              <div className="aspect-video w-full bg-black">
+              <div className="w-full bg-black">
                 <video
                   src={modalDealer.localVideoPath}
-                  className="w-full h-full object-cover"
+                  className="w-full max-h-[50vh] object-contain"
                   controls
                   autoPlay
                   muted

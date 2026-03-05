@@ -835,52 +835,60 @@ textarea:focus-visible {
    LEAFLET MARKER CLUSTER STYLES
    ======================================== */
 .custom-cluster-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-weight: 700;
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  font-weight: 700 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  transition: transform 0.2s ease !important;
+  background: linear-gradient(135deg, #0047AB 0%, #003380 100%) !important;
+  border: 3px solid white !important;
 }
 
 .custom-cluster-icon:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) !important;
 }
 
 .custom-cluster-icon .cluster-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  font-size: 14px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
 .marker-cluster-small {
-  background: linear-gradient(135deg, #0047AB 0%, #003380 100%);
-  border: 3px solid white;
+  background: linear-gradient(135deg, #0047AB 0%, #003380 100%) !important;
+  width: 40px !important;
+  height: 40px !important;
 }
 
 .marker-cluster-small .cluster-icon {
-  font-size: 12px;
+  font-size: 13px !important;
 }
 
 .marker-cluster-medium {
-  background: linear-gradient(135deg, #003380 0%, #002255 100%);
-  border: 3px solid white;
+  background: linear-gradient(135deg, #003380 0%, #002255 100%) !important;
+  width: 50px !important;
+  height: 50px !important;
 }
 
 .marker-cluster-medium .cluster-icon {
-  font-size: 14px;
+  font-size: 15px !important;
 }
 
 .marker-cluster-large {
-  background: linear-gradient(135deg, #002255 0%, #001133 100%);
-  border: 4px solid white;
+  background: linear-gradient(135deg, #002255 0%, #001133 100%) !important;
+  border: 4px solid white !important;
+  width: 60px !important;
+  height: 60px !important;
 }
 
 .marker-cluster-large .cluster-icon {
-  font-size: 16px;
+  font-size: 17px !important;
 }

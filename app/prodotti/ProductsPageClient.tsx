@@ -195,63 +195,34 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
 
   return (
     <div className="min-h-screen bg-white">
-      {/* ===== HERO - Neon cyberpunk ===== */}
-      <section className="relative overflow-hidden min-h-[50vh] lg:min-h-[55vh] flex items-center justify-center bg-[#0d0d0d]">
-        {/* Griglia prospettica */}
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            background: `
-              linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-            transform: 'perspective(500px) rotateX(60deg) translateY(-50%)',
-            transformOrigin: 'center top',
-          }}
-        />
+      {/* ===== HERO - Cerchi concentrici pulsanti ===== */}
+      <section className="relative overflow-hidden min-h-[50vh] lg:min-h-[55vh] flex items-center justify-center bg-gradient-to-b from-[#0c1222] to-[#1a2744]">
+        {/* Glow centrale */}
+        <div className="absolute w-[300px] h-[300px] rounded-full bg-blue-500/30 blur-[60px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
 
-        {/* Linee neon animate */}
-        <motion.div
-          className="absolute h-[2px] z-[1]"
-          style={{
-            width: '60%',
-            top: '30%',
-            left: '20%',
-            background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)',
-            boxShadow: '0 0 20px #3b82f6, 0 0 40px #3b82f6',
-          }}
-          animate={{ opacity: [0.3, 1, 0.3], scaleX: [0.8, 1, 0.8] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute h-[2px] z-[1]"
-          style={{
-            width: '40%',
-            top: '50%',
-            left: '30%',
-            background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)',
-            boxShadow: '0 0 20px #3b82f6, 0 0 40px #3b82f6',
-          }}
-          animate={{ opacity: [0.3, 1, 0.3], scaleX: [0.8, 1, 0.8] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-        />
-        <motion.div
-          className="absolute h-[2px] z-[1]"
-          style={{
-            width: '50%',
-            top: '70%',
-            left: '25%',
-            background: 'linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent)',
-            boxShadow: '0 0 20px #3b82f6, 0 0 40px #3b82f6',
-          }}
-          animate={{ opacity: [0.3, 1, 0.3], scaleX: [0.8, 1, 0.8] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-        />
-
-        {/* Glow corners */}
-        <div className="absolute w-[200px] h-[200px] rounded-full bg-pink-500/40 blur-[80px] top-[-50px] left-[-50px]" />
-        <div className="absolute w-[200px] h-[200px] rounded-full bg-blue-500/40 blur-[80px] bottom-[-50px] right-[-50px]" />
+        {/* Cerchi concentrici */}
+        {[200, 350, 500, 650, 800].map((size, i) => (
+          <motion.div
+            key={`circle-${i}`}
+            className="absolute rounded-full border border-blue-500/20 left-1/2 top-1/2"
+            style={{
+              width: size,
+              height: size,
+              x: '-50%',
+              y: '-50%',
+            }}
+            animate={{
+              opacity: [0.2, 0.5, 0.2],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: i * 0.5,
+            }}
+          />
+        ))}
 
         {/* Contenuto */}
         <div className="container-glos relative z-10 py-20 lg:py-28">
@@ -261,11 +232,11 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <p className="text-cyan-300 uppercase tracking-widest text-sm font-semibold mb-4">
+            <p className="text-blue-300 uppercase tracking-widest text-sm font-semibold mb-4">
               Catalogo Completo
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-              style={{ textShadow: '0 0 30px rgba(59,130,246,0.5), 0 4px 20px rgba(0,0,0,0.4)' }}
+              style={{ textShadow: '0 4px 20px rgba(0, 0, 0, 0.4)' }}
             >
               I Nostri Prodotti
             </h1>
@@ -275,9 +246,6 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
             </p>
           </motion.div>
         </div>
-
-        {/* Border glow bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent z-[2]" />
       </section>
 
       {/* ===== BLENDER GLOS - SEZIONE SPECIALE (SFONDO BIANCO) ===== */}

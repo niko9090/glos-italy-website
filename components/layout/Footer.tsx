@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Facebook, Instagram, Linkedin, Youtube, Twitter, Mail, Phone, MapPin } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { sl } from '@/lib/utils/stegaSafe'
-import { useTranslations } from '@/lib/context/LanguageContext'
+import { useLanguage, useTranslations } from '@/lib/context/LanguageContext'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
 
 interface FooterProps {
@@ -54,13 +54,14 @@ const footerColumnsClasses: Record<string, string> = {
 }
 
 export default function Footer({ settings, navigation }: FooterProps) {
-  const { t } = useTranslations()
+  const { t: tSanity } = useLanguage() // For Sanity localized data
+  const { t } = useTranslations() // For static translation keys
   const currentYear = new Date().getFullYear()
 
-  // Estrai valori sicuri - use settings values directly since they come from Sanity
-  const companyName = settings?.companyName || 'GLOS Italy'
-  const slogan = settings?.slogan
-  const address = settings?.address
+  // Estrai valori sicuri - translate Sanity localized fields
+  const companyName = tSanity(settings?.companyName) || 'GLOS Italy'
+  const slogan = tSanity(settings?.slogan)
+  const address = tSanity(settings?.address)
 
   // Get customization settings with defaults
   const logoSize = sl(logoSizeClasses, settings?.footerLogoSize, 'xl')
@@ -78,8 +79,9 @@ export default function Footer({ settings, navigation }: FooterProps) {
   ]
 
   // Copyright text with {year} replacement
-  const copyrightText = settings?.footerCopyrightText
-    ? settings.footerCopyrightText.replace('{year}', String(currentYear))
+  const rawCopyrightText = tSanity(settings?.footerCopyrightText)
+  const copyrightText = rawCopyrightText
+    ? rawCopyrightText.replace('{year}', String(currentYear))
     : t('footer.copyright', { year: currentYear })
 
   // Determine which logo to use - prefer logoWhite for dark backgrounds
@@ -204,7 +206,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                       href={item.href || '#'}
                       className="text-gray-400 hover:text-white transition-colors"
                     >
-                      {item.label}
+                      {tSanity(item.label)}
                     </Link>
                   </li>
                 ))}
@@ -304,7 +306,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                   href={link.href || '#'}
                   className="text-gray-500 hover:text-white transition-colors"
                 >
-                  {link.label}
+                  {tSanity(link.label)}
                 </Link>
               ))}
             </div>

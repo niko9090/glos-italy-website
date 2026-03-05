@@ -225,39 +225,31 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
           transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
         />
 
-        {/* Ripples casuali sparsi - Variante G */}
+        {/* Ripples sottili e discreti - solo 4 punti */}
         {[
-          { left: '12%', top: '35%', delays: [0, 0.6, 1.2] },
-          { left: '75%', top: '25%', delays: [1.8, 2.4, 3] },
-          { left: '45%', top: '70%', delays: [0.9, 1.5, 2.1] },
-          { left: '88%', top: '60%', delays: [2.7, 3.3, 3.9] },
-          { left: '30%', top: '20%', delays: [0.3, 0.9, 1.5] },
-          { left: '60%', top: '45%', delays: [1.2, 1.8, 2.4] },
-          { left: '20%', top: '75%', delays: [2.1, 2.7, 3.3] },
-          { left: '55%', top: '15%', delays: [3.6, 4.2] },
-          { left: '85%', top: '85%', delays: [0.6, 1.2, 1.8] },
-          { left: '8%', top: '55%', delays: [1.5, 2.1, 2.7] },
+          { left: '20%', top: '40%', delays: [0, 2, 4] },
+          { left: '75%', top: '35%', delays: [1, 3, 5] },
+          { left: '35%', top: '65%', delays: [1.5, 3.5] },
+          { left: '80%', top: '70%', delays: [0.5, 2.5, 4.5] },
         ].map((point, pointIndex) => (
           <div key={`ripple-point-${pointIndex}`} className="absolute" style={{ left: point.left, top: point.top }}>
             {point.delays.map((delay, waveIndex) => (
               <motion.div
                 key={`wave-${pointIndex}-${waveIndex}`}
-                className="absolute rounded-full border-2 border-blue-400/50"
+                className="absolute rounded-full border border-blue-400/25"
                 style={{
                   left: '50%',
                   top: '50%',
                   x: '-50%',
                   y: '-50%',
-                  boxShadow: '0 0 10px rgba(59, 130, 246, 0.3)',
                 }}
                 animate={{
-                  width: [10, 280],
-                  height: [10, 280],
-                  opacity: [0.7, 0],
-                  borderWidth: [2, 1],
+                  width: [0, 200],
+                  height: [0, 200],
+                  opacity: [0.35, 0],
                 }}
                 transition={{
-                  duration: 4.5,
+                  duration: 6,
                   repeat: Infinity,
                   ease: 'easeOut',
                   delay: delay,

@@ -138,6 +138,7 @@ interface Dealer {
   website?: string
   openingHours?: string
   youtubeVideo?: string
+  localVideoPath?: string
   location?: {
     lat?: number
     lng?: number
@@ -425,8 +426,21 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
               </button>
             </div>
 
-            {/* Video YouTube */}
-            {youtubeId && (
+            {/* Video - Locale o YouTube */}
+            {modalDealer.localVideoPath ? (
+              <div className="aspect-video w-full bg-black">
+                <video
+                  src={modalDealer.localVideoPath}
+                  className="w-full h-full object-cover"
+                  controls
+                  autoPlay
+                  muted
+                  playsInline
+                >
+                  Il tuo browser non supporta i video HTML5.
+                </video>
+              </div>
+            ) : youtubeId ? (
               <div className="aspect-video w-full bg-black">
                 <iframe
                   src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&cc_load_policy=1&cc_lang_pref=en&hl=en`}
@@ -436,7 +450,7 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
                   allowFullScreen
                 />
               </div>
-            )}
+            ) : null}
 
             {/* Dettagli Rivenditore - Compatti */}
             <div className="p-4 space-y-3">

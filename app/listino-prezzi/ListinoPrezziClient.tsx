@@ -612,54 +612,49 @@ export default function ListinoPrezziClient() {
 
   return (
     <>
-      {/* HERO - Variante M: Liquido espansivo dal centro */}
+      {/* HERO - Liquido sparso casuale */}
       <section className="relative bg-gradient-to-br from-[#0a1628] via-[#0f2744] to-[#1a365d] text-white overflow-hidden min-h-[50vh] lg:min-h-[55vh] flex items-center">
-        {/* Centro pulsante */}
-        <motion.div
-          className="absolute left-1/2 top-1/2 w-[150px] h-[150px] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(139,92,246,0.4), transparent)',
-            x: '-50%',
-            y: '-50%',
-            filter: 'blur(40px)',
-          }}
-          animate={{
-            scale: [1, 1.3, 1],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-        />
-
-        {/* Liquido che si espande verso sinistra */}
-        <motion.div
-          className="absolute top-1/2 h-[200px]"
-          style={{
-            background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.35))',
-            filter: 'blur(50px)',
-            y: '-50%',
-          }}
-          animate={{
-            left: ['50%', '5%', '50%'],
-            width: ['10%', '45%', '10%'],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        />
-
-        {/* Liquido che si espande verso destra */}
-        <motion.div
-          className="absolute top-1/2 h-[200px]"
-          style={{
-            background: 'linear-gradient(-90deg, transparent, rgba(6,182,212,0.3))',
-            filter: 'blur(50px)',
-            y: '-50%',
-          }}
-          animate={{
-            right: ['50%', '5%', '50%'],
-            width: ['10%', '45%', '10%'],
-            opacity: [0.5, 0.8, 0.5],
-          }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-        />
+        {/* Blob liquidi sparsi in tutta l'immagine */}
+        {[
+          { left: '10%', top: '25%', size: 180, color: 'rgba(59,130,246,0.25)', delay: 0, duration: 7 },
+          { left: '75%', top: '20%', size: 150, color: 'rgba(6,182,212,0.22)', delay: 1.5, duration: 8 },
+          { left: '45%', top: '60%', size: 200, color: 'rgba(139,92,246,0.2)', delay: 0.8, duration: 6 },
+          { left: '85%', top: '70%', size: 160, color: 'rgba(6,182,212,0.25)', delay: 2.5, duration: 7.5 },
+          { left: '20%', top: '75%', size: 140, color: 'rgba(59,130,246,0.22)', delay: 1.2, duration: 8.5 },
+          { left: '60%', top: '35%', size: 170, color: 'rgba(99,102,241,0.2)', delay: 3, duration: 6.5 },
+          { left: '5%', top: '50%', size: 130, color: 'rgba(59,130,246,0.2)', delay: 2, duration: 9 },
+          { left: '90%', top: '45%', size: 145, color: 'rgba(6,182,212,0.18)', delay: 0.5, duration: 7 },
+        ].map((blob, i) => (
+          <motion.div
+            key={`blob-${i}`}
+            className="absolute rounded-[40%_60%_70%_30%/40%_50%_60%_50%]"
+            style={{
+              left: blob.left,
+              top: blob.top,
+              width: blob.size,
+              height: blob.size,
+              background: `radial-gradient(circle, ${blob.color}, transparent)`,
+              filter: 'blur(50px)',
+              x: '-50%',
+              y: '-50%',
+            }}
+            animate={{
+              scale: [1, 1.15, 1],
+              borderRadius: [
+                '40% 60% 70% 30% / 40% 50% 60% 50%',
+                '60% 40% 30% 70% / 50% 60% 40% 50%',
+                '40% 60% 70% 30% / 40% 50% 60% 50%',
+              ],
+              opacity: [0.6, 0.9, 0.6],
+            }}
+            transition={{
+              duration: blob.duration,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: blob.delay,
+            }}
+          />
+        ))}
 
         <div className="container-glos py-16 md:py-20 lg:py-24 relative z-10">
           <motion.div

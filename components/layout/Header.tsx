@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { sl } from '@/lib/utils/stegaSafe'
-import { useLanguage } from '@/lib/context/LanguageContext'
+import { useLanguage, useTranslations } from '@/lib/context/LanguageContext'
 import LanguageSelector from '@/components/LanguageSelector'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
 
@@ -17,14 +17,14 @@ interface HeaderProps {
   navigation: Navigation | null
 }
 
-// Menu di fallback se Sanity non ha dati
+// Menu di fallback se Sanity non ha dati - le label usano le chiavi di traduzione
 const defaultNavItems = [
-  { _key: 'home', label: 'Home', href: '/' },
-  { _key: 'chi-siamo', label: 'Chi Siamo', href: '/chi-siamo' },
-  { _key: 'prodotti', label: 'Prodotti', href: '/prodotti' },
-  { _key: 'listino', label: 'Listino Prezzi', href: '/listino-prezzi' },
-  { _key: 'community', label: 'Community', href: '/rivenditori' },
-  { _key: 'contatti', label: 'Contatti', href: '/contatti' },
+  { _key: 'home', label: 'nav.home', href: '/', useTranslationKey: true },
+  { _key: 'chi-siamo', label: 'nav.chiSiamo', href: '/chi-siamo', useTranslationKey: true },
+  { _key: 'prodotti', label: 'nav.prodotti', href: '/prodotti', useTranslationKey: true },
+  { _key: 'listino', label: 'nav.listinoPrezzi', href: '/listino-prezzi', useTranslationKey: true },
+  { _key: 'community', label: 'nav.community', href: '/rivenditori', useTranslationKey: true },
+  { _key: 'contatti', label: 'nav.contatti', href: '/contatti', useTranslationKey: true },
 ]
 
 // Logo size classes - dimensioni aumentate
@@ -61,8 +61,9 @@ const navGapClasses: Record<string, string> = {
 
 export default function Header({ settings, navigation }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { t } = useLanguage()
-  const companyName = t(settings?.companyName) || 'GLOS Italy'
+  const { t: tSanity } = useLanguage()
+  const { t } = useTranslations()
+  const companyName = tSanity(settings?.companyName) || 'GLOS Italy'
 
   // Usa items da Sanity se esistono, altrimenti usa il fallback
   const navItems = navigation?.items && navigation.items.length > 0
@@ -77,7 +78,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
   const headerStyle = sl(headerStyleClasses, settings?.headerStyle, 'metal')
   const navGap = sl(navGapClasses, settings?.headerNavGap, '8')
   const showLanguageSelector = settings?.headerShowLanguageSelector !== false
-  const ctaText = t(settings?.headerCtaText) || 'Contattaci'
+  const ctaText = tSanity(settings?.headerCtaText) || t('nav.contatti')
   const ctaLink = settings?.headerCtaLink || '/contatti'
 
   return (
@@ -109,7 +110,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
                 href={item.href || '#'}
                 className="text-gray-700 hover:text-primary font-medium text-lg py-2 transition-colors"
               >
-                {t(item.label)}
+                {(item as { useTranslationKey?: boolean }).useTranslationKey ? t(item.label) : tSanity(item.label)}
               </Link>
             ))}
           </nav>
@@ -132,7 +133,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
             <button
               onClick={toggleMobileMenu}
               className="lg:hidden p-3 text-gray-700 focus-ring rounded-lg"
-              aria-label={isMobileMenuOpen ? 'Chiudi menu di navigazione' : 'Apri menu di navigazione'}
+              aria-label={isMobileMenuOpen ? t('nav.ariaCloseMenu') : t('nav.ariaOpenMenu')}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-menu"
             >
@@ -152,7 +153,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden metal-brushed border-t border-gray-300/50"
             role="navigation"
-            aria-label="Menu di navigazione mobile"
+            aria-label={t('nav.ariaMobileMenu')}
           >
             <div className="container-glos py-4">
               <nav className="flex flex-col gap-2">
@@ -163,7 +164,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
                     onClick={toggleMobileMenu}
                     className="block py-3 text-gray-700 font-medium text-lg hover:text-primary"
                   >
-                    {t(item.label)}
+                    {(item as { useTranslationKey?: boolean }).useTranslationKey ? t(item.label) : tSanity(item.label)}
                   </Link>
                 ))}
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Cookie, X, Settings, Check } from 'lucide-react'
+import { useTranslations } from '@/lib/context/LanguageContext'
 
 type CookieConsent = {
   necessary: boolean
@@ -15,6 +16,7 @@ type CookieConsent = {
 const COOKIE_CONSENT_KEY = 'glos-cookie-consent'
 
 export default function CookieBanner() {
+  const { t } = useTranslations()
   const [showBanner, setShowBanner] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [consent, setConsent] = useState<CookieConsent>({
@@ -102,14 +104,12 @@ export default function CookieBanner() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">
-                      Utilizziamo i cookie
+                      {t('cookies.title')}
                     </h3>
                     <p className="text-gray-600 text-sm mb-4">
-                      Questo sito utilizza cookie tecnici necessari al funzionamento e cookie analitici
-                      per migliorare la tua esperienza. Puoi accettare tutti i cookie o personalizzare
-                      le tue preferenze.{' '}
+                      {t('cookies.description')}{' '}
                       <Link href="/cookie" className="text-primary hover:underline">
-                        Scopri di più
+                        {t('cookies.learnMore')}
                       </Link>
                     </p>
                     <div className="flex flex-wrap gap-3">
@@ -118,27 +118,27 @@ export default function CookieBanner() {
                         className="px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2"
                       >
                         <Check className="w-4 h-4" />
-                        Accetta tutti
+                        {t('cookies.acceptAll')}
                       </button>
                       <button
                         onClick={acceptNecessary}
                         className="px-6 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors"
                       >
-                        Solo necessari
+                        {t('cookies.rejectAll')}
                       </button>
                       <button
                         onClick={() => setShowSettings(true)}
                         className="px-6 py-2.5 text-gray-600 font-medium hover:text-gray-900 transition-colors flex items-center gap-2"
                       >
                         <Settings className="w-4 h-4" />
-                        Personalizza
+                        {t('cookies.customize')}
                       </button>
                     </div>
                   </div>
                   <button
                     onClick={acceptNecessary}
                     className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                    aria-label="Chiudi"
+                    aria-label={t('cookies.close')}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -149,12 +149,12 @@ export default function CookieBanner() {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-bold text-gray-900">
-                    Preferenze Cookie
+                    {t('cookies.preferences')}
                   </h3>
                   <button
                     onClick={() => setShowSettings(false)}
                     className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                    aria-label="Chiudi impostazioni"
+                    aria-label={t('cookies.closeSettings')}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -165,13 +165,13 @@ export default function CookieBanner() {
                   <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-semibold text-gray-900">Cookie Necessari</h4>
+                        <h4 className="font-semibold text-gray-900">{t('cookies.necessary')}</h4>
                         <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                          Sempre attivi
+                          {t('cookies.alwaysActive')}
                         </span>
                       </div>
                       <p className="text-sm text-gray-600">
-                        Essenziali per il funzionamento del sito. Non possono essere disattivati.
+                        {t('cookies.necessaryDescription')}
                       </p>
                     </div>
                     <div className="flex-shrink-0 ml-4">
@@ -184,10 +184,9 @@ export default function CookieBanner() {
                   {/* Analytics Cookies */}
                   <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 mb-1">Cookie Analitici</h4>
+                      <h4 className="font-semibold text-gray-900 mb-1">{t('cookies.analytics')}</h4>
                       <p className="text-sm text-gray-600">
-                        Ci aiutano a capire come i visitatori interagiscono con il sito,
-                        raccogliendo informazioni in forma anonima.
+                        {t('cookies.analyticsDescription')}
                       </p>
                     </div>
                     <div className="flex-shrink-0 ml-4">
@@ -209,10 +208,9 @@ export default function CookieBanner() {
                   {/* Marketing Cookies */}
                   <div className="flex items-start justify-between p-4 bg-gray-50 rounded-lg">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-gray-900 mb-1">Cookie di Marketing</h4>
+                      <h4 className="font-semibold text-gray-900 mb-1">{t('cookies.marketing')}</h4>
                       <p className="text-sm text-gray-600">
-                        Utilizzati per tracciare i visitatori e mostrare annunci pertinenti.
-                        Attualmente non utilizziamo cookie di marketing.
+                        {t('cookies.marketingDescription')}
                       </p>
                     </div>
                     <div className="flex-shrink-0 ml-4">
@@ -237,21 +235,21 @@ export default function CookieBanner() {
                     onClick={savePreferences}
                     className="px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors"
                   >
-                    Salva preferenze
+                    {t('cookies.savePreferences')}
                   </button>
                   <button
                     onClick={acceptAll}
                     className="px-6 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors"
                   >
-                    Accetta tutti
+                    {t('cookies.acceptAll')}
                   </button>
                 </div>
 
                 <p className="mt-4 text-xs text-gray-500">
-                  Per maggiori informazioni, consulta la nostra{' '}
-                  <Link href="/cookie" className="text-primary hover:underline">Cookie Policy</Link>
-                  {' '}e la{' '}
-                  <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>.
+                  {t('cookies.moreInfo')}{' '}
+                  <Link href="/cookie" className="text-primary hover:underline">{t('cookies.cookiePolicy')}</Link>
+                  {' '}{t('cookies.and')}{' '}
+                  <Link href="/privacy" className="text-primary hover:underline">{t('cookies.privacyPolicy')}</Link>.
                 </p>
               </div>
             )}

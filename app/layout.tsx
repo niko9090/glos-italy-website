@@ -81,7 +81,7 @@ export default async function RootLayout({
 
   // Prepare company info for structured data
   const companyName = getTextValue(settings?.companyName) || SITE_NAME
-  const slogan = getTextValue(settings?.slogan) || 'Prodotti di qualita Made in Italy'
+  const slogan = getTextValue(settings?.slogan) || 'Prodotti di qualità Made in Italy'
 
   return (
     <html lang="it" className={inter.variable}>

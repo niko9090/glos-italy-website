@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Facebook, Instagram, Linkedin, Youtube, Twitter, Mail, Phone, MapPin } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { sl } from '@/lib/utils/stegaSafe'
-import { useLanguage } from '@/lib/context/LanguageContext'
+import { useTranslations } from '@/lib/context/LanguageContext'
 import type { SiteSettings, Navigation } from '@/lib/sanity/fetch'
 
 interface FooterProps {
@@ -54,13 +54,13 @@ const footerColumnsClasses: Record<string, string> = {
 }
 
 export default function Footer({ settings, navigation }: FooterProps) {
-  const { t } = useLanguage()
+  const { t } = useTranslations()
   const currentYear = new Date().getFullYear()
 
-  // Estrai valori sicuri
-  const companyName = t(settings?.companyName) || 'GLOS Italy'
-  const slogan = t(settings?.slogan)
-  const address = t(settings?.address)
+  // Estrai valori sicuri - use settings values directly since they come from Sanity
+  const companyName = settings?.companyName || 'GLOS Italy'
+  const slogan = settings?.slogan
+  const address = settings?.address
 
   // Get customization settings with defaults
   const logoSize = sl(logoSizeClasses, settings?.footerLogoSize, 'xl')
@@ -73,14 +73,14 @@ export default function Footer({ settings, navigation }: FooterProps) {
   const showProducts = settings?.footerShowProducts !== false
   const showContacts = settings?.footerShowContacts !== false
   const bottomLinks = settings?.footerBottomLinks || [
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Cookie Policy', href: '/cookie' },
+    { label: t('footer.privacyPolicy'), href: '/privacy' },
+    { label: t('footer.cookiePolicy'), href: '/cookie' },
   ]
 
   // Copyright text with {year} replacement
   const copyrightText = settings?.footerCopyrightText
     ? settings.footerCopyrightText.replace('{year}', String(currentYear))
-    : `© ${currentYear} ${companyName}. Tutti i diritti riservati.`
+    : t('footer.copyright', { year: currentYear })
 
   // Determine which logo to use - prefer logoWhite for dark backgrounds
   const footerLogo = isValidImage(settings?.logoWhite) ? settings.logoWhite : settings?.logo
@@ -196,7 +196,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
           {/* Quick Links */}
           {showQuickLinks && (
             <div>
-              <h4 className="text-lg font-semibold mb-6">Link Rapidi</h4>
+              <h4 className="text-lg font-semibold mb-6">{t('footer.quickLinks')}</h4>
               <ul className="space-y-3">
                 {navigation?.items?.slice(0, 6).map((item) => (
                   <li key={item._key}>
@@ -204,7 +204,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                       href={item.href || '#'}
                       className="text-gray-400 hover:text-white transition-colors"
                     >
-                      {t(item.label)}
+                      {item.label}
                     </Link>
                   </li>
                 ))}
@@ -215,11 +215,11 @@ export default function Footer({ settings, navigation }: FooterProps) {
           {/* Products */}
           {showProducts && (
             <div>
-              <h4 className="text-lg font-semibold mb-6">Prodotti</h4>
+              <h4 className="text-lg font-semibold mb-6">{t('footer.products')}</h4>
               <ul className="space-y-3">
                 <li>
                   <Link href="/prodotti" className="text-gray-400 hover:text-white transition-colors">
-                    Tutti i Prodotti
+                    {t('footer.allProducts')}
                   </Link>
                 </li>
                 <li>
@@ -239,7 +239,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
           {/* Contact Info */}
           {showContacts && (
             <div>
-              <h4 className="text-lg font-semibold mb-6">Contatti</h4>
+              <h4 className="text-lg font-semibold mb-6">{t('footer.contacts')}</h4>
               <ul className="space-y-4">
                 {address && (
                   <li className="flex items-start gap-3">
@@ -251,10 +251,10 @@ export default function Footer({ settings, navigation }: FooterProps) {
                   <li className="flex items-center gap-3">
                     <Phone className="w-5 h-5 text-primary flex-shrink-0" />
                     <a
-                      href={`tel:${String(t(settings.phone) || '').replace(/\s/g, '')}`}
+                      href={`tel:${String(settings.phone || '').replace(/\s/g, '')}`}
                       className="text-gray-400 hover:text-white transition-colors"
                     >
-                      {t(settings.phone)}
+                      {settings.phone}
                     </a>
                   </li>
                 )}
@@ -280,7 +280,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 )}
                 {(settings?.vatNumber || settings?.pec) && (
                   <li className="text-gray-500 text-sm pt-2 border-t border-gray-800 space-y-1">
-                    {settings?.vatNumber && <span className="block">P.IVA: {settings.vatNumber}</span>}
+                    {settings?.vatNumber && <span className="block">{t('footer.vatNumber')}: {settings.vatNumber}</span>}
                     {settings?.pec && <span className="block">PEC: {settings.pec}</span>}
                   </li>
                 )}

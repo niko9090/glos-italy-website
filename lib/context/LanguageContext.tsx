@@ -2,6 +2,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { translations } from '../i18n/translations'
 
 export type Language = 'it' | 'en' | 'es'
 
@@ -87,5 +88,71 @@ export function useLanguage() {
 // Hook semplificato per la traduzione
 export function useTranslation() {
   const { t, language } = useLanguage()
+  return { t, language }
+}
+
+/**
+ * Helper: naviga un oggetto usando dot-notation
+ * Esempio: getNestedValue({ nav: { home: 'Casa' } }, 'nav.home') -> 'Casa'
+ */
+function getNestedValue(obj: Record<string, unknown>, path: string): string | undefined {
+  const keys = path.split('.')
+  let current: unknown = obj
+
+  for (const key of keys) {
+    if (current === null || current === undefined) return undefined
+    if (typeof current !== 'object') return undefined
+    current = (current as Record<string, unknown>)[key]
+  }
+
+  return typeof current === 'string' ? current : undefined
+}
+
+/**
+ * Hook per traduzioni con chiavi dot-notation
+ *
+ * @example
+ * const { t, language } = useTranslations()
+ * t('nav.home') // -> 'Home' (in base alla lingua)
+ * t('footer.copyright', { year: 2024 }) // -> '© 2024 GLOS S.R.L.'
+ */
+export function useTranslations() {
+  const { language } = useLanguage()
+
+  /**
+   * Funzione di traduzione con supporto per:
+   * - Chiavi dot-notation (es. 'nav.home', 'cookies.title')
+   * - Placeholder (es. {year}, {name})
+   * - Fallback a italiano se la chiave non esiste nella lingua corrente
+   */
+  const t = (key: string, params?: Record<string, string | number>): string => {
+    // Prova nella lingua corrente
+    const langTranslations = translations[language]
+    let value = langTranslations ? getNestedValue(langTranslations as Record<string, unknown>, key) : undefined
+
+    // Fallback a italiano se non trovato
+    if (value === undefined && language !== 'it') {
+      const itTranslations = translations.it
+      value = itTranslations ? getNestedValue(itTranslations as Record<string, unknown>, key) : undefined
+    }
+
+    // Se ancora non trovato, ritorna la chiave stessa
+    if (value === undefined) {
+      console.warn(`[useTranslations] Missing translation for key: "${key}"`)
+      return key
+    }
+
+    // Sostituisci i placeholder se presenti
+    if (params) {
+      let result = value
+      for (const [placeholder, replacement] of Object.entries(params)) {
+        result = result.replace(new RegExp(`\\{${placeholder}\\}`, 'g'), String(replacement))
+      }
+      return result
+    }
+
+    return value
+  }
+
   return { t, language }
 }

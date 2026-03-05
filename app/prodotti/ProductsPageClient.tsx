@@ -198,28 +198,29 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
       {/* ===== HERO - Cerchi concentrici pulsanti ===== */}
       <section className="relative overflow-hidden min-h-[50vh] lg:min-h-[55vh] flex items-center justify-center bg-gradient-to-b from-[#0c1222] to-[#1a2744]">
         {/* Glow centrale */}
-        <div className="absolute w-[300px] h-[300px] rounded-full bg-blue-500/30 blur-[60px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute w-[350px] h-[350px] rounded-full bg-blue-500/25 blur-[80px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
 
-        {/* Cerchi concentrici */}
-        {[200, 350, 500, 650, 800].map((size, i) => (
+        {/* Cerchi concentrici animati */}
+        {[200, 350, 500, 650, 800, 950].map((size, i) => (
           <motion.div
             key={`circle-${i}`}
-            className="absolute rounded-full border border-blue-500/20 left-1/2 top-1/2"
+            className="absolute rounded-full left-1/2 top-1/2"
             style={{
               width: size,
               height: size,
+              border: `${i < 3 ? '2px' : '1px'} solid rgba(59,130,246,${0.4 - i * 0.05})`,
               x: '-50%',
               y: '-50%',
             }}
             animate={{
-              opacity: [0.2, 0.5, 0.2],
-              scale: [1, 1.05, 1],
+              scale: [1, 1.03, 1],
+              opacity: [0.4 + (3-i) * 0.1, 0.7 + (3-i) * 0.1, 0.4 + (3-i) * 0.1],
             }}
             transition={{
               duration: 4,
               repeat: Infinity,
               ease: 'easeInOut',
-              delay: i * 0.5,
+              delay: i * 0.4,
             }}
           />
         ))}
@@ -236,7 +237,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
               Catalogo Completo
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-              style={{ textShadow: '0 4px 20px rgba(0, 0, 0, 0.4)' }}
+              style={{ textShadow: '0 4px 20px rgba(0,0,0,0.4)' }}
             >
               I Nostri Prodotti
             </h1>

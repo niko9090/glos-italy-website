@@ -20,7 +20,7 @@ import CookieBanner from '@/components/CookieBanner'
 
 // Font Inter - font principale per tutto il sito (look industriale/meccanico)
 const inter = Inter({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   variable: '--font-inter',
   display: 'swap',
   weight: ['300', '400', '500', '600', '700', '800'],
@@ -86,6 +86,7 @@ export default async function RootLayout({
   return (
     <html lang="it" className={inter.variable}>
       <head>
+        <meta charSet="utf-8" />
         {/* Global Structured Data - Organization and Website schemas */}
         <OrganizationSchema data={settings || {}} />
         <WebsiteSchema name={companyName} description={slogan} />

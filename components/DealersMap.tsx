@@ -311,7 +311,7 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
       {isGeocoding && (
         <div className="mb-2 p-2 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700 flex items-center gap-2">
           <div className="animate-spin w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
-          Localizzazione rivenditori in corso...
+          Caricamento della nostra community in corso...
         </div>
       )}
 

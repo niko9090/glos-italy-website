@@ -108,6 +108,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
               <Link
                 key={item._key}
                 href={item.href || '#'}
+                prefetch={false}
                 className="text-gray-700 hover:text-primary font-medium text-lg py-2 transition-colors"
               >
                 {(item as { useTranslationKey?: boolean }).useTranslationKey ? t(item.label || '') : tSanity(item.label)}
@@ -161,6 +162,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
                   <Link
                     key={item._key}
                     href={item.href || '#'}
+                    prefetch={false}
                     onClick={toggleMobileMenu}
                     className="block py-3 text-gray-700 font-medium text-lg hover:text-primary"
                   >

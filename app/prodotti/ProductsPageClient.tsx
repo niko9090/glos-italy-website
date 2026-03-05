@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { getTextValue } from '@/lib/utils/textHelpers'
+import { getExpoThumbnail } from '@/lib/products/expoImages'
 import RichText from '@/components/RichText'
 import type { Product, Category } from '@/lib/sanity/fetch'
 import ProductBadges from '@/components/products/ProductBadges'
@@ -501,17 +502,36 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                   className={`order-2 w-full ${groupIndex % 2 === 1 ? 'lg:order-1' : 'lg:order-2'}`}
                 >
                   {/* Immagine categoria */}
-                  {group.products[0] && isValidImage(group.products[0].mainImage) && (
+                  {group.products[0] && (
                     <div className={`relative rounded-2xl overflow-hidden mb-6 p-6 ${
                       isBlue ? 'bg-white' : 'bg-gradient-to-br from-[#0047AB] to-[#0055CC]'
                     }`}>
-                      <Image
-                        src={safeImageUrl(group.products[0].mainImage, 500, 400)!}
-                        alt={categoryName}
-                        width={500}
-                        height={400}
-                        className="w-full h-auto object-contain mx-auto max-h-[280px]"
-                      />
+                      {(() => {
+                        const firstProductSlug = group.products[0].slug?.current || ''
+                        const categoryExpoThumb = getExpoThumbnail(firstProductSlug)
+                        if (categoryExpoThumb) {
+                          return (
+                            <Image
+                              src={categoryExpoThumb}
+                              alt={categoryName}
+                              width={500}
+                              height={400}
+                              className="w-full h-auto object-contain mx-auto max-h-[280px]"
+                            />
+                          )
+                        } else if (isValidImage(group.products[0].mainImage)) {
+                          return (
+                            <Image
+                              src={safeImageUrl(group.products[0].mainImage, 500, 400)!}
+                              alt={categoryName}
+                              width={500}
+                              height={400}
+                              className="w-full h-auto object-contain mx-auto max-h-[280px]"
+                            />
+                          )
+                        }
+                        return null
+                      })()}
                     </div>
                   )}
 
@@ -672,6 +692,9 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
 
 // Card Prodotto - Bianca su blu, Blu su bianco
 function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolean }) {
+  const productSlug = product.slug?.current || ''
+  const expoThumbnail = getExpoThumbnail(productSlug)
+
   return (
     <motion.article
       variants={fadeIn}
@@ -683,7 +706,14 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
     >
       <Link href={`/prodotti/${product.slug?.current}`} className="block">
         <div className={`relative aspect-[4/3] overflow-hidden ${isOnBlue ? 'bg-gray-50' : 'bg-white/10'}`}>
-          {isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 400, 300) ? (
+          {expoThumbnail ? (
+            <Image
+              src={expoThumbnail}
+              alt={getTextValue(product.name)}
+              fill
+              className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : isValidImage(product.mainImage) && safeImageUrl(product.mainImage, 400, 300) ? (
             <Image
               src={safeImageUrl(product.mainImage, 400, 300)!}
               alt={getTextValue(product.name)}

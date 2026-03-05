@@ -614,38 +614,34 @@ export default function ListinoPrezziClient() {
     <>
       {/* HERO - Liquido sparso casuale */}
       <section className="relative bg-gradient-to-br from-[#0a1628] via-[#0f2744] to-[#1a365d] text-white overflow-hidden min-h-[50vh] lg:min-h-[55vh] flex items-center">
-        {/* Blob liquidi sparsi in tutta l'immagine */}
+        {/* Blob liquidi che si muovono random */}
         {[
-          { left: '10%', top: '25%', size: 180, color: 'rgba(59,130,246,0.25)', delay: 0, duration: 7 },
-          { left: '75%', top: '20%', size: 150, color: 'rgba(6,182,212,0.22)', delay: 1.5, duration: 8 },
-          { left: '45%', top: '60%', size: 200, color: 'rgba(139,92,246,0.2)', delay: 0.8, duration: 6 },
-          { left: '85%', top: '70%', size: 160, color: 'rgba(6,182,212,0.25)', delay: 2.5, duration: 7.5 },
-          { left: '20%', top: '75%', size: 140, color: 'rgba(59,130,246,0.22)', delay: 1.2, duration: 8.5 },
-          { left: '60%', top: '35%', size: 170, color: 'rgba(99,102,241,0.2)', delay: 3, duration: 6.5 },
-          { left: '5%', top: '50%', size: 130, color: 'rgba(59,130,246,0.2)', delay: 2, duration: 9 },
-          { left: '90%', top: '45%', size: 145, color: 'rgba(6,182,212,0.18)', delay: 0.5, duration: 7 },
+          { size: 200, color: 'rgba(59,130,246,0.35)', delay: 0, duration: 12, xRange: [5, 35], yRange: [15, 45] },
+          { size: 170, color: 'rgba(6,182,212,0.32)', delay: 2, duration: 14, xRange: [60, 90], yRange: [10, 40] },
+          { size: 220, color: 'rgba(139,92,246,0.28)', delay: 1, duration: 10, xRange: [30, 60], yRange: [50, 80] },
+          { size: 180, color: 'rgba(6,182,212,0.35)', delay: 3, duration: 13, xRange: [65, 95], yRange: [55, 85] },
+          { size: 160, color: 'rgba(59,130,246,0.32)', delay: 1.5, duration: 11, xRange: [10, 40], yRange: [60, 90] },
+          { size: 190, color: 'rgba(99,102,241,0.3)', delay: 2.5, duration: 15, xRange: [40, 70], yRange: [20, 50] },
         ].map((blob, i) => (
           <motion.div
             key={`blob-${i}`}
             className="absolute rounded-[40%_60%_70%_30%/40%_50%_60%_50%]"
             style={{
-              left: blob.left,
-              top: blob.top,
               width: blob.size,
               height: blob.size,
               background: `radial-gradient(circle, ${blob.color}, transparent)`,
-              filter: 'blur(50px)',
-              x: '-50%',
-              y: '-50%',
+              filter: 'blur(45px)',
             }}
             animate={{
-              scale: [1, 1.15, 1],
+              left: [`${blob.xRange[0]}%`, `${blob.xRange[1]}%`, `${blob.xRange[0]}%`],
+              top: [`${blob.yRange[0]}%`, `${blob.yRange[1]}%`, `${blob.yRange[0]}%`],
+              scale: [1, 1.2, 1],
               borderRadius: [
                 '40% 60% 70% 30% / 40% 50% 60% 50%',
                 '60% 40% 30% 70% / 50% 60% 40% 50%',
                 '40% 60% 70% 30% / 40% 50% 60% 50%',
               ],
-              opacity: [0.6, 0.9, 0.6],
+              opacity: [0.7, 1, 0.7],
             }}
             transition={{
               duration: blob.duration,

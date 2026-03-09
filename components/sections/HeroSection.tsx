@@ -688,7 +688,7 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
                     } ${index === 0 ? 'shadow-lg shadow-white/20' : ''}`}
                   >
                     {button.iconPosition === 'left' && button.icon && getIcon(button.icon)}
-                    {String(t(button.text) || '')}
+                    {String(tSanity(button.text) || '')}
                     {(button.iconPosition !== 'left' || !button.icon) && (
                       index === 0 ? getIcon(button.icon || 'arrow-right') : button.icon && getIcon(button.icon)
                     )}

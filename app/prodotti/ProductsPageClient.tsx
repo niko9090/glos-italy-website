@@ -215,6 +215,43 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
     return 'accessori'
   }
 
+  // Get translated specs for category
+  const getCategorySpecs = (categoryKey: string): { label: string; value: string; icon: React.ElementType }[] => {
+    const specsMap: Record<string, { label: string; value: string; icon: React.ElementType }[]> = {
+      'blender': [
+        { label: t('products.specCapacity'), value: t('products.specValueBucketsDay'), icon: Gauge },
+        { label: t('products.specSystem'), value: t('products.specValueMixGlos'), icon: Sparkles },
+        { label: t('products.specCompressedAir'), value: t('products.specValueAirMin'), icon: Wind },
+        { label: t('products.specResult'), value: t('products.specValueNoBubbles'), icon: Check }
+      ],
+      'termo': [
+        { label: t('products.specPower'), value: t('products.specValueUpTo15kW'), icon: Zap },
+        { label: t('products.specAirFlow'), value: t('products.specValueUpTo1500m3'), icon: Wind },
+        { label: t('products.specNoise'), value: t('products.specValueLess65dB'), icon: Volume2 },
+        { label: t('products.specWeight'), value: t('products.specValueWeight8to25'), icon: Weight }
+      ],
+      'wash': [
+        { label: t('products.specTankCapacity'), value: t('products.specValue30to50L'), icon: Droplets },
+        { label: t('products.specWaterSaving'), value: t('products.specValueUpTo90'), icon: Check },
+        { label: t('products.specFiltration'), value: t('products.specValueMultistage'), icon: Shield },
+        { label: t('products.specMaterial'), value: t('products.specValueInox304'), icon: Shield }
+      ],
+      'taglierine': [
+        { label: t('products.specCutWidth'), value: t('products.specValueUpTo1200mm'), icon: Ruler },
+        { label: t('products.specMaxThickness'), value: t('products.specValueUpTo500mm'), icon: Ruler },
+        { label: t('products.specMaterials'), value: t('products.specValueEpsXpsRock'), icon: Shield },
+        { label: t('products.specPowerSupply'), value: t('products.specValue230V'), icon: Zap }
+      ],
+      'accessori': [
+        { label: t('products.specReplacementWires'), value: t('products.specValueAllModels'), icon: Zap },
+        { label: t('products.specBlades'), value: t('products.specValueVarious'), icon: Scissors },
+        { label: t('products.specFilters'), value: t('products.specValueForWash'), icon: Shield },
+        { label: t('products.specWarranty'), value: t('products.specValue12Months'), icon: Check }
+      ],
+    }
+    return specsMap[categoryKey] || []
+  }
+
   // Trova il Blender
   const blenderProduct = useMemo(() => {
     return products.find(p => {
@@ -399,7 +436,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
 
               {/* Specifiche Tecniche in Cards BLU */}
               <div className="grid grid-cols-2 gap-4 mb-8">
-                {blenderInfo.specs.map((spec, i) => {
+                {getCategorySpecs('blender').map((spec, i) => {
                   const SpecIcon = spec.icon
                   return (
                     <motion.div
@@ -500,7 +537,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                     </div>
                     <div className="p-2 bg-gradient-to-r from-primary to-blue-600">
                       <p className="text-white text-xs font-bold">MIX GLOS SYSTEM</p>
-                      <p className="text-blue-100 text-[10px]">Tecnologia brevettata</p>
+                      <p className="text-blue-100 text-[10px]">{t('products.patentedTechnology')}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -576,7 +613,9 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                   }`}>
                     <CategoryIcon className={`w-5 h-5 ${isBlue ? 'text-blue-200' : 'text-primary'}`} />
                     <span className={`text-sm font-semibold ${isBlue ? 'text-blue-100' : 'text-primary'}`}>
-                      {group.products.length} prodott{group.products.length === 1 ? 'o' : 'i'}
+                      {group.products.length === 1
+                        ? t('products.productCountSingle', { count: group.products.length })
+                        : t('products.productCount', { count: group.products.length })}
                     </span>
                   </div>
 
@@ -690,7 +729,10 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
 
                   {/* Specifiche Tecniche */}
                   <div className="grid grid-cols-2 gap-3">
-                    {categoryInfo.specs.map((spec, i) => {
+                    {(getCategorySpecs(getCategoryKey(categoryName)).length > 0
+                      ? getCategorySpecs(getCategoryKey(categoryName))
+                      : categoryInfo.specs
+                    ).map((spec, i) => {
                       const SpecIcon = spec.icon
                       return (
                         <div

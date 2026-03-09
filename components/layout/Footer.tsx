@@ -183,7 +183,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
-                    aria-label="Seguici su TikTok (si apre in una nuova finestra)"
+                    aria-label={t('footer.followTikTok')}
                     role="listitem"
                   >
                     <svg className="w-5 h-5" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">

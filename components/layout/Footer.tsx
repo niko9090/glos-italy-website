@@ -60,7 +60,8 @@ export default function Footer({ settings, navigation }: FooterProps) {
 
   // Estrai valori sicuri - translate Sanity localized fields
   const companyName = tSanity(settings?.companyName) || 'GLOS Italy'
-  const slogan = tSanity(settings?.slogan) || t('footer.slogan')
+  // Use static translation for slogan (always translated)
+  const slogan = t('footer.slogan')
   const address = tSanity(settings?.address)
 
   // Get customization settings with defaults

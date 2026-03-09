@@ -121,6 +121,100 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
   const { t } = useTranslations()
   const listinoPdfUrl = `/api/download-listino?lang=${language}`
 
+  // Translation helpers for category content
+  const getCategoryLongDesc = (categoryKey: string): string => {
+    const map: Record<string, string> = {
+      'blender': t('products.blenderLongDesc'),
+      'termo': t('products.termoLongDesc'),
+      'wash': t('products.washLongDesc'),
+      'taglierine': t('products.taglierineLongDesc'),
+      'accessori': t('products.accessoriLongDesc'),
+    }
+    return map[categoryKey] || ''
+  }
+
+  const getCategoryFeatures = (categoryKey: string): string[] => {
+    const featuresMap: Record<string, string[]> = {
+      'blender': [
+        t('products.blenderFeature1'),
+        t('products.blenderFeature2'),
+        t('products.blenderFeature3'),
+        t('products.blenderFeature4'),
+      ],
+      'termo': [
+        t('products.termoFeature1'),
+        t('products.termoFeature2'),
+        t('products.termoFeature3'),
+        t('products.termoFeature4'),
+      ],
+      'wash': [
+        t('products.washFeature1'),
+        t('products.washFeature2'),
+        t('products.washFeature3'),
+        t('products.washFeature4'),
+      ],
+      'taglierine': [
+        t('products.taglierineFeature1'),
+        t('products.taglierineFeature2'),
+        t('products.taglierineFeature3'),
+        t('products.taglierineFeature4'),
+      ],
+      'accessori': [
+        t('products.accessoriFeature1'),
+        t('products.accessoriFeature2'),
+        t('products.accessoriFeature3'),
+        t('products.accessoriFeature4'),
+      ],
+    }
+    return featuresMap[categoryKey] || []
+  }
+
+  const getCategoryBenefits = (categoryKey: string): string[] => {
+    const benefitsMap: Record<string, string[]> = {
+      'blender': [
+        t('products.blenderBenefit1'),
+        t('products.blenderBenefit2'),
+        t('products.blenderBenefit3'),
+        t('products.blenderBenefit4'),
+      ],
+      'termo': [
+        t('products.termoBenefit1'),
+        t('products.termoBenefit2'),
+        t('products.termoBenefit3'),
+        t('products.termoBenefit4'),
+      ],
+      'wash': [
+        t('products.washBenefit1'),
+        t('products.washBenefit2'),
+        t('products.washBenefit3'),
+        t('products.washBenefit4'),
+      ],
+      'taglierine': [
+        t('products.taglierineBenefit1'),
+        t('products.taglierineBenefit2'),
+        t('products.taglierineBenefit3'),
+        t('products.taglierineBenefit4'),
+      ],
+      'accessori': [
+        t('products.accessoriBenefit1'),
+        t('products.accessoriBenefit2'),
+        t('products.accessoriBenefit3'),
+        t('products.accessoriBenefit4'),
+      ],
+    }
+    return benefitsMap[categoryKey] || []
+  }
+
+  // Get category key from name
+  const getCategoryKey = (name: string): string => {
+    const lower = name.toLowerCase()
+    if (lower.includes('blender')) return 'blender'
+    if (lower.includes('termo')) return 'termo'
+    if (lower.includes('wash')) return 'wash'
+    if (lower.includes('taglierine') || lower.includes('policut') || lower.includes('fiber')) return 'taglierine'
+    return 'accessori'
+  }
+
   // Trova il Blender
   const blenderProduct = useMemo(() => {
     return products.find(p => {
@@ -300,7 +394,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
               <p className="text-2xl text-primary font-medium mb-6">BG2</p>
 
               <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                {blenderInfo.longDescription}
+                {getCategoryLongDesc('blender') || blenderInfo.longDescription}
               </p>
 
               {/* Specifiche Tecniche in Cards BLU */}
@@ -330,7 +424,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
               <div className="mb-8">
                 <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">{t('products.mainBenefits')}</h4>
                 <div className="grid grid-cols-2 gap-2">
-                  {blenderInfo.benefits.map((benefit, i) => (
+                  {getCategoryBenefits('blender').map((benefit, i) => (
                     <div key={i} className="flex items-center gap-2 text-gray-700">
                       <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
                       <span className="text-sm">{benefit}</span>
@@ -497,7 +591,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                     <p className={`text-lg leading-relaxed mb-6 ${
                       isBlue ? 'text-blue-100' : 'text-gray-600'
                     }`}>
-                      {categoryInfo.longDescription}
+                      {getCategoryLongDesc(getCategoryKey(categoryName)) || categoryInfo.longDescription}
                     </p>
 
                     {/* Caratteristiche Principali */}
@@ -508,7 +602,10 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                         {t('products.mainFeatures')}
                       </h4>
                       <div className="space-y-2">
-                        {categoryInfo.features.map((feature, i) => (
+                        {(getCategoryFeatures(getCategoryKey(categoryName)).length > 0
+                          ? getCategoryFeatures(getCategoryKey(categoryName))
+                          : categoryInfo.features
+                        ).map((feature, i) => (
                           <div
                             key={i}
                             className={`flex items-center gap-3 ${
@@ -530,7 +627,10 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                         {t('products.benefits')}
                       </h4>
                       <div className="grid grid-cols-2 gap-2">
-                        {categoryInfo.benefits.map((benefit, i) => (
+                        {(getCategoryBenefits(getCategoryKey(categoryName)).length > 0
+                          ? getCategoryBenefits(getCategoryKey(categoryName))
+                          : categoryInfo.benefits
+                        ).map((benefit, i) => (
                           <div
                             key={i}
                             className={`flex items-center gap-2 text-sm ${
@@ -621,7 +721,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                   <p className={`text-base leading-relaxed mb-6 ${
                     isBlue ? 'text-blue-100' : 'text-gray-600'
                   }`}>
-                    {categoryInfo.longDescription}
+                    {getCategoryLongDesc(getCategoryKey(categoryName)) || categoryInfo.longDescription}
                   </p>
 
                   {/* Caratteristiche Principali Mobile */}
@@ -632,7 +732,10 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                       {t('products.mainFeatures')}
                     </h4>
                     <div className="space-y-2">
-                      {categoryInfo.features.map((feature, i) => (
+                      {(getCategoryFeatures(getCategoryKey(categoryName)).length > 0
+                        ? getCategoryFeatures(getCategoryKey(categoryName))
+                        : categoryInfo.features
+                      ).map((feature, i) => (
                         <div
                           key={i}
                           className={`flex items-center gap-3 ${
@@ -654,7 +757,10 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                       {t('products.benefits')}
                     </h4>
                     <div className="grid grid-cols-2 gap-2">
-                      {categoryInfo.benefits.map((benefit, i) => (
+                      {(getCategoryBenefits(getCategoryKey(categoryName)).length > 0
+                        ? getCategoryBenefits(getCategoryKey(categoryName))
+                        : categoryInfo.benefits
+                      ).map((benefit, i) => (
                         <div
                           key={i}
                           className={`flex items-center gap-2 text-sm ${

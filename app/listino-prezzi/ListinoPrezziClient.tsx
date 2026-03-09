@@ -553,8 +553,8 @@ const categoryFamilies: CategoryFamily[] = [
 // FORMAT HELPERS
 // ======================================================
 
-function formatPrice(price: number): string {
-  if (price === 0) return 'Su richiesta'
+function formatPrice(price: number, onRequestText: string = 'Su richiesta'): string {
+  if (price === 0) return onRequestText
   return new Intl.NumberFormat('it-IT', {
     style: 'currency',
     currency: 'EUR',
@@ -610,6 +610,96 @@ export default function ListinoPrezziClient() {
   // Conta totale prodotti per famiglia
   const getTotalProducts = (family: CategoryFamily) => {
     return family.subcategories.reduce((acc, sub) => acc + sub.products.length, 0)
+  }
+
+  // Translation helpers for catalog content
+  const getFamilyDesc = (familyId: string): string => {
+    const map: Record<string, string> = {
+      'blender': t('catalog.familyBlenderDesc'),
+      'taglierine': t('catalog.familyCuttersDesc'),
+      'termolight': t('catalog.familyTermolightDesc'),
+      'washstation': t('catalog.familyWashDesc'),
+      'accessori': t('catalog.familyAccessoriesDesc'),
+    }
+    return map[familyId] || ''
+  }
+
+  const getSubcategoryDesc = (subId: string): string => {
+    const map: Record<string, string> = {
+      'blender': t('catalog.subBlenderDesc'),
+      'ecocut': t('catalog.subEcoCutDesc'),
+      'twin': t('catalog.subTwinDesc'),
+      'easy': t('catalog.subEasyDesc'),
+      'basic': t('catalog.subBasicDesc'),
+      'manuali': t('catalog.subManualDesc'),
+      'fibercut': t('catalog.subFiberCutDesc'),
+      'termolight': t('catalog.subTermolightDesc'),
+      'washstation': t('catalog.subWashDesc'),
+      'accessori': t('catalog.subAccessoriesDesc'),
+      'filo': t('catalog.subWireDesc'),
+    }
+    return map[subId] || ''
+  }
+
+  const getProductDesc = (code: string): string => {
+    const map: Record<string, string> = {
+      'BLENDER GLOS': t('catalog.blenderBG2Desc'),
+      'ECOCUT 100-30': t('catalog.ecoCut1000Desc'),
+      'TWIN 120-20': t('catalog.twin12020Desc'),
+      'TWIN 120-30': t('catalog.twin12030Desc'),
+      'EASY 120-20': t('catalog.easy120020Desc'),
+      'EASY 120-30': t('catalog.easy120030Desc'),
+      'EASY 100-20': t('catalog.easy100020Desc'),
+      'EASY 100-30': t('catalog.easy100030Desc'),
+      'EASY 70-20': t('catalog.easy70020Desc'),
+      'EASY 70-30': t('catalog.easy70030Desc'),
+      'TWINBASIC 120SCC': t('catalog.twinBasic1200SCCDesc'),
+      'TWINBASIC 120S': t('catalog.twinBasic1200SDesc'),
+      'TWINBASIC 100SCC': t('catalog.twinBasic1000SCCDesc'),
+      'TWINBASIC 100S': t('catalog.twinBasic1000SDesc'),
+      'EASYBASIC 120CC': t('catalog.easyBasic1200CCDesc'),
+      'EASYBASIC 120': t('catalog.easyBasic1200Desc'),
+      'EASYBASIC 100CC': t('catalog.easyBasic1000CCDesc'),
+      'EASYBASIC 100': t('catalog.easyBasic1000Desc'),
+      'EASYBASIC 70': t('catalog.easyBasic700Desc'),
+      'MINICUT': t('catalog.minicutDesc'),
+      'MINICUT S/T': t('catalog.minicutNoTransDesc'),
+      'BISELLATRICE': t('catalog.hotKnifeDesc'),
+      'FIBERCUT 120-20': t('catalog.fiberCut1200Desc'),
+      'TMLIGHT': t('catalog.termolightDesc'),
+      'TMLIGHT S/C': t('catalog.termolightNoStandDesc'),
+      'WASH STATION': t('catalog.washStationDesc'),
+      'TRASFORMATORE': t('catalog.transformerDesc'),
+      'CAVABASIC': t('catalog.standBasicDesc'),
+      'CAVALLETTO': t('catalog.standTermolightDesc'),
+      'FIBERLAMA 40': t('catalog.fiberBladeDesc'),
+      'PICCHIO12': t('catalog.picchio12Desc'),
+      'PICCHIO19': t('catalog.picchio19Desc'),
+      'PICCHIO12R': t('catalog.picchio12RDesc'),
+      'PICCHIO19R': t('catalog.picchio19RDesc'),
+      'BISELLO1': t('catalog.slideInlaysDesc'),
+      'BISELLO2': t('catalog.slideHolesDesc'),
+      'BISELKIT2': t('catalog.kitInlaysDesc'),
+      'BISELKIT3': t('catalog.kitHolesDesc'),
+      'BISELAMA 150': t('catalog.blade150Desc'),
+      'BISELAMA 200': t('catalog.blade200Desc'),
+      'FILO 1200 / FILO 1000': t('catalog.wire1200Desc'),
+      'FILO 1200 GAMMA': t('catalog.wireGammaDesc'),
+      'FILO DELTA': t('catalog.wireDeltaDesc'),
+      'BOB FIL.08MT20': t('catalog.wireBobbin20Desc'),
+      'BOB FIL.08MT30': t('catalog.wireBobbin30Desc'),
+    }
+    return map[code] || ''
+  }
+
+  const getBadgeText = (badge: string): string => {
+    const map: Record<string, string> = {
+      'Brevettato': t('catalog.badgePatented'),
+      'Novità': t('catalog.badgeNew'),
+      'Top di Gamma': t('catalog.badgeTopGamma'),
+      'Eco': t('catalog.badgeEco'),
+    }
+    return map[badge] || badge
   }
 
   return (
@@ -802,7 +892,7 @@ export default function ListinoPrezziClient() {
                           <p className="text-blue-200 text-sm">{getTotalProducts(family)} prodotti</p>
                         </div>
                       </div>
-                      <p className="text-blue-100">{family.description}</p>
+                      <p className="text-blue-100">{getFamilyDesc(family.id) || family.description}</p>
                     </div>
 
                     {/* Subcategories */}
@@ -814,8 +904,8 @@ export default function ListinoPrezziClient() {
                             <ChevronRight className="w-5 h-5 text-[#0047AB]" />
                             <div>
                               <h3 className="text-xl font-bold text-gray-900">{subcategory.name}</h3>
-                              {subcategory.subtitle && (
-                                <p className="text-sm text-gray-500">{subcategory.subtitle}</p>
+                              {(getSubcategoryDesc(subcategory.id) || subcategory.subtitle) && (
+                                <p className="text-sm text-gray-500">{getSubcategoryDesc(subcategory.id) || subcategory.subtitle}</p>
                               )}
                             </div>
                           </div>
@@ -844,7 +934,7 @@ export default function ListinoPrezziClient() {
                                         </h4>
                                         {product.badge && (
                                           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
-                                            {product.badge}
+                                            {getBadgeText(product.badge)}
                                           </span>
                                         )}
                                       </div>
@@ -869,9 +959,9 @@ export default function ListinoPrezziClient() {
                                   </div>
 
                                   {/* Description - più grande */}
-                                  {product.description && (
+                                  {(getProductDesc(product.code) || product.description) && (
                                     <p className="text-base text-gray-700 leading-relaxed mb-4">
-                                      {product.description}
+                                      {getProductDesc(product.code) || product.description}
                                     </p>
                                   )}
 

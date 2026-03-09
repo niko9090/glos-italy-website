@@ -60,7 +60,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
 
   // Estrai valori sicuri - translate Sanity localized fields
   const companyName = tSanity(settings?.companyName) || 'GLOS Italy'
-  const slogan = tSanity(settings?.slogan)
+  const slogan = tSanity(settings?.slogan) || t('footer.slogan')
   const address = tSanity(settings?.address)
 
   // Get customization settings with defaults
@@ -116,14 +116,14 @@ export default function Footer({ settings, navigation }: FooterProps) {
 
             {/* Social Links */}
             {showSocial && (
-              <div className="flex gap-4" role="list" aria-label="Link ai social media">
+              <div className="flex gap-4" role="list" aria-label={t('footer.socialLabel')}>
                 {settings?.facebook && (
                   <a
                     href={settings.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
-                    aria-label="Seguici su Facebook (si apre in una nuova finestra)"
+                    aria-label={t('footer.followFacebook')}
                     role="listitem"
                   >
                     <Facebook className="w-5 h-5" aria-hidden="true" />
@@ -135,7 +135,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
-                    aria-label="Seguici su Instagram (si apre in una nuova finestra)"
+                    aria-label={t('footer.followInstagram')}
                     role="listitem"
                   >
                     <Instagram className="w-5 h-5" aria-hidden="true" />
@@ -147,7 +147,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
-                    aria-label="Seguici su LinkedIn (si apre in una nuova finestra)"
+                    aria-label={t('footer.followLinkedIn')}
                     role="listitem"
                   >
                     <Linkedin className="w-5 h-5" aria-hidden="true" />
@@ -159,7 +159,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
-                    aria-label="Seguici su YouTube (si apre in una nuova finestra)"
+                    aria-label={t('footer.followYouTube')}
                     role="listitem"
                   >
                     <Youtube className="w-5 h-5" aria-hidden="true" />
@@ -171,7 +171,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-11 h-11 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors focus-ring-white"
-                    aria-label="Seguici su Twitter/X (si apre in una nuova finestra)"
+                    aria-label={t('footer.followTwitter')}
                     role="listitem"
                   >
                     <Twitter className="w-5 h-5" aria-hidden="true" />

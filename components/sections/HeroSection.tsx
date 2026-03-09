@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { isValidImage, safeImageUrl, getFileUrl } from '@/lib/sanity/client'
 import { ArrowRight, ChevronDown, Play, Download, Phone, Mail } from 'lucide-react'
-import { useLanguage } from '@/lib/context/LanguageContext'
+import { useLanguage, useTranslations } from '@/lib/context/LanguageContext'
 import { sl, cs } from '@/lib/utils/stegaSafe'
 import RichText from '@/components/RichText'
 import {
@@ -90,7 +90,8 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ data, documentId, sectionKey }: HeroSectionProps) {
-  const { t } = useLanguage()
+  const { t: tSanity } = useLanguage()
+  const { t } = useTranslations()
   const containerRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -603,7 +604,7 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
                 sl(badgeColorClasses, data.badge?.color, 'blue')
               }`}
             >
-              {String(t(data.badge.text) || '')}
+              {String(tSanity(data.badge.text) || '')}
             </motion.div>
           )}
 
@@ -613,7 +614,7 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
               variants={heroItemVariants}
               className="text-sm md:text-base font-semibold tracking-widest uppercase mb-4 opacity-80"
             >
-              {String(t(data.eyebrow) || '')}
+              {String(tSanity(data.eyebrow) || '')}
             </motion.p>
           )}
 
@@ -644,13 +645,13 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
             className="mb-10"
           >
             <p className="text-lg md:text-xl opacity-80 mb-3">
-              Dal cuore della Motor Valley, progettiamo e produciamo macchinari che definiscono gli standard del settore.
+              {t('hero.tagline')}
             </p>
             <Link
               href="/chi-siamo"
               className="inline-flex items-center gap-2 text-white/90 hover:text-white transition-colors group"
             >
-              <span className="border-b border-white/50 group-hover:border-white">Leggi di più</span>
+              <span className="border-b border-white/50 group-hover:border-white">{t('common.readMore')}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>
@@ -752,7 +753,7 @@ export default function HeroSection({ data, documentId, sectionKey }: HeroSectio
         >
           {!!data.scrollIndicatorText && (
             <p className={`text-sm mb-2 opacity-60 ${sl(textColorClasses, data.textColor, 'white')}`}>
-              {String(t(data.scrollIndicatorText) || '')}
+              {String(tSanity(data.scrollIndicatorText) || '')}
             </p>
           )}
           <motion.div

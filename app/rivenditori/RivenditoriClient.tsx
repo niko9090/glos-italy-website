@@ -8,7 +8,7 @@ import DealersMap from '@/components/DealersMapWrapper'
 
 interface Dealer {
   _id: string
-  name: string
+  name?: string
   description?: string
   logo?: any
   address?: string

@@ -66,6 +66,10 @@ export const translations = {
       cookiePolicy: 'Cookie Policy',
       privacyPolicy: 'Privacy Policy',
     },
+    // Hero
+    hero: {
+      tagline: 'Dal cuore della Motor Valley, progettiamo e produciamo macchinari che definiscono gli standard del settore.',
+    },
     // Common
     common: {
       readMore: 'Leggi di più',
@@ -450,6 +454,10 @@ export const translations = {
       cookiePolicy: 'Cookie Policy',
       privacyPolicy: 'Privacy Policy',
     },
+    // Hero
+    hero: {
+      tagline: 'From the heart of Motor Valley, we design and manufacture machinery that sets industry standards.',
+    },
     // Common
     common: {
       readMore: 'Read more',
@@ -833,6 +841,10 @@ export const translations = {
       and: 'y la',
       cookiePolicy: 'Política de Cookies',
       privacyPolicy: 'Política de Privacidad',
+    },
+    // Hero
+    hero: {
+      tagline: 'Desde el corazón de Motor Valley, diseñamos y fabricamos maquinaria que define los estándares del sector.',
     },
     // Common
     common: {

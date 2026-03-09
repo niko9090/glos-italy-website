@@ -226,12 +226,12 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 </li>
                 <li>
                   <Link href="/listino-prezzi" className="text-gray-400 hover:text-white transition-colors">
-                    Listino Prezzi
+                    {t('footer.listinoPrezzi')}
                   </Link>
                 </li>
                 <li>
                   <Link href="/rivenditori" className="text-gray-400 hover:text-white transition-colors">
-                    Community
+                    {t('footer.community')}
                   </Link>
                 </li>
               </ul>
@@ -269,12 +269,12 @@ export default function Footer({ settings, navigation }: FooterProps) {
                       </a>
                       {settings?.salesEmail && (
                         <a href={`mailto:${settings.salesEmail}`} className="hover:text-white transition-colors block text-sm mt-1">
-                          Commerciale: {settings.salesEmail}
+                          {t('footer.commercial')}: {settings.salesEmail}
                         </a>
                       )}
                       {settings?.technicalEmail && (
                         <a href={`mailto:${settings.technicalEmail}`} className="hover:text-white transition-colors block text-sm mt-1">
-                          Assistenza: {settings.technicalEmail}
+                          {t('footer.assistance')}: {settings.technicalEmail}
                         </a>
                       )}
                     </div>
@@ -283,7 +283,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 {(settings?.vatNumber || settings?.pec) && (
                   <li className="text-gray-500 text-sm pt-2 border-t border-gray-800 space-y-1">
                     {settings?.vatNumber && <span className="block">{t('footer.vatNumber')}: {settings.vatNumber}</span>}
-                    {settings?.pec && <span className="block">PEC: {settings.pec}</span>}
+                    {settings?.pec && <span className="block">{t('footer.pec')}: {settings.pec}</span>}
                   </li>
                 )}
               </ul>

@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { MapPin, Award, Users, Wrench, Target, Shield, Lightbulb } from 'lucide-react'
+import { useTranslations } from '@/lib/context/LanguageContext'
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -20,25 +21,34 @@ const fadeInRight = {
   animate: { opacity: 1, x: 0 },
 }
 
-const values = [
-  {
-    icon: Target,
-    title: 'Precisione',
-    description: 'Ogni componente è progettato con tolleranze millimetriche per garantire prestazioni costanti.',
-  },
-  {
-    icon: Shield,
-    title: 'Affidabilità',
-    description: 'Macchinari costruiti per durare nel tempo, con materiali di prima qualità certificati.',
-  },
-  {
-    icon: Lightbulb,
-    title: 'Innovazione',
-    description: 'Ricerca continua per sviluppare soluzioni che anticipano le esigenze del mercato.',
-  },
-]
-
 export default function ChiSiamoClient() {
+  const { t } = useTranslations()
+
+  const values = [
+    {
+      icon: Target,
+      title: t('about.precision'),
+      description: t('about.precisionDesc'),
+    },
+    {
+      icon: Shield,
+      title: t('about.reliability'),
+      description: t('about.reliabilityDesc'),
+    },
+    {
+      icon: Lightbulb,
+      title: t('about.innovation'),
+      description: t('about.innovationDesc'),
+    },
+  ]
+
+  const features = [
+    t('about.feature1'),
+    t('about.feature2'),
+    t('about.feature3'),
+    t('about.feature4'),
+  ]
+
   return (
     <main className="bg-white">
       {/* Hero Section - Onde fluide animate */}
@@ -91,19 +101,18 @@ export default function ChiSiamoClient() {
             className="max-w-4xl mx-auto text-center"
           >
             <p className="text-blue-300 uppercase tracking-widest text-sm font-semibold mb-4">
-              La Nostra Storia
+              {t('about.ourStory')}
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
               style={{ textShadow: '0 4px 20px rgba(0, 0, 0, 0.4)' }}
             >
-              GL.OS: Ingegneria Meccanica e Innovazione{' '}
+              {t('about.title')}{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
-                Made in Italy
+                {t('about.madeInItaly')}
               </span>
             </h1>
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Dal cuore della Motor Valley, progettiamo e produciamo macchinari
-              che definiscono gli standard del settore.
+              {t('about.heroSubtitle')}
             </p>
           </motion.div>
         </div>
@@ -125,25 +134,14 @@ export default function ChiSiamoClient() {
                   <MapPin className="w-6 h-6 text-primary" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                  La Nostra Vision
+                  {t('about.ourVision')}
                 </h2>
               </div>
 
               <div className="space-y-6 text-gray-600 text-lg leading-relaxed">
-                <p>
-                  Nel cuore della <strong className="text-gray-900">Motor Valley</strong>, a Reggio Emilia,
-                  nasce nel 2005 GL.OS - un&apos;azienda che trasforma l&apos;ingegneria meccanica in arte industriale.
-                </p>
-                <p>
-                  Qui, dove <strong className="text-gray-900">Ferrari, Lamborghini e Ducati</strong> hanno
-                  scritto la storia dell&apos;eccellenza italiana, GL.OS porta la stessa passione e precisione
-                  nel settore delle vernici e dei rivestimenti.
-                </p>
-                <p>
-                  Progettiamo e produciamo macchinari che non si limitano a funzionare:
-                  <strong className="text-gray-900"> performano con l&apos;affidabilità</strong> che solo
-                  il Made in Italy sa garantire.
-                </p>
+                <p>{t('about.visionText1')}</p>
+                <p>{t('about.visionText2')}</p>
+                <p>{t('about.visionText3')}</p>
               </div>
 
               <div className="mt-8 flex items-center gap-4">
@@ -151,7 +149,7 @@ export default function ChiSiamoClient() {
                   <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white">🇮🇹</div>
                   <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold border-2 border-white">RE</div>
                 </div>
-                <span className="text-sm text-gray-500">Reggio Emilia, Italia</span>
+                <span className="text-sm text-gray-500">{t('about.location')}</span>
               </div>
             </motion.div>
 
@@ -214,9 +212,9 @@ export default function ChiSiamoClient() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">I Nostri Valori</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('about.ourValues')}</h2>
             <p className="text-blue-100 max-w-2xl mx-auto">
-              I principi che guidano ogni nostra decisione, dalla progettazione alla produzione.
+              {t('about.valuesSubtitle')}
             </p>
           </motion.div>
 
@@ -265,8 +263,8 @@ export default function ChiSiamoClient() {
                   <div className="flex items-center gap-3 text-white">
                     <Award className="w-8 h-8" />
                     <div>
-                      <div className="font-bold">Brevetti Registrati</div>
-                      <div className="text-sm text-white/80">Innovazione protetta</div>
+                      <div className="font-bold">{t('about.patents')}</div>
+                      <div className="text-sm text-white/80">{t('about.protectedInnovation')}</div>
                     </div>
                   </div>
                 </div>
@@ -279,8 +277,7 @@ export default function ChiSiamoClient() {
                     <Wrench className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900">Precisione</div>
-                    <div className="text-sm text-gray-500">Industriale</div>
+                    <div className="font-bold text-gray-900">{t('about.industrialPrecision')}</div>
                   </div>
                 </div>
               </div>
@@ -299,30 +296,18 @@ export default function ChiSiamoClient() {
                   <Users className="w-6 h-6 text-primary" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                  Il Nostro Metodo
+                  {t('about.ourMethod')}
                 </h2>
               </div>
 
               <div className="space-y-6 text-gray-600 text-lg leading-relaxed">
-                <p>
-                  Dietro ogni macchina GL.OS c&apos;è la visione di <strong className="text-gray-900">Leonardo Ceci</strong>,
-                  ingegnere e fondatore che ha trasformato problemi industriali in soluzioni brevettate.
-                </p>
-                <p>
-                  Dal <strong className="text-gray-900">Policut</strong> al <strong className="text-gray-900">Blender</strong>,
-                  ogni prodotto nasce da un&apos;esigenza reale del mercato, sviluppata con rigore ingegneristico
-                  e perfezionata attraverso anni di feedback dai professionisti del settore.
-                </p>
+                <p>{t('about.methodText1')}</p>
+                <p>{t('about.methodText2')}</p>
               </div>
 
               {/* Features list */}
               <div className="mt-8 space-y-4">
-                {[
-                  'Progettazione interna con software CAD 3D',
-                  'Prototipazione rapida e test sul campo',
-                  'Materiali di alta qualità certificati',
-                  'Assistenza tecnica dedicata',
-                ].map((feature, index) => (
+                {features.map((feature, index) => (
                   <motion.div
                     key={feature}
                     initial={{ opacity: 0, x: 20 }}
@@ -355,18 +340,17 @@ export default function ChiSiamoClient() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Vuoi saperne di più?
+              {t('about.wantToKnowMore')}
             </h2>
             <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              Contattaci per una consulenza personalizzata o per richiedere un preventivo.
-              Il nostro team è a tua disposizione.
+              {t('about.ctaSubtitle')}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
                 href="/contatti"
                 className="px-8 py-4 bg-white text-primary font-bold rounded-xl hover:bg-blue-50 transition-colors shadow-lg"
               >
-                Contattaci
+                {t('common.contactUs')}
               </Link>
               <a
                 href="tel:+390522967690"

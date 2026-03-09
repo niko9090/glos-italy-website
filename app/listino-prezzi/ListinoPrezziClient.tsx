@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { MOTION, fadeInUp } from '@/lib/animations/config'
 import { Zap, Wind, Droplets, Sparkles, Package, ChevronRight, Check } from 'lucide-react'
+import { useTranslations } from '@/lib/context/LanguageContext'
 
 // ======================================================
 // DATA - Extracted from GLOS official catalog PDF
@@ -579,6 +580,7 @@ const itemVariants = {
 }
 
 export default function ListinoPrezziClient() {
+  const { t } = useTranslations()
   const [activeFamily, setActiveFamily] = useState<string | null>(null)
   const [expandedFamilies, setExpandedFamilies] = useState<string[]>(['blender'])
 
@@ -660,13 +662,13 @@ export default function ListinoPrezziClient() {
             className="text-center max-w-4xl mx-auto"
           >
             <p className="text-blue-300 uppercase tracking-widest text-sm font-semibold mb-4">
-              Catalogo Ufficiale GLOS
+              {t('priceList.officialCatalog')}
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Listino Prezzi
+              {t('priceList.title')}
             </h1>
             <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto mb-8">
-              Attrezzature professionali Made in Italy per edilizia, industria e settore del colore.
+              {t('priceList.subtitle')}
             </p>
           </motion.div>
         </div>
@@ -684,7 +686,7 @@ export default function ListinoPrezziClient() {
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
-              Tutti i Prodotti
+              {t('priceList.allProducts')}
             </button>
             {categoryFamilies.map((family) => {
               const FamilyIcon = family.icon
@@ -719,7 +721,7 @@ export default function ListinoPrezziClient() {
             <aside className="hidden lg:block">
               <div className="sticky top-40 bg-white rounded-2xl shadow-lg overflow-hidden">
                 <div className="bg-gradient-to-r from-[#0047AB] to-[#003380] p-5">
-                  <h3 className="text-white font-bold">Famiglie Prodotto</h3>
+                  <h3 className="text-white font-bold">{t('priceList.productFamilies')}</h3>
                 </div>
                 <div className="p-4 space-y-1">
                   {categoryFamilies.map((family) => {
@@ -769,7 +771,7 @@ export default function ListinoPrezziClient() {
                     href="/contatti"
                     className="block w-full text-center px-4 py-3 bg-[#0047AB] text-white rounded-xl text-sm font-semibold hover:bg-[#003380] transition-colors"
                   >
-                    Richiedi Preventivo
+                    {t('priceList.requestQuote')}
                   </Link>
                 </div>
               </div>
@@ -847,7 +849,7 @@ export default function ListinoPrezziClient() {
                                         )}
                                       </div>
                                       <p className="text-xs text-gray-400 font-mono">
-                                        Cod. {product.code}
+                                        {t('priceList.code')} {product.code}
                                       </p>
                                     </div>
                                     <div className="text-right flex-shrink-0">
@@ -860,7 +862,7 @@ export default function ListinoPrezziClient() {
                                           href="/contatti"
                                           className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#0047AB] text-white rounded-lg text-xs font-semibold hover:bg-[#003380] transition-colors"
                                         >
-                                          Richiedi Prezzo
+                                          {t('priceList.requestPrice')}
                                         </Link>
                                       )}
                                     </div>
@@ -905,43 +907,24 @@ export default function ListinoPrezziClient() {
               {/* CONDITIONS */}
               <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-6">
-                  Condizioni di Vendita
+                  {t('priceList.salesConditions')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-600">
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-2">Prezzi</h3>
-                    <p>
-                      Tutti i prezzi di listino si intendono al pezzo, IVA e
-                      trasporto esclusi.
-                    </p>
+                    <h3 className="font-semibold text-gray-800 mb-2">{t('priceList.prices')}</h3>
+                    <p>{t('priceList.pricesDesc')}</p>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-2">
-                      Trasporto
-                    </h3>
-                    <p>
-                      Porto franco da 500,00 netti. Per importi inferiori:
-                      contributo trasporto 15,00.
-                    </p>
+                    <h3 className="font-semibold text-gray-800 mb-2">{t('priceList.shipping')}</h3>
+                    <p>{t('priceList.shippingDesc')}</p>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-2">
-                      Merce difettosa
-                    </h3>
-                    <p>
-                      Qualsiasi difetto o mancanza deve essere comunicato per
-                      iscritto entro 8 giorni dalla consegna.
-                    </p>
+                    <h3 className="font-semibold text-gray-800 mb-2">{t('priceList.defectiveGoods')}</h3>
+                    <p>{t('priceList.defectiveGoodsDesc')}</p>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800 mb-2">
-                      Pagamenti
-                    </h3>
-                    <p>
-                      In caso di ritardo si applicano interessi di mora (D.Lgs.
-                      231/02). Le merci restano di proprietà del fornitore fino a
-                      totale pagamento.
-                    </p>
+                    <h3 className="font-semibold text-gray-800 mb-2">{t('priceList.payments')}</h3>
+                    <p>{t('priceList.paymentsDesc')}</p>
                   </div>
                 </div>
                 <div className="mt-6 pt-6 border-t border-gray-100">
@@ -967,18 +950,17 @@ export default function ListinoPrezziClient() {
             transition={{ duration: MOTION.DURATION.SLOW }}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Hai bisogno di un preventivo personalizzato?
+              {t('priceList.needCustomQuote')}
             </h2>
             <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-              Contattaci per offerte su grandi quantità, configurazioni speciali
-              o per richiedere il prezzo di Blender GLOS e Wash Station.
+              {t('priceList.customQuoteDesc')}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
                 href="/contatti"
                 className="px-8 py-4 bg-white text-[#0047AB] rounded-xl font-bold text-lg hover:bg-blue-50 transition-colors shadow-lg"
               >
-                Contattaci
+                {t('common.contactUs')}
               </Link>
               <a
                 href="tel:+390522967690"

@@ -12,7 +12,7 @@ import RichText from '@/components/RichText'
 import type { Product, Category } from '@/lib/sanity/fetch'
 import ProductBadges from '@/components/products/ProductBadges'
 import { ArrowRight, Zap, Shield, Wrench, Package, ChevronRight, Sparkles, Scissors, Wind, Droplets, Check, Gauge, Timer, Ruler, Weight, Thermometer, Volume2 } from 'lucide-react'
-import { useLanguage } from '@/lib/context/LanguageContext'
+import { useLanguage, useTranslations } from '@/lib/context/LanguageContext'
 
 interface ProductsPageClientProps {
   products: Product[]
@@ -118,6 +118,7 @@ const CATEGORY_INFO: Record<string, {
 
 export default function ProductsPageClient({ products, categories }: ProductsPageClientProps) {
   const { language } = useLanguage()
+  const { t } = useTranslations()
   const listinoPdfUrl = `/api/download-listino?lang=${language}`
 
   // Trova il Blender
@@ -268,16 +269,15 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
             className="text-center max-w-4xl mx-auto"
           >
             <p className="text-blue-300 uppercase tracking-widest text-sm font-semibold mb-4">
-              Catalogo Completo
+              {t('products.catalog')}
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
               style={{ textShadow: '0 4px 20px rgba(0,0,0,0.4)' }}
             >
-              I Nostri Prodotti
+              {t('products.title')}
             </h1>
             <p className="text-xl text-blue-100/90 leading-relaxed max-w-2xl mx-auto">
-              Macchinari di precisione progettati e costruiti in Italia.
-              Qualità, innovazione e affidabilità dal 2005.
+              {t('products.subtitleLong')}
             </p>
           </motion.div>
         </div>
@@ -328,7 +328,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
 
               {/* Vantaggi */}
               <div className="mb-8">
-                <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Vantaggi Principali</h4>
+                <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">{t('products.mainBenefits')}</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {blenderInfo.benefits.map((benefit, i) => (
                     <div key={i} className="flex items-center gap-2 text-gray-700">
@@ -345,14 +345,14 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                   href={blenderProduct ? `/prodotti/${blenderProduct.slug?.current}` : '/contatti'}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg"
                 >
-                  Scopri tutti i dettagli
+                  {t('products.discoverDetails')}
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
                   href="/contatti"
                   className="inline-flex items-center gap-2 px-6 py-3 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary/5 transition-all"
                 >
-                  Richiedi preventivo
+                  {t('common.requestQuote')}
                 </Link>
               </div>
             </motion.div>
@@ -505,7 +505,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                       <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
                         isBlue ? 'text-blue-200' : 'text-gray-500'
                       }`}>
-                        Caratteristiche Principali
+                        {t('products.mainFeatures')}
                       </h4>
                       <div className="space-y-2">
                         {categoryInfo.features.map((feature, i) => (
@@ -527,7 +527,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                       <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
                         isBlue ? 'text-blue-200' : 'text-gray-500'
                       }`}>
-                        Vantaggi
+                        {t('products.benefits')}
                       </h4>
                       <div className="grid grid-cols-2 gap-2">
                         {categoryInfo.benefits.map((benefit, i) => (
@@ -629,7 +629,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                     <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
                       isBlue ? 'text-blue-200' : 'text-gray-500'
                     }`}>
-                      Caratteristiche Principali
+                      {t('products.mainFeatures')}
                     </h4>
                     <div className="space-y-2">
                       {categoryInfo.features.map((feature, i) => (
@@ -651,7 +651,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                     <h4 className={`text-sm font-semibold uppercase tracking-wide mb-3 ${
                       isBlue ? 'text-blue-200' : 'text-gray-500'
                     }`}>
-                      Vantaggi
+                      {t('products.benefits')}
                     </h4>
                     <div className="grid grid-cols-2 gap-2">
                       {categoryInfo.benefits.map((benefit, i) => (
@@ -714,17 +714,17 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
             className="max-w-3xl mx-auto text-center"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Vuoi saperne di più?
+              {t('products.wantToKnowMore')}
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Contattaci per una consulenza personalizzata sui nostri macchinari.
+              {t('products.consultationCta')}
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/contatti"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-primary font-bold rounded-xl hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
-                Contattaci ora
+                {t('products.contactNow')}
                 <ChevronRight className="w-5 h-5" />
               </Link>
               <a
@@ -733,7 +733,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all"
               >
-                Scarica listino prezzi
+                {t('products.downloadPriceList')}
               </a>
             </div>
           </motion.div>
@@ -745,6 +745,7 @@ export default function ProductsPageClient({ products, categories }: ProductsPag
 
 // Card Prodotto - Bianca su blu, Blu su bianco
 function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolean }) {
+  const { t } = useTranslations()
   const productSlug = product.slug?.current || ''
   const expoThumbnail = getExpoThumbnail(productSlug)
 
@@ -794,7 +795,7 @@ function ProductCard({ product, isOnBlue }: { product: Product; isOnBlue: boolea
             <RichText value={product.shortDescription} />
           </div>
           <span className={`inline-flex items-center font-medium text-sm group-hover:gap-2 transition-all ${isOnBlue ? 'text-primary' : 'text-white'}`}>
-            Scopri di più <ArrowRight className="w-4 h-4 ml-1" />
+            {t('common.discoverMore')} <ArrowRight className="w-4 h-4 ml-1" />
           </span>
         </div>
       </Link>

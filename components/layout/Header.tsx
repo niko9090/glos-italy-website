@@ -23,7 +23,7 @@ const defaultNavItems = [
   { _key: 'chi-siamo', label: 'nav.chiSiamo', href: '/chi-siamo', useTranslationKey: true },
   { _key: 'prodotti', label: 'nav.prodotti', href: '/prodotti', useTranslationKey: true },
   { _key: 'listino', label: 'nav.listinoPrezzi', href: '/listino-prezzi', useTranslationKey: true },
-  { _key: 'community', label: 'nav.community', href: '/rivenditori', useTranslationKey: true },
+  // { _key: 'community', label: 'nav.community', href: '/rivenditori', useTranslationKey: true }, // Temporaneamente nascosto - sezione in sviluppo
   { _key: 'contatti', label: 'nav.contatti', href: '/contatti', useTranslationKey: true },
 ]
 

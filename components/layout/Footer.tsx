@@ -230,11 +230,13 @@ export default function Footer({ settings, navigation }: FooterProps) {
                     {t('footer.listinoPrezzi')}
                   </Link>
                 </li>
+                {/* Temporaneamente nascosto - sezione Community in sviluppo
                 <li>
                   <Link href="/rivenditori" className="text-gray-400 hover:text-white transition-colors">
                     {t('footer.community')}
                   </Link>
                 </li>
+                */}
               </ul>
             </div>
           )}

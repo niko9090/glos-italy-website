@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
@@ -139,6 +140,7 @@ interface Dealer {
   openingHours?: string
   youtubeVideo?: string
   localVideoPath?: string
+  promoVideoUrl?: string
   location?: {
     lat?: number
     lng?: number
@@ -396,8 +398,9 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
         </MarkerClusterGroup>
       </MapContainer>
 
-      {/* Modal Rivenditore - Centrato nella pagina */}
-      {modalDealer && (
+      {/* Modal Rivenditore - in portal su <body> per restare centrato sullo schermo
+          (un contenitore con transform/transizione altrimenti "ancorerebbe" il fixed). */}
+      {isMounted && modalDealer && createPortal((
         <div
           className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center p-4 overflow-y-auto"
           onClick={() => setModalDealer(null)}
@@ -426,8 +429,21 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
               </button>
             </div>
 
-            {/* Video - Locale o YouTube */}
-            {modalDealer.localVideoPath ? (
+            {/* Video - Promo (dal gestionale) / Locale / YouTube */}
+            {modalDealer.promoVideoUrl ? (
+              <div className="w-full bg-black">
+                <video
+                  src={modalDealer.promoVideoUrl}
+                  className="w-full max-h-[50vh] object-contain"
+                  controls
+                  autoPlay
+                  muted
+                  playsInline
+                >
+                  Il tuo browser non supporta i video HTML5.
+                </video>
+              </div>
+            ) : modalDealer.localVideoPath ? (
               <div className="w-full bg-black">
                 <video
                   src={modalDealer.localVideoPath}
@@ -538,7 +554,7 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
             </div>
           </div>
         </div>
-      )}
+      ), document.body)}
     </>
   )
 }

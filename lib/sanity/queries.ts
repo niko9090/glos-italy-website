@@ -344,6 +344,7 @@ export const allDealersQuery = defineQuery(`
     certifications,
     youtubeVideo,
     localVideoPath,
+    "promoVideoUrl": promoVideo.asset->url,
     gallery,
     isActive,
     isFeatured
@@ -369,6 +370,7 @@ export const dealersByCityQuery = defineQuery(`
     certifications,
     youtubeVideo,
     localVideoPath,
+    "promoVideoUrl": promoVideo.asset->url,
     gallery,
     isFeatured
   }

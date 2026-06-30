@@ -1,17 +1,22 @@
-// Contact Form API Route - v4.0
-// Invio dei contatti al gestionale GLOS (modulo Lead) con FALLBACK automatico a
-// Formspree: se il gestionale risponde correttamente lo usiamo (sostituisce
-// Formspree); se non e' configurato o non raggiungibile, ripieghiamo su Formspree
+// Contact Form API Route - v5.0
+// I lead del form vengono scritti come documento `siteLead` su Sanity (il CMS
+// che il gestionale GL.OS gia' interroga): il gestionale li importa poi nel suo
+// modulo Lead via polling. Questo evita di esporre il gestionale su Internet.
+// Fallback automatico a Formspree se la scrittura su Sanity non e' disponibile,
 // cosi' nessun messaggio va perso.
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from 'next-sanity'
+import { projectId, dataset, apiVersion } from '@/lib/sanity/client'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mnjgrpqn'
 
-// URL COMPLETO del webhook lead del gestionale, secret incluso nel path, es.
-// https://gestionale.glos.it/webhooks/lead/<SECRET>
-// Va impostata nelle Environment Variables di Vercel (server-side, mai esposta al browser).
-// Se assente, il form continua a funzionare via Formspree.
-const GESTIONALE_LEAD_URL = process.env.GESTIONALE_LEAD_URL
+// Token Sanity con permessi di SCRITTURA (ruolo Editor), solo server-side.
+// Va impostato nelle Environment Variables di Vercel. Se assente, si usa Formspree.
+const SANITY_WRITE_TOKEN = process.env.SANITY_WRITE_TOKEN
+
+const writeClient = SANITY_WRITE_TOKEN
+  ? createClient({ projectId, dataset, apiVersion, token: SANITY_WRITE_TOKEN, useCdn: false })
+  : null
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,14 +31,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       return NextResponse.json({ error: 'Email non valida' }, { status: 400 })
     }
 
-    // Messaggio arricchito con tipo richiesta / oggetto, per non perdere contesto
-    // (il gestionale salva il messaggio nelle note del lead).
+    // Messaggio arricchito con tipo richiesta / oggetto, per non perdere contesto.
     const fullMessage = [
       requestType ? `Tipo richiesta: ${requestType}` : '',
       subject ? `Oggetto: ${subject}` : '',
@@ -42,40 +45,32 @@ export async function POST(request: NextRequest) {
       .filter(Boolean)
       .join('\n')
 
-    // 1) Prova il gestionale GLOS (se configurato). Se va a buon fine, NON usiamo Formspree.
-    if (GESTIONALE_LEAD_URL) {
+    // 1) Scrivi il lead come documento `siteLead` su Sanity. Il gestionale lo importa.
+    if (writeClient) {
       try {
-        const res = await fetch(GESTIONALE_LEAD_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            name,
-            email,
-            phone: phone || '',
-            company: company || '',
-            message: fullMessage,
-            source: `sito-contatti${requestType ? '/' + requestType : ''}`,
-            website: '', // honeypot anti-spam: deve restare vuoto
-          }),
-          // Non restare appesi se il gestionale non risponde: poi si ripiega su Formspree.
-          signal: AbortSignal.timeout(8000),
+        await writeClient.create({
+          _type: 'siteLead',
+          name,
+          email,
+          phone: phone || '',
+          company: company || '',
+          message: fullMessage,
+          source: `sito-contatti${requestType ? '/' + requestType : ''}`,
+          receivedAt: new Date().toISOString(),
+          imported: false,
         })
 
-        if (res.ok) {
-          console.log('Lead inviato al gestionale GLOS:', { name, email, requestType })
-          return NextResponse.json({
-            success: true,
-            message: 'Messaggio inviato con successo',
-          })
-        }
-
-        console.error('Gestionale lead error, fallback a Formspree. Status:', res.status)
+        console.log('Lead scritto su Sanity (siteLead):', { name, email, requestType })
+        return NextResponse.json({
+          success: true,
+          message: 'Messaggio inviato con successo',
+        })
       } catch (err) {
-        console.error('Gestionale lead non raggiungibile, fallback a Formspree:', err)
+        console.error('Scrittura Sanity fallita, fallback a Formspree:', err)
       }
     }
 
-    // 2) Fallback (o default se il gestionale non e' configurato): Formspree.
+    // 2) Fallback (o default se SANITY_WRITE_TOKEN non e' configurato): Formspree.
     const formData = {
       name,
       email,

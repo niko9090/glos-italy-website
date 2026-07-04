@@ -70,6 +70,16 @@ export default function Header({ settings, navigation }: HeaderProps) {
     ? navigation.items
     : defaultNavItems
 
+  // Voce sempre presente: Area Riservata clienti (per ora pagina "coming soon")
+  const navItemsAll: any[] = [
+    ...navItems,
+    {
+      _key: 'area-riservata',
+      href: '/area-riservata',
+      label: { _type: 'localeString', it: 'Area riservata', en: 'Reserved area', es: 'Área reservada' },
+    },
+  ]
+
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
 
   // Get customization settings with defaults
@@ -104,7 +114,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
 
           {/* Desktop Navigation */}
           <nav className={`hidden lg:flex items-center ${navGap}`}>
-            {navItems.map((item) => (
+            {navItemsAll.map((item) => (
               <Link
                 key={item._key}
                 href={item.href || '#'}
@@ -158,7 +168,7 @@ export default function Header({ settings, navigation }: HeaderProps) {
           >
             <div className="container-glos py-4">
               <nav className="flex flex-col gap-2">
-                {navItems.map((item) => (
+                {navItemsAll.map((item) => (
                   <Link
                     key={item._key}
                     href={item.href || '#'}

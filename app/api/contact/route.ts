@@ -1,31 +1,16 @@
-// Contact Form API Route - v4.0: Formspree + inoltro lead al gestionale GL.OS
+// Contact Form API Route - v4.1: Formspree + inoltro lead al gestionale GL.OS
 import { NextRequest, NextResponse } from 'next/server'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mnjgrpqn'
-
-// Endpoint del gestionale che riceve i lead (server-to-server, secret nel path).
-// Il secret va impostato nelle Environment Variables di Vercel: SITE_LEAD_SECRET
-// = stesso valore di SITE_LEAD_SECRET nel .env del gestionale.
 const GESTIONALE_BASE = 'https://gestionale.glos-hub.org'
 
-// Inoltra il lead al gestionale. Best-effort: non deve mai far fallire la submit
-// dell'utente (se il gestionale è irraggiungibile, il messaggio è comunque su Formspree).
 async function inoltraAlGestionale(payload: {
-  name: string
-  email: string
-  phone?: string
-  company?: string
-  requestType?: string
-  subject?: string
-  message: string
+  name: string; email: string; phone?: string; company?: string
+  requestType?: string; subject?: string; message: string
 }) {
   const secret = process.env.SITE_LEAD_SECRET
-  if (!secret) return // integrazione non configurata: salta silenziosamente
-
-  const message = payload.subject
-    ? `[${payload.subject}] ${payload.message}`
-    : payload.message
-
+  if (!secret) return
+  const message = payload.subject ? `[${payload.subject}] ${payload.message}` : payload.message
   try {
     await fetch(`${GESTIONALE_BASE}/webhooks/lead/${secret}`, {
       method: 'POST',
@@ -39,12 +24,32 @@ async function inoltraAlGestionale(payload: {
         message,
         source: 'sito',
       }),
-      // Non tenere impiccata la risposta all'utente troppo a lungo.
-      signal: AbortSignal.timeout(4000),
+      cache: 'no-store',
     })
   } catch (error) {
     console.error('Inoltro lead al gestionale fallito (non bloccante):', error)
   }
+}
+
+// Diagnostica temporanea: dice se la env e' presente e cosa risponde la fetch
+// verso il gestionale. NON espone il valore del secret. Da rimuovere dopo la verifica.
+export async function GET() {
+  const secret = process.env.SITE_LEAD_SECRET
+  let probe = 'skipped-no-secret'
+  if (secret) {
+    try {
+      const r = await fetch(`${GESTIONALE_BASE}/webhooks/lead/${secret}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ email: 'probe-diagnostica@glos.test', name: 'probe', source: 'probe' }),
+        cache: 'no-store',
+      })
+      probe = `status ${r.status}`
+    } catch (e) {
+      probe = 'fetch-error: ' + String(e)
+    }
+  }
+  return NextResponse.json({ hasSecret: !!secret, secretLen: secret ? secret.length : 0, probe })
 }
 
 export async function POST(request: NextRequest) {
@@ -52,43 +57,25 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { name, email, phone, company, requestType, subject, message } = body
 
-    // Validation
     if (!name || !email || !message) {
-      return NextResponse.json(
-        { error: 'Nome, email e messaggio sono obbligatori' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Nome, email e messaggio sono obbligatori' }, { status: 400 })
     }
-
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Email non valida' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Email non valida' }, { status: 400 })
     }
 
-    // Prepara i dati per Formspree
     const formData = {
-      name,
-      email,
-      phone: phone || '',
-      company: company || '',
-      requestType: requestType || '',
-      subject: subject || '',
-      message,
+      name, email,
+      phone: phone || '', company: company || '',
+      requestType: requestType || '', subject: subject || '', message,
       _subject: `[Contatto Sito GLOS] ${requestType || 'Nuovo messaggio'}${subject ? `: ${subject}` : ''}`,
     }
 
-    // Invia a Formspree E, in parallelo, inoltra il lead al gestionale (best-effort).
     const [formspreeResult] = await Promise.allSettled([
       fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(formData),
       }),
       inoltraAlGestionale({ name, email, phone, company, requestType, subject, message }),
@@ -101,27 +88,12 @@ export async function POST(request: NextRequest) {
       } else {
         console.error('Formspree error:', formspreeResult.reason)
       }
-      return NextResponse.json(
-        { error: 'Errore durante l\'invio del messaggio' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Errore durante l\'invio del messaggio' }, { status: 500 })
     }
 
-    console.log('Contact form submission sent to Formspree:', {
-      name,
-      email,
-      requestType,
-    })
-
-    return NextResponse.json({
-      success: true,
-      message: 'Messaggio inviato con successo',
-    })
+    return NextResponse.json({ success: true, message: 'Messaggio inviato con successo' })
   } catch (error) {
     console.error('Contact form error:', error)
-    return NextResponse.json(
-      { error: 'Errore durante l\'invio del messaggio' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Errore durante l\'invio del messaggio' }, { status: 500 })
   }
 }

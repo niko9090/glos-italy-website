@@ -1,9 +1,14 @@
-// Contact Form API Route - v4.1: Formspree + inoltro lead al gestionale GL.OS
+// Contact Form API Route - v4.2: Formspree + inoltro lead al gestionale GL.OS
 import { NextRequest, NextResponse } from 'next/server'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mnjgrpqn'
+
+// Endpoint del gestionale che riceve i lead (server-to-server, secret nel path).
+// Richiede la env SITE_LEAD_SECRET su Vercel = stesso valore del gestionale.
 const GESTIONALE_BASE = 'https://gestionale.glos-hub.org'
 
+// Inoltra il lead al gestionale. Best-effort: non fa mai fallire la submit utente
+// (se il gestionale non risponde, il messaggio resta comunque su Formspree).
 async function inoltraAlGestionale(payload: {
   name: string; email: string; phone?: string; company?: string
   requestType?: string; subject?: string; message: string
@@ -29,27 +34,6 @@ async function inoltraAlGestionale(payload: {
   } catch (error) {
     console.error('Inoltro lead al gestionale fallito (non bloccante):', error)
   }
-}
-
-// Diagnostica temporanea: dice se la env e' presente e cosa risponde la fetch
-// verso il gestionale. NON espone il valore del secret. Da rimuovere dopo la verifica.
-export async function GET() {
-  const secret = process.env.SITE_LEAD_SECRET
-  let probe = 'skipped-no-secret'
-  if (secret) {
-    try {
-      const r = await fetch(`${GESTIONALE_BASE}/webhooks/lead/${secret}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email: 'probe-diagnostica@glos.test', name: 'probe', source: 'probe' }),
-        cache: 'no-store',
-      })
-      probe = `status ${r.status}`
-    } catch (e) {
-      probe = 'fetch-error: ' + String(e)
-    }
-  }
-  return NextResponse.json({ hasSecret: !!secret, secretLen: secret ? secret.length : 0, probe })
 }
 
 export async function POST(request: NextRequest) {

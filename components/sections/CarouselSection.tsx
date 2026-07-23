@@ -321,13 +321,17 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
           >
             {/* Background Image with Ken Burns */}
             <div className={`absolute inset-0 ${data.kenBurns ? 'animate-ken-burns' : ''}`}>
-              <Image
-                src={safeImageUrl(currentSlide.image, 1920, 1080)!}
-                alt=""
-                fill
-                className={`object-cover ${data.hoverEffect?.includes('zoom') ? 'transition-transform duration-700 hover:scale-110' : ''}`}
-                priority={currentIndex === 0}
-              />
+              {safeImageUrl(currentSlide.image, 1920, 1080) ? (
+                <Image
+                  src={safeImageUrl(currentSlide.image, 1920, 1080)!}
+                  alt=""
+                  fill
+                  className={`object-cover ${data.hoverEffect?.includes('zoom') ? 'transition-transform duration-700 hover:scale-110' : ''}`}
+                  priority={currentIndex === 0}
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-metal-700 to-metal-900" />
+              )}
             </div>
 
             {/* Overlay */}
@@ -486,13 +490,17 @@ export default function CarouselSection({ data, documentId, sectionKey }: Carous
                     aria-label={`Vai alla slide ${idx + 1} di ${totalSlides}`}
                     aria-current={idx === currentIndex ? 'true' : undefined}
                   >
-                    <Image
-                      src={safeImageUrl(slide.image, 80, 60)!}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      aria-hidden="true"
-                    />
+                    {safeImageUrl(slide.image, 80, 60) ? (
+                      <Image
+                        src={safeImageUrl(slide.image, 80, 60)!}
+                        alt=""
+                        fill
+                        className="object-cover"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-metal-700" />
+                    )}
                   </button>
                 ))}
                 {validSlides.length > 5 && (

@@ -35,7 +35,14 @@ export const viewport: Viewport = {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings()
+  // Fallback a null se Sanity non risponde (timeout/rate-limit durante caricamenti massicci):
+  // i metadati non devono mai far cadere il render.
+  let settings = null
+  try {
+    settings = await getSiteSettings()
+  } catch (error) {
+    console.error('[GLOS] getSiteSettings (metadata) fallito, uso fallback:', error)
+  }
 
   // Use enhanced metadata generation
   const baseMetadata = generateSiteMetadata(settings)
@@ -71,10 +78,19 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [settings, navigation] = await Promise.all([
-    getSiteSettings(),
-    getNavigation(),
-  ])
+  // Rete di sicurezza: se Sanity e' irraggiungibile (timeout/rate-limit durante
+  // caricamenti massicci di contenuti) il sito deve comunque renderizzare con
+  // header minimale. I componenti figli gestiscono gia' settings=null / nav vuota.
+  let settings: Awaited<ReturnType<typeof getSiteSettings>> | null = null
+  let navigation: Awaited<ReturnType<typeof getNavigation>> | null = null
+  try {
+    ;[settings, navigation] = await Promise.all([
+      getSiteSettings(),
+      getNavigation(),
+    ])
+  } catch (error) {
+    console.error('[GLOS] Caricamento settings/navigation fallito, uso fallback:', error)
+  }
 
   const dm = await draftMode()
   const isDraft = dm.isEnabled

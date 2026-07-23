@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
-import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
 import { getSpacingClasses } from '@/lib/utils/spacing'
@@ -190,7 +190,7 @@ export default function TabsSection({ data, documentId, sectionKey }: TabsSectio
                     </div>
 
                     {/* Image */}
-                    {isValidImage(activeContent.image) && (
+                    {safeImageUrl(activeContent.image, 800, 600) && (
                       <div className={contentLayout?.includes('image-text') ? 'lg:order-1' : ''}>
                         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
                           <Image

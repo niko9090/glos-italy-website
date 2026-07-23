@@ -96,10 +96,10 @@ export default function TrustBadgesSection({ data, documentId, sectionKey }: Tru
 
   // Render badge icon
   const renderIcon = (badge: TrustBadge, size: string = 'w-8 h-8') => {
-    if (badge.iconImage && isValidImage(badge.iconImage)) {
+    if (badge.iconImage && safeImageUrl(badge.iconImage, 96)) {
       return (
         <Image
-          src={safeImageUrl(badge.iconImage, 96) || ''}
+          src={safeImageUrl(badge.iconImage, 96)!}
           alt=""
           width={48}
           height={48}

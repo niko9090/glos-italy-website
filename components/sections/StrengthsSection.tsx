@@ -255,11 +255,11 @@ export default function StrengthsSection({ data, documentId, sectionKey }: Stren
     const iconSize = sl(iconSizeClasses, data.iconSize, 'lg')
 
     // Custom image icon
-    if (item.iconImage && isValidImage(item.iconImage)) {
+    if (item.iconImage && safeImageUrl(item.iconImage, 96)) {
       return (
         <div className={`${iconSize.wrapper} relative`}>
           <Image
-            src={safeImageUrl(item.iconImage, 96) || ''}
+            src={safeImageUrl(item.iconImage, 96)!}
             alt=""
             width={64}
             height={64}

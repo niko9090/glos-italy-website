@@ -84,5 +84,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   )
   for (const c of caseStudies) add('/case-studies', c, 0.5)
 
-  return entries
+  // Deduplica per URL: una pagina CMS puo condividere il path con una rotta statica
+  // (es. /chi-siamo). Teniamo la prima occorrenza (le rotte statiche vengono prima).
+  const seen = new Set<string>()
+  return entries.filter((entry) => {
+    if (seen.has(entry.url)) return false
+    seen.add(entry.url)
+    return true
+  })
 }

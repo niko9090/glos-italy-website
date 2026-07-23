@@ -378,9 +378,11 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
 
         <MarkerClusterGroup
           chunkedLoading
-          maxClusterRadius={50}
-          disableClusteringAtZoom={7}
-          spiderfyOnMaxZoom={true}
+          maxClusterRadius={40}
+          disableClusteringAtZoom={6}
+          spiderfyOnMaxZoom={false}
+          zoomToBoundsOnClick={true}
+          animate={false}
           showCoverageOnHover={false}
           iconCreateFunction={(cluster: L.MarkerCluster) => {
             const count = cluster.getChildCount()

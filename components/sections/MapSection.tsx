@@ -10,6 +10,7 @@ import { useLanguage } from '@/lib/context/LanguageContext'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { MOTION, fadeInUp, staggerContainer, staggerItem } from '@/lib/animations/config'
 import RichText from '@/components/RichText'
+import VideoModal from '@/components/VideoModal'
 import { getSpacingClasses } from '@/lib/utils/spacing'
 import { sl } from '@/lib/utils/stegaSafe'
 
@@ -179,6 +180,8 @@ interface Dealer {
   regions?: string[]
   certifications?: string[]
   youtubeVideo?: string
+  promoVideoUrl?: string
+  localVideoPath?: string
   isFeatured?: boolean
 }
 
@@ -211,6 +214,12 @@ function getYouTubeId(url: string): string | null {
   if (!url) return null
   const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/)
   return match ? match[1] : null
+}
+
+// Percorso locale utilizzabile solo se URL assoluto o root-relative
+function getSafeLocalVideoUrl(path?: string): string | null {
+  if (!path) return null
+  return /^https?:\/\//.test(path) || path.startsWith('/') ? path : null
 }
 
 export default function MapSection({ data, dealers = [], documentId, sectionKey }: MapSectionProps) {
@@ -261,15 +270,21 @@ export default function MapSection({ data, dealers = [], documentId, sectionKey 
   )
 
   // Dealer Card Component
-  const DealerCard = ({ dealer }: { dealer: Dealer }) => {
+  const DealerCard = ({ dealer, showFeatured = false }: { dealer: Dealer; showFeatured?: boolean }) => {
+    const [isVideoOpen, setIsVideoOpen] = useState(false)
     const youtubeId = dealer.youtubeVideo ? getYouTubeId(dealer.youtubeVideo) : null
+    // Priorità: YouTube > video caricato dal gestionale > video locale
+    const uploadedVideoUrl = dealer.promoVideoUrl || getSafeLocalVideoUrl(dealer.localVideoPath) || null
+    const hasVideo = !!youtubeId || !!uploadedVideoUrl
+    const isFeatured = dealer.isFeatured && showFeatured
+    const dealerName = String(t(dealer.name) || '')
 
     return (
       <motion.article
         variants={staggerItem}
-        className={`card p-6 relative ${dealer.isFeatured ? 'ring-2 ring-yellow-400 bg-yellow-50/30' : ''}`}
+        className={`card p-6 relative ${isFeatured ? 'ring-2 ring-yellow-400 bg-yellow-50/30' : ''}`}
       >
-        {dealer.isFeatured && (
+        {isFeatured && (
           <div className="absolute -top-2 -right-2 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
             <Star className="w-3 h-3" /> In Evidenza
           </div>
@@ -383,18 +398,26 @@ export default function MapSection({ data, dealers = [], documentId, sectionKey 
           </div>
         )}
 
-        {youtubeId && (
+        {hasVideo && (
           <div className="mt-4 pt-4 border-t">
-            <a
-              href={`https://www.youtube.com/watch?v=${youtubeId}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setIsVideoOpen(true)}
               className="flex items-center justify-center gap-2 w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
             >
               <Play className="w-5 h-5" />
               Guarda il Video
-            </a>
+            </button>
           </div>
+        )}
+
+        {hasVideo && (
+          <VideoModal
+            isOpen={isVideoOpen}
+            onClose={() => setIsVideoOpen(false)}
+            youtubeId={youtubeId || undefined}
+            videoUrl={youtubeId ? undefined : uploadedVideoUrl || undefined}
+            title={dealerName}
+          />
         )}
       </motion.article>
     )
@@ -533,7 +556,7 @@ export default function MapSection({ data, dealers = [], documentId, sectionKey 
                   {dealers
                     .filter((d) => d.isFeatured)
                     .map((dealer) => (
-                      <DealerCard key={dealer._id} dealer={dealer} />
+                      <DealerCard key={dealer._id} dealer={dealer} showFeatured />
                     ))}
                 </motion.div>
               </div>

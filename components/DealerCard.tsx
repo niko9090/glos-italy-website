@@ -24,6 +24,8 @@ interface DealerCardProps {
     regions?: string[]
     certifications?: string[]
     youtubeVideo?: string
+    promoVideoUrl?: string
+    localVideoPath?: string
     isFeatured?: boolean
   }
   showFeatured?: boolean
@@ -36,10 +38,20 @@ const getYouTubeId = (url: string) => {
   return match ? match[1] : null
 }
 
+// Restituisce un percorso locale utilizzabile solo se è un URL assoluto
+// (http/https) o un percorso root-relative servito dall'app (inizia con "/").
+const getSafeLocalVideoUrl = (path?: string) => {
+  if (!path) return null
+  return /^https?:\/\//.test(path) || path.startsWith('/') ? path : null
+}
+
 export default function DealerCard({ dealer, showFeatured = false }: DealerCardProps) {
   const [isVideoOpen, setIsVideoOpen] = useState(false)
 
   const youtubeId = getYouTubeId(dealer.youtubeVideo || '')
+  // Priorità: YouTube > video caricato dal gestionale (promoVideoUrl) > video locale
+  const uploadedVideoUrl = dealer.promoVideoUrl || getSafeLocalVideoUrl(dealer.localVideoPath) || null
+  const hasVideo = !!youtubeId || !!uploadedVideoUrl
   const isFeatured = dealer.isFeatured && showFeatured
   const dealerName: string = String(getTextValue(dealer.name) || '')
   const dealerDescription: string = String(getTextValue(dealer.description) || '')
@@ -176,8 +188,8 @@ export default function DealerCard({ dealer, showFeatured = false }: DealerCardP
           </div>
         )}
 
-        {/* Video YouTube Button */}
-        {youtubeId && (
+        {/* Pulsante Video (YouTube oppure video caricato dal gestionale) */}
+        {hasVideo && (
           <div className="mt-4 pt-4 border-t">
             <button
               onClick={() => setIsVideoOpen(true)}
@@ -191,11 +203,12 @@ export default function DealerCard({ dealer, showFeatured = false }: DealerCardP
       </article>
 
       {/* Video Modal */}
-      {youtubeId && (
+      {hasVideo && (
         <VideoModal
           isOpen={isVideoOpen}
           onClose={() => setIsVideoOpen(false)}
-          youtubeId={youtubeId}
+          youtubeId={youtubeId || undefined}
+          videoUrl={youtubeId ? undefined : uploadedVideoUrl || undefined}
           title={dealerName}
         />
       )}

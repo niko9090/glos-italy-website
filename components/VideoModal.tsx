@@ -7,11 +7,14 @@ import { X } from 'lucide-react'
 interface VideoModalProps {
   isOpen: boolean
   onClose: () => void
-  youtubeId: string
+  /** ID di un video YouTube (prioritario se presente) */
+  youtubeId?: string
+  /** URL diretto di un video (CDN Sanity o percorso servito) da riprodurre in HTML5 */
+  videoUrl?: string
   title?: string
 }
 
-export default function VideoModal({ isOpen, onClose, youtubeId, title }: VideoModalProps) {
+export default function VideoModal({ isOpen, onClose, youtubeId, videoUrl, title }: VideoModalProps) {
   // Chiudi con ESC
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') onClose()
@@ -68,14 +71,27 @@ export default function VideoModal({ isOpen, onClose, youtubeId, title }: VideoM
               </div>
             )}
 
-            {/* YouTube iframe */}
-            <iframe
-              src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`}
-              title={title || 'Video YouTube'}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full"
-            />
+            {/* Video: YouTube (prioritario) oppure video HTML5 da URL diretto */}
+            {youtubeId ? (
+              <iframe
+                src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`}
+                title={title || 'Video YouTube'}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            ) : videoUrl ? (
+              <video
+                src={videoUrl}
+                title={title || 'Video'}
+                controls
+                autoPlay
+                playsInline
+                className="absolute inset-0 w-full h-full object-contain bg-black"
+              >
+                Il tuo browser non supporta i video HTML5.
+              </video>
+            ) : null}
           </motion.div>
         </motion.div>
       )}

@@ -217,6 +217,7 @@ export interface Dealer {
   certifications?: string[]
   youtubeVideo?: string
   localVideoPath?: string
+  promoVideoUrl?: string
   gallery?: unknown[]
   isActive?: boolean
   isFeatured?: boolean

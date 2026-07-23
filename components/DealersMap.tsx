@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { MapContainer, TileLayer, Marker } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -21,6 +21,22 @@ const defaultIcon = L.icon({
 })
 
 L.Marker.prototype.options.icon = defaultIcon
+
+// Adatta automaticamente la vista per inquadrare tutti i marker della mappa.
+function FitBounds({ points }: { points: [number, number][] }) {
+  const map = useMap()
+  const key = points.map((p) => p.join(',')).join('|')
+  useEffect(() => {
+    if (points.length === 0) return
+    if (points.length === 1) {
+      map.setView(points[0], 11)
+      return
+    }
+    map.fitBounds(L.latLngBounds(points), { padding: [60, 60], maxZoom: 13 })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, key])
+  return null
+}
 
 // Cache geocoding per evitare chiamate ripetute
 const geocodeCache: Record<string, { lat: number; lng: number } | null> = {}
@@ -294,6 +310,16 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
     return null
   }
 
+  const mapPoints: [number, number][] = dealersWithLocation
+    .map((d) => {
+      const co =
+        d.location?.lat && d.location?.lng
+          ? { lat: d.location.lat, lng: d.location.lng }
+          : geocodedDealers[d._id]
+      return co ? ([co.lat, co.lng] as [number, number]) : null
+    })
+    .filter((p): p is [number, number] => p !== null)
+
   const selectedCoords = getSelectedDealerCoords()
   const center: [number, number] = selectedCoords
     ? [selectedCoords.lat, selectedCoords.lng]
@@ -329,8 +355,7 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
                   : `${failedDealerNames.length} rivenditori non appaiono sulla mappa`}
               </p>
               <p className="text-amber-600 text-xs mt-1">
-                Non è stato possibile localizzare: {failedDealerNames.join(', ')}.
-                Verificare l'indirizzo o inserire le coordinate manuali in Sanity.
+                Alcune sedi non sono ancora visualizzabili sulla mappa; stiamo aggiornando i dati.
               </p>
             </div>
           </div>
@@ -348,6 +373,8 @@ export default function DealersMap({ dealers, selectedDealer, onSelectDealer }: 
           attribution='&copy; <a href="https://carto.com/">CARTO</a>'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
+
+        {!selectedCoords && <FitBounds points={mapPoints} />}
 
         <MarkerClusterGroup
           chunkedLoading

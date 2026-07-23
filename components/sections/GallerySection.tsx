@@ -75,7 +75,10 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
 
   // Filter valid images
   const validImages = useMemo(() => {
-    return data.images?.filter(img => isValidImage(img)) || []
+    // Teniamo solo le immagini che si risolvono davvero in un URL valido:
+    // isValidImage puo' passare ma safeImageUrl restituire null (asset corrotto/errore builder).
+    // Cosi' tutti i safeImageUrl(...)! a valle sono garantiti non-null.
+    return data.images?.filter(img => isValidImage(img) && safeImageUrl(img)) || []
   }, [data.images])
 
   // Get unique categories
@@ -220,9 +223,32 @@ export default function GallerySection({ data, documentId, sectionKey }: Gallery
     const colsMobile = data.columnsMobile || 2
     const layout = data.layout || 'grid'
 
+    // Mappa gap (chiavi testuali) -> classi space-y numeriche valide di Tailwind
+    const masonrySpaceY: Record<string, string> = {
+      none: 'space-y-0',
+      xs: 'space-y-1',
+      sm: 'space-y-2',
+      md: 'space-y-4',
+      lg: 'space-y-6',
+      xl: 'space-y-8',
+    }
+    // Mappa colonne masonry (valori numerici) -> classi columns-N esplicite
+    const masonryColsMobile: Record<number, string> = {
+      1: 'columns-1', 2: 'columns-2', 3: 'columns-3', 4: 'columns-4',
+    }
+    const masonryCols: Record<number, string> = {
+      1: 'md:columns-1', 2: 'md:columns-2', 3: 'md:columns-3',
+      4: 'md:columns-4', 5: 'md:columns-5', 6: 'md:columns-6',
+    }
+
     if (layout === 'marquee') return ''
     if (layout?.includes('carousel')) return 'flex overflow-x-auto snap-x snap-mandatory'
-    if (layout?.includes('masonry')) return `columns-${colsMobile} md:columns-${cols} space-y-${data.gap || 'md'}`
+    if (layout?.includes('masonry')) {
+      const spaceY = masonrySpaceY[data.gap || 'md'] || 'space-y-4'
+      const mobileCols = masonryColsMobile[colsMobile] || 'columns-2'
+      const desktopCols = masonryCols[cols] || 'md:columns-4'
+      return `${mobileCols} ${desktopCols} ${spaceY}`
+    }
 
     const colClasses: Record<string, string> = {
       '1': 'grid-cols-1',

@@ -397,10 +397,10 @@ export default function FeaturesSection({ data, documentId, sectionKey }: Featur
                     <div className={`flex-shrink-0 ${
                       data.iconPosition?.includes('top') ? 'mb-4' : ''
                     } ${data.iconPosition?.includes('background') ? 'absolute right-4 top-4 opacity-10 text-6xl' : ''}`}>
-                      {item.iconImage && isValidImage(item.iconImage) ? (
+                      {item.iconImage && safeImageUrl(item.iconImage, 64) ? (
                         <div className={sl(iconSizeClasses, data.iconSize, 'lg')}>
                           <Image
-                            src={safeImageUrl(item.iconImage, 64) || ''}
+                            src={safeImageUrl(item.iconImage, 64)!}
                             alt=""
                             width={48}
                             height={48}

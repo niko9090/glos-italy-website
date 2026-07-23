@@ -76,11 +76,13 @@ export default async function SectorsPage() {
         <div className="container-glos">
           {sectors.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {sectors.map((sector, index) => {
+              {sectors
+                .filter((sector) => Boolean(sector.slug?.current))
+                .map((sector, index) => {
                 const imageUrl = isValidImage(sector.image) ? safeImageUrl(sector.image, 600, 400) : null
                 const name = getTextValue(sector.name)
                 const description = getTextValue(sector.description)
-                const slug = sector.slug?.current
+                const slug = sector.slug!.current
 
                 return (
                   <article

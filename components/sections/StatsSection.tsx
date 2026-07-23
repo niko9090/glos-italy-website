@@ -176,9 +176,9 @@ export default function StatsSection({ data }: StatsSectionProps) {
               >
                 {/* Icon */}
                 <div className={`flex-shrink-0 ${iconColor}`}>
-                  {stat.iconImage && isValidImage(stat.iconImage) ? (
+                  {stat.iconImage && safeImageUrl(stat.iconImage, 48) ? (
                     <Image
-                      src={safeImageUrl(stat.iconImage, 48) || ''}
+                      src={safeImageUrl(stat.iconImage, 48)!}
                       alt=""
                       width={24}
                       height={24}

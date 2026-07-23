@@ -8,7 +8,7 @@ import {
   MapPin, Phone, Mail, Clock, MessageCircle, Send,
   Facebook, Instagram, Linkedin, Twitter, Youtube, CheckCircle2, AlertCircle
 } from 'lucide-react'
-import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { safeImageUrl } from '@/lib/sanity/client'
 import { sl, cs } from '@/lib/utils/stegaSafe'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import RichText from '@/components/RichText'
@@ -946,7 +946,7 @@ export default function ContactSection({ data, documentId, sectionKey }: Contact
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                   />
-                ) : data.mapType?.includes('image') && isValidImage(data.mapImage) ? (
+                ) : data.mapType?.includes('image') && safeImageUrl(data.mapImage, 800, 600) ? (
                   <div className="relative w-full h-full">
                     <Image
                       src={safeImageUrl(data.mapImage, 800, 600)!}

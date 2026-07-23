@@ -3,7 +3,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
+import { safeImageUrl } from '@/lib/sanity/client'
 import { useLanguage } from '@/lib/context/LanguageContext'
 import { getSpacingClasses } from '@/lib/utils/spacing'
 import { sl } from '@/lib/utils/stegaSafe'
@@ -217,7 +217,7 @@ export default function TimelineSection({ data, documentId, sectionKey }: Timeli
                     whileHover={{ y: -5, boxShadow: '0 20px 40px rgba(0,0,0,0.15)' }}
                     transition={{ duration: MOTION.DURATION.FAST }}
                   >
-                    {data.showImages && isValidImage(item.image) && (
+                    {data.showImages && safeImageUrl(item.image, 300, 200) && (
                       <div className="relative h-32 rounded-lg overflow-hidden mb-3">
                         <Image src={safeImageUrl(item.image, 300, 200)!} alt="" fill className="object-cover" />
                       </div>
@@ -328,7 +328,7 @@ export default function TimelineSection({ data, documentId, sectionKey }: Timeli
                       {item.year}
                     </motion.span>
 
-                    {data.showImages && isValidImage(item.image) && (
+                    {data.showImages && safeImageUrl(item.image, 500, 300) && (
                       <motion.div
                         className="relative h-48 rounded-lg overflow-hidden mb-4"
                         initial={{ opacity: 0, scale: 0.95 }}

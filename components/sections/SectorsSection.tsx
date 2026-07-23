@@ -282,10 +282,10 @@ export default function SectorsSection({ data, documentId, sectionKey }: Sectors
                   {/* Icon */}
                   {(sector.icon || sector.iconImage) && (
                     <div className="mb-4">
-                      {sector.iconImage && isValidImage(sector.iconImage) ? (
+                      {sector.iconImage && safeImageUrl(sector.iconImage, 96) ? (
                         <div className={`${sl(iconSizeClasses, data.iconSize, 'lg')} relative`}>
                           <Image
-                            src={safeImageUrl(sector.iconImage, 96) || ''}
+                            src={safeImageUrl(sector.iconImage, 96)!}
                             alt=""
                             width={64}
                             height={64}

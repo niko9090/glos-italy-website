@@ -344,7 +344,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
               Contattaci
             </Link>
             <Link
-              href="/rivenditori"
+              href="/community"
               className="btn bg-white/20 text-white border border-white/30 hover:bg-white hover:text-primary"
             >
               Trova Rivenditore

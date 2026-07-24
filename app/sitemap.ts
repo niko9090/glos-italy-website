@@ -14,7 +14,7 @@ const STATIC_ROUTES: { path: string; priority: number; changeFrequency: ChangeFr
   { path: '/prodotti', priority: 0.9, changeFrequency: 'weekly' },
   { path: '/settori', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/listino-prezzi', priority: 0.6, changeFrequency: 'monthly' },
-  { path: '/rivenditori', priority: 0.7, changeFrequency: 'weekly' },
+  { path: '/community', priority: 0.7, changeFrequency: 'weekly' },
   { path: '/case-studies', priority: 0.6, changeFrequency: 'monthly' },
   { path: '/privacy', priority: 0.2, changeFrequency: 'yearly' },
   { path: '/cookie', priority: 0.2, changeFrequency: 'yearly' },

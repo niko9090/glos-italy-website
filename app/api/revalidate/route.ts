@@ -132,8 +132,8 @@ export async function POST(request: NextRequest) {
         break
 
       case 'dealer':
-        revalidatePath('/rivenditori')
-        revalidatedPaths.push('/rivenditori')
+        revalidatePath('/community')
+        revalidatedPaths.push('/community')
 
         revalidateTag('dealers')
         revalidatedTags.push('dealers')

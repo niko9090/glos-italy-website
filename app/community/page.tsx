@@ -3,18 +3,18 @@ import { Metadata } from 'next'
 import { getAllDealers, getSiteSettings, getAllTestimonials } from '@/lib/sanity/fetch'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { OrganizationSchema, BreadcrumbSchema, WebPageSchema, LocalBusinessSchema } from '@/components/seo/JsonLd'
-import RivenditoriClient from './RivenditoriClient'
+import CommunityClient from './CommunityClient'
 
 export const metadata: Metadata = {
   title: 'Community',
   description: 'Entra nella Community GLOS Italy. Unisciti alla nostra community in Italia e Europa.',
   alternates: {
-    canonical: `${SITE_URL}/rivenditori`,
+    canonical: `${SITE_URL}/community`,
   },
   openGraph: {
     title: 'Community | GLOS Italy',
     description: 'Entra nella Community GLOS Italy. Unisciti alla nostra community in Italia e Europa.',
-    url: `${SITE_URL}/rivenditori`,
+    url: `${SITE_URL}/community`,
     siteName: SITE_NAME,
     locale: 'it_IT',
     type: 'website',
@@ -39,7 +39,7 @@ export default async function DealersPage() {
   // Breadcrumb data
   const breadcrumbItems = [
     { name: 'Home', url: '/' },
-    { name: 'Community', url: '/rivenditori' },
+    { name: 'Community', url: '/community' },
   ]
 
   return (
@@ -50,7 +50,7 @@ export default async function DealersPage() {
       <WebPageSchema
         title="Community GLOS Italy"
         description="Entra nella Community GLOS Italy. Unisciti alla nostra community."
-        url="/rivenditori"
+        url="/community"
       />
       {/* LocalBusiness schema for featured dealers */}
       {featuredDealers.slice(0, 5).map((dealer) => (
@@ -71,7 +71,7 @@ export default async function DealersPage() {
         />
       ))}
 
-      <RivenditoriClient dealers={dealers} testimonials={testimonials} />
+      <CommunityClient dealers={dealers} testimonials={testimonials} />
     </>
   )
 }

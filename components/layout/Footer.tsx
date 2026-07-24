@@ -232,7 +232,7 @@ export default function Footer({ settings, navigation }: FooterProps) {
                 </li>
                 {/* Temporaneamente nascosto - sezione Community in sviluppo
                 <li>
-                  <Link href="/rivenditori" className="text-gray-400 hover:text-white transition-colors">
+                  <Link href="/community" className="text-gray-400 hover:text-white transition-colors">
                     {t('footer.community')}
                   </Link>
                 </li>

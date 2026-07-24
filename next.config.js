@@ -31,6 +31,11 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
+      {
+        source: '/rivenditori',
+        destination: '/community',
+        permanent: true,
+      },
     ]
   },
 

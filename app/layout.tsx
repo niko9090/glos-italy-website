@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { draftMode } from 'next/headers'
 import { getSiteSettings, getNavigation } from '@/lib/sanity/fetch'
+import { client } from '@/lib/sanity/client'
 import { SanityLive } from '@/lib/sanity/live'
 import { VisualEditing } from 'next-sanity'
 
@@ -12,6 +13,7 @@ import Footer from '@/components/layout/Footer'
 import DraftBanner from '@/components/layout/DraftBanner'
 import PageTransition from '@/components/layout/PageTransition'
 import SkipLink from '@/components/accessibility/SkipLink'
+import MaintenanceScreen from '@/components/MaintenanceScreen'
 import { LanguageProvider } from '@/lib/context/LanguageContext'
 import { generateSiteMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { getTextValue } from '@/lib/utils/textHelpers'
@@ -73,6 +75,19 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+// Legge il flag "sito in manutenzione" dal CMS. Fail-safe: solo un true esplicito
+// attiva la manutenzione; qualunque errore o valore mancante lascia il sito online.
+async function isSiteInMaintenance(): Promise<boolean> {
+  try {
+    const m = await client.fetch<{ on?: boolean }>(
+      `*[_type == "siteSettings"][0]{ "on": siteMaintenance }`
+    )
+    return m?.on === true
+  } catch {
+    return false
+  }
+}
+
 export default async function RootLayout({
   children,
 }: {
@@ -95,6 +110,10 @@ export default async function RootLayout({
   const dm = await draftMode()
   const isDraft = dm.isEnabled
 
+  // Manutenzione intero sito: attiva solo se il flag e' true e NON si sta lavorando
+  // in anteprima (gli editor in draft mode vedono comunque il sito reale).
+  const siteMaintenance = (await isSiteInMaintenance()) && !isDraft
+
   // Prepare company info for structured data
   const companyName = getTextValue(settings?.companyName) || SITE_NAME
   const slogan = getTextValue(settings?.slogan) || 'Prodotti di qualità Made in Italy'
@@ -103,21 +122,26 @@ export default async function RootLayout({
     <html lang="it" className={inter.variable}>
       <head>
         <meta charSet="utf-8" />
+        {siteMaintenance && <meta name="robots" content="noindex" />}
         {/* Global Structured Data - Organization and Website schemas */}
         <OrganizationSchema data={settings || {}} />
         <WebsiteSchema name={companyName} description={slogan} />
       </head>
       <body className={`min-h-screen flex flex-col bg-white text-gray-900 antialiased ${isDraft ? 'pt-10' : ''}`}>
-        <LanguageProvider>
-          {isDraft && <DraftBanner />}
-          <SkipLink />
-          <Header settings={settings} navigation={navigation} />
-          <main id="main-content" className="flex-grow" tabIndex={-1}>
-            <PageTransition>{children}</PageTransition>
-          </main>
-          <Footer settings={settings} navigation={navigation} />
-          <CookieBanner />
-        </LanguageProvider>
+        {siteMaintenance ? (
+          <MaintenanceScreen />
+        ) : (
+          <LanguageProvider>
+            {isDraft && <DraftBanner />}
+            <SkipLink />
+            <Header settings={settings} navigation={navigation} />
+            <main id="main-content" className="flex-grow" tabIndex={-1}>
+              <PageTransition>{children}</PageTransition>
+            </main>
+            <Footer settings={settings} navigation={navigation} />
+            <CookieBanner />
+          </LanguageProvider>
+        )}
         {/* SanityLive - handles live content updates in real-time */}
         <SanityLive />
         {/* Visual Editing - active only in draft mode */}

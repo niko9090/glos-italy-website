@@ -3,15 +3,17 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { ShieldCheck, Check, Globe, ArrowLeft, Clock } from 'lucide-react'
 import { client } from '@/lib/sanity/client'
+import GlosWatermark from '@/components/GlosWatermark'
+import MaintenanceScreen from '@/components/MaintenanceScreen'
 
 export const metadata: Metadata = {
   title: 'Area Riservata - GLOS Italy',
   description: 'Area riservata ai clienti GLOS Italy. Presto disponibile.',
-  // Finché è in "coming soon" non va indicizzata.
+  // Finché è in "coming soon"/manutenzione non va indicizzata.
   robots: { index: false, follow: false },
 }
 
-// Lo stato dell'interruttore può cambiare dal gestionale: niente cache statica.
+// Lo stato degli interruttori può cambiare dal gestionale: niente cache statica.
 export const dynamic = 'force-dynamic'
 
 // Portale clienti (gestionale). Sovrascrivibile da Sanity quando si va online.
@@ -27,31 +29,45 @@ const FEATURES = [
 interface ReservedAreaConfig {
   enabled?: boolean
   url?: string
+  maintenance?: boolean
 }
 
 export default async function AreaRiservataPage() {
-  // Legge l'interruttore dal CMS. Se il CMS non risponde, resta in "coming soon"
-  // (non reindirizzare mai per errore).
+  // Legge gli interruttori dal CMS. Se il CMS non risponde, resta in "coming soon"
+  // (non reindirizzare né mostrare manutenzione per errore).
   let cfg: ReservedAreaConfig | null = null
   try {
     cfg = await client.fetch<ReservedAreaConfig>(
-      `*[_type == "siteSettings"][0]{ "enabled": reservedAreaEnabled, "url": reservedAreaUrl }`
+      `*[_type == "siteSettings"][0]{ "enabled": reservedAreaEnabled, "url": reservedAreaUrl, "maintenance": reservedAreaMaintenance }`
     )
   } catch {
     cfg = null
   }
 
-  // Interruttore ACCESO -> reindirizza al portale clienti del gestionale.
+  // Priorità: manutenzione sezione > redirect al portale > coming soon.
+  if (cfg?.maintenance) {
+    return (
+      <MaintenanceScreen
+        title="Area Riservata in manutenzione"
+        message={"Stiamo effettuando alcuni interventi sull'area clienti. Torneremo online a brevissimo."}
+        backHref="/"
+        backLabel="Torna al sito"
+      />
+    )
+  }
+
   if (cfg?.enabled) {
     redirect(cfg.url || DEFAULT_PORTAL_URL)
   }
 
-  // Interruttore SPENTO -> stessa card del portale, ma con il "presto disponibile".
+  // Coming soon: stessa card del portale, con filigrana GLOS in lieve movimento.
   return (
-    <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center px-4 py-10 bg-gradient-to-br from-metal-50 via-white to-primary/5">
-      <div className="w-full max-w-[62rem] grid lg:grid-cols-[1.05fr_1fr] rounded-[1.75rem] overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] ring-1 ring-metal-200/70 bg-white">
+    <div className="relative min-h-[calc(100vh-8rem)] flex items-center justify-center px-4 py-10 bg-gradient-to-br from-metal-50 via-white to-primary/5 overflow-hidden">
+      <GlosWatermark />
 
-        {/* ═══════════ Pannello identità GLOS (come nel portale) ═══════════ */}
+      <div className="relative z-10 w-full max-w-[62rem] grid lg:grid-cols-[1.05fr_1fr] rounded-[1.75rem] overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.35)] ring-1 ring-metal-200/70 bg-white">
+
+        {/* Pannello identità GLOS (come nel portale) */}
         <div className="relative hidden lg:flex flex-col justify-between p-8 text-white overflow-hidden bg-gradient-to-br from-primary-light via-primary to-primary-dark">
           {/* griglia "blueprint" */}
           <div
@@ -108,7 +124,7 @@ export default async function AreaRiservataPage() {
           </div>
         </div>
 
-        {/* ═══════════ Pannello "coming soon" (al posto del form) ═══════════ */}
+        {/* Pannello "coming soon" (al posto del form) */}
         <div className="p-8 sm:p-10 flex flex-col justify-center">
           <div className="mb-6 lg:hidden text-2xl font-extrabold tracking-tight text-primary">
             GLOS <span className="text-metal-700">Italy</span>

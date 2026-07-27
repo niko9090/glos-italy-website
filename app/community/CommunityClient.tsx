@@ -5,10 +5,12 @@ import { MapPin, Star, Quote } from 'lucide-react'
 import { isValidImage, safeImageUrl } from '@/lib/sanity/client'
 import { useTranslations } from '@/lib/context/LanguageContext'
 import DealersMap from '@/components/DealersMapWrapper'
+import DealerCard from '@/components/DealerCard'
 
 interface Dealer {
   _id: string
   name?: string
+  type?: string
   description?: string
   logo?: any
   address?: string
@@ -16,6 +18,13 @@ interface Dealer {
   country?: string
   phone?: string
   email?: string
+  website?: string
+  openingHours?: string
+  regions?: string[]
+  certifications?: string[]
+  youtubeVideo?: string
+  promoVideoUrl?: string
+  localVideoPath?: string
   location?: { lat: number; lng: number }
   isFeatured?: boolean
 }
@@ -43,6 +52,10 @@ export default function RivenditoriClient({ dealers, testimonials }: Rivenditori
   )
 
   const countriesCount = new Set(dealers.map(d => d.country || 'Italia').filter(Boolean)).size
+
+  // Partner marcati "in evidenza" dal gestionale: mostrati come schede prominenti
+  // (con badge e pulsante video). Se nessuno è in evidenza, la sezione non compare.
+  const featuredDealers = dealers.filter((d) => d.isFeatured)
 
   return (
     <div className="section">
@@ -78,6 +91,20 @@ export default function RivenditoriClient({ dealers, testimonials }: Rivenditori
             </p>
           </div>
         ) : null}
+
+        {/* Partner in evidenza */}
+        {featuredDealers.length > 0 && (
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
+              <Star className="w-6 h-6 text-yellow-400 fill-yellow-400" /> Partner in evidenza
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredDealers.map((dealer) => (
+                <DealerCard key={dealer._id} dealer={dealer} showFeatured />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Recensioni Clienti */}
         <div className="mb-12">

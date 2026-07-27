@@ -1,6 +1,7 @@
 // Listino Prezzi - Catalogo completo prodotti GLOS con prezzi
 import type { Metadata } from 'next'
 import { getSiteSettings } from '@/lib/sanity/fetch'
+import { getListino } from '@/lib/sanity/listino'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { OrganizationSchema, BreadcrumbSchema, WebPageSchema } from '@/components/seo/JsonLd'
 import ListinoPrezziClient from './ListinoPrezziClient'
@@ -31,6 +32,9 @@ export const metadata: Metadata = {
 
 export default async function ListinoPrezziPage() {
   const settings = await getSiteSettings()
+  // Voci del listino gestite dal gestionale (Sito > Listino) via Sanity.
+  // Se vuoto (CMS irraggiungibile / non pubblicato) il client usa i dati storici.
+  const listino = await getListino()
 
   const breadcrumbItems = [
     { name: 'Home', url: '/' },
@@ -46,7 +50,7 @@ export default async function ListinoPrezziPage() {
         description="Listino prezzi completo di tutte le attrezzature professionali GLOS Italy."
         url={`${SITE_URL}/listino-prezzi`}
       />
-      <ListinoPrezziClient />
+      <ListinoPrezziClient items={listino} />
     </>
   )
 }

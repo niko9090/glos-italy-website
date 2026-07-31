@@ -38,7 +38,10 @@ interface CategoryFamily {
 }
 
 // Famiglie di prodotti raggruppate
-const categoryFamilies: CategoryFamily[] = [
+// Dati storici di FALLBACK: usati solo se Sanity non restituisce voci di listino
+// (CMS irraggiungibile o listino non ancora pubblicato). In condizioni normali la
+// pagina usa i dati gestiti dal gestionale (Sito > Listino) via `buildFamiliesFromItems`.
+const fallbackFamilies: CategoryFamily[] = [
   {
     id: 'blender',
     name: 'Blender GLOS',
@@ -563,6 +566,108 @@ function formatPrice(price: number, onRequestText: string = 'Su richiesta'): str
 }
 
 // ======================================================
+// LISTINO DA SANITY (gestito dal gestionale)
+// ======================================================
+
+// Voce di listino letta da Sanity (tipo `listinoItem`).
+interface ListinoItem {
+  code: string
+  name: string
+  description?: string
+  price?: number
+  family?: string
+  familyId?: string
+  subcategory?: string
+  subcategoryId?: string
+  specs?: { label: string; value: string }[]
+  badge?: string
+  sortOrder?: number
+}
+
+// Presentazione (non gestita a listino): icona e descrizione per famiglia,
+// sottotitolo/nota per sottocategoria. Se un id non è mappato, si usano dei fallback.
+const FAMILY_ICONS: Record<string, React.ElementType> = {
+  blender: Sparkles,
+  taglierine: Zap,
+  termolight: Wind,
+  washstation: Droplets,
+  accessori: Package,
+}
+
+const FAMILY_META: Record<string, { name: string; description: string }> = {
+  blender: { name: 'Blender GLOS', description: 'Miscelatore professionale brevettato per vernici ad acqua' },
+  taglierine: { name: 'Taglierine', description: 'Taglierine professionali a filo caldo per isolanti: Policut Twin, Easy, Basic e Fiber Cut' },
+  termolight: { name: 'Termolight', description: 'Termoventilatore professionale per asciugatura rapida' },
+  washstation: { name: 'Wash Station', description: 'Stazione di lavaggio eco-compatibile per materiali ad acqua' },
+  accessori: { name: 'Accessori e Ricambi', description: 'Componenti, ricambi e accessori per tutti i prodotti GLOS' },
+}
+
+const SUBCAT_META: Record<string, { name: string; subtitle?: string; note?: string }> = {
+  blender: { name: 'Blender GLOS', subtitle: 'Miscelatore professionale brevettato per vernici ad acqua', note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato' },
+  ecocut: { name: 'Eco-Cut', subtitle: '4ª generazione - Taglierina professionale per polistirolo', note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato' },
+  twin: { name: 'Policut Twin', subtitle: 'Serie Gamma - Taglierine autoportanti professionali' },
+  easy: { name: 'Policut Easy', subtitle: 'Serie Gamma - Taglierine da ponteggio professionali' },
+  basic: { name: 'Policut Basic', subtitle: 'Serie Basic - Taglierine autoportanti con trasformatore a bordo' },
+  manuali: { name: 'Taglierine Manuali', subtitle: 'Minicut e Hot Knife - Per tagli di precisione e lavori speciali' },
+  fibercut: { name: 'Fiber Cut', subtitle: 'Taglierina professionale per fibre minerali e lane di vetro' },
+  termolight: { name: 'Termolight', subtitle: 'Termoventilatore professionale per imbianchini e decoratori' },
+  washstation: { name: 'Wash Station', subtitle: 'Stazione di lavaggio eco-compatibile per materiali ad acqua', note: 'Prezzo su richiesta - Contattaci per un preventivo personalizzato' },
+  accessori: { name: 'Accessori', subtitle: 'Componenti e accessori per tutti i prodotti GLOS' },
+  filo: { name: 'Filo di Ricambio', subtitle: 'Filo di ricambio per tutte le taglierine Policut' },
+}
+
+// Ricostruisce le famiglie (per la UI) dalle voci di listino di Sanity, preservando
+// l'ordine (sortOrder) e usando la presentazione mappata sopra.
+function buildFamiliesFromItems(items: ListinoItem[]): CategoryFamily[] {
+  const sorted = [...items].sort((a, b) => (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999))
+  const order: string[] = []
+  const fams: Record<string, { subOrder: string[]; subs: Record<string, Product[]> }> = {}
+
+  for (const it of sorted) {
+    const fid = it.familyId || 'altro'
+    const sid = it.subcategoryId || fid
+    if (!fams[fid]) {
+      fams[fid] = { subOrder: [], subs: {} }
+      order.push(fid)
+    }
+    if (!fams[fid].subs[sid]) {
+      fams[fid].subs[sid] = []
+      fams[fid].subOrder.push(sid)
+    }
+    fams[fid].subs[sid].push({
+      code: it.code,
+      name: it.name,
+      description: it.description,
+      price: typeof it.price === 'number' ? it.price : 0,
+      specs: it.specs,
+      badge: it.badge,
+    })
+  }
+
+  return order.map((fid) => {
+    const meta = FAMILY_META[fid]
+    const firstOfFam = sorted.find((i) => (i.familyId || 'altro') === fid)
+    return {
+      id: fid,
+      name: meta?.name || firstOfFam?.family || fid,
+      icon: FAMILY_ICONS[fid] || Package,
+      description: meta?.description || '',
+      subcategories: fams[fid].subOrder.map((sid) => {
+        const sm = SUBCAT_META[sid]
+        const firstOfSub = sorted.find((i) => (i.subcategoryId || (i.familyId || 'altro')) === sid)
+        return {
+          id: sid,
+          name: sm?.name || firstOfSub?.subcategory || sid,
+          subtitle: sm?.subtitle,
+          note: sm?.note,
+          products: fams[fid].subs[sid],
+        }
+      }),
+    }
+  })
+}
+
+// ======================================================
 // COMPONENT
 // ======================================================
 
@@ -579,10 +684,14 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: MOTION.DURATION.NORMAL } },
 }
 
-export default function ListinoPrezziClient() {
+export default function ListinoPrezziClient({ items = [] }: { items?: ListinoItem[] }) {
   const { t } = useTranslations()
   const [activeFamily, setActiveFamily] = useState<string | null>(null)
   const [expandedFamilies, setExpandedFamilies] = useState<string[]>(['blender'])
+
+  // Voci gestite dal gestionale (Sito > Listino) via Sanity. Se assenti (CMS
+  // irraggiungibile o listino non pubblicato), si usano i dati storici di fallback.
+  const categoryFamilies = items.length > 0 ? buildFamiliesFromItems(items) : fallbackFamilies
 
   const toggleFamily = (familyId: string) => {
     setExpandedFamilies(prev =>

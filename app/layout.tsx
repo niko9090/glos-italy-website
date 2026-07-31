@@ -14,6 +14,8 @@ import DraftBanner from '@/components/layout/DraftBanner'
 import PageTransition from '@/components/layout/PageTransition'
 import SkipLink from '@/components/accessibility/SkipLink'
 import MaintenanceScreen from '@/components/MaintenanceScreen'
+import PromoPopup from '@/components/PromoPopup'
+import { getSitePromo } from '@/lib/sanity/promo'
 import { LanguageProvider } from '@/lib/context/LanguageContext'
 import { generateSiteMetadata, SITE_URL, SITE_NAME } from '@/lib/seo/metadata'
 import { getTextValue } from '@/lib/utils/textHelpers'
@@ -114,6 +116,10 @@ export default async function RootLayout({
   // in anteprima (gli editor in draft mode vedono comunque il sito reale).
   const siteMaintenance = (await isSiteInMaintenance()) && !isDraft
 
+  // Promo/annuncio popup: caricata solo se il sito non è in manutenzione.
+  // Il rendering effettivo (una volta a sessione, entro il periodo) è nel componente client.
+  const promo = siteMaintenance ? null : await getSitePromo()
+
   // Prepare company info for structured data
   const companyName = getTextValue(settings?.companyName) || SITE_NAME
   const slogan = getTextValue(settings?.slogan) || 'Prodotti di qualità Made in Italy'
@@ -140,6 +146,7 @@ export default async function RootLayout({
             </main>
             <Footer settings={settings} navigation={navigation} />
             <CookieBanner />
+            {promo?.enabled && <PromoPopup promo={promo} />}
           </LanguageProvider>
         )}
         {/* SanityLive - handles live content updates in real-time */}
